@@ -16,6 +16,7 @@
 
 ACME_ADD_MODULE(capu static)
 
+
 MACRO(ADD_PLATFORM_FILE filename)
 	ACME_ADD_FILE(os/${filename} SOURCE_GROUP "os")
 	ACME_ADD_FILE(os/${TARGET_OS}/${filename} SOURCE_GROUP "os/${TARGET_OS}")
@@ -98,6 +99,9 @@ ADD_UTIL_FILE(TestUtils)
 ADD_UTIL_FILE(Allocator)
 ADD_UTIL_FILE(StaticAllocator)
 ADD_UTIL_FILE(HybridAllocator)
+ADD_UTIL_FILE(BinaryFileOutputStream)
+ADD_UTIL_FILE(BinaryFileInputStream)
+ADD_UTIL_FILE(TextFileOutputStream)
 
 ADD_DEFINITIONS(-DCAPU_LOGGING_ENABLED=1)
 

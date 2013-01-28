@@ -141,7 +141,16 @@ namespace capu
 
         outStream << "Another test string";
 
-        EXPECT_STREQ("Another test string", outStream.getData());
+        const uint32_t strlen = *reinterpret_cast<const uint32_t*>(outStream.getData());
+
+        char_t* buffer = new char_t[strlen + 1];
+
+        capu::Memory::Copy(buffer, outStream.getData() + sizeof(uint32_t), strlen);
+        buffer[strlen] = 0;
+
+        EXPECT_STREQ("Another test string", buffer);
+
+        delete buffer;
     }
 
     TEST_F(BinaryOutputStreamTest, InsertString)
@@ -150,7 +159,16 @@ namespace capu
 
         outStream << "Hello World with a lot of characters";
 
-        EXPECT_STREQ("Hello World with a lot of characters", outStream.getData());
+        const uint32_t strlen = *reinterpret_cast<const uint32_t*>(outStream.getData());
+
+        char_t* buffer = new char_t[strlen + 1];
+
+        capu::Memory::Copy(buffer, outStream.getData() + sizeof(uint32_t), strlen);
+        buffer[strlen] = 0;
+
+        EXPECT_STREQ("Hello World with a lot of characters", buffer);
+
+        delete buffer;
     }
 }
 

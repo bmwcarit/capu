@@ -145,7 +145,7 @@ namespace capu
         status_t retVal = CAPU_ERROR;
         while (totalBytes < fileSize)
         {
-            retVal = file.read(&buffer[totalBytes], fileSize - totalBytes, &readBytes);
+            retVal = file.read(&buffer[totalBytes], fileSize - totalBytes, readBytes);
             if (retVal == capu::CAPU_EOF)
             {
                 // read to end

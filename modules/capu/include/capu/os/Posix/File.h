@@ -35,7 +35,7 @@ namespace capu
             status_t open(const FileMode& mode);
             bool_t isOpen();
             bool_t isEof();
-            status_t read(char_t* buffer, uint_t length, uint_t* numBytes);
+            status_t read(char_t* buffer, uint_t length, uint_t& numBytes);
             status_t write(const char_t* buffer, uint_t length);
             status_t flush();
             status_t close();
@@ -231,7 +231,7 @@ namespace capu
 
         inline
         status_t
-        File::read(char* buffer, uint_t length, uint_t* numBytes)
+        File::read(char* buffer, uint_t length, uint_t& numBytes)
         {
             if (buffer == NULL)
             {
@@ -246,19 +246,13 @@ namespace capu
 
             if (result == length)
             {
-                if (numBytes != NULL)
-                {
-                    *numBytes = result;
-                }
+                numBytes = result;
                 return CAPU_OK;
             }
 
             if (feof(mHandle))
             {
-                if (numBytes != NULL)
-                {
-                    *numBytes = result;
-                }
+                numBytes = result;
                 return CAPU_EOF;
             }
             return CAPU_ERROR;

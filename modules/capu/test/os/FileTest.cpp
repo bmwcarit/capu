@@ -108,7 +108,7 @@ TEST(File, WriteSubstring)
     //read data back
     memset(bufRead, 0, sizeof(bufRead));
     capu::uint_t read;
-    status = f1->read(bufRead, substringSize, &read);
+    status = f1->read(bufRead, substringSize, read);
     EXPECT_EQ(capu::CAPU_OK, status);
     EXPECT_EQ(substringSize, read);
 
@@ -175,12 +175,12 @@ TEST(File, ReadTest)
     EXPECT_TRUE(f3->isOpen());
 
     // invalid params
-    status = f3->read(NULL, 0, NULL);
+    status = f3->read(NULL, 0, read);
     EXPECT_EQ(capu::CAPU_EINVAL, status);
 
     read = 0;
     memset(buf2, 0, sizeof(buf2));
-    status = f3->read(buf2, strlen(buf1), &read);
+    status = f3->read(buf2, strlen(buf1), read);
     EXPECT_EQ(capu::CAPU_OK, status);
     EXPECT_EQ((capu::uint_t)strlen(buf1), read);
     delete f3;
@@ -192,7 +192,7 @@ TEST(File, ReadTest)
     EXPECT_TRUE(f4->isOpen());
 
     memset(buf2, 0, sizeof(buf2));
-    status = f4->read(buf2, strlen(buf1), NULL);
+    status = f4->read(buf2, strlen(buf1), read);
     EXPECT_EQ(capu::CAPU_OK, status);
     EXPECT_EQ((capu::uint_t)strlen(buf1), read);
     delete f4;
@@ -205,7 +205,7 @@ TEST(File, ReadTest)
 
     read = 0;
     memset(buf2, 0, sizeof(buf2));
-    status = f5->read(buf2, sizeof(buf2), &read);
+    status = f5->read(buf2, sizeof(buf2), read);
     EXPECT_EQ(capu::CAPU_EOF, status);
     EXPECT_EQ((capu::uint_t)strlen(buf1), read);
     EXPECT_EQ(0, strcmp(buf1, buf2));
@@ -236,7 +236,7 @@ TEST(File, ReadWriteBinaryTest)
     capu::File f3("test.txt");
     f3.open(capu::READ_EXISTING_BINARY);
     capu::uint_t bytes;
-    status = f3.read(buf2, sizeof(buf2), &bytes);
+    status = f3.read(buf2, sizeof(buf2), bytes);
     EXPECT_EQ(capu::CAPU_OK, status);
     f3.close();
 

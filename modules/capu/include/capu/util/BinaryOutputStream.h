@@ -213,14 +213,17 @@ namespace capu
     IOutputStream&
     BinaryOutputStream::operator<<(const String& value)
     {
-        return write(value.c_str(), static_cast<uint32_t>(value.getLength()) + 1);
+        operator<<(static_cast<uint32_t>(value.getLength())); // first write length of string
+        return write(value.c_str(), static_cast<uint32_t>(value.getLength()));
     }
 
     inline
     IOutputStream&
     BinaryOutputStream::operator<<(const char_t* value)
     {
-        return write(value, static_cast<uint32_t>(StringUtils::Strlen(value) + 1));
+        const uint32_t len = static_cast<uint32_t>(StringUtils::Strlen(value));
+        operator<<(len); // first write length of string
+        return write(value, len);
     }
 
     inline

@@ -79,8 +79,10 @@ namespace capu
     {
         char buffer[16];
         String value = "Hello World";
+        uint32_t strlen = static_cast<uint32_t>(value.getLength());
 
-        Memory::Copy(buffer, value.c_str(), value.getLength() + 1);
+        Memory::Copy(buffer, reinterpret_cast<char_t*>(&strlen), sizeof(uint32_t));
+        Memory::Copy(buffer + sizeof(uint32_t), value.c_str(), value.getLength() + 1);
 
         BinaryInputStream inStream(buffer);
 
@@ -121,6 +123,7 @@ namespace capu
         int32_t intVal = 5;
         float_t floatVal = 4.3f;
         String stringVal = "Hello World";
+        uint32_t strlen = static_cast<uint32_t>(stringVal.getLength());
         bool_t boolVal = true;
 
         uint_t offset = 0;
@@ -129,8 +132,10 @@ namespace capu
         offset += sizeof(int32_t);
         Memory::Copy(buffer + offset, &floatVal, sizeof(float_t));
         offset += sizeof(float_t);
+        Memory::Copy(buffer + offset, &strlen, sizeof(uint32_t));
+        offset += sizeof(uint32_t);
         Memory::Copy(buffer + offset , stringVal.c_str(), stringVal.getLength() + 1);
-        offset += stringVal.getLength() + 1;
+        offset += stringVal.getLength();
         Memory::Copy(buffer + offset, &boolVal, sizeof(bool_t));
 
         BinaryInputStream inStream(buffer);

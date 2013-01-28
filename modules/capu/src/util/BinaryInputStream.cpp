@@ -17,6 +17,7 @@
 #include <capu/util/BinaryInputStream.h>
 #include <capu/os/Memory.h>
 
+
 namespace capu
 {
     BinaryInputStream::BinaryInputStream(const char_t* buffer)
@@ -43,8 +44,17 @@ namespace capu
 
     IInputStream& BinaryInputStream::operator>>(String& value)
     {
-        value = mCurrent;
-        mCurrent += value.getLength() + 1;
+        uint32_t length = 0;
+        operator>>(length); // first read the length of the string
+
+        char_t* buffer = new char_t[length + 1];
+
+        read(buffer, length);
+        buffer[length] = 0; // terminate string
+
+        value = buffer;
+
+        delete[] buffer;
         return *this;
     }
 
