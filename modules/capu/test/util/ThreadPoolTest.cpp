@@ -18,6 +18,7 @@
 #include <gmock/gmock.h>
 #include "capu/util/ThreadPool.h"
 #include "capu/os/Mutex.h"
+#include "capu/os/Semaphore.h"
 #include "capu/os/AtomicOperation.h"
 
 class Globals
@@ -44,13 +45,17 @@ public:
 class WorkToDoCancelable : public capu::Runnable
 {
 public:
-    WorkToDoCancelable()
+    capu::Semaphore& m_semaphore;
+
+    WorkToDoCancelable(capu::Semaphore& semaphore)
+        : m_semaphore(semaphore)
     {
     }
 
     void run()
     {
         capu::AtomicOperation::AtomicAdd32(Globals::var, 5);
+        m_semaphore.release();
         while (!isCancelRequested())
         {
             capu::Thread::Sleep(10);
@@ -107,19 +112,28 @@ TEST(ThreadPool, AddCloseTest)
 TEST(ThreadPool, AddCloseCancelTest)
 {
     Globals::var = 0;
+    capu::Semaphore waiter;
+    capu::uint32_t poolSize = 5;
+    capu::ThreadPool* pool = new capu::ThreadPool(poolSize);
 
-    capu::ThreadPool* pool = new capu::ThreadPool();
+    // add a lot of workers
+    // a worker will increase the counter and then stay active
     for (capu::int32_t i = 0; i < 10000; i++)
     {
-        capu::SmartPointer<WorkToDoCancelable> w = new WorkToDoCancelable();
+        capu::SmartPointer<WorkToDoCancelable> w = new WorkToDoCancelable(waiter);
         EXPECT_EQ(capu::CAPU_OK, pool->add(w));
     }
 
-    capu::Thread::Sleep(100);
+    // wait that all workers that fit in the pool have increased the global counter
+    for(capu::uint32_t i = 0; i < poolSize; i++)
+    {
+        waiter.aquire();
+    }
 
+    // closing will cancel all workers and forbid any new worker to start
     EXPECT_EQ(capu::CAPU_OK, pool->close(true));
 
-    //check if all the work has been done which means that all threads have been executed
+    // check if all the work has been done which means that all threads have been executed
     EXPECT_EQ(25u, Globals::var);
 
     // if test runs further closing has worked
