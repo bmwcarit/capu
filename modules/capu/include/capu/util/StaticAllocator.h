@@ -33,6 +33,13 @@ namespace capu
         pointer allocate();
         void deallocate(pointer& ptr);
 
+        /**
+        * Checks if the given pointer is inside the managed memory of the allocator.
+        * @param ptr The pointer to check.
+        * @return True if the given pointer is managed by the allocator, false otherwise.
+        */
+        bool_t isManagedMemory(T* ptr);
+
     protected:
     private:
         struct MemoryEntry
@@ -49,21 +56,18 @@ namespace capu
         MemoryEntry  mData[COUNT];
         MemoryEntry* mFreeEntry;
         uint32_t     mFreeCount;
-
     };
 
-
     template<typename T, uint32_t COUNT>
-    StaticAllocator<T, COUNT>::StaticAllocator()
+    inline StaticAllocator<T, COUNT>::StaticAllocator()
         : mFreeEntry(mData)
         , mFreeCount(COUNT)
     {
         mData[COUNT - 1].nextFreeEntry = 0; // repair last entry
     }
 
-
     template<typename T, uint32_t COUNT>
-    typename StaticAllocator<T, COUNT>::pointer StaticAllocator<T, COUNT>::allocate()
+    inline typename StaticAllocator<T, COUNT>::pointer StaticAllocator<T, COUNT>::allocate()
     {
         T* result = 0;
 
@@ -90,7 +94,17 @@ namespace capu
     }
 
     template<typename T, uint32_t COUNT>
-    void StaticAllocator<T, COUNT>::deallocate(typename StaticAllocator<T, COUNT>::pointer& ptr)
+    inline bool_t StaticAllocator<T, COUNT>::isManagedMemory(T* ptr)
+    {
+        // do some pointer arithmetic to check if the given ptr is inside our memory bounds
+        MemoryEntry* toCheck = reinterpret_cast<MemoryEntry*>(ptr);
+        MemoryEntry* myStart = reinterpret_cast<MemoryEntry*>(&mData[0]);
+        MemoryEntry* myEnd = reinterpret_cast<MemoryEntry*>(&mData[COUNT-1]);
+        return toCheck >= myStart && toCheck <= myEnd;
+    }
+
+    template<typename T, uint32_t COUNT>
+    inline void StaticAllocator<T, COUNT>::deallocate(typename StaticAllocator<T, COUNT>::pointer& ptr)
     {
         MemoryEntry* entry = reinterpret_cast<MemoryEntry*>(ptr); // the MemoryEntry should be at the same position as the T*
 
@@ -101,7 +115,6 @@ namespace capu
         ptr->~T();
         ptr = 0;
     }
-
 }
 
 #endif // CAPU_StaticAllocator_H

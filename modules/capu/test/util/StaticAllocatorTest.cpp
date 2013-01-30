@@ -110,7 +110,6 @@ namespace capu
         allocator.deallocate(second);
 
         EXPECT_EQ(0, StaticAllocatorTestClass::counter);
-
     }
 
     TEST_F(StaticAllocatorTest, DeallocatePrimitive)
@@ -178,5 +177,56 @@ namespace capu
         second = allocator.allocate();
 
         EXPECT_TRUE(0 != second);
+    }
+
+    TEST_F(StaticAllocatorTest, IsManagedMemory1)
+    {
+        StaticAllocator<uint32_t, 2> allocator;
+        uint32_t* val1 = allocator.allocate();
+        uint32_t* val2 = allocator.allocate();
+        EXPECT_TRUE(allocator.isManagedMemory(val1));
+        EXPECT_TRUE(allocator.isManagedMemory(val2));
+        allocator.deallocate(val1);
+        allocator.deallocate(val2);
+    }
+
+    TEST_F(StaticAllocatorTest, IsManagedMemory2)
+    {
+        StaticAllocator<uint32_t, 2> allocator1;
+        StaticAllocator<uint32_t, 2> allocator2;
+        uint32_t* val1 = allocator1.allocate();
+        uint32_t* val2 = allocator1.allocate();
+        uint32_t* val3 = allocator2.allocate();
+        uint32_t* val4 = allocator2.allocate();
+
+        EXPECT_TRUE(allocator1.isManagedMemory(val1));
+        EXPECT_TRUE(allocator1.isManagedMemory(val2));
+        EXPECT_FALSE(allocator1.isManagedMemory(val3));
+        EXPECT_FALSE(allocator1.isManagedMemory(val4));
+
+        EXPECT_FALSE(allocator2.isManagedMemory(val1));
+        EXPECT_FALSE(allocator2.isManagedMemory(val2));
+        EXPECT_TRUE(allocator2.isManagedMemory(val3));
+        EXPECT_TRUE(allocator2.isManagedMemory(val4));
+
+        allocator1.deallocate(val1);
+        allocator1.deallocate(val2);
+        allocator2.deallocate(val3);
+        allocator2.deallocate(val4);
+    }
+
+    TEST_F(StaticAllocatorTest, IsManagedMemory3)
+    {
+        StaticAllocator<uint32_t, 2> allocator;
+        uint32_t custom;
+        EXPECT_FALSE(allocator.isManagedMemory(&custom));
+    }
+
+    TEST_F(StaticAllocatorTest, IsManagedMemory4)
+    {
+        StaticAllocator<uint32_t, 2> allocator;
+        uint32_t* custom = new uint32_t();
+        EXPECT_FALSE(allocator.isManagedMemory(custom));
+        delete custom;
     }
 }
