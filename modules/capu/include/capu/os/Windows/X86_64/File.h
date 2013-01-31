@@ -66,7 +66,7 @@ namespace capu
             inline
             status_t File::getSizeInBytes(uint_t& size) const
             {
-                HANDLE fileHandle = CreateFile(mPath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+                HANDLE fileHandle = CreateFileA(mPath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
                 if (fileHandle == NULL)
                 {
                     return CAPU_ENOT_EXIST;

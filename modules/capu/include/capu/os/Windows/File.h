@@ -88,7 +88,7 @@ namespace capu
         {
             Array<char_t> buffer(path.getLength() + 1);
             StringUtils::Strncpy(buffer.getRawData(), buffer.size(), path.c_str());
-            PathRemoveBackslash(buffer.getRawData());
+            PathRemoveBackslashA(buffer.getRawData());
             return String(buffer.getRawData());
         }
 
@@ -97,7 +97,7 @@ namespace capu
         {
             char_t buffer[1000]; // TODO
             char_t* filePointer = 0;
-            int_t length = GetFullPathName(getPath().c_str(), sizeof(buffer), buffer, &filePointer);
+            int_t length = GetFullPathNameA(getPath().c_str(), sizeof(buffer), buffer, &filePointer);
             if (filePointer)
             {
                 // "trim" last path component
@@ -116,7 +116,7 @@ namespace capu
         inline
         status_t File::createFile()
         {
-            HANDLE handle = CreateFile(mPath.c_str(), 0, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+            HANDLE handle = CreateFileA(mPath.c_str(), 0, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
             capu::bool_t status = (handle != INVALID_HANDLE_VALUE);
             CloseHandle(handle);
             if (status)
@@ -129,7 +129,7 @@ namespace capu
         inline
         status_t File::createDirectory()
         {
-            BOOL status = CreateDirectory(mPath.c_str(), 0) == TRUE;
+            BOOL status = CreateDirectoryA(mPath.c_str(), 0) == TRUE;
             if (status != TRUE)
             {
                 return CAPU_ERROR;
@@ -143,11 +143,11 @@ namespace capu
             int_t status = -1;
             if (isDirectory())
             {
-                status = RemoveDirectory(mPath.c_str());
+                status = RemoveDirectoryA(mPath.c_str());
             }
             else
             {
-                status = DeleteFile(mPath.c_str());
+                status = DeleteFileA(mPath.c_str());
             }
             if (status != 0)
             {
@@ -173,7 +173,7 @@ namespace capu
         inline
         status_t File::renameTo(const capu::String& newPath)
         {
-            int_t status = MoveFileEx(mPath.c_str(), newPath.c_str(), 0);
+            int_t status = MoveFileExA(mPath.c_str(), newPath.c_str(), 0);
             if (status == 0)
             {
                 return CAPU_ERROR;

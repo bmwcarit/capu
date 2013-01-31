@@ -58,7 +58,7 @@ namespace capu
                 return CAPU_ERROR;
             }
 
-            mHandle = LoadLibrary(mPath.c_str());
+            mHandle = LoadLibraryA(mPath.c_str());
 
             if (mHandle == 0)
             {

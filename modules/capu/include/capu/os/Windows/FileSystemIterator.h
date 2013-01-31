@@ -46,7 +46,7 @@ namespace capu
 
             bool_t mValid;
 
-            WIN32_FIND_DATA mFindFileData;
+            WIN32_FIND_DATAA mFindFileData;
         };
 
         inline FileSystemIterator::FileSystemIterator(capu::File root)
@@ -70,7 +70,7 @@ namespace capu
         {
             String searchPattern(directory.getPath());
             searchPattern.append("/*.*");
-            HANDLE currFileHandle = FindFirstFile(searchPattern.c_str(), &mFindFileData);
+            HANDLE currFileHandle = FindFirstFileA(searchPattern.c_str(), &mFindFileData);
             if (currFileHandle == INVALID_HANDLE_VALUE)
             {
                 mValid = false;
@@ -138,7 +138,7 @@ namespace capu
                 HANDLE dir;
                 mDirectoryStack.peek(dir);
 
-                BOOL result = FindNextFile(dir, &mFindFileData);
+                BOOL result = FindNextFileA(dir, &mFindFileData);
                 found = result != 0;
             }
             while (found && (StringUtils::Strcmp(mFindFileData.cFileName, ".") == 0 ||
