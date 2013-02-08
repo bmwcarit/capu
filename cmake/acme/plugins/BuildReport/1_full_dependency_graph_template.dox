@@ -1,0 +1,33 @@
+/*
+ * Copyright (C) 2012 BMW Car IT GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * \page "Full dependency graph"
+ * > # Legend:
+ * \image html legend.png
+ * The dependency graph is integrated into the build report as Portable Network Graphic (PNG).\n
+ * ACME additionally created a copy of the dependency graph of the format png into the deliverable directory of the current project (into the subdirectory "doc"). \n\n
+ * 
+ * > # Full dependency graph: 
+ * \n
+ * The added cmake projects as well as the external libraries are subgrouped into a subgraph. The nodes of the respective projects are linked to the dependency \n
+ * graph and the build report of the added cmake project (if they exist). \n 
+ * The nodes that represent modules are linked to the directory of the source files. \n \n
+ * <IMG Src="dependency_graph.png" Class="map" Alt="No dependency graph was found!" target="_blank" Usemap="#${PROJECT_NAME}" Ismap>
+ * 
+ * 
+ */
+
