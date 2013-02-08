@@ -1,0 +1,8 @@
+/3psw
+/build
+/deliverable
+*~
+*\.kdev4
+*\.orig
+*\.swp
+\.kdev_include_paths

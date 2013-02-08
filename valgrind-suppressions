@@ -1,0 +1,50 @@
+{
+   va_list suppression 1
+   Memcheck:Cond
+   fun:_itoa_word
+   fun:vfprintf
+   fun:vsnprintf
+   fun:_ZN4capu9unixbased11StringUtils8VsprintfEPcyPKcP13__va_list_tag
+   fun:_ZN4capu11StringUtils8VsprintfEPcyPKcP13__va_list_tag
+   fun:_ZN4capu6Logger4vlogENS_11LoggerLevelEPKcS3_iS3_P13__va_list_tag
+   fun:_ZN4capu6Logger5traceEPKcS2_iS2_z
+   fun:_ZN15Logger_log_Test8TestBodyEv
+   fun:_ZN7testing8internal38HandleSehExceptionsInMethodIfSupportedINS_4TestEvEET0_PT_MS4_FS3_vEPKc
+   fun:_ZN7testing8internal35HandleExceptionsInMethodIfSupportedINS_4TestEvEET0_PT_MS4_FS3_vEPKc
+   fun:_ZN7testing4Test3RunEv
+   fun:_ZN7testing8TestInfo3RunEv
+}
+
+{
+   va_list suppression 2
+   Memcheck:Value8
+   fun:_itoa_word
+   fun:vfprintf
+   fun:vsnprintf
+   fun:_ZN4capu9unixbased11StringUtils8VsprintfEPcyPKcP13__va_list_tag
+   fun:_ZN4capu11StringUtils8VsprintfEPcyPKcP13__va_list_tag
+   fun:_ZN4capu6Logger4vlogENS_11LoggerLevelEPKcS3_iS3_P13__va_list_tag
+   fun:_ZN4capu6Logger5traceEPKcS2_iS2_z
+   fun:_ZN15Logger_log_Test8TestBodyEv
+   fun:_ZN7testing8internal38HandleSehExceptionsInMethodIfSupportedINS_4TestEvEET0_PT_MS4_FS3_vEPKc
+   fun:_ZN7testing8internal35HandleExceptionsInMethodIfSupportedINS_4TestEvEET0_PT_MS4_FS3_vEPKc
+   fun:_ZN7testing4Test3RunEv
+   fun:_ZN7testing8TestInfo3RunEv
+}
+
+{
+   va_list suppression 3
+   Memcheck:Cond
+   fun:vfprintf
+   fun:vsnprintf
+   fun:_ZN4capu9unixbased11StringUtils8VsprintfEPcyPKcP13__va_list_tag
+   fun:_ZN4capu11StringUtils8VsprintfEPcyPKcP13__va_list_tag
+   fun:_ZN4capu6Logger4vlogENS_11LoggerLevelEPKcS3_iS3_P13__va_list_tag
+   fun:_ZN4capu6Logger5traceEPKcS2_iS2_z
+   fun:_ZN15Logger_log_Test8TestBodyEv
+   fun:_ZN7testing8internal38HandleSehExceptionsInMethodIfSupportedINS_4TestEvEET0_PT_MS4_FS3_vEPKc
+   fun:_ZN7testing8internal35HandleExceptionsInMethodIfSupportedINS_4TestEvEET0_PT_MS4_FS3_vEPKc
+   fun:_ZN7testing4Test3RunEv
+   fun:_ZN7testing8TestInfo3RunEv
+   fun:_ZN7testing8TestCase3RunEv
+}

@@ -1,0 +1,171 @@
+/*
+ * Copyright (C) 2012 BMW Car IT GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CAPU_WINDOWS_THREAD_H
+#define CAPU_WINDOWS_THREAD_H
+
+#include <windows.h>
+
+namespace capu
+{
+    enum ThreadState;
+
+    namespace os
+    {
+        class Thread
+        {
+        public:
+            Thread();
+            ~Thread();
+            status_t start(Runnable& runnable);
+            status_t join();
+            void cancel();
+            ThreadState getState() const;
+            static status_t Sleep(uint32_t millis);
+            static uint_t CurrentThreadId();
+        private:
+
+            class ThreadRunnable
+            {
+            public:
+                ThreadRunnable();
+
+                Thread* thread;
+                Runnable* runnable;
+            };
+
+            DWORD  mThreadId;
+            HANDLE mThreadHandle;
+            ThreadState mState;
+            ThreadRunnable mRunnable;
+
+            void setState(ThreadState state);
+            static DWORD WINAPI run(LPVOID arg);
+        };
+
+        inline
+        Thread::ThreadRunnable::ThreadRunnable()
+            : thread(NULL)
+            , runnable(NULL)
+        {
+        }
+
+        inline
+        DWORD WINAPI
+        Thread::run(LPVOID arg)
+        {
+            ThreadRunnable* tr = (ThreadRunnable*) arg;
+            if (tr->runnable != NULL)
+            {
+                tr->runnable->run();
+            }
+            tr->thread->setState(TS_TERMINATED);
+            return NULL;
+        }
+
+        inline
+        Thread::Thread()
+            : mThreadHandle(0)
+            , mState(TS_NEW)
+        {
+            mRunnable.thread = this;
+        }
+
+        inline
+        Thread::~Thread()
+        {
+            join();
+        }
+
+        inline
+        status_t
+        Thread::start(Runnable& runnable)
+        {
+            if (mThreadHandle != 0)
+            {
+                // thread must be joined before it can be started again
+                return CAPU_ERROR;
+            }
+
+            mRunnable.runnable = &runnable;
+            mRunnable.thread->setState(TS_RUNNING);
+            mThreadHandle = CreateThread(NULL, 0, Thread::run, &mRunnable, 0, &mThreadId);
+            //TODO: check thread handle and return appropriate error code
+            if (mThreadHandle == NULL)
+            {
+                mRunnable.thread->setState(TS_NEW);
+                return CAPU_ERROR;
+            }
+            return CAPU_OK;
+        }
+
+        inline
+        status_t
+        Thread::join()
+        {
+            if (mThreadHandle && WaitForSingleObject(mThreadHandle, INFINITE) == 0)
+            {
+                mThreadHandle = 0;
+                return CAPU_OK;
+            }
+            else
+            {
+                return CAPU_ERROR;
+            }
+        }
+
+        inline
+        ThreadState
+        Thread::getState() const
+        {
+            return mState;
+        }
+
+        inline
+        void
+        Thread::setState(ThreadState state)
+        {
+            mState = state;
+        }
+
+        inline
+        status_t
+        Thread::Sleep(uint32_t millis)
+        {
+            ::Sleep(millis);
+            return CAPU_OK;
+        }
+
+        inline
+        uint_t
+        Thread::CurrentThreadId()
+        {
+            return GetCurrentThreadId();
+        }
+
+        inline
+        void
+        Thread::cancel()
+        {
+            if (mRunnable.runnable)
+            {
+                mRunnable.runnable->cancel();
+            }
+        }
+    }
+}
+
+#endif //CAPU_WINDOWS_THREAD_H
