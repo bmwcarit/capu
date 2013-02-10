@@ -49,8 +49,8 @@ MESSAGE(STATUS "using ACME base directory: ${ACME_PATH}")
 
 INCLUDE(${ACME_PATH}/internal/config.cmake)
 INCLUDE(${ACME_PATH}/internal/functions.cmake)
-INCLUDE(${ACME_PATH}/test/test.cmake)
-INCLUDE(${ACME_PATH}/test/testcases.cmake)
+#INCLUDE(${ACME_PATH}/test/test.cmake)
+#INCLUDE(${ACME_PATH}/test/testcases.cmake)
 
 
 #--------------------------------------------------------------------------
