@@ -91,7 +91,8 @@ TEST(Thread, startAndJoinTest)
     capu::Thread* CAPU_thread2 = new capu::Thread();
     CAPU_thread2->start(_test2);
     EXPECT_EQ(capu::CAPU_OK, CAPU_thread2->join());
-    EXPECT_EQ(capu::CAPU_ERROR, CAPU_thread2->join());
+    // multiple join and join without having started is ok
+    EXPECT_EQ(capu::CAPU_OK, CAPU_thread2->join());
     delete CAPU_thread2;
 }
 
@@ -102,14 +103,17 @@ TEST(Thread, reuseThread)
 
     {
         capu::Thread thread;
+        EXPECT_EQ(capu::TS_NEW, thread.getState());
         EXPECT_EQ(capu::CAPU_OK, thread.start(runnable1));
 
         // start with another runnable should fail until joined
         EXPECT_NE(capu::CAPU_OK, thread.start(runnable2));
 
         EXPECT_EQ(capu::CAPU_OK, thread.join());
+        EXPECT_EQ(capu::TS_TERMINATED, thread.getState());
         EXPECT_EQ(1, ThreadTest::variable);
         EXPECT_EQ(capu::CAPU_OK, thread.start(runnable2));
+        EXPECT_NE(capu::TS_TERMINATED, thread.getState());
     }
 
     // thread should be joined
@@ -127,6 +131,17 @@ TEST(Thread, startAndCancelTest)
     thread->cancel();
 
     // test blocks forever if cancel didn't work
+    EXPECT_EQ(capu::CAPU_OK, thread->join());
+
+    delete thread;
+}
+
+TEST(Thread, joinWithoutStartingIsOK)
+{
+    ThreadTestCancel runnable;
+
+    capu::Thread* thread = new capu::Thread();
+    // join without having started
     EXPECT_EQ(capu::CAPU_OK, thread->join());
 
     delete thread;
@@ -170,13 +185,14 @@ TEST(Thread, contextTest)
 
 TEST(Thread, getState)
 {
-    ThreadTest2 r1;
+    ThreadTestCancel r1;
     capu::Thread thread;
     capu::ThreadState state = thread.getState();
     EXPECT_EQ(capu::TS_NEW, state);
     thread.start(r1);
     state = thread.getState();
-    EXPECT_EQ(capu::TS_RUNNING, state);
+    EXPECT_NE(capu::TS_TERMINATED, state);
+    thread.cancel();
     thread.join();
     state = thread.getState();
     EXPECT_EQ(capu::TS_TERMINATED, state);

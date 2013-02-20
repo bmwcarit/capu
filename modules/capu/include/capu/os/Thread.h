@@ -59,7 +59,7 @@ namespace capu
 
         /**
          * Waits the thread completeness
-         * @return CAPU_OK if thread is currently waiting for completeness
+         * @return CAPU_OK if thread is currently waiting for completeness, hasn't been started at all or has terminated
          *         CAPU_ERROR otherwise
          */
         status_t join();

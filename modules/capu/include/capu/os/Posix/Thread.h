@@ -84,6 +84,7 @@ namespace capu
         Thread::run(void* arg)
         {
             ThreadRunnable* tr = (ThreadRunnable*) arg;
+            tr->thread->setState(TS_RUNNING);
             if (tr->runnable != NULL)
             {
                 tr->runnable->run();
@@ -103,11 +104,10 @@ namespace capu
             }
 
             mRunnable.runnable = &runnable;
-            mRunnable.thread->setState(TS_RUNNING);
             int32_t result = pthread_create(&mThread, &mAttr, Thread::run, &mRunnable);
+            mRunnable.thread->setState(TS_NEW);
             if (result != 0)
             {
-                mRunnable.thread->setState(TS_NEW);
                 return CAPU_ERROR;
             }
             return CAPU_OK;
@@ -119,7 +119,7 @@ namespace capu
         {
             if (mThread == 0)
             {
-                return CAPU_ERROR;
+                return CAPU_OK;
             }
             if (pthread_join(mThread, NULL) == 0)
             {

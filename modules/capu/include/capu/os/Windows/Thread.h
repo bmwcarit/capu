@@ -68,6 +68,7 @@ namespace capu
         Thread::run(LPVOID arg)
         {
             ThreadRunnable* tr = (ThreadRunnable*) arg;
+            tr->thread->setState(TS_RUNNING);
             if (tr->runnable != NULL)
             {
                 tr->runnable->run();
@@ -101,12 +102,10 @@ namespace capu
             }
 
             mRunnable.runnable = &runnable;
-            mRunnable.thread->setState(TS_RUNNING);
             mThreadHandle = CreateThread(NULL, 0, Thread::run, &mRunnable, 0, &mThreadId);
-            //TODO: check thread handle and return appropriate error code
+            mRunnable.thread->setState(TS_NEW);
             if (mThreadHandle == NULL)
             {
-                mRunnable.thread->setState(TS_NEW);
                 return CAPU_ERROR;
             }
             return CAPU_OK;
@@ -116,15 +115,17 @@ namespace capu
         status_t
         Thread::join()
         {
-            if (mThreadHandle && WaitForSingleObject(mThreadHandle, INFINITE) == 0)
+            if (0 == mThreadHandle)
+            {
+                return CAPU_OK;
+            }
+            if (WaitForSingleObject(mThreadHandle, INFINITE) == 0)
             {
                 mThreadHandle = 0;
                 return CAPU_OK;
             }
-            else
-            {
-                return CAPU_ERROR;
-            }
+
+            return CAPU_ERROR;
         }
 
         inline
