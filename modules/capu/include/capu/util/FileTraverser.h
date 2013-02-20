@@ -43,7 +43,7 @@ namespace capu
     {
         capu::FileSystemIterator iter(directory);
 
-        status_t result = CAPU_ERROR;
+        status_t result = CAPU_OK;
         while (iter.isValid())
         {
             bool_t stepIntoDirectory = true;

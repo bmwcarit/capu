@@ -38,7 +38,7 @@ TEST(FileUtilsTest, CreateAndRemoveDirectories)
 {
     // setup
     capu::File temp1234("temp1/temp2/temp3/temp4");
-
+    capu::File temp123("temp1/temp2/temp3");
     // execute
     EXPECT_FALSE(temp1234.isDirectory());
     EXPECT_FALSE(temp1234.exists());
@@ -49,7 +49,31 @@ TEST(FileUtilsTest, CreateAndRemoveDirectories)
     EXPECT_FALSE(temp1234.exists());
 
     // cleanup
+
+    temp123.remove();
+    capu::File temp12("temp1/temp2");
+    temp12.remove();
+    capu::File temp1("temp1");
+    temp1.remove();
+}
+
+
+TEST(FileUtilsTest, RecursiveDirectoryDelete)
+{
+    // setup
+    capu::File temp1234("temp1/temp2/temp3/temp4");
     capu::File temp123("temp1/temp2/temp3");
+    // execute
+    EXPECT_FALSE(temp1234.isDirectory());
+    EXPECT_FALSE(temp1234.exists());
+    capu::FileUtils::createDirectories(temp1234);
+    EXPECT_TRUE(temp1234.exists());
+    EXPECT_TRUE(temp1234.isDirectory());
+    capu::FileUtils::removeDirectory(temp123);
+    EXPECT_FALSE(temp1234.exists());
+    EXPECT_FALSE(temp123.exists());
+    // cleanup
+
     temp123.remove();
     capu::File temp12("temp1/temp2");
     temp12.remove();
