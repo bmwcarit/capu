@@ -57,7 +57,8 @@ TEST(FileTraverser, defaultAcceptTest)
     capu::FileTraverser::accept(f1, visitor); // accept visits all files
     EXPECT_EQ(2u, visitor.mCallCount);
     visitor.mCallCount = 0;
-    capu::FileTraverser::accept(f2, visitor); // accept visits no files
+    capu::status_t retVal = capu::FileTraverser::accept(f2, visitor); // accept visits no files
+    EXPECT_EQ(capu::CAPU_OK, retVal);
     EXPECT_EQ(0u, visitor.mCallCount);
 
     // cleanup
@@ -74,7 +75,8 @@ TEST(FileTraverser, acceptOnFile)
 
     // exec
     TestVisitor visitor;
-    capu::FileTraverser::accept(f1, visitor);
+    capu::status_t retVal = capu::FileTraverser::accept(f1, visitor);
+    EXPECT_EQ(capu::CAPU_OK, retVal);
     EXPECT_EQ(0u, visitor.mCallCount); // accept visits also if called on a file
 
     // cleanup
@@ -89,7 +91,8 @@ TEST(FileTraverser, acceptTestOnEmptyDir)
 
     // exec
     TestVisitor visitor;
-    capu::FileTraverser::accept(f1, visitor);
+    capu::status_t retVal = capu::FileTraverser::accept(f1, visitor);
+    EXPECT_EQ(capu::CAPU_OK, retVal);
     EXPECT_EQ(0u, visitor.mCallCount); // accepts on empty dir doesn't visit anything
 
     // cleanup
@@ -109,12 +112,14 @@ TEST(FileTraverser, abortTest)
 
     // exec
     visitor.mReturnValue = capu::CAPU_ERROR; // will abort traversal immediately
-    capu::FileTraverser::accept(f1, visitor);
+    capu::status_t retVal = capu::FileTraverser::accept(f1, visitor);
+    EXPECT_EQ(capu::CAPU_ERROR, retVal);
     EXPECT_EQ(1u, visitor.mCallCount); // only foobarfolder, then abort
     visitor.mCallCount = 0;
 
     visitor.mReturnValue = capu::CAPU_OK; // will do full traversal
-    capu::FileTraverser::accept(f1, visitor);
+    retVal = capu::FileTraverser::accept(f1, visitor);
+    EXPECT_EQ(capu::CAPU_OK, retVal);
     EXPECT_EQ(2u, visitor.mCallCount);
 
     // cleanup
@@ -137,22 +142,25 @@ TEST(FileTraverser, recursiveTraversalTest)
     TestVisitor visitor(false); // not stepping into directory
 
     // exec
-    capu::FileTraverser::accept(f1, visitor);
+    capu::status_t retVal = capu::FileTraverser::accept(f1, visitor);
+    EXPECT_EQ(capu::CAPU_OK, retVal);
     EXPECT_EQ(1u, visitor.mCallCount); // only foobarfolder2 was visited, then no recursion
     visitor.mCallCount = 0;
     visitor.mStepIntoDirectory = true;
 
-    capu::FileTraverser::accept(f1, visitor);
+    retVal = capu::FileTraverser::accept(f1, visitor);
+    EXPECT_EQ(capu::CAPU_OK, retVal);
     EXPECT_EQ(3u, visitor.mCallCount); // all files and folders were visited
     visitor.mCallCount = 0;
     visitor.mStepIntoDirectory = false;
 
-    capu::FileTraverser::accept(f2, visitor);
+    retVal = capu::FileTraverser::accept(f2, visitor);
     EXPECT_EQ(2u, visitor.mCallCount); // only foobar1 and foobar2 was visited
 
     visitor.mCallCount = 0;
     visitor.mStepIntoDirectory = true;
-    capu::FileTraverser::accept(f2, visitor);
+    retVal = capu::FileTraverser::accept(f2, visitor);
+    EXPECT_EQ(capu::CAPU_OK, retVal);
     EXPECT_EQ(2u, visitor.mCallCount); // foobar1.txt and foobar2.txt was visited
 
     // cleanup
@@ -169,6 +177,7 @@ TEST(FileTraverser, acceptOnNonExistingFolderTest)
     capu::File nonex("somenonexfile");
 
     // exec
-    capu::FileTraverser::accept(nonex, visitor); // accept does not visit nonexisting files/folders
+    capu::status_t retVal = capu::FileTraverser::accept(nonex, visitor); // accept does not visit nonexisting files/folders
+    EXPECT_EQ(capu::CAPU_OK, retVal);
     EXPECT_EQ(0u, visitor.mCallCount);
 }
