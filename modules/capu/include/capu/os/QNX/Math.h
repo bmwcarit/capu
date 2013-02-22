@@ -17,6 +17,8 @@
 #ifndef CAPU_QNX_MATH_H
 #define CAPU_QNX_MATH_H
 
+using namespace std;
+
 #include <capu/os/Posix/Math.h>
 
 namespace capu
