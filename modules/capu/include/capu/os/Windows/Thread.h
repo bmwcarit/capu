@@ -51,7 +51,7 @@ namespace capu
             HANDLE mThreadHandle;
             ThreadState mState;
             ThreadRunnable mRunnable;
-
+            bool mIsStarted;
             void setState(ThreadState state);
             static DWORD WINAPI run(LPVOID arg);
         };
@@ -81,6 +81,7 @@ namespace capu
         Thread::Thread()
             : mThreadHandle(0)
             , mState(TS_NEW)
+            , mIsStarted(false)
         {
             mRunnable.thread = this;
         }
@@ -95,19 +96,23 @@ namespace capu
         status_t
         Thread::start(Runnable& runnable)
         {
-            if (mThreadHandle != 0)
+            if (mIsStarted)
             {
-                // thread must be joined before it can be started again
+                // thread must have not been started or be joined before it can be started again
                 return CAPU_ERROR;
             }
 
             mRunnable.runnable = &runnable;
+            mRunnable.thread->setState(TS_STARTING);
+            mIsStarted = true;
             mThreadHandle = CreateThread(NULL, 0, Thread::run, &mRunnable, 0, &mThreadId);
-            mRunnable.thread->setState(TS_NEW);
             if (mThreadHandle == NULL)
             {
+                mRunnable.thread->setState(TS_NEW);
+                mIsStarted = false;
                 return CAPU_ERROR;
             }
+            
             return CAPU_OK;
         }
 
@@ -115,13 +120,13 @@ namespace capu
         status_t
         Thread::join()
         {
-            if (0 == mThreadHandle)
+            if (!mIsStarted)
             {
-                return CAPU_OK;
+                return CAPU_ERROR;
             }
             if (WaitForSingleObject(mThreadHandle, INFINITE) == 0)
             {
-                mThreadHandle = 0;
+                mIsStarted = false;
                 return CAPU_OK;
             }
 

@@ -29,6 +29,7 @@ namespace capu
     enum ThreadState
     {
         TS_NEW,
+        TS_STARTING,
         TS_RUNNING,
         TS_TERMINATED
     };
@@ -59,7 +60,7 @@ namespace capu
 
         /**
          * Waits the thread completeness
-         * @return CAPU_OK if thread is currently waiting for completeness, hasn't been started at all or has terminated
+         * @return CAPU_OK if thread is currently waiting for completeness or has terminated
          *         CAPU_ERROR otherwise
          */
         status_t join();

@@ -50,6 +50,7 @@ namespace capu
             pthread_attr_t mAttr;
             ThreadState mState;
             ThreadRunnable mRunnable;
+            bool mIsStarted;
 
             void setState(ThreadState state);
             static void* run(void* arg);
@@ -66,6 +67,7 @@ namespace capu
         Thread::Thread()
             : mThread(0)
             , mState(TS_NEW)
+            , mIsStarted(false)
         {
             pthread_attr_init(&mAttr);
             pthread_attr_setdetachstate(&mAttr, PTHREAD_CREATE_JOINABLE);
@@ -97,17 +99,20 @@ namespace capu
         status_t
         Thread::start(Runnable& runnable)
         {
-            if (mThread != 0)
+            if (mIsStarted)
             {
-                // thread must be joined before it can be started again
+                // thread must have not been started or be joined before it can be started again
                 return CAPU_ERROR;
             }
 
             mRunnable.runnable = &runnable;
+            mRunnable.thread->setState(TS_STARTING);
+            mIsStarted = true;
             int32_t result = pthread_create(&mThread, &mAttr, Thread::run, &mRunnable);
-            mRunnable.thread->setState(TS_NEW);
             if (result != 0)
             {
+                mRunnable.thread->setState(TS_NEW);
+                mIsStarted = false;
                 return CAPU_ERROR;
             }
             return CAPU_OK;
@@ -117,13 +122,13 @@ namespace capu
         status_t
         Thread::join()
         {
-            if (mThread == 0)
+            if (!mIsStarted)
             {
-                return CAPU_OK;
+                return CAPU_ERROR;
             }
             if (pthread_join(mThread, NULL) == 0)
             {
-                mThread = 0;
+                mIsStarted = false;
                 return CAPU_OK;
             }
             return CAPU_ERROR;

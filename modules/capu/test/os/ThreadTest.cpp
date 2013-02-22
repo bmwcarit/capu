@@ -91,8 +91,8 @@ TEST(Thread, startAndJoinTest)
     capu::Thread* CAPU_thread2 = new capu::Thread();
     CAPU_thread2->start(_test2);
     EXPECT_EQ(capu::CAPU_OK, CAPU_thread2->join());
-    // multiple join and join without having started is ok
-    EXPECT_EQ(capu::CAPU_OK, CAPU_thread2->join());
+    // multiple join is not ok
+    EXPECT_EQ(capu::CAPU_ERROR, CAPU_thread2->join());
     delete CAPU_thread2;
 }
 
@@ -142,7 +142,7 @@ TEST(Thread, joinWithoutStartingIsOK)
 
     capu::Thread* thread = new capu::Thread();
     // join without having started
-    EXPECT_EQ(capu::CAPU_OK, thread->join());
+    EXPECT_EQ(capu::CAPU_ERROR, thread->join());
 
     delete thread;
 }
