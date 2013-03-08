@@ -178,6 +178,62 @@ TEST(String, TestAppend4)
     EXPECT_EQ(10u, str.getLength());
 }
 
+TEST(String, TestPlusOperator1)
+{
+    capu::String str1("hello");
+    capu::String str2("world");
+    capu::String str3 = str1 + str2;
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("hello", str1.c_str()));
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("world", str2.c_str()));
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("helloworld", str3.c_str()));
+}
+
+TEST(String, TestPlusOperator2)
+{
+    capu::String str1("hello");
+    capu::String str2;
+    capu::String str3 = str1 + str2;
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("hello", str1.c_str()));
+    EXPECT_EQ(0u, str2.getLength());
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("hello", str3.c_str()));
+}
+
+TEST(String, TestPlusOperator3)
+{
+    capu::String str1;
+    capu::String str2("world");
+    capu::String str3 = str1 + str2;
+    EXPECT_EQ(0u, str1.getLength());
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("world", str2.c_str()));
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("world", str3.c_str()));
+}
+
+TEST(String, TestPlusOperator4)
+{
+    capu::String str1("hello");
+    capu::String str2 = str1 + "world";
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("hello", str1.c_str()));
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("helloworld", str2.c_str()));
+}
+
+TEST(String, TestPlusOperator5)
+{
+    capu::String str1("world");
+    capu::String str2 = "hello" + str1;
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("world", str1.c_str()));
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("helloworld", str2.c_str()));
+}
+
+TEST(String, TestAddition)
+{
+    capu::String str1("hello");
+    capu::String str2("world");
+    capu::String str3 = str1 + str2;
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("hello", str1.c_str()));
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("world", str2.c_str()));
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("helloworld", str3.c_str()));
+}
+
 TEST(String, TestSubStringCTor1)
 {
     capu::String str("0123456789", 4, 6);

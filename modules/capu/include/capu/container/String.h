@@ -85,6 +85,16 @@ namespace capu
         String& operator=(const char_t* other);
 
         /**
+         * Add two strings together and return the concatenated string
+         */
+        String operator+(const String& rOperand);
+
+        /**
+         * Concatenate a c-style string and return the result
+         */
+        String operator+(const char_t* rOperand);
+
+        /**
          * Return if this string equals another
          */
         bool_t operator==(const String& other) const;
@@ -311,6 +321,24 @@ namespace capu
     {
         initData(other);
         return *this;
+    }
+
+    inline String String::operator+(const String& rOperand)
+    {
+        String result(*this);
+        return result.append(rOperand);
+    }
+
+    inline String String::operator+(const char_t* rOperand)
+    {
+        String result(c_str());
+        return result.append(rOperand);
+    }
+
+    inline String operator+(const char_t* lOperand, const String& rOperand)
+    {
+        String result(lOperand);
+        return result.append(rOperand.c_str());
     }
 
     inline bool_t String::operator==(const String& other) const
