@@ -112,7 +112,7 @@ namespace capu
                 mIsStarted = false;
                 return CAPU_ERROR;
             }
-            
+
             return CAPU_OK;
         }
 

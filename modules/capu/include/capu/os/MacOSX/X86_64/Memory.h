@@ -37,7 +37,7 @@ namespace capu
                 using capu::generic::Memory::Set;
                 static uint_t CurrentMemoryUsage();
             };
-            
+
             inline uint_t Memory::CurrentMemoryUsage()
             {
                 struct task_basic_info result;

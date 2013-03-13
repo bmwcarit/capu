@@ -99,7 +99,7 @@ namespace capu
         // do some pointer arithmetic to check if the given ptr is inside our memory bounds
         MemoryEntry* toCheck = reinterpret_cast<MemoryEntry*>(ptr);
         MemoryEntry* myStart = reinterpret_cast<MemoryEntry*>(&mData[0]);
-        MemoryEntry* myEnd = reinterpret_cast<MemoryEntry*>(&mData[COUNT-1]);
+        MemoryEntry* myEnd = reinterpret_cast<MemoryEntry*>(&mData[COUNT - 1]);
         return toCheck >= myStart && toCheck <= myEnd;
     }
 

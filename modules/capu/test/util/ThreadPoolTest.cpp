@@ -125,7 +125,7 @@ TEST(ThreadPool, AddCloseCancelTest)
     }
 
     // wait that all workers that fit in the pool have increased the global counter
-    for(capu::uint32_t i = 0; i < poolSize; i++)
+    for (capu::uint32_t i = 0; i < poolSize; i++)
     {
         waiter.aquire();
     }
