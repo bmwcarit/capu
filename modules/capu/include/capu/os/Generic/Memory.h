@@ -37,9 +37,6 @@ namespace capu
 
             template<typename T>
             static void MoveObject(T* dst, const T* src, const uint_t size); // move with assignment operator
-
-        private:
-            int_t m_member;
         };
 
         inline
