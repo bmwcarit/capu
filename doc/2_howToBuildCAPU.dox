@@ -1,0 +1,41 @@
+/*
+ * Copyright (C) 2012 BMW Car IT GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+@page how_to_build How to build CAPU
+
+The CAPU build is <a href="http://www.cmake.org/">CMake based</a>. CMake supports various development and target platforms as well as different IDEs. 
+For further documentation about CMake, please refer to the CMake homepage.
+
+In order to create the CAPU-buildfiles for your system, start Cmake with an appropriate configuration of an IDE-generator and a system-toolchain file. CAPU offers a set of toolchain files 
+for some target platforms. You find them in the folder [CAPU_SOURCE_DIRECTORY]/cmake/toolchain.
+
+On most systems, CMake offers an UI-based dialog (cmake-gui). It will request a source code and binaries folder. The source code folder is the main CAPU source directory. It contains the 
+main CMakeLists.txt. You can choose the binaries folder as an arbitrary folder on your drive. CMake will generate the folder automatically if it does not exist. After you have entered the two directories,
+press the 'Configure' button. Cmake will then request the generator and toolchain file. After another 'Configure' run, no unset property should be visible in the UI. You can then 'generate' the
+buildfiles for your IDE.  
+
+CAPU does not require any special configuration. After you have created the build files, open your IDE and the CAPU project file. As a first start, build and run the 'capuTest' target. You will
+see a lot of tests for the various parts of CAPU.
+
+@section usecapuinanotherproject How to use CAPU in another project
+In most cases, you will use CAPU in another project. If your build is CMake based, too, you can integrate CAPU very easily. Add the following external project
+configuration to your CMake files:
+
+@code
+TODO please paste here!
+@endcode
+*/

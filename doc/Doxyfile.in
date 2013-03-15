@@ -21,7 +21,7 @@
 
 PROJECT_NAME           = CAPU
 
-PROJECT_BRIEF          = "A framework for C++ plugins."
+PROJECT_BRIEF          = "Collections And Platform Utils"
 
 OUTPUT_DIRECTORY       = @GLOBAL_TOP_LEVEL_BINARY_DIR@/documentation
 
