@@ -119,18 +119,21 @@ namespace capu
 
     };
 
+    inline
     ConstString::ConstString(const char_t* str)
         : m_data(str)
         , m_length(StringUtils::Strlen(m_data))
     {
     }
 
+    inline
     ConstString::ConstString(const ConstString& other)
         : m_data(other.c_str())
         , m_length(other.m_length)
     {
     }
-
+    
+    inline
     ConstString::ConstString(const char_t* data, const uint_t start)
         : m_data(0)
         , m_length(0)
@@ -142,7 +145,6 @@ namespace capu
             m_length = StringUtils::Strlen(startdata);
         }
     }
-
 
     inline
     const char_t*

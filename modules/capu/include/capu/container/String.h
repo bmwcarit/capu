@@ -22,6 +22,7 @@
 #include "capu/container/Array.h"
 #include "capu/util/Swap.h"
 #include "capu/container/Hash.h"
+#include "capu/container/ConstString.h"
 
 namespace capu
 {
@@ -343,7 +344,7 @@ namespace capu
 
     inline bool_t String::operator==(const String& other) const
     {
-        return StringUtils::Strcmp(c_str(), other.c_str()) == 0;
+        return ConstString(c_str()) == ConstString(other.c_str());
     }
 
     inline bool_t String::operator!=(const String& other) const
@@ -436,19 +437,17 @@ namespace capu
 
     inline int_t String::find(const char_t ch) const
     {
-        return StringUtils::IndexOf(c_str(), ch);
+        return ConstString(c_str()).find(ch);
     }
 
     inline int_t String::find(const String& substr) const
     {
-        const char* start = strstr(c_str(), substr.c_str());
-
-        return start ? (start - c_str()) : -1;
+        return ConstString(c_str()).find(ConstString(substr.c_str()));
     }
 
     inline int_t String::rfind(const char_t ch) const
     {
-        return StringUtils::LastIndexOf(c_str(), ch);
+        return ConstString(c_str()).rfind(ch);
     }
 
     inline String& String::swap(String& other)
