@@ -100,6 +100,14 @@ namespace capu
         static int_t IndexOf(const char_t* str, const char_t ch);
 
         /**
+         * Calculates the first index of a given string
+         * @param string to search in
+         * @param string to search for
+         * @return the first index of the specified string or -1 if the char was not found
+         */
+        static int_t IndexOf(const char_t* str, const char_t* str2);
+
+        /**
          * Checks if the given testString starts with the given prefix.
          * @param str The string which is tested.
          * @param prefix The prefix.
@@ -174,6 +182,12 @@ namespace capu
         return capu::os::arch::StringUtils::StartsWith(str, prefix);
     }
 
+    inline
+    int_t 
+    StringUtils::IndexOf(const char_t* str, const char_t* str2)
+    {
+        return capu::os::arch::StringUtils::IndexOf(str, str2);
+    }
 }
 #endif //CAPU_STRINGUTILS_H
 

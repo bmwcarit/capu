@@ -128,3 +128,10 @@ TEST(StringUtils, StartsWith2)
     EXPECT_FALSE(capu::StringUtils::StartsWith("prefixwithsuffix", 0));
     EXPECT_FALSE(capu::StringUtils::StartsWith(0, "prefix"));
 }
+
+TEST(StringUtils, IndexOf2)
+{
+    EXPECT_EQ(6, capu::StringUtils::IndexOf("Hello World", "World"));
+    EXPECT_EQ(-1, capu::StringUtils::IndexOf("Hello World", "WORLD"));
+
+}

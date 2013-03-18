@@ -36,6 +36,7 @@ namespace capu
             static int_t Strcmp(const char_t* str1, const char_t* str2);
             static int_t LastIndexOf(const char_t* str, const char_t ch);
             static int_t IndexOf(const char_t* str, const char_t ch);
+            static int_t IndexOf(const char_t* str, const char_t* str2);
             static bool_t StartsWith(const char_t* str, const char_t* prefix);
         };
 
@@ -125,6 +126,14 @@ namespace capu
             }
             return strncmp(str, prefix, strlen(prefix)) == 0;
         }
+		
+        inline
+        int_t 
+        StringUtils::IndexOf(const char_t* str, const char_t* str2)
+       {
+            const char_t* start = strstr(str, str2);
+            return start ? (start - str) : -1;
+       }
     }
 }
 #endif // CAPU_UNIXBASED_STRINGUTILS_H
