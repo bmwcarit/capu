@@ -102,7 +102,7 @@ ADD_UTIL_FILE(StaticAllocator)
 ADD_UTIL_FILE(HybridAllocator)
 ADD_UTIL_FILE(BinaryFileOutputStream)
 ADD_UTIL_FILE(BinaryFileInputStream)
-ADD_UTIL_FILE(TextFileOutputStream)
+ADD_UTIL_FILE(StringOutputStream)
 
 ADD_DEFINITIONS(-DCAPU_LOGGING_ENABLED=1)
 
