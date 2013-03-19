@@ -46,8 +46,16 @@ namespace capu
     typedef bool    bool_t;
     typedef char    char_t;
 
+
+#ifdef OS_MACOSX
+    #if defined(ARCH_X86_64)
+        typedef int64_t  int_t; //::intptr is defined as unsigned long aka 32 Bit instead of 64 Bit
+        typedef uint64_t uint_t;
+    #endif
+#else
     typedef ::intptr_t  int_t;
     typedef ::uintptr_t  uint_t;
+#endif
 }
 
 #endif //CAPU_CONFIG_H
