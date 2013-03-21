@@ -410,16 +410,16 @@ namespace capu
         const T& back() const;
 
         /**
-         * Finds the index of given element in the link list
+         * Finds the element in the link list
          * if you are using an object you need to overload == operator
          *
          * NOTE: Not STL compatible
          *
          * @param element the value that will be searched
-         * @return -1 if the value either does not exist or given value is NULL
-         *          otherwise index of value on linked list
+         * @return Iterator to the searched element if the element is found
+         *         otherwise Iterator to the end of the list
          */
-        int_t find(const T& element) const;
+        Iterator find(const T& element) const;
 
         /**
          * Check that if the list contains the given parameter or not
@@ -501,23 +501,19 @@ namespace capu
     }
 
     template <class T, class A, class C>
-    int_t List<T, A , C>::find(const T& element) const
+    typename List<T, A , C>::Iterator List<T, A , C>::find(const T& element) const
     {
-        int_t counter = 0;
-        ListNode* current = mBoundary.mNext;
-        while (current != &mBoundary)
-        {
-            if (mComparator(current->mData, element))
-            {
-                // element was found, return index
-                return counter;
-            }
-            current = current->mNext;
-            ++counter;
-        }
+        Iterator iter           = begin();
+        const Iterator iterEnd  = end();
 
-        // not found
-        return -1;
+        for(; iter != iterEnd; ++iter)
+        {
+            if(*iter == element)
+            {
+                return iter;
+            }
+        }
+        return iterEnd;
     }
 
     template <class T, class A, class C>
@@ -549,7 +545,7 @@ namespace capu
     template <class T, class A, class C>
     inline bool_t List<T, A , C>::contains(const T& element) const
     {
-        return find(element) != -1;
+        return find(element) != end();
     }
 
     template <class T, class A, class C>

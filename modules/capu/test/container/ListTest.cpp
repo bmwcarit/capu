@@ -315,7 +315,7 @@ TEST(List, find)
     capu::int32_t data3 = 44;
 
     //check empty list
-    EXPECT_EQ(-1, list->find(data1));
+    EXPECT_EQ(list->end(), list->find(data1));
 
     //add some elements
     list->insert(data1);
@@ -323,11 +323,11 @@ TEST(List, find)
     list->insert(data3);
 
     //find the elements
-    EXPECT_EQ(0, list->find(data1));
+    EXPECT_EQ(0, list->find(data1).currentIndex());
 
-    EXPECT_EQ(1, list->find(data2));
+    EXPECT_EQ(1, list->find(data2).currentIndex());
 
-    EXPECT_EQ(2, list->find(data3));
+    EXPECT_EQ(2, list->find(data3).currentIndex());
 
     delete list;
 }
@@ -375,9 +375,9 @@ TEST(List, copyConstructor1)
     EXPECT_EQ(list.size(), copy.size());
     list.clear();
 
-    EXPECT_EQ(0, copy.find(data1));
-    EXPECT_EQ(1, copy.find(data2));
-    EXPECT_EQ(2, copy.find(data3));
+    EXPECT_EQ(0, copy.find(data1).currentIndex());
+    EXPECT_EQ(1, copy.find(data2).currentIndex());
+    EXPECT_EQ(2, copy.find(data3).currentIndex());
 }
 
 TEST(List, copyConstructor2)
@@ -393,9 +393,9 @@ TEST(List, copyConstructor2)
     copy.insert(data2);
     copy.insert(data3);
 
-    EXPECT_EQ(0, copy.find(data1));
-    EXPECT_EQ(1, copy.find(data2));
-    EXPECT_EQ(2, copy.find(data3));
+    EXPECT_EQ(0, copy.find(data1).currentIndex());
+    EXPECT_EQ(1, copy.find(data2).currentIndex());
+    EXPECT_EQ(2, copy.find(data3).currentIndex());
     EXPECT_TRUE(list.isEmpty());
 }
 
