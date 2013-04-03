@@ -92,36 +92,40 @@ ENDFUNCTION(INTERNAL_ACME_EXPORT_FILE)
 
 # collect everything for tar building
 FUNCTION(INTERNAL_BUILD_RELEASE_TAR)
-	MESSAGE(STATUS "Adding Tarfile export target")
-	# the top level target for building the tar
-	add_custom_target(ExportTar COMMENT "Exporting marked Files into a tar" )
+	#Is there something to copy?
+	IF(NOT ${TARGETS_TO_COPY} STREQUAL "" AND NOT ${FILES_TO_COPY} STREQUAL "" AND NOT ${DIRECTORIES_TO_COPY} STREQUAL "")
+		MESSAGE(STATUS "Adding Tarfile export target")
+		# the top level target for building the tar
+		add_custom_target(ExportTar COMMENT "Exporting marked Files into a tar" )
 
-	# make files to copy out of targets to copy
-	FOREACH(TARGET_TO_COPY ${TARGETS_TO_COPY})
-		get_target_property(fullFilePath ${TARGET_TO_COPY} LOCATION)
-		get_filename_component(FILENAME "${fullFilePath}" NAME)
-		FOREACH(TARGET_DIR ${${TARGET_TO_COPY}_TARGETDIRS})
-			add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E copy_if_different "${fullFilePath}" "${TARGET_DIR}/${FILENAME}")
+		# make files to copy out of targets to copy
+		FOREACH(TARGET_TO_COPY ${TARGETS_TO_COPY})
+			get_target_property(fullFilePath ${TARGET_TO_COPY} LOCATION)
+			get_filename_component(FILENAME "${fullFilePath}" NAME)
+			FOREACH(TARGET_DIR ${${TARGET_TO_COPY}_TARGETDIRS})
+				add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E copy_if_different "${fullFilePath}" "${TARGET_DIR}/${FILENAME}")
+			ENDFOREACH()
 		ENDFOREACH()
-	ENDFOREACH()
 
-	# go through all directories to be copied
-	FOREACH(DIRECTORY_TO_COPY ${DIRECTORIES_TO_COPY})
-		FOREACH(TARGET_DIR ${${DIRECTORY_TO_COPY}_TARGETDIRS})
-			add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E copy_directory "${DIRECTORY_TO_COPY}" "${TARGET_DIR}")
+		# go through all directories to be copied
+		FOREACH(DIRECTORY_TO_COPY ${DIRECTORIES_TO_COPY})
+			FOREACH(TARGET_DIR ${${DIRECTORY_TO_COPY}_TARGETDIRS})
+				add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E copy_directory "${DIRECTORY_TO_COPY}" "${TARGET_DIR}")
+			ENDFOREACH()
 		ENDFOREACH()
-	ENDFOREACH()
 
-	# go through all files to include in tar
-	FOREACH(FILE_TO_COPY ${FILES_TO_COPY})
-		FOREACH(TARGET_PATH ${${FILE_TO_COPY}_TARGETPATHS})
-			add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FILE_TO_COPY}" "${TARGET_PATH}")
+		# go through all files to include in tar
+		FOREACH(FILE_TO_COPY ${FILES_TO_COPY})
+			FOREACH(TARGET_PATH ${${FILE_TO_COPY}_TARGETPATHS})
+				add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FILE_TO_COPY}" "${TARGET_PATH}")
+			ENDFOREACH()
 		ENDFOREACH()
-	ENDFOREACH()
 
-	# tar everything beneath build/export dir
-	add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E tar cvf ${PROJECT_NAME}.tar "${PROJECT_NAME}" WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/export/)
+		# tar everything beneath build/export dir
+		add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E tar cvf ${PROJECT_NAME}.tar "${PROJECT_NAME}" WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/export/)
 
-	# copy tar to deliverable folder
-	add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/export/${PROJECT_NAME}.tar" "${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.tar")
+		# copy tar to deliverable folder
+		add_custom_command(TARGET ExportTar COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/export/${PROJECT_NAME}.tar" "${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.tar")
+		
+	ENDIF()
 ENDFUNCTION(INTERNAL_BUILD_RELEASE_TAR)

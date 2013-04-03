@@ -31,23 +31,42 @@ FUNCTION(INTERNAL_ADD_FILES_TO_SOURCE_GROUP source_group_name list_of_files)
 	SET(${source_group_name}_${CURRENT_MODULE_NAME} 	${${source_group_name}_${CURRENT_MODULE_NAME}} CACHE INTERNAL "")
 ENDFUNCTION(INTERNAL_ADD_FILES_TO_SOURCE_GROUP)
 
-
-FUNCTION(PRINT)
-	IF(TEST_ENABLE_MESSAGES)
-		MESSAGE(${ARGN})
-	ENDIF()
-ENDFUNCTION(PRINT)
-
-
-FUNCTION(PRINT_DETAILS)
-	IF(CONFIG_DETAILED_CONFIGURATION_REPORT)
-		IF(TEST_ENABLE_MESSAGES)
-			MESSAGE(${ARGN})
+FUNCTION(message)
+	LIST(GET ARGV 0 LOGLEVEL)
+	LIST(REMOVE_AT ARGV 0)
+	INTERNAL_LIST_TO_STRING("${ARGV}" MSG)
+	IF(LOGLEVEL STREQUAL WARNING)
+		_MESSAGE("WARNING: ${MSG}") # remove stack trace from output
+	ELSEIF(LOGLEVEL STREQUAL VERBOSE)
+		IF(CONFIG_VERBOSE)
+			_MESSAGE("${MSG}") 
 		ENDIF()
+	ELSE()
+		_MESSAGE(${LOGLEVEL} " ${MSG}")
 	ENDIF()
-ENDFUNCTION(PRINT_DETAILS)
+
+ENDFUNCTION()
 
 
+# Split arguments passed to a function into several lists separated by
+# specified identifiers that do not have an associated list e.g.:
+#
+# SET(arguments
+#   hello world
+#   LIST3 foo bar
+#   LIST1 fuz baz
+#   )
+# ARGUMENT_SPLITTER("${arguments}" "LIST1 LIST2 LIST3" ARG)
+#
+# results in 8 distinct variables:
+#  * ARG_DEFAULT_FOUND: 1
+#  * ARG_DEFAULT: hello;world
+#  * ARG_LIST1_FOUND: 1
+#  * ARG_LIST1: fuz;baz
+#  * ARG_LIST2_FOUND: 0
+#  * ARG_LIST2:
+#  * ARG_LIST3_FOUND: 1
+#  * ARG_LIST3: foo;bar
 MACRO(INTERNAL_ARGUMENT_SPLITTER argInput argKeywordList argPrefix)
 
 	SET(inputTokenList "DEFAULT" "${argInput}")
@@ -109,9 +128,6 @@ MACRO(INTERNAL_GET_PATH_TO_FILES gsp_class)
 	STRING(TOUPPER ${GSP_FILENAME} gsp_varname)
 	IF(NOT "${GSP_PREFIX}" STREQUAL "")
 		SET(gsp_varname ${GSP_PREFIX})
-	#ELSEIF(NOT "${GSP_PLATFORM}" STREQUAL "")
-	#	STRING(TOUPPER ${GSP_PLATFORM} gsp_platform_varname)
-	#	SET(gsp_varname ${gsp_platform_varname}${gsp_varname})
 	ENDIF()
      
 	SET(gsp_all_classes ${gsp_class} ${GSP_DEFAULT_ARGS})
@@ -194,8 +210,24 @@ ENDMACRO(INTERNAL_GET_TEST_PATH)
 
 
 MACRO(INTERNAL_GROUP_LINK igl_libs)
-	IF("${TARGET_COMPILER}" STREQUAL "GCC")
+	IF(${CMAKE_COMPILER_IS_GNUCXX} OR ${CMAKE_COMPILER_IS_GNUCC})
 		SET(${igl_libs} "-Wl,--start-group" ${ARGN} "-Wl,--end-group")
 	ENDIF()
 ENDMACRO(INTERNAL_GROUP_LINK)
+
+MACRO(INTERNAL_LIST_REMOVE_DUPLICATES _list)
+	LIST(LENGTH "${_list}" ListLength)
+	IF(NOT  ${ListLength} EQUAL 0)
+		LIST(REMOVE_DUPLICATES "${_list}")
+	ENDIF()
+ENDMACRO(INTERNAL_LIST_REMOVE_DUPLICATES)
+
+MACRO(INTERNAL_LIST_REMOVE_ITEM _list)
+	LIST(LENGTH _list ListLength)
+	IF(NOT  ${ListLength} EQUAL 0)
+		INTERNAL_LIST_REMOVE_ITEM(_list ${ARGN})
+	ENDIF()
+ENDMACRO(INTERNAL_LIST_REMOVE_ITEM)
+
+
 

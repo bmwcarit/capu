@@ -14,15 +14,16 @@
 # limitations under the License.
 #
 
-INCLUDE(FindDoxygen)
+FIND_PROGRAM(QT5_PATH qmake)
 
-SET(DOXYGEN_FOUND ${DOXYGEN_FOUND} CACHE INTERNAL "")
-SET(DOXYGEN_DOT_FOUND ${DOXYGEN_DOT_FOUND} CACHE INTERNAL "")
+SET(QT5_PATH ${QT5_PATH} CACHE PATH "")
 
-IF("${DOXYGEN_EXECUTABLE}" STREQUAL "DOXYGEN_EXECUTABLE-NOTFOUND")
-	MESSAGE(WARNING "   The executable of the additional software \"doxygen\" was not found!")
-	MESSAGE(WARNING "   If you have installed \"doxygen\" then add the path to the executable into the Cache Variable \"DOXYGEN_EXECUTABLE\".")
-	MESSAGE(WARNING "   Otherwise ACME will not create the build report!")
+IF("${QT5_PATH}" STREQUAL "QT5_PATH-NOTFOUND")
+	MESSAGE(STATUS "   The executable of the additional software \"Qt5\" was not found!")
+	MESSAGE(STATUS "   If you have installed \"Qt5\" then add the path to the executable of \"Qt5\" into the Cache Variable \"QT5_PATH\".")
+	MESSAGE(STATUS "   Otherwise ACME will not perform the memory check!")
+	MESSAGE(STATUS)
 ELSE()
-	MESSAGE(VERBOSE "Found the additional software ${DOXYGEN_EXECUTABLE}")
+	MESSAGE(STATUS "   Found the additional software ${QT5_PATH}")
+	SET(QT5_FOUND 1 CACHE INTERNAL "")
 ENDIF()

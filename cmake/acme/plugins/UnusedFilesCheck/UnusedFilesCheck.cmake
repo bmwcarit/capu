@@ -25,7 +25,7 @@ SET(CONFIG_CHECK_FOR_UNUSED_FILES   0  CACHE BOOL     "Checks for and warns abou
 #--------------------------------------------------------------------------
 
 IF(CONFIG_CHECK_FOR_UNUSED_FILES)
-	ADD_PLUGIN_DOIT_HOOK(INTERNAL_CHECK_FOR_UNUSED_FILES\(\"\${CURRENT_MODULE_NAME}\"\ \"\${CMAKE_CURRENT_SOURCE_DIR}/\${CURRENT_MODULE_NAME}\"\))
+	ADD_PLUGIN_AFTER_DOIT_HOOK(INTERNAL_CHECK_FOR_UNUSED_FILES)
 ENDIF()
 
 
@@ -33,8 +33,10 @@ ENDIF()
 # Plugin Functions
 #--------------------------------------------------------------------------
 
-FUNCTION(INTERNAL_CHECK_FOR_UNUSED_FILES modulename path)
+MACRO(INTERNAL_CHECK_FOR_UNUSED_FILES)
     IF(CONFIG_CHECK_FOR_UNUSED_FILES)
+        SET (path "${CMAKE_CURRENT_SOURCE_DIR}/${CURRENT_MODULE_NAME}")
+        SET (modulename "${CURRENT_MODULE_NAME}")
 		STRING(TOUPPER ${modulename} CURRENT_UPPER_MODULE_NAME)
 		SET(AddedFiles ${${CURRENT_UPPER_MODULE_NAME}_MODULE_SOURCE_FILES})
 		FILE(GLOB_RECURSE publicHeaders "${path}/include/${modulename}/*.*")
@@ -44,8 +46,8 @@ FUNCTION(INTERNAL_CHECK_FOR_UNUSED_FILES modulename path)
 		FOREACH(file ${AllFiles})
 			list(FIND AddedFiles ${file} normalFileFound)
 			IF(${normalFileFound} EQUAL -1)
-				MESSAGE(${file} "(0): warning: File not added to acme") #  shows line in visual studio (error console)
+				MESSAGE(WARNING ${file} "(0): warning: File not added to acme") #  shows line in visual studio (error console)
 			ENDIF()
 		ENDFOREACH()
     ENDIF()
-ENDFUNCTION(INTERNAL_CHECK_FOR_UNUSED_FILES)
+ENDMACRO(INTERNAL_CHECK_FOR_UNUSED_FILES)

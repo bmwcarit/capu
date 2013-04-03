@@ -33,7 +33,7 @@ MARK_AS_ADVANCED(CONFIG_DOCUMENTATION_FOLDER_NAME)
 # Plugin External Tools
 #--------------------------------------------------------------------------
 
-PRINT_DETAILS(STATUS "...requires external tool Doxygen")
+MESSAGE(VERBOSE "...requires external tool Doxygen")
 IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/doc/)
 	IF(NOT DOXYGEN_FOUND)
 		INCLUDE(${ACME_PATH}/tools/FindDoxygen.cmake)

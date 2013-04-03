@@ -25,7 +25,7 @@ SET(CONFIG_SEARCH_MEMORY_ERRORS   0  CACHE BOOL     "sets memcheck flags and cre
 # Plugin External Tools
 #--------------------------------------------------------------------------
 
-PRINT_DETAILS(STATUS "...requires external tool Valgrind")
+MESSAGE(VERBOSE "...requires external tool Valgrind")
 IF(CONFIG_SEARCH_MEMORY_ERRORS)
 	IF(NOT VALGRIND_FOUND)
 		INCLUDE(${ACME_PATH}/tools/FindValgrind.cmake)
@@ -49,15 +49,13 @@ ENDIF()
 FUNCTION(INTERNAL_SEARCH_MEMORY_ERRORS)
     IF(CONFIG_SEARCH_MEMORY_ERRORS)
 		IF(NOT "${VALGRIND_PATH}" STREQUAL "VALGRIND_PATH-NOTFOUND")
-			MESSAGE("")
-			MESSAGE(---------------------------------------------------------------------------)
-			MESSAGE("Searching for memory errors...")
+			MESSAGE(VERBOSE "Searching for memory errors...")
 
 			IF("${TARGET_OS}" STREQUAL "Linux")
 				INTERNAL_MEMORY_ERRORS_LINUX()
 						                			                
 			ELSEIF("${TARGET_OS}" STREQUAL "Windows")
-				MESSAGE(STATUS "The feature is currently just available on Linux")
+				MESSAGE(WARNING "The feature is currently just available on Linux")
 			ELSE()
 		
 			ENDIF()
@@ -72,31 +70,31 @@ FUNCTION(INTERNAL_MEMORY_ERRORS_LINUX)
     SET(path_to_executable "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
 	IF("${VALGRIND_PATH}" STREQUAL "VALGRIND_PATH-NOTFOUND")
-		MESSAGE(STATUS "WARNING: The required tool valgrind is not installed. Install \"valgrind\" to create the memory check target")
+		MESSAGE(WARNING "The required tool valgrind is not installed. Install \"valgrind\" to create the memory check target")
 		SET(settings_correct 0)
 	ENDIF()
 	
     IF("${GLOBAL_UTILS_MODULES_TESTS}" STREQUAL "")
-	    MESSAGE(STATUS "WARNING: No test modules have been found.")
+	    MESSAGE(WARNING "No test modules have been found.")
 	    SET(settings_correct 0)
     ENDIF()
     
     IF(NOT CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE)
-        MESSAGE(STATUS "WARNING: The cache variable \"CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE\" ist FALSE. To create the target \"Memory_Check\" ENABLE this cache variable.")
+        MESSAGE(WARNING "The cache variable \"CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE\" ist FALSE. To create the target \"Memory_Check\" ENABLE this cache variable.")
         SET(settings_correct 0)
     ENDIF()
     
     IF(NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-	    MESSAGE(STATUS "WARNING: The cache variable \"CMAKE_BUILD_TYPE\" ist not \"Debug\". To create the target \"Memory_Check\" set this cache variable to \"Debug\".")
+	    MESSAGE(WARNING "The cache variable \"CMAKE_BUILD_TYPE\" ist not \"Debug\". To create the target \"Memory_Check\" set this cache variable to \"Debug\".")
 	    SET(settings_correct 0) 
 	ENDIF()
 
     IF("${settings_correct}" STREQUAL "0")
-		MESSAGE(STATUS "WARNING: The target \"Memory_Check\" was not created.")
+		MESSAGE(WARNING "The target \"Memory_Check\" was not created.")
 	
 	ELSE()
-        MESSAGE(STATUS "All necessary settings are correct. A Memory-Check-Target has been created.")
-        MESSAGE(STATUS "Use \"make Memory_Check\" after building and installing the project in the build-directory to generate the memory leak detection.")
+        MESSAGE(VERBOSE  "All necessary settings are correct. A Memory-Check-Target has been created.")
+        MESSAGE(STATUS "Valgrind: Use \"make Memory_Check\" after building and installing the project in the build-directory to generate the memory leak detection.")
     
         INTERNAL_ADD_COMPILER_FLAGS_TO_TARGET("Test" "${memcheck_compile_flags}")
         

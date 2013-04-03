@@ -15,33 +15,27 @@
 #
 
 #--------------------------------------------------------------------------
-# Enable message output
-#--------------------------------------------------------------------------
-
-SET(TEST_ENABLE_MESSAGES 1 CACHE INTERNAL "")
-
-#--------------------------------------------------------------------------
-# If a toolchain was provided and the toolchain file exists make sure,
-# that all variables are set as early as possible.
-#--------------------------------------------------------------------------
-
-IF (NOT "${CMAKE_TOOLCHAIN_FILE}" STREQUAL "" )
-	IF (EXISTS "${CMAKE_TOOLCHAIN_FILE}")
-		INCLUDE(${CMAKE_TOOLCHAIN_FILE})
-		MESSAGE(STATUS "Using toolchain file: " ${CMAKE_TOOLCHAIN_FILE})
-	ELSE()
-		MESSAGE(STATUS "WARNING: toolchain file not found: " ${CMAKE_TOOLCHAIN_FILE})
-	ENDIF()
-ENDIF()
-
-#--------------------------------------------------------------------------
 # Store the current path to acme build system.
 # There is the macro CMAKE_CURRENT_LIST_DIR, but it requires Cmake 2.8.3 or higher.
 # This solution works on CMake 2.6 as well.
 #--------------------------------------------------------------------------
-
 get_filename_component(ACME_PATH ${CMAKE_CURRENT_LIST_FILE} PATH) 
-MESSAGE(STATUS "using ACME base directory: ${ACME_PATH}")
+
+INCLUDE(${ACME_PATH}/internal/helpmethods.cmake)
+
+MESSAGE(VERBOSE "using ACME base directory: ${ACME_PATH}")
+#--------------------------------------------------------------------------
+# If a toolchain was provided and the toolchain file exists make sure,
+# that all variables are set as early as possible.
+#--------------------------------------------------------------------------
+IF (NOT "${CMAKE_TOOLCHAIN_FILE}" STREQUAL "" )
+	IF (EXISTS "${CMAKE_TOOLCHAIN_FILE}")
+		INCLUDE(${CMAKE_TOOLCHAIN_FILE})
+		MESSAGE(VERBOSE "Using toolchain file: " ${CMAKE_TOOLCHAIN_FILE})
+	ELSE()
+		MESSAGE(WARNING "toolchain file not found: " ${CMAKE_TOOLCHAIN_FILE})
+	ENDIF()
+ENDIF()
 
 #--------------------------------------------------------------------------
 # Include configurations, internal implementations and a test file
@@ -126,9 +120,9 @@ ENDFUNCTION(ACME_ADD_EXTERNAL_LIBRARY)
 # \text  	Sets the lokal variable \a CURRENT_MODULE_NAME, invokes the CMake\n
 #           command `ADD_SUBDIRECTORY()` and the Function `INTERNAL_JUST_DOIT()`.
 # \details 	--------------------------------------------------------------------------------------------------------------------\n \n
-FUNCTION(ACME_ADD_SUBDIRECTORY sub_dir_name)
+MACRO(ACME_ADD_SUBDIRECTORY sub_dir_name)
 	INTERNAL_ACME_ADD_SUBDIRECTORY("${sub_dir_name}")
-ENDFUNCTION(ACME_ADD_SUBDIRECTORY)
+ENDMACRO(ACME_ADD_SUBDIRECTORY)
 
 ##
 # \page     ACME_API ACME_API
@@ -150,22 +144,6 @@ ENDFUNCTION(ACME_ADD_MODULE)
 FUNCTION(ACME_ADD_OPTIONAL_MODULE aom_module_name aom_type)
 	INTERNAL_ADD_OPTIONAL_MODULE("${aom_module_name}" "${aom_type}")
 ENDFUNCTION(ACME_ADD_OPTIONAL_MODULE)
-
-##
-# \page     ACME_API ACME_API
-# \section  ACME_REQUIRED_PACKAGE ACME_REQUIRED_PACKAGE
-# \text  	Looks for the file \a Find<pkg_name>.cmake in the cmake module path and adds the required include directories and \n
-# 			libraries to the build. The current module name is specified by the invoking \a CMakeList.txt.
-# \param    pkg_name name of the added package
-# \modifies ${pkg_name}_FOUND						\n
-#			${pkg_name}_INCLUDE_DIRS				\n
-#			${pkg_name}_LIBRARIES					\n
-#			${CURRENT_MODULE_NAME}_PACKAGE_LIBS		\n
-#			[${CURRENT_MODULE_NAME}_BUILD_ENABLED]	
-# \details 	--------------------------------------------------------------------------------------------------------------------\n \n
-FUNCTION(ACME_REQUIRED_PACKAGE pkg_name)
-	INTERNAL_REQUIRED_PACKAGE("${pkg_name}")
-ENDFUNCTION(ACME_REQUIRED_PACKAGE)
 
 ##
 # \page     ACME_API ACME_API
@@ -194,7 +172,7 @@ ENDFUNCTION(ACME_OPTIONAL_PACKAGE)
 #			[${CURRENT_MODULE_NAME}_DEBUG_DEFINITIONS]		
 # \details 	--------------------------------------------------------------------------------------------------------------------\n \n
 FUNCTION(ACME_ADD_DEPENDENCY ad_name)
-	INTERNAL_ADD_DEPENDENCY("${ad_name}")
+	INTERNAL_ADD_DEPENDENCY(${ad_name} ${ARGN})
 ENDFUNCTION(ACME_ADD_DEPENDENCY)
 
 ##
@@ -348,7 +326,7 @@ ENDFUNCTION(ACME_ADD_OPTIONAL_FILE)
 # \modifies ${CURRENT_MODULE_NAME}_LIBRARIES
 # \details 	--------------------------------------------------------------------------------------------------------------------\n \n
 FUNCTION(ACME_LINK_LIBRARY ll_name)
-	INTERNAL_LINK_LIBRARY("${ll_name}" ${ARGN})
+	INTERNAL_ADD_LIBRARY_TO_CURRENT_MODULE("${ll_name}" ${ARGN})
 ENDFUNCTION(ACME_LINK_LIBRARY ll_name)
 
 ##
@@ -476,8 +454,6 @@ ENDFUNCTION(ACME_TEST)
 #--------------------------------------------------------------------------
 
 INCLUDE(${ACME_PATH}/internal/plugins.cmake)
-
-
 
 #
 # \page     ACME_API ACME_API

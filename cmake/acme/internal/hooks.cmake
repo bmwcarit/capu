@@ -22,11 +22,11 @@ FUNCTION(ADD_PLUGIN_FINALIZE_HOOK functionname)
 	FILE(APPEND "${CMAKE_CURRENT_BINARY_DIR}/Hooks/FinalizeHooksTemp.cmake" "${functionname}()\n")
 ENDFUNCTION(ADD_PLUGIN_FINALIZE_HOOK)
 
-FUNCTION(CALL_PLUGIN_FINALIZE_HOOKS)
+MACRO(CALL_PLUGIN_FINALIZE_HOOKS)
 	IF(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/Hooks/FinalizeHooksTemp.cmake)
 		INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/Hooks/FinalizeHooksTemp.cmake)
 	ENDIF()
-ENDFUNCTION(CALL_PLUGIN_FINALIZE_HOOKS)
+ENDMACRO(CALL_PLUGIN_FINALIZE_HOOKS)
 
 
 #--------------------------------------------------------------------------
@@ -34,26 +34,57 @@ ENDFUNCTION(CALL_PLUGIN_FINALIZE_HOOKS)
 #--------------------------------------------------------------------------
 
 FUNCTION(ADD_PLUGIN_DEPENDENCY_HOOK functionname)
-	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/DependencyHooksTemp.cmake" "${functionname}\n")
+	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/DependencyHooksTemp.cmake" "${functionname}()\n")
 ENDFUNCTION(ADD_PLUGIN_DEPENDENCY_HOOK)
 
-FUNCTION(CALL_PLUGIN_DEPENDENCY_HOOKS)
+MACRO(CALL_PLUGIN_DEPENDENCY_HOOKS)
 	IF(EXISTS ${CMAKE_BINARY_DIR}/Hooks/DependencyHooksTemp.cmake)
 		INCLUDE(${CMAKE_BINARY_DIR}/Hooks/DependencyHooksTemp.cmake)
 	ENDIF()
-ENDFUNCTION(CALL_PLUGIN_DEPENDENCY_HOOKS)
+ENDMACRO(CALL_PLUGIN_DEPENDENCY_HOOKS)
 
 
 #--------------------------------------------------------------------------
 # Hooks within the function INTERNAL_JUST_DOIT
 #--------------------------------------------------------------------------
 
-FUNCTION(ADD_PLUGIN_DOIT_HOOK functionname)
-	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/DoitHooksTemp.cmake" "${functionname}\n")
-ENDFUNCTION(ADD_PLUGIN_DOIT_HOOK)
+FUNCTION(ADD_PLUGIN_BEFORE_DOIT_HOOK functionname)
+	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/BeforeDoitHooksTemp.cmake" "${functionname}()\n")
+ENDFUNCTION(ADD_PLUGIN_BEFORE_DOIT_HOOK)
 
-FUNCTION(CALL_PLUGIN_DOIT_HOOKS)
-	IF(EXISTS ${CMAKE_BINARY_DIR}/Hooks/DoitHooksTemp.cmake)
-		INCLUDE(${CMAKE_BINARY_DIR}/Hooks/DoitHooksTemp.cmake)
+MACRO(CALL_PLUGIN_BEFORE_DOIT_HOOKS)
+	IF(EXISTS ${CMAKE_BINARY_DIR}/Hooks/BeforeDoitHooksTemp.cmake)
+		INCLUDE(${CMAKE_BINARY_DIR}/Hooks/BeforeDoitHooksTemp.cmake)
 	ENDIF()
-ENDFUNCTION(CALL_PLUGIN_DOIT_HOOKS)
+ENDMACRO(CALL_PLUGIN_BEFORE_DOIT_HOOKS)
+
+FUNCTION(ADD_PLUGIN_AFTER_DOIT_HOOK functionname)
+	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/AfterDoitHooksTemp.cmake" "${functionname}()\n")
+ENDFUNCTION(ADD_PLUGIN_AFTER_DOIT_HOOK)
+
+MACRO(CALL_PLUGIN_AFTER_DOIT_HOOKS)
+	IF(EXISTS ${CMAKE_BINARY_DIR}/Hooks/AfterDoitHooksTemp.cmake)
+		INCLUDE(${CMAKE_BINARY_DIR}/Hooks/AfterDoitHooksTemp.cmake)
+ 	ENDIF()
+ENDMACRO(CALL_PLUGIN_AFTER_DOIT_HOOKS)
+
+FUNCTION(CLEAN_UP_HOOKS)
+	MESSAGE(VERBOSE Hooks "Cleaning up hooks")
+	IF(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/Hooks/FinalizeHooksTemp.cmake)
+		FILE(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/Hooks/FinalizeHooksTemp.cmake)
+	ENDIF()
+
+	IF(EXISTS ${CMAKE_BINARY_DIR}/Hooks/DependencyHooksTemp.cmake)
+		FILE(REMOVE ${CMAKE_BINARY_DIR}/Hooks/DependencyHooksTemp.cmake)
+	ENDIF()
+
+	IF(EXISTS ${CMAKE_BINARY_DIR}/Hooks/BeforeDoitHooksTemp.cmake)
+		FILE(REMOVE ${CMAKE_BINARY_DIR}/Hooks/BeforeDoitHooksTemp.cmake)
+	ENDIF()
+
+	IF(EXISTS ${CMAKE_BINARY_DIR}/Hooks/AfterDoitHooksTemp.cmake)
+		FILE(REMOVE ${CMAKE_BINARY_DIR}/Hooks/AfterDoitHooksTemp.cmake)
+	ENDIF()
+ENDFUNCTION(CLEAN_UP_HOOKS)
+
+CLEAN_UP_HOOKS()

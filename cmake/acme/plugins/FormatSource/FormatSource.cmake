@@ -25,7 +25,7 @@ SET(CONFIG_CREATE_FORMAT_SOURCE_CODE   0   CACHE BOOL     "add FormatSource targ
 # Plugin External Tools
 #--------------------------------------------------------------------------
 
-PRINT_DETAILS(STATUS "...requires external tool Astyle")
+MESSAGE(VERBOSE  "...requires external tool Astyle")
 IF(CONFIG_CREATE_FORMAT_SOURCE_CODE)
 	IF(NOT ASTYLE_FOUND) 
 		INCLUDE(${ACME_PATH}/tools/FindAstyle.cmake)

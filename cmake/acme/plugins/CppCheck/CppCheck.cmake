@@ -34,7 +34,7 @@ ENDFUNCTION(ACME_CPPCHECK_TARGET)
 # Plugin External Tools
 #--------------------------------------------------------------------------
 
-PRINT_DETAILS(STATUS "...requires external tool Cppcheck")
+MESSAGE(VERBOSE "...requires external tool Cppcheck")
 IF(CONFIG_CREATE_CPPCHECK)
 	IF(NOT CPPCHECK_FOUND) 
 		INCLUDE(${ACME_PATH}/tools/FindCppCheck.cmake)

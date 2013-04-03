@@ -25,7 +25,7 @@ SET(CONFIG_CREATE_TEST_COVERAGE	  0	 CACHE BOOL	   "enable the creation of the t
 # Plugin External Tools
 #--------------------------------------------------------------------------
 
-PRINT_DETAILS(STATUS "...requires external tool Lcov")
+MESSAGE(VERBOSE "...requires external tool Lcov")
 IF(CONFIG_CREATE_TEST_COVERAGE)
 	IF(NOT LCOV_FOUND)
 		INCLUDE(${ACME_PATH}/tools/FindLcov.cmake)
@@ -49,8 +49,6 @@ ENDIF()
 FUNCTION(INTERNAL_CREATE_TEST_COVERAGE)
     IF(CONFIG_CREATE_TEST_COVERAGE)
 		IF(NOT "${LCOV_PATH}" STREQUAL "LCOV_PATH-NOTFOUND")
-			MESSAGE("")
-			MESSAGE(---------------------------------------------------------------------------)
 			MESSAGE("Creating test coverage...")
 
 			IF("${TARGET_OS}" STREQUAL "Linux")
@@ -69,36 +67,36 @@ FUNCTION(INTERNAL_TEST_COVERAGE_LINUX)
     SET(settings_correct 1)
 
 	IF("${GLOBAL_UTILS_MODULES_TESTS}" STREQUAL "")
-	    MESSAGE(STATUS "WARNING: No test modules have been found.")
+	    MESSAGE(WARNING "No test modules have been found.")
 	    SET(settings_correct 0)
 	    
 	ELSE()
         IF("${LCOV_PATH}" STREQUAL "LCOV_PATH-NOTFOUND")
-            MESSAGE(STATUS "WARNING: The required tool lcov is not installed. Install \"lcov\" to create the test coverage target")
+            MESSAGE(WARNING "The required tool lcov is not installed. Install \"lcov\" to create the test coverage target")
             SET(settings_correct 0)
         ENDIF()
 	
 		IF(CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE)			
-            MESSAGE(STATUS "WARNING: The cache variable \"CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE\" ist TRUE. To create the target \"Test_Coverage\" DISABLE this cache variable.")
+            MESSAGE(WARNING "The cache variable \"CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE\" ist TRUE. To create the target \"Test_Coverage\" DISABLE this cache variable.")
 		    SET(settings_correct 0)
 	    ENDIF()
 			
         IF(NOT CONFIG_BUILD_UNITTESTS)
-	    	MESSAGE(STATUS "WARNING: The cache variable \"CONFIG_BUILD_UNITTESTS\" ist FALSE. To create the target \"Test_Coverage\" ENABLE this cache variable.")
+	    	MESSAGE(WARNING "The cache variable \"CONFIG_BUILD_UNITTESTS\" ist FALSE. To create the target \"Test_Coverage\" ENABLE this cache variable.")
 		    SET(settings_correct 0)
 	    ENDIF()	
 	    
 	    IF(NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-	       	MESSAGE(STATUS "WARNING: The cache variable \"CMAKE_BUILD_TYPE\" ist not \"Debug\". To create the target \"Test_Coverage\" set this cache variable to \"Debug\".")
+	       	MESSAGE(WARNING "The cache variable \"CMAKE_BUILD_TYPE\" ist not \"Debug\". To create the target \"Test_Coverage\" set this cache variable to \"Debug\".")
 		    SET(settings_correct 0) 
 	    ENDIF()
 	ENDIF()
 
 
 	IF("${settings_correct}" STREQUAL "0")
-		MESSAGE(STATUS "WARNING: The target \"Test_Coverage\" was not created.")
+		MESSAGE(WARNING "The target \"Test_Coverage\" was not created.")
 	ELSE()
-		MESSAGE(STATUS "All necessary settings are correct. A Test-Coverage-Target has been created.")
+		MESSAGE(VERBOSE "All necessary settings are correct. A Test-Coverage-Target has been created.")
 		MESSAGE(STATUS "Use \"make Test_Coverage\" after building and installing the project in the build-directory to generate the test coverage.")
 		
         SET(path_to_testexe "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")

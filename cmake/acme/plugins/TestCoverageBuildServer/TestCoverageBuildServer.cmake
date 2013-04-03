@@ -26,7 +26,7 @@ SET(CONFIG_CREATE_TEST_COVERAGE_BUILD_SERVER 0  CACHE BOOL     "sets gcov flags 
 #--------------------------------------------------------------------------
 
 IF(CONFIG_CREATE_TEST_COVERAGE_BUILD_SERVER)
-	ADD_PLUGIN_DOIT_HOOK(INTERNAL_TEST_COVERAGE_ON_BUILD_SERVER\(\))
+	ADD_PLUGIN_BEFORE_DOIT_HOOK(INTERNAL_TEST_COVERAGE_ON_BUILD_SERVER)
 ENDIF()
 
 
@@ -37,12 +37,12 @@ ENDIF()
 FUNCTION(INTERNAL_TEST_COVERAGE_ON_BUILD_SERVER)    
         IF("${TARGET_OS}" STREQUAL "Linux")
             IF(${CMAKE_BUILD_TYPE} STREQUAL "Debug") # otherwise, windows configure fails because CMAKE_BUILD_TYPE is not set
-                ACME_REQUIRED_PACKAGE(Rt)
-                ACME_LINK_LIBRARY(gcov)
+                ACME_ADD_DEPENDENCY(Rt)
+                ACME_LINK_LIBRARY(-lgcov)
                 ACME_ADD_DEBUG_COMPILER_FLAG(-fprofile-arcs)
                 ACME_ADD_DEBUG_COMPILER_FLAG(-ftest-coverage)
             ELSE()
-                MESSAGE(STATUS "WARNING: The cache variable \"CMAKE_BUILD_TYPE\" ist not \"Debug\". To set gcov flags set this cache variable to \"Debug\".")
+                MESSAGE(WARNING "The cache variable \"CMAKE_BUILD_TYPE\" ist not \"Debug\". To set gcov flags set this cache variable to \"Debug\".")
             ENDIF()
         ENDIF()
 ENDFUNCTION()
