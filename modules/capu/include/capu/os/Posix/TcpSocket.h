@@ -396,8 +396,8 @@ namespace capu
             }
 
             struct timeval _timeout;
-            _timeout.tv_sec = mTimeout;
-            _timeout.tv_usec = 0;
+            _timeout.tv_sec = mTimeout / 1000;
+            _timeout.tv_usec = ( mTimeout % 1000 ) * 1000;
 
             if (setsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, &_timeout, sizeof(_timeout)) < 0)
             {
@@ -527,7 +527,8 @@ namespace capu
                 return CAPU_ERROR;
             }
 
-            timeout = _timeout.tv_sec;
+            timeout = _timeout.tv_sec*1000;
+            timeout += _timeout.tv_usec/1000;
 
             return CAPU_OK;
         }

@@ -409,15 +409,11 @@ namespace capu
                 return CAPU_SOCKET_ESOCKET;
             }
 
-            struct timeval soTimeout;
-            soTimeout.tv_sec = mTimeout;
-            soTimeout.tv_usec = 0;
-
-            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (char_t*)&soTimeout, sizeof(soTimeout)) == SOCKET_ERROR)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (char_t*)&mTimeout, sizeof(mTimeout)) == SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
-            if (setsockopt(mSocket, SOL_SOCKET, SO_SNDTIMEO, (char_t*)&soTimeout, sizeof(soTimeout)) == SOCKET_ERROR)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_SNDTIMEO, (char_t*)&mTimeout, sizeof(mTimeout)) == SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
