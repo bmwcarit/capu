@@ -26,7 +26,7 @@ public:
         return capu::CAPU_OK;
     }
 
-    capu::status_t log(capu::LoggerMessage& message)
+    capu::status_t log(capu::LoggerMessage&)
     {
         return capu::CAPU_OK;
     }

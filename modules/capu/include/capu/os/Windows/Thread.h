@@ -17,6 +17,7 @@
 #ifndef CAPU_WINDOWS_THREAD_H
 #define CAPU_WINDOWS_THREAD_H
 
+#include "capu/os/Generic/Thread.h"
 #include <windows.h>
 
 namespace capu
@@ -25,49 +26,30 @@ namespace capu
 
     namespace os
     {
-        class Thread
+        class Thread : private generic::Thread
         {
         public:
             Thread();
             ~Thread();
             status_t start(Runnable& runnable);
             status_t join();
-            void cancel();
-            ThreadState getState() const;
+            using capu::generic::Thread::cancel;
+            using capu::generic::Thread::resetCancel;
+            using capu::generic::Thread::getState;
             static status_t Sleep(uint32_t millis);
             static uint_t CurrentThreadId();
         private:
 
-            class ThreadRunnable
-            {
-            public:
-                ThreadRunnable();
-
-                Thread* thread;
-                Runnable* runnable;
-            };
-
             DWORD  mThreadId;
             HANDLE mThreadHandle;
-            ThreadState mState;
-            ThreadRunnable mRunnable;
-            bool mIsStarted;
-            void setState(ThreadState state);
             static DWORD WINAPI run(LPVOID arg);
         };
-
-        inline
-        Thread::ThreadRunnable::ThreadRunnable()
-            : thread(NULL)
-            , runnable(NULL)
-        {
-        }
 
         inline
         DWORD WINAPI
         Thread::run(LPVOID arg)
         {
-            ThreadRunnable* tr = (ThreadRunnable*) arg;
+            generic::ThreadRunnable* tr = (generic::ThreadRunnable*) arg;
             tr->thread->setState(TS_RUNNING);
             if (tr->runnable != NULL)
             {
@@ -79,11 +61,9 @@ namespace capu
 
         inline
         Thread::Thread()
-            : mThreadHandle(0)
-            , mState(TS_NEW)
-            , mIsStarted(false)
+            : generic::Thread()
+            , mThreadHandle(0)
         {
-            mRunnable.thread = this;
         }
 
         inline
@@ -134,20 +114,6 @@ namespace capu
         }
 
         inline
-        ThreadState
-        Thread::getState() const
-        {
-            return mState;
-        }
-
-        inline
-        void
-        Thread::setState(ThreadState state)
-        {
-            mState = state;
-        }
-
-        inline
         status_t
         Thread::Sleep(uint32_t millis)
         {
@@ -160,16 +126,6 @@ namespace capu
         Thread::CurrentThreadId()
         {
             return GetCurrentThreadId();
-        }
-
-        inline
-        void
-        Thread::cancel()
-        {
-            if (mRunnable.runnable)
-            {
-                mRunnable.runnable->cancel();
-            }
         }
     }
 }

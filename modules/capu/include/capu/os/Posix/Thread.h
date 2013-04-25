@@ -19,59 +19,39 @@
 
 #include <pthread.h>
 #include <unistd.h>
+#include "capu/os/Generic/Thread.h"
 
 namespace capu
 {
     namespace posix
     {
-        class Thread
+        class Thread : private generic::Thread
         {
         public:
             Thread();
             ~Thread();
             status_t start(Runnable& runnable);
             status_t join();
-            void cancel();
-            ThreadState getState() const;
             static status_t Sleep(uint32_t millis);
+            using capu::generic::Thread::cancel;
+            using capu::generic::Thread::resetCancel;
+            using capu::generic::Thread::getState;
 
         private:
-
-            class ThreadRunnable
-            {
-            public:
-                ThreadRunnable();
-
-                Thread* thread;
-                Runnable* runnable;
-            };
-
             pthread_t mThread;
             pthread_attr_t mAttr;
-            ThreadState mState;
-            ThreadRunnable mRunnable;
-            bool mIsStarted;
 
-            void setState(ThreadState state);
             static void* run(void* arg);
         };
 
-        inline
-        Thread::ThreadRunnable::ThreadRunnable()
-            : thread(NULL)
-            , runnable(NULL)
-        {
-        }
 
         inline
         Thread::Thread()
-            : mThread(0)
-            , mState(TS_NEW)
-            , mIsStarted(false)
+            : generic::Thread()
+            , mThread(0)
         {
             pthread_attr_init(&mAttr);
             pthread_attr_setdetachstate(&mAttr, PTHREAD_CREATE_JOINABLE);
-            mRunnable.thread = this;
         }
 
         inline
@@ -85,7 +65,7 @@ namespace capu
         void*
         Thread::run(void* arg)
         {
-            ThreadRunnable* tr = (ThreadRunnable*) arg;
+            generic::ThreadRunnable* tr = (generic::ThreadRunnable*) arg;
             tr->thread->setState(TS_RUNNING);
             if (tr->runnable != NULL)
             {
@@ -143,29 +123,6 @@ namespace capu
                 return CAPU_OK;
             }
             return CAPU_ERROR;
-        }
-
-        inline
-        ThreadState Thread::getState() const
-        {
-            return mState;
-        }
-
-        inline
-        void
-        Thread::setState(ThreadState state)
-        {
-            mState = state;
-        }
-
-        inline
-        void
-        Thread::cancel()
-        {
-            if (mRunnable.runnable)
-            {
-                mRunnable.runnable->cancel();
-            }
         }
     }
 }

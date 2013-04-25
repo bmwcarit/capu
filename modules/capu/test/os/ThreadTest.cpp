@@ -38,6 +38,27 @@ private:
     capu::int32_t mVal;
 };
 
+class IncrementerThreadTest : public capu::Runnable
+{
+public:
+    static capu::int32_t variable;
+
+    IncrementerThreadTest()
+    {
+        variable = 0;
+    }
+
+    void run()
+    {
+        do
+        {
+            variable++;
+            EXPECT_EQ(capu::CAPU_OK, capu::Thread::Sleep(100));
+        }
+        while (!isCancelRequested());
+    }
+};
+
 class ThreadTest2 : public capu::Runnable
 {
 public:
@@ -70,7 +91,8 @@ public:
 };
 
 
-capu::int32_t ThreadTest::variable;
+capu::int32_t ThreadTest::variable = 0;
+capu::int32_t IncrementerThreadTest::variable = 0;
 
 TEST(Thread, startAndJoinTest)
 {
@@ -134,6 +156,38 @@ TEST(Thread, startAndCancelTest)
     EXPECT_EQ(capu::CAPU_OK, thread->join());
 
     delete thread;
+}
+
+TEST(Thread, reuseCancelledThread)
+{
+    IncrementerThreadTest runnable;
+    {
+        capu::Thread thread;
+        EXPECT_EQ(capu::TS_NEW, thread.getState());
+        EXPECT_EQ(capu::CAPU_OK, thread.start(runnable));
+
+        // start with another runnable should fail until joined
+        EXPECT_NE(capu::CAPU_OK, thread.start(runnable));
+
+        thread.cancel();
+        EXPECT_EQ(capu::CAPU_OK, thread.join());
+        EXPECT_EQ(capu::TS_TERMINATED, thread.getState());
+        EXPECT_LT(0, IncrementerThreadTest::variable); // should have run at least once until now
+        capu::int32_t previousValue = IncrementerThreadTest::variable;
+
+        // restart without reset only runs first part of code
+        EXPECT_EQ(capu::CAPU_OK, thread.start(runnable));
+        EXPECT_EQ(capu::CAPU_OK, thread.join());
+        EXPECT_EQ(previousValue + 1, IncrementerThreadTest::variable);
+        previousValue = IncrementerThreadTest::variable;
+
+        // restart with reset
+        EXPECT_EQ(capu::CAPU_OK, thread.start(runnable));
+        thread.cancel();
+        EXPECT_EQ(capu::CAPU_OK, thread.join());
+        EXPECT_LT(previousValue, IncrementerThreadTest::variable);
+
+    }
 }
 
 TEST(Thread, joinWithoutStartingIsOK)

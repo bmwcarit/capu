@@ -30,6 +30,7 @@ namespace capu
             using capu::posix::Thread::start;
             using capu::posix::Thread::join;
             using capu::posix::Thread::cancel;
+            using capu::posix::Thread::resetCancel;
             using capu::posix::Thread::getState;
             using capu::posix::Thread::Sleep;
             static uint_t CurrentThreadId();

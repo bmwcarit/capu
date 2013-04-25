@@ -71,6 +71,11 @@ namespace capu
         void cancel();
 
         /**
+         * Resets the cancel flag of the runnable, it could be run again or continue to run
+         */
+        void resetCancel();
+
+        /**
          * Return the current thread state
          * @return state of the thread
          */
@@ -109,6 +114,13 @@ namespace capu
     Thread::cancel()
     {
         capu::os::arch::Thread::cancel();
+    }
+
+    inline
+    void
+    Thread::resetCancel()
+    {
+        capu::os::arch::Thread::resetCancel();
     }
 
     inline

@@ -48,6 +48,16 @@ namespace capu
         }
 
         /**
+         * Resets the cancel flag to false.
+         *
+         * Allows a runnable to potentially be run again (test if cancel requested does not fail).
+         */
+        void resetCancel()
+        {
+            mCancel = false;
+        }
+
+        /**
          * Checks if the cancel flag is set.
          *
          * @return TRUE if the runnable should exit, FALSE otherwise

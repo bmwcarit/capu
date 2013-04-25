@@ -32,6 +32,7 @@ namespace capu
                 using capu::os::Thread::start;
                 using capu::os::Thread::join;
                 using capu::os::Thread::cancel;
+                using capu::os::Thread::resetCancel;
                 using capu::os::Thread::getState;
                 using capu::os::Thread::Sleep;
                 using capu::os::Thread::CurrentThreadId;
