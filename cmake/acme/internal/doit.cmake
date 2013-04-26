@@ -41,20 +41,19 @@ MACRO(INTERNAL_JUST_DOIT)
     INTERNAL_LIST_REMOVE_DUPLICATES(GoogleMock_DEPENDENCIES)
     SET(GoogleMock_DEPENDENCIES ${GoogleMock_DEPENDENCIES} CACHE INTERNAL "")
 	
-	INTERNAL_SET_GLOBAL_TEST_VARIABLES()
 	INTERNAL_SET_MODULE_SOURCE_FILES()						# adds files in the "res/" folders to "${CURRENT_UPPER_MODULE_NAME}_MODULE_SOURCE_FILES"
     
 	IF(${WITH_${CURRENT_UPPER_MODULE_NAME}} AND ${${CURRENT_MODULE_NAME}_BUILD_ENABLED})
 		# Everything that has to do with collecting things from dependencies
 		INTERNAL_COLLECT_LIBRARIES_FOR_LINKING()			# sets the local variable "collected_libs"
-		INTERNAL_COLLECT_DEPENDENCIES_TEST()				# sets the local variable "collected_dependencies_test"
 		INTERNAL_COLLECT_DEPENDENCY_DIRS()					# sets the local variable "collected_dependency_dirs"
-		INTERNAL_COLLECT_DEPENDENCY_DIRS_TEST()				# sets the local variable "collected_dependency_dirs_test"
 		INTERNAL_COLLECT_INCLUDE_DIRS()						# sets the local variable "include_dirs"
 		INTERNAL_COLLECT_RES_FILES()						# sets the local variable "resource_files"
 		INTERNAL_ADD_CORRECT_CMAKELIST()					# adds correct "CMakeList.txt" to "${CURRENT_UPPER_MODULE_NAME}_MODULE_SOURCE_FILES"
 		INTERNAL_COLLECT_PACKAGE_LINK_DIRECTORIES()			# sets the local variable "external_package_link_directories"
-		
+
+        LINK_DIRECTORIES(${collected_dependency_dirs})
+
 		IF(${${CURRENT_MODULE_NAME}_HAS_SOURCE_FILES})
 			# Create actual cmake target and add properties to them
 			INTERNAL_ADD_MODULE_TARGET()					# adds the "${${CURRENT_UPPER_MODULE_NAME}_MODULE_SOURCE_FILES}" to the generated library or executable target
@@ -67,7 +66,10 @@ MACRO(INTERNAL_JUST_DOIT)
 		ENDIF()
 
 		# Test stuff
+        INTERNAL_COLLECT_DEPENDENCIES_TEST()				# sets the local variable "collected_dependencies_test"
+        INTERNAL_COLLECT_DEPENDENCY_DIRS_TEST()				# sets the local variable "collected_dependency_dirs_test"
 		IF(NOT "${${CURRENT_MODULE_NAME}_TEST_FILES}" STREQUAL "")
+            INTERNAL_SET_GLOBAL_TEST_VARIABLES()
 			IF(${CONFIG_BUILD_UNITTESTS})
 				IF(NOT ${CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE})
 					
@@ -78,9 +80,9 @@ MACRO(INTERNAL_JUST_DOIT)
 						ENDIF()
 					ENDIF()			
 			
-					LINK_DIRECTORIES(${GoogleTest_LIBRARIES_DIR} ${GoogleMock_LIBRARIES_DIR} ${external_package_link_directories})
+					LINK_DIRECTORIES(${GoogleTest_LIBRARY_DIRS} ${GoogleMock_LIBRARY_DIRS} ${external_package_link_directories})
 					ADD_EXECUTABLE(${CURRENT_MODULE_NAME}Test ${${CURRENT_MODULE_NAME}_TEST_FILES} ${${CURRENT_MODULE_NAME}_TEST_MAIN})
-					SET_TARGET_PROPERTIES(${CURRENT_MODULE_NAME}Test PROPERTIES INCLUDE_DIRECTORIES "${intern_include_path};${include_dirs};${test_path};${GoogleTest_INCLUDE_DIRS};${GoogleMock_INCLUDE_DIRS}")
+					SET_TARGET_PROPERTIES(${CURRENT_MODULE_NAME}Test PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/${CURRENT_MODULE_NAME}/include;${include_dirs};${test_path};${GoogleTest_INCLUDE_DIRS};${GoogleMock_INCLUDE_DIRS}")
 					INTERNAL_ADD_FLAGS_TO_TEST_TARGET()
 
 					MESSAGE(VERBOSE  "${CURRENT_MODULE_NAME} contains unit tests, building ${CURRENT_MODULE_NAME}Test")
@@ -121,6 +123,7 @@ ENDMACRO(INTERNAL_JUST_DOIT)
 
 
 MACRO(INTERNAL_COLLECT_LIBRARIES_FOR_LINKING)
+MESSAGE (VERBOSE INTERNAL_COLLECT_LIBRARIES_FOR_LINKING "${CURRENT_MODULE_NAME}_LIBRARIES=${${CURRENT_MODULE_NAME}_LIBRARIES}")
 	SET(collected_libs "${${CURRENT_MODULE_NAME}_LIBRARIES}")
 	INTERNAL_LIST_REMOVE_ITEM(collected_libs "")
 
@@ -150,15 +153,9 @@ MACRO(INTERNAL_COLLECT_DEPENDENCIES_TEST)
 	MESSAGE(VERBOSE "Initial collected libs in test ${collected_libs}")
 	MESSAGE(VERBOSE "List of all dependencies of ${CURRENT_MODULE_NAME}: ${${CURRENT_MODULE_NAME}_DEPENDENCIES}")
 
-	MESSAGE(VERBOSE "GoogleMock_DEPENDENCIES ${GoogleMock_DEPENDENCIES}")
-	MESSAGE(VERBOSE "Threads Libraries: ${Thread_LIBRARIES}")
-	MESSAGE(VERBOSE "Rt Libraries: ${Rt_LIBRARIES}")
-
 	IF(NOT "${${CURRENT_MODULE_NAME}_TEST_FILES}" STREQUAL "")
 		FOREACH(current_dependency ${${CURRENT_MODULE_NAME}_DEPENDENCIES})
-			IF(${${current_dependency}_HAS_SOURCE_FILES})
-				SET(collected_dependencies_test ${collected_dependencies_test} ${${current_dependency}_LIBRARIES})
-			ENDIF()
+             SET(collected_dependencies_test ${collected_dependencies_test} ${${current_dependency}_LIBRARIES})
 		ENDFOREACH()
 
 		FOREACH (googleMockDep ${GoogleMock_DEPENDENCIES})
@@ -174,20 +171,12 @@ MACRO(INTERNAL_COLLECT_DEPENDENCIES_TEST)
 		ENDIF()
 	
 		IF(${CONFIG_BUILD_UNITTESTS})
-			
-			IF(NOT "${collected_dependencies_test}" STREQUAL "")
-				LIST(REVERSE collected_dependencies_test)
-				LIST(REMOVE_DUPLICATES collected_dependencies_test)
-				LIST(REVERSE collected_dependencies_test)
-			ENDIF()		
-			
-			IF(NOT ${CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE})			
+			IF(NOT ${CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE})
 				IF(${${CURRENT_MODULE_NAME}_HAS_SOURCE_FILES})
 					IF(NOT "${CURRENT_MODULE_TYPE}" STREQUAL "DYNAMIC") # use an advanced flag to control this behaviour ("DYNAMIC_TEST_LINK_BEHAVIOUR") ?!
-						SET(collected_dependencies_test ${CURRENT_MODULE_NAME} ${collected_dependencies_test})
+						SET(collected_dependencies_test ${${CURRENT_MODULE_NAME}_LIBRARIES} ${collected_dependencies_test})
 					ENDIF()
 				ENDIF()
-
 			ENDIF()
 		ENDIF()
 	ENDIF()
@@ -205,6 +194,13 @@ MACRO(INTERNAL_COLLECT_DEPENDENCY_DIRS)
 	IF(NOT "${collected_dependency_dirs}" STREQUAL "")
 		LIST(REMOVE_DUPLICATES collected_dependency_dirs)
 	ENDIF()
+    
+    IF(NOT "${${CURRENT_MODULE_NAME}_DEPENDENCIES}" STREQUAL "")
+        FOREACH(current_dependency ${${CURRENT_MODULE_NAME}_DEPENDENCIES})
+            SET(collected_dependency_dirs ${collected_dependency_dirs} ${${current_dependency}_LIBRARY_DIRS})
+        ENDFOREACH()	
+    ENDIF()
+    MESSAGE(VERBOSE INTERNAL_COLLECT_DEPENDENCY_DIRS END "${CURRENT_MODULE_NAME}_LIBRARY_DIRS=${${CURRENT_MODULE_NAME}_LIBRARY_DIRS}")
 ENDMACRO(INTERNAL_COLLECT_DEPENDENCY_DIRS)
 
 
@@ -253,14 +249,12 @@ ENDMACRO(INTERNAL_ADD_CORRECT_CMAKELIST)
 
 
 MACRO(INTERNAL_COLLECT_PACKAGE_LINK_DIRECTORIES)
-	IF(NOT "${${CURRENT_MODULE_NAME}_TEST_FILES}" STREQUAL "")
 		SET(external_package_link_directories "")
 		FOREACH(current_dependency ${${CURRENT_MODULE_NAME}_DEPENDENCIES})
-			IF(DEFINED ${current_dependency}_LIBRARIES_DIR)
-				SET(external_package_link_directories ${external_package_link_directories} "${${current_dependency}_LIBRARIES_DIR}")
+			IF(DEFINED ${current_dependency}_LIBRARY_DIRS)
+				SET(external_package_link_directories ${external_package_link_directories} "${${current_dependency}_LIBRARY_DIRS}")
 			ENDIF()
 		ENDFOREACH()	
-	ENDIF()
 ENDMACRO(INTERNAL_COLLECT_PACKAGE_LINK_DIRECTORIES)
 
 
@@ -272,8 +266,7 @@ MACRO(INTERNAL_ADD_MODULE_TARGET)
 		${${CURRENT_UPPER_MODULE_NAME}_MODULE_SOURCE_FILES}
 		)
 		SET(${CURRENT_MODULE_NAME}_LIBRARIES ${CURRENT_MODULE_NAME} CACHE INTERNAL "")
-		MESSAGE(VERBOSE "${CURRENT_MODULE_NAME}_LIBRARIES = ${${CURRENT_MODULE_NAME}_LIBRARIES}")
-		
+
 	ELSEIF("${CURRENT_MODULE_TYPE}" STREQUAL "DYNAMIC")
 		ADD_LIBRARY(${CURRENT_MODULE_NAME}
 		SHARED
@@ -285,8 +278,8 @@ MACRO(INTERNAL_ADD_MODULE_TARGET)
 		ADD_EXECUTABLE(${CURRENT_MODULE_NAME}
 		${${CURRENT_UPPER_MODULE_NAME}_MODULE_SOURCE_FILES}
         )
-		
-    ENDIF()		
+
+    ENDIF()
 ENDMACRO(INTERNAL_ADD_MODULE_TARGET)
 
 
@@ -303,7 +296,7 @@ ENDMACRO(INTERNAL_ADD_FLAGS_TO_MODULE_TARGET)
 
 
 MACRO(INTERNAL_SET_MODULE_TARGET_PROPERTIES)
-	SET_TARGET_PROPERTIES(${CURRENT_MODULE_NAME} PROPERTIES INCLUDE_DIRECTORIES "${include_dirs};${intern_include_path}")
+	SET_TARGET_PROPERTIES(${CURRENT_MODULE_NAME} PROPERTIES INCLUDE_DIRECTORIES "${include_dirs};${CMAKE_CURRENT_SOURCE_DIR}/${CURRENT_MODULE_NAME}/include")
 	SET_TARGET_PROPERTIES(${CURRENT_MODULE_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 ENDMACRO(INTERNAL_SET_MODULE_TARGET_PROPERTIES)
 
@@ -328,12 +321,10 @@ MACRO(INTERNAL_SET_GLOBAL_TEST_VARIABLES)
 
 		IF(${CONFIG_BUILD_UNITTESTS})
 			IF(${CONFIG_BUILD_GLOBAL_TEST_EXECUTABLE})
-				SET(GLOBAL_TEST_INCLUDE_DIRECTORIES ${GLOBAL_TEST_INCLUDE_DIRECTORIES} ${include_dirs} ${intern_include_path} "${test_path}" CACHE INTERNAL "collect test include directories")					
-				SET(GLOBAL_TEST_LIBS ${collected_dependencies_test} ${GLOBAL_TEST_LIBS} CACHE INTERNAL "collect test libs")
-				
-				IF(${${CURRENT_MODULE_NAME}_HAS_SOURCE_FILES})
-					SET(GLOBAL_TEST_LIBS ${CURRENT_MODULE_NAME} ${GLOBAL_TEST_LIBS} CACHE INTERNAL "collect test libs")
-				ENDIF()
+				SET(GLOBAL_TEST_INCLUDE_DIRECTORIES ${GLOBAL_TEST_INCLUDE_DIRECTORIES} ${include_dirs} ${CMAKE_CURRENT_SOURCE_DIR}/${CURRENT_MODULE_NAME}/include "${test_path}" CACHE INTERNAL "collect test include directories")					
+				SET(GLOBAL_TEST_LIBS ${collected_dependencies_test} ${GLOBAL_TEST_LIBS} )
+                SET(GLOBAL_TEST_LIBS ${${CURRENT_MODULE_NAME}_LIBRARIES} ${GLOBAL_TEST_LIBS} CACHE INTERNAL "collect test libs")
+                MESSAGE(VERBOSE INTERNAL_SET_GLOBAL_TEST_VARIABLES "GLOBAL_TEST_LIBS=${GLOBAL_TEST_LIBS}")
 				
 				SET(GLOBAL_TEST_SOURCE ${GLOBAL_TEST_SOURCE} ${${CURRENT_MODULE_NAME}_TEST_FILES} CACHE INTERNAL "collect test source")
 				SET(GLOBAL_TEST_LINKER_DIRECTORIES ${GLOBAL_TEST_LINKER_DIRECTORIES} "${collected_dependency_dirs_test}" "${external_package_link_directories}" CACHE INTERNAL "collect test linker directories")
@@ -416,7 +407,18 @@ MACRO(INTERNAL_COPY_RESOURCE_FILES)
 		IF(NOT "${jdi_exclude_files}" STREQUAL "")
 			INTERNAL_LIST_REMOVE_ITEM(jdi_ressource_files ${jdi_exclude_files})
 		ENDIF()
-		INSTALL(FILES ${jdi_ressource_files} DESTINATION "res")
+		INSTALL(FILES ${jdi_ressource_files} DESTINATION "res/${CURRENT_MODULE_NAME}")
+        add_custom_command(TARGET ${CURRENT_MODULE_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E make_directory
+                "${CMAKE_RESOURCE_OUTPUT_DIRECTORY}/${CURRENT_MODULE_NAME}/"
+                )
+        FOREACH(file ${jdi_ressource_files})
+            add_custom_command(TARGET ${CURRENT_MODULE_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${file}
+                "${CMAKE_RESOURCE_OUTPUT_DIRECTORY}/${CURRENT_MODULE_NAME}/"
+                )
+        ENDFOREACH()
 ENDMACRO(INTERNAL_COPY_RESOURCE_FILES)
 
 
@@ -432,8 +434,28 @@ ENDMACRO(INTERNAL_COPY_DOC_FILES)
 
 
 MACRO(INTERNAL_COPY_INSTALL_FILES)
+
 	IF(NOT "${${CURRENT_MODULE_NAME}_INSTALL_FILES}" STREQUAL "")
-		INSTALL(FILES ${${CURRENT_MODULE_NAME}_INSTALL_FILES} DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/\${BUILD_TYPE}")
+        FOREACH(file ${${CURRENT_MODULE_NAME}_INSTALL_FILES})
+			SET(subDir "")
+			IF (NOT "${${CURRENT_MODULE_NAME}_${file}_INSTALL_DIR}" STREQUAL "")
+				SET(subDir "${${CURRENT_MODULE_NAME}_${file}_INSTALL_DIR}/")
+				MESSAGE(VERBOSE "installing ${file} to ${subDir}")
+				
+				add_custom_command(TARGET ${CURRENT_MODULE_NAME} POST_BUILD
+					COMMAND ${CMAKE_COMMAND} -E make_directory
+					"${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${subDir}"
+                )
+			ENDIF()
+
+            add_custom_command(TARGET ${CURRENT_MODULE_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${file}
+                "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${subDir}"
+                )
+				
+			INSTALL(FILES ${file} DESTINATION "bin/${subDir}")
+        ENDFOREACH()
 	ENDIF()
 ENDMACRO(INTERNAL_COPY_INSTALL_FILES)
 

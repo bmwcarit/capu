@@ -14,12 +14,22 @@
 # limitations under the License.
 #
 
+# Adds curly braces if argument input does not contain any
+MACRO(AddBracesIfNeeded output input)
+   IF (NOT "${${input}}" MATCHES ".*\\(.*\\).*$")
+        SET(${output} "${${input}}()")
+   ELSE()
+       SET(${output} "${${input}}")
+   ENDIF()
+ENDMACRO()
+
 #--------------------------------------------------------------------------
 # Hooks within the function INTERNAL_FINALIZE
 #--------------------------------------------------------------------------
 
 FUNCTION(ADD_PLUGIN_FINALIZE_HOOK functionname)
-	FILE(APPEND "${CMAKE_CURRENT_BINARY_DIR}/Hooks/FinalizeHooksTemp.cmake" "${functionname}()\n")
+    AddBracesIfNeeded(withBraces functionname)
+	FILE(APPEND "${CMAKE_CURRENT_BINARY_DIR}/Hooks/FinalizeHooksTemp.cmake" "${withBraces}\n")
 ENDFUNCTION(ADD_PLUGIN_FINALIZE_HOOK)
 
 MACRO(CALL_PLUGIN_FINALIZE_HOOKS)
@@ -34,7 +44,8 @@ ENDMACRO(CALL_PLUGIN_FINALIZE_HOOKS)
 #--------------------------------------------------------------------------
 
 FUNCTION(ADD_PLUGIN_DEPENDENCY_HOOK functionname)
-	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/DependencyHooksTemp.cmake" "${functionname}()\n")
+    AddBracesIfNeeded(withBraces functionname)
+	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/DependencyHooksTemp.cmake" "${withBraces}\n")
 ENDFUNCTION(ADD_PLUGIN_DEPENDENCY_HOOK)
 
 MACRO(CALL_PLUGIN_DEPENDENCY_HOOKS)
@@ -49,7 +60,8 @@ ENDMACRO(CALL_PLUGIN_DEPENDENCY_HOOKS)
 #--------------------------------------------------------------------------
 
 FUNCTION(ADD_PLUGIN_BEFORE_DOIT_HOOK functionname)
-	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/BeforeDoitHooksTemp.cmake" "${functionname}()\n")
+    AddBracesIfNeeded(withBraces functionname)
+	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/BeforeDoitHooksTemp.cmake" "${withBraces}\n")
 ENDFUNCTION(ADD_PLUGIN_BEFORE_DOIT_HOOK)
 
 MACRO(CALL_PLUGIN_BEFORE_DOIT_HOOKS)
@@ -59,7 +71,8 @@ MACRO(CALL_PLUGIN_BEFORE_DOIT_HOOKS)
 ENDMACRO(CALL_PLUGIN_BEFORE_DOIT_HOOKS)
 
 FUNCTION(ADD_PLUGIN_AFTER_DOIT_HOOK functionname)
-	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/AfterDoitHooksTemp.cmake" "${functionname}()\n")
+    AddBracesIfNeeded(withBraces functionname)
+	FILE(APPEND "${CMAKE_BINARY_DIR}/Hooks/AfterDoitHooksTemp.cmake" "${withBraces}\n")
 ENDFUNCTION(ADD_PLUGIN_AFTER_DOIT_HOOK)
 
 MACRO(CALL_PLUGIN_AFTER_DOIT_HOOKS)

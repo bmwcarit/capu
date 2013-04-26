@@ -93,7 +93,7 @@ ENDFUNCTION(INTERNAL_ACME_EXPORT_FILE)
 # collect everything for tar building
 FUNCTION(INTERNAL_BUILD_RELEASE_TAR)
 	#Is there something to copy?
-	IF(NOT ${TARGETS_TO_COPY} STREQUAL "" AND NOT ${FILES_TO_COPY} STREQUAL "" AND NOT ${DIRECTORIES_TO_COPY} STREQUAL "")
+	IF(NOT "${TARGETS_TO_COPY}" STREQUAL "" AND NOT "${FILES_TO_COPY}" STREQUAL "" AND NOT "${DIRECTORIES_TO_COPY}" STREQUAL "")
 		MESSAGE(STATUS "Adding Tarfile export target")
 		# the top level target for building the tar
 		add_custom_target(ExportTar COMMENT "Exporting marked Files into a tar" )

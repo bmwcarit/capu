@@ -353,8 +353,8 @@ ENDFUNCTION(ACME_LINK_LIBRARY_GROUP)
 # \param    ${ARGN} names of the files that should be installed
 # \modifies ${CURRENT_MODULE_NAME}_INSTALL_FILES
 # \details 	--------------------------------------------------------------------------------------------------------------------\n \n
-FUNCTION(ACME_ADD_INSTALL_FILE)
-	INTERNAL_ADD_INSTALL_FILE("${ARGN}")
+FUNCTION(ACME_ADD_INSTALL_FILE fileName)
+	INTERNAL_ADD_INSTALL_FILE(${fileName} ${ARGN})
 ENDFUNCTION(ACME_ADD_INSTALL_FILE)
 
 FUNCTION(ACME_INSTALL_RESOURCES)
