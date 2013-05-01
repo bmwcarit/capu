@@ -51,6 +51,12 @@ namespace capu
             {
                 nextFreeEntry = this + 1; // Preconnect memory entries
             }
+
+            MemoryEntry& operator=(const MemoryEntry& other)
+            {
+                element = other.element;
+                return *this;
+            }
         };
 
         MemoryEntry  mData[COUNT];

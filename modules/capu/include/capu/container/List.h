@@ -20,8 +20,8 @@
 #include "capu/Error.h"
 #include "capu/Config.h"
 #include "capu/container/Comparator.h"
-#include "capu/util/Swap.h"
 #include "capu/util/Allocator.h"
+#include "capu/util/StaticAllocator.h"
 
 namespace capu
 {
@@ -164,13 +164,6 @@ namespace capu
          * Destructor
          */
         virtual ~List();
-
-        /**
-         * Swaps the list with another list and returns a reference to *this.
-         * @param other the other list
-         * @return this list
-         */
-        List<T, A , C>& swap(List<T, A , C>& other);
 
         /**
          * Adds all items of the given list to the current list.
@@ -435,16 +428,6 @@ namespace capu
     };
 
     /*
-     * Implementation specialized swap for list
-     */
-
-    template <class T, class A, class C>
-    void swap(List<T, A , C>& first, List<T, A , C>& second)
-    {
-        first.swap(second);
-    }
-
-    /*
      * Implementation
      */
 
@@ -497,7 +480,20 @@ namespace capu
     template <class T, class A, class C>
     List<T, A , C>& List<T, A , C>::operator=(List<T, A , C> other)
     {
-        return swap(other);
+        clear();
+
+        mBoundary.mNext = &mBoundary;
+        mBoundary.mPrev = &mBoundary;
+
+        // add all items from the other List
+        Iterator it = other.begin();
+        while (it != other.end())
+        {
+            insert(*it);
+            it++;
+        }
+
+        return *this;
     }
 
     template <class T, class A, class C>
@@ -514,32 +510,6 @@ namespace capu
             }
         }
         return iterEnd;
-    }
-
-    template <class T, class A, class C>
-    inline List<T, A , C>& List<T, A , C>::swap(List< T, A, C >& other)
-    {
-        ListNode* thisNext = mBoundary.mNext;
-        ListNode* thisPrev = mBoundary.mPrev;
-        ListNode* otherNext = other.mBoundary.mNext;
-        ListNode* otherPrev = other.mBoundary.mPrev;
-
-        mBoundary.mNext = other.isEmpty() ? &mBoundary : otherNext;
-        mBoundary.mPrev = other.isEmpty() ? &mBoundary : otherPrev;
-        other.mBoundary.mNext = isEmpty() ? &other.mBoundary : thisNext;
-        other.mBoundary.mPrev = isEmpty() ? &other.mBoundary : thisPrev;
-
-        capu::swap(mSize, other.mSize);
-
-        // correct next and first of elements next to the boundary
-        mBoundary.mPrev->mNext = &mBoundary;
-        other.mBoundary.mPrev->mNext = &(other.mBoundary);
-        mBoundary.mNext->mPrev = &mBoundary;
-        other.mBoundary.mNext->mPrev = &(other.mBoundary);
-
-        // comparator is default constructed and type safe
-        //  -> don't swap comparator
-        return *this;
     }
 
     template <class T, class A, class C>
@@ -598,6 +568,7 @@ namespace capu
         {
             return CAPU_ENO_MEMORY;
         }
+
         newNode->mData = element; // copy in
         newNode->mNext = addPosition->mNext;
         newNode->mPrev = addPosition;
@@ -613,6 +584,7 @@ namespace capu
         deletePosition->mPrev->mNext = deletePosition->mNext;
         deletePosition->mNext->mPrev = deletePosition->mPrev;
         mAllocator.deallocate(deletePosition);
+
         --mSize;
         return CAPU_OK;
     }
@@ -927,6 +899,14 @@ namespace capu
     {
         return mIndex;
     }
+
+    /**
+     * A list class with a defined amount of static memory.
+     */
+    template<typename T, uint32_t COUNT, class C = Comparator>
+    class StaticList: public List<T, StaticAllocator<GenericListNode<T>, COUNT>, C>
+    {
+    };
 }
 
 #endif /* CAPU_LIST_H */

@@ -470,82 +470,6 @@ TEST(List, assignOperator)
     EXPECT_TRUE(l2.contains("world"));
 }
 
-TEST(List, swap)
-{
-    capu::List<capu::String> l1;
-    capu::List<capu::String> l2;
-    l1.insert("hello");
-    l1.insert("world");
-    l2.insert("will");
-    l2.insert("get");
-    l2.insert("removed");
-
-    // swap first time using member function
-    l1.swap(l2);
-    EXPECT_TRUE(l1.contains("will"));
-    EXPECT_TRUE(l1.contains("get"));
-    EXPECT_TRUE(l1.contains("removed"));
-    EXPECT_EQ(3u, l1.size());
-    EXPECT_TRUE(l2.contains("hello"));
-    EXPECT_TRUE(l2.contains("world"));
-    EXPECT_EQ(2u, l2.size());
-
-    // swap second time using capu::swap
-    capu::swap(l1, l2);
-    EXPECT_TRUE(l2.contains("will"));
-    EXPECT_TRUE(l2.contains("get"));
-    EXPECT_TRUE(l2.contains("removed"));
-    EXPECT_EQ(3u, l2.size());
-    EXPECT_TRUE(l1.contains("hello"));
-    EXPECT_TRUE(l1.contains("world"));
-    EXPECT_EQ(2u, l1.size());
-}
-
-TEST(List, swapEmptyList)
-{
-    {
-        capu::List<capu::String> l1;
-
-        l1.insert("hello");
-        l1.insert("world");
-
-        {
-            capu::List<capu::String> l2;
-
-            // swap first time using member function
-            l1.swap(l2);
-            EXPECT_FALSE(l1.contains("hello"));
-            EXPECT_FALSE(l1.contains("world"));
-            EXPECT_EQ(0u, l1.size());
-            EXPECT_TRUE(l2.contains("hello"));
-            EXPECT_TRUE(l2.contains("world"));
-            EXPECT_EQ(2u, l2.size());
-        }
-        EXPECT_EQ(0u, l1.size());
-    }
-
-    {
-        capu::List<capu::String> l1;
-
-        l1.insert("hello");
-        l1.insert("world");
-
-        {
-            capu::List<capu::String> l2;
-
-            // swap first time using member function
-            l2.swap(l1);
-            EXPECT_FALSE(l1.contains("hello"));
-            EXPECT_FALSE(l1.contains("world"));
-            EXPECT_EQ(0u, l1.size());
-            EXPECT_TRUE(l2.contains("hello"));
-            EXPECT_TRUE(l2.contains("world"));
-            EXPECT_EQ(2u, l2.size());
-        }
-        EXPECT_EQ(0u, l1.size());
-    }
-}
-
 TEST(List, front)
 {
     capu::List<capu::uint32_t> list;
@@ -589,6 +513,25 @@ TEST(List, back)
     list.push_back(5);
     EXPECT_EQ(5u, list.back());
     EXPECT_EQ(1u, list.front());
+}
+
+TEST(List, StaticMemory)
+{
+    capu::StaticList<capu::uint32_t, 3u> list;
+	EXPECT_EQ(capu::CAPU_OK, list.push_front(1));
+    EXPECT_EQ(capu::CAPU_OK, list.push_front(2));
+    EXPECT_EQ(capu::CAPU_OK, list.push_front(3));
+    EXPECT_EQ(capu::CAPU_ENO_MEMORY, list.push_front(4));
+    EXPECT_EQ(3, list.size());
+
+    list.clear();
+    EXPECT_EQ(0, list.size());
+
+    EXPECT_EQ(capu::CAPU_OK, list.push_front(1));
+    EXPECT_EQ(capu::CAPU_OK, list.push_front(2));
+    EXPECT_EQ(capu::CAPU_OK, list.push_front(3));
+    EXPECT_EQ(capu::CAPU_ENO_MEMORY, list.push_front(4));
+    EXPECT_EQ(3, list.size());
 }
 
 TEST(ListIterator, hasNext)

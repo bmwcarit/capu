@@ -117,25 +117,7 @@ namespace capu
          * Remove all elements from queue
          */
         void clear();
-
-        /**
-         * Swaps the queue with another queue
-         * @param other the other queue
-         */
-        Queue<T>& swap(Queue<T>& other);
     };
-
-
-    /*
-     * Implementation specialized swap for queue
-     */
-
-    template <typename T>
-    void swap(Queue<T>& first, Queue<T>& second)
-    {
-        first.swap(second);
-    }
-
 
     /*
      * Implementation queue
@@ -150,14 +132,6 @@ namespace capu
     Queue<T>::~Queue()
     {
     }
-
-    template <typename T>
-    inline Queue<T>& Queue<T>::swap(Queue< T >& other)
-    {
-        List<T>::swap(other);
-        return *this;
-    }
-
 
     template <typename T>
     inline T& Queue<T>::front()
