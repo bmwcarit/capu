@@ -261,3 +261,22 @@ TEST(Queue, popAll)
     EXPECT_EQ(capu::CAPU_OK, queue.popAll(list));
     EXPECT_TRUE(list.isEmpty());
 }
+
+TEST(Queue, StaticMemory)
+{
+    capu::StaticQueue<capu::uint32_t, 3u> queue;
+    EXPECT_EQ(capu::CAPU_OK, queue.push(1));
+    EXPECT_EQ(capu::CAPU_OK, queue.push(2));
+    EXPECT_EQ(capu::CAPU_OK, queue.push(3));
+    EXPECT_EQ(capu::CAPU_ENO_MEMORY, queue.push(4));
+    EXPECT_EQ(3, queue.size());
+
+    queue.clear();
+    EXPECT_EQ(0, queue.size());
+
+    EXPECT_EQ(capu::CAPU_OK, queue.push(1));
+    EXPECT_EQ(capu::CAPU_OK, queue.push(2));
+    EXPECT_EQ(capu::CAPU_OK, queue.push(3));
+    EXPECT_EQ(capu::CAPU_ENO_MEMORY, queue.push(4));
+    EXPECT_EQ(3, queue.size());
+}

@@ -21,14 +21,15 @@
 #include "capu/os/Semaphore.h"
 #include "capu/os/Mutex.h"
 #include "capu/util/ScopedLock.h"
+#include "capu/util/StaticAllocator.h"
 
 namespace capu
 {
     /**
      * Queue for concurrent access. All methods are threadsafe.
      */
-    template <class T>
-    class BlockingQueue: private Queue<T>
+    template <class T, class A = Allocator<GenericListNode<T> >, class C = Comparator>
+    class BlockingQueue: private Queue<T, A, C>
     {
     public:
         virtual ~BlockingQueue();
@@ -36,8 +37,9 @@ namespace capu
         /**
          * Insert an element into the queue
          * @param element The element to insert
+         * @return CAPU_OK if push was successful.
          */
-        void push(const T& element);
+        status_t push(const T& element);
 
         /**
          * Remove and return an element from the queue
@@ -62,40 +64,52 @@ namespace capu
          */
         bool_t empty();
 
+        /**
+         * Return size of the queue
+         * @return return the size of queue
+         */
+        uint_t size();
+
+        /**
+         * Remove all elements from queue
+         */
+        void clear();
+
     private:
         Semaphore mSemaphore;
         Mutex mMutex;
     };
 
-    template <class T>
-    inline BlockingQueue<T>::~BlockingQueue()
+    template <class T, class A, class C>
+    inline BlockingQueue<T, A, C>::~BlockingQueue()
     {
     }
 
-    template <class T>
-    inline bool_t BlockingQueue<T>::empty()
+    template <class T, class A, class C>
+    inline bool_t BlockingQueue<T, A, C>::empty()
     {
         ScopedMutexLock locker(mMutex);
-        return Queue<T>::empty();
+        return Queue<T, A, C>::empty();
     }
 
-    template <class T>
-    inline void BlockingQueue<T>::push(const T& element)
+    template <class T, class A, class C>
+    inline status_t BlockingQueue<T, A, C>::push(const T& element)
     {
         ScopedMutexLock locker(mMutex);
-        Queue<T>::push(element);
+        status_t retVal = Queue<T, A, C>::push(element);
         mSemaphore.release();
+        return retVal;
     }
 
-    template <class T>
-    inline status_t BlockingQueue<T>::peek(T& element)
+    template <class T, class A, class C>
+    inline status_t BlockingQueue<T, A, C>::peek(T& element)
     {
         ScopedMutexLock locker(mMutex);
-        return Queue<T>::peek(element);
+        return Queue<T, A, C>::peek(element);
     }
 
-    template <class T>
-    inline status_t BlockingQueue<T>::pop(T* element, const uint32_t timeoutMillis)
+    template <class T, class A, class C>
+    inline status_t BlockingQueue<T, A, C>::pop(T* element, const uint32_t timeoutMillis)
     {
         // wait outside the lock
         status_t retVal = mSemaphore.tryAquire(timeoutMillis);
@@ -104,8 +118,30 @@ namespace capu
             return retVal;
         }
         ScopedMutexLock locker(mMutex);
-        return Queue<T>::pop(element);
+        return Queue<T, A, C>::pop(element);
     }
+
+    template <class T, class A, class C>
+    inline void BlockingQueue<T, A, C>::clear()
+    {
+        ScopedMutexLock locker(mMutex);
+        Queue<T, A, C>::clear();
+    }
+
+    template <class T, class A, class C>
+    inline uint_t BlockingQueue<T, A, C>::size()
+    {
+        ScopedMutexLock locker(mMutex);
+        return Queue<T, A, C>::size();
+    }
+
+    /**
+     * A blocking queue class with a defined amount of static memory.
+     */
+     template<typename T, uint32_t COUNT, class C = Comparator>
+     class StaticBlockingQueue: public BlockingQueue<T, StaticAllocator<GenericListNode<T>, COUNT>, C>
+     {
+     };
 }
 
 #endif // CAPU_BLOCKINGQUEUE_H

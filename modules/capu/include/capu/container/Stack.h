@@ -18,14 +18,15 @@
 #define CAPU_STACK_H
 
 #include "capu/container/List.h"
+#include "capu/util/StaticAllocator.h"
 
 namespace capu
 {
     /**
      * Implements a non-synchronized stack with the common push and pop operations (LIFO - last-in, first-out).
      */
-    template <typename T>
-    class Stack : private List<T>
+    template <class T, class A = Allocator<GenericListNode<T> >, class C = Comparator>
+    class Stack : private List<T, A, C>
     {
     public:
         /**
@@ -78,56 +79,64 @@ namespace capu
         void clear();
     };
 
-    template <typename T>
-    inline Stack<T>::Stack()
+    template <class T, class A, class C>
+    inline Stack<T, A, C>::Stack()
     {
     }
 
-    template <typename T>
-    inline Stack<T>::~Stack()
+    template <class T, class A, class C>
+    inline Stack<T, A, C>::~Stack()
     {
     }
 
-    template <typename T>
-    status_t Stack<T>::pop(T* element)
+    template <class T, class A, class C>
+    status_t Stack<T, A, C>::pop(T* element)
     {
-        return List<T>::erase(0, element);
+        return List<T, A, C>::erase(0, element);
     }
 
-    template <typename T>
-    int_t Stack<T>::size() const
+    template <class T, class A, class C>
+    int_t Stack<T, A, C>::size() const
     {
-        return List<T>::size();
+        return List<T, A, C>::size();
     }
 
-    template <typename T>
-    void Stack<T>::clear()
+    template <class T, class A, class C>
+    void Stack<T, A, C>::clear()
     {
-        List<T>::clear();
+        List<T, A, C>::clear();
     }
 
-    template <typename T>
-    bool_t Stack<T>::isEmpty() const
+    template <class T, class A, class C>
+    bool_t Stack<T, A, C>::isEmpty() const
     {
-        return List<T>::isEmpty();
+        return List<T, A, C>::isEmpty();
     }
 
-    template <typename T>
-    status_t Stack<T>::push(const T& element)
+    template <class T, class A, class C>
+    status_t Stack<T, A, C>::push(const T& element)
     {
-        return List<T>::insert(0, element);
+        return List<T, A, C>::insert(0, element);
     }
 
-    template <typename T>
-    status_t Stack<T>::peek(T& element) const
+    template <class T, class A, class C>
+    status_t Stack<T, A, C>::peek(T& element) const
     {
         if (isEmpty())
         {
             return CAPU_EINVAL;
         }
-        element = List<T>::front();
+        element = List<T, A, C>::front();
         return CAPU_OK;
     }
+
+    /**
+     * A stack class with a defined amount of static memory.
+     */
+     template<typename T, uint32_t COUNT, class C = Comparator>
+     class StaticStack: public Stack<T, StaticAllocator<GenericListNode<T>, COUNT>, C>
+     {
+     };
 }
 
 #endif // CAPU_STACK_H
