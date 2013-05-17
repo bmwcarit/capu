@@ -179,6 +179,15 @@ namespace capu
          *         CAPU_ERROR otherwise
          */
         inline status_t getTimeout(int32_t& timeout);
+
+        /**
+         * Get remote ip address this socket is connected to
+         * @return CAPU_OK if the address was successfully obtained
+         * @return CAPU_SOCKET_ESOCKET if the socket is not valid
+         * @return CAPU_ERROR otherwise
+         **/
+        inline status_t getRemoteAddress(char_t** address);
+        
     };
 
     inline
@@ -295,6 +304,13 @@ namespace capu
     TcpSocket::getTimeout(int32_t& timeout)
     {
         return capu::os::arch::TcpSocket::getTimeout(timeout);
+    }
+
+    inline
+    status_t
+    TcpSocket::getRemoteAddress(char_t** address)
+    {
+        return capu::os::arch::TcpSocket::getRemoteAddress(address);
     }
 }
 

@@ -32,6 +32,7 @@ namespace capu
             public:
                 TcpSocket();
                 TcpSocket(const SocketDescription& socketDescription);
+
                 using capu::os::TcpSocket::send;
                 using capu::os::TcpSocket::receive;
                 using capu::os::TcpSocket::close;
@@ -46,6 +47,7 @@ namespace capu
                 using capu::os::TcpSocket::getNoDelay;
                 using capu::os::TcpSocket::getKeepAlive;
                 using capu::os::TcpSocket::getTimeout;
+                using capu::os::TcpSocket::getRemoteAddress;
 
             };
 

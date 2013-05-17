@@ -379,11 +379,12 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
 
     capu::int32_t int_tmp = 0;
     capu::bool_t bool_tmp = false;
+    capu::char_t* remoteIP = 0;
 
     //CHECK THE PROPERTIES ARE CORRECTLY SET
     EXPECT_EQ(capu::CAPU_OK, socket->getBufferSize(int_tmp));
 
-    //On Linux the kernel adjust the buffer size and set it to doubles of given size (at least)
+    //On Linux the kernel adjusts the buffer size and set it to doubles of given size (at least)
     //therefore we have to check here for >=
     EXPECT_TRUE(int_tmp >= 1024);
     EXPECT_EQ(capu::CAPU_OK, socket->getKeepAlive(bool_tmp));
@@ -412,8 +413,10 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
 
     //CHECK THE PROPERTIES ARE CORRECTLY SET
     EXPECT_EQ(capu::CAPU_OK, socket->getBufferSize(int_tmp));
-    //kernel adjust the buffer size and set it to doubles of given size (at least)
-
+    EXPECT_EQ(capu::CAPU_OK, socket->getRemoteAddress(&remoteIP));
+    EXPECT_STREQ("127.0.0.1", remoteIP);
+    
+    //kernel adjusts the buffer size and set it to doubles of given size (at least)
     EXPECT_TRUE(int_tmp >= 2024);
     EXPECT_EQ(capu::CAPU_OK, socket->getKeepAlive(bool_tmp));
     EXPECT_FALSE(bool_tmp);
@@ -442,6 +445,7 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
 
     delete socket;
     delete serverSocket;
+    delete remoteIP;
 }
 
 TEST(SocketAndTcpServerSocket, CommunicationTest)

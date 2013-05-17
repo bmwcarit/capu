@@ -44,6 +44,7 @@ namespace capu
             using capu::posix::TcpSocket::getNoDelay;
             using capu::posix::TcpSocket::getKeepAlive;
             using capu::posix::TcpSocket::getTimeout;
+            using capu::posix::TcpSocket::getRemoteAddress;
 
         };
 

@@ -48,6 +48,7 @@ namespace capu
             status_t getNoDelay(bool_t& noDelay);
             status_t getKeepAlive(bool_t& keepAlive);
             status_t getTimeout(int32_t& timeout);
+            status_t getRemoteAddress(char_t** remoteAddress);
 
         protected:
         private:
@@ -543,6 +544,27 @@ namespace capu
 
             timeout = soTimeout.tv_sec;
 
+            return CAPU_OK;
+        }
+
+        inline status_t TcpSocket::getRemoteAddress(char_t** remoteAddress)
+        {
+            if (mSocket == INVALID_SOCKET)
+            {
+                return CAPU_SOCKET_ESOCKET;
+            }
+
+            sockaddr_in client_address = {0};
+            int32_t size = sizeof(client_address);
+            auto ret = getpeername(mSocket, (sockaddr*)&client_address, &size); 
+
+            if ( 0 != remoteAddress)
+            {
+                char *remoteIP = inet_ntoa(client_address.sin_addr);
+                uint_t stringLength = StringUtils::Strlen(remoteIP) + 1;
+                *remoteAddress = new char_t[stringLength];
+                StringUtils::Strncpy(*remoteAddress, stringLength, remoteIP);
+            }
             return CAPU_OK;
         }
     }
