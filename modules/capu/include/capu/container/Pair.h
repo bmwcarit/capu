@@ -17,6 +17,8 @@
 #ifndef CAPU_PAIR_H
 #define CAPU_PAIR_H
 
+#include "capu/Config.h"
+
 namespace capu
 {
     /**
