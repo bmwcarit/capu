@@ -88,16 +88,18 @@ namespace capu
         /**
          * Return the first index of the given character within the ConstString
          * @param ch The character whos index is requested
+         * @param offset The index from where the search for the character has to be started (default 0).
          * @return The index of the found char or -1 if the char was not found.
          */
-        int_t find(const char_t ch) const;
+        int_t find(const char_t ch, const uint_t offset = 0) const;
 
         /**
          * Return the first index of the given substring within the ConstString
          * @param substr The substring whos index is requested
+         * @param offset The index from where the search for the substring has to be started (default 0).
          * @return The index of the found substring or -1 if the substring was not found.
          */
-        int_t find(const ConstString& substr) const;
+        int_t find(const ConstString& substr, const uint_t offset = 0) const;
 
         /**
          * Return the index of the last occurence of the given character within the ConstString
@@ -191,16 +193,16 @@ namespace capu
 
     inline
     int_t 
-    ConstString::find(const char_t ch) const
+    ConstString::find(const char_t ch, const uint_t offset) const
     {
-        return StringUtils::IndexOf(c_str(), ch);
+        return StringUtils::IndexOf(c_str(), ch, offset);
     }
 
     inline
     int_t 
-    ConstString::find(const ConstString& substr) const
+    ConstString::find(const ConstString& substr, const uint_t offset) const
     {
-        return StringUtils::IndexOf(c_str(), substr);
+        return StringUtils::IndexOf(c_str(), substr, offset);
     }
 
     inline 

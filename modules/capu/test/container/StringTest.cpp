@@ -339,6 +339,44 @@ TEST(String, FindChar)
     EXPECT_EQ(0, str3.find(0)); // indexof(0) = strlen
 }
 
+TEST(String, FindCharOffset)
+{
+    capu::String str1;
+    capu::String str2("hello world");
+    capu::String str3("");
+
+    EXPECT_EQ(-1, str1.find('o', 12));
+    EXPECT_EQ(-1, str1.find('o', 0));
+
+    EXPECT_EQ(4, str2.find('o',  1));
+    EXPECT_EQ(5, str2.find(' ', 0));
+    EXPECT_EQ(7, str2.find('o', 5));
+
+    EXPECT_EQ(-1, str2.find('o', 20));
+
+}
+
+TEST(String, FindStringOffset)
+{
+    capu::String str("hello world I am your old man");
+
+    EXPECT_EQ(5, str.find(" ", 0));
+    EXPECT_EQ(11, str.find(" ", 6));
+    EXPECT_EQ(13, str.find(" ", 12));
+    EXPECT_EQ(16, str.find(" ", 14));
+    EXPECT_EQ(21, str.find(" ", 17));
+    EXPECT_EQ(25, str.find(" ", 22));
+
+    EXPECT_EQ(9, str.find("ld",  0));
+    EXPECT_EQ(23, str.find("ld", 10));
+
+    EXPECT_EQ(-1, str.find("ld", 25));
+
+    EXPECT_EQ(-1, str.find("ld", 29));
+    EXPECT_EQ(-1, str.find("ld", 30));
+
+}
+
 TEST(String, RFindChar)
 {
     capu::String str1;

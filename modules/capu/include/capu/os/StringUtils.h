@@ -95,17 +95,19 @@ namespace capu
          * Calculates the first index of a given character.
          * @param str the string
          * @param ch the search char.
+         * @param offset the index from where the search for the character has to be started (default 0).
          * @return The first index of the specified char or -1 if the char was not found.
          */
-        static int_t IndexOf(const char_t* str, const char_t ch);
+        static int_t IndexOf(const char_t* str, const char_t ch, const uint_t offset = 0);
 
         /**
          * Calculates the first index of a given string
          * @param string to search in
          * @param string to search for
+         * @param offset The index from where the search for the 2nd string has to be started in the 1st string (default 0).
          * @return the first index of the specified string or -1 if the char was not found
          */
-        static int_t IndexOf(const char_t* str, const char_t* str2);
+        static int_t IndexOf(const char_t* str, const char_t* str2, const uint_t offset = 0);
 
         /**
          * Checks if the given testString starts with the given prefix.
@@ -170,9 +172,16 @@ namespace capu
 
     inline
     int_t
-    StringUtils::IndexOf(const char_t* str, const char_t ch)
+    StringUtils::IndexOf(const char_t* str, const char_t ch, const uint_t offset)
     {
-        return capu::os::arch::StringUtils::IndexOf(str, ch);
+        if (Strlen(str) >= offset)
+        {
+            return capu::os::arch::StringUtils::IndexOf(str, ch, offset);
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     inline
@@ -183,10 +192,17 @@ namespace capu
     }
 
     inline
-    int_t 
-    StringUtils::IndexOf(const char_t* str, const char_t* str2)
+    int_t
+    StringUtils::IndexOf(const char_t* str, const char_t* str2, const uint_t offset)
     {
-        return capu::os::arch::StringUtils::IndexOf(str, str2);
+        if (Strlen(str) >= offset)
+        {
+            return capu::os::arch::StringUtils::IndexOf(str, str2, offset);
+        }
+        else
+        {
+            return -1;
+        }
     }
 }
 #endif //CAPU_STRINGUTILS_H

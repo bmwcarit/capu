@@ -132,16 +132,18 @@ namespace capu
         /**
          * Return the first index of the given character within the string
          * @param ch The character whos index is requested
+         * @param offset The index from where the search for the character has to be started (default 0).
          * @return The index of the found char or -1 if the char was not found.
          */
-        int_t find(const char_t ch) const;
+        int_t find(const char_t ch, const uint_t offset = 0) const;
 
         /**
          * Return the first index of the given substring within the string
          * @param substr The substring whos index is requested
+         * @param offset The index from where the search for the substring has to be started (default 0).
          * @return The index of the found substring or -1 if the substring was not found.
          */
-        int_t find(const String& substr) const;
+        int_t find(const String& substr, const uint_t offset = 0) const;
 
         /**
          * Return the index of the last occurence of the given character within the string
@@ -435,14 +437,14 @@ namespace capu
         return m_size;
     }
 
-    inline int_t String::find(const char_t ch) const
+    inline int_t String::find(const char_t ch, const uint_t offset) const
     {
-        return ConstString(c_str()).find(ch);
+        return ConstString(c_str()).find(ch, offset);
     }
 
-    inline int_t String::find(const String& substr) const
+    inline int_t String::find(const String& substr, const uint_t offset) const
     {
-        return ConstString(c_str()).find(ConstString(substr.c_str()));
+        return ConstString(c_str()).find(ConstString(substr.c_str()), offset);
     }
 
     inline int_t String::rfind(const char_t ch) const
