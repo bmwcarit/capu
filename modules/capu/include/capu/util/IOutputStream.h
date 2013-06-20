@@ -57,6 +57,20 @@ namespace capu
         virtual IOutputStream& operator<<(const uint32_t value) = 0;
 
         /**
+         * Operator for writing int64_t values to a stream
+         * @param value the value which will be written to the stream
+         * @return a reference to the IOutputStream for further processing of data
+         */
+        virtual IOutputStream& operator<<(const int64_t value) = 0;
+
+        /**
+         * Operator for writing uint64_t values to a stream
+         * @param value the value which will be written to the stream
+         * @return a reference to the IOutputStream for further processing of data
+         */
+        virtual IOutputStream& operator<<(const uint64_t value) = 0;
+
+        /**
          * Operator for writing String values to a stream
          * @param value the value which will be written to the stream
          * @return a reference to the IOutputStream for further processing of data

@@ -19,6 +19,7 @@
 #include <capu/util/IInputStream.h>
 #include <capu/os/Math.h>
 #include <capu/util/Runnable.h>
+#include <capu/util/SocketInputStream.h>
 #include <capu/os/Thread.h>
 
 namespace capu
@@ -76,6 +77,22 @@ namespace capu
             return *this;
         }
 
+        IInputStream& operator>>(uint64_t& value)
+        {
+            uint64_t tmp;
+            receiveFromSocket(reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
+            value = ntohll(tmp);
+            return *this;
+        }
+
+        IInputStream& operator>>(int64_t& value)
+        {
+            uint64_t tmp;
+            operator>>(tmp);
+            value = static_cast<int64_t>(tmp);
+            return *this;
+        }
+
         IInputStream& operator>>(String& value)
         {
             char_t buffer[1024];
@@ -113,6 +130,8 @@ namespace capu
             receiveFromSocket(data, size);
             return *this;
         }
+
+
     };
 
     template<typename T>
@@ -185,6 +204,16 @@ namespace capu
     TEST_F(UdpSocketOutputStreamTest, SendUInt32Data)
     {
         EXPECT_EQ(5u, UdpSocketOutputStreamTestExecutor<uint32_t>::Execute(5u));
+    }
+
+    TEST_F(UdpSocketOutputStreamTest, SendInt64Data)
+    {
+        EXPECT_EQ(0x6464646432323232, UdpSocketOutputStreamTestExecutor<int64_t>::Execute(0x6464646432323232));
+    }
+
+    TEST_F(UdpSocketOutputStreamTest, SendUInt64Data)
+    {
+        EXPECT_EQ(0x6464646432323232u, UdpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232u));
     }
 
     TEST_F(UdpSocketOutputStreamTest, SendFloatData)

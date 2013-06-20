@@ -41,6 +41,8 @@ namespace capu
         virtual IOutputStream& operator<<(const float_t value);
         virtual IOutputStream& operator<<(const int32_t value);
         virtual IOutputStream& operator<<(const uint32_t value);
+        virtual IOutputStream& operator<<(const int64_t value);
+        virtual IOutputStream& operator<<(const uint64_t value);
         virtual IOutputStream& operator<<(const String& value);
         virtual IOutputStream& operator<<(const bool_t  value);
         virtual IOutputStream& operator<<(const char_t* value);
@@ -129,6 +131,24 @@ namespace capu
     {
         char_t buffer[11];
         StringUtils::Sprintf(buffer, 11, "%u", value);
+        return operator<<(buffer);
+    }
+
+    inline
+    IOutputStream&
+    StringOutputStream::operator<<(const int64_t value)
+    {
+        char_t buffer[21];
+        StringUtils::Sprintf(buffer, 21, "%lld", value);
+        return operator<<(buffer);
+    }
+
+    inline
+    IOutputStream&
+    StringOutputStream::operator<<(const uint64_t value)
+    {
+        char_t buffer[21];
+        StringUtils::Sprintf(buffer, 21, "%llu", value);
         return operator<<(buffer);
     }
 

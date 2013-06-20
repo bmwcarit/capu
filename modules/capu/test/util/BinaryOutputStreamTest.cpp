@@ -84,6 +84,37 @@ namespace capu
         EXPECT_EQ(NumericLimits::Max<uint32_t>(), *reinterpret_cast<const uint32_t*>(data));
     }
 
+    TEST_F(BinaryOutputStreamTest, InsertInt64)
+    {
+        BinaryOutputStream outStream;
+
+        outStream << (int64_t)5 << (int64_t)6 << (int64_t)7;
+
+        const char_t* data = outStream.getData();
+        EXPECT_EQ((int64_t)5, *reinterpret_cast<const int64_t*>(data));
+        data += sizeof(int64_t);
+        EXPECT_EQ((int64_t)6, *reinterpret_cast<const int64_t*>(data));
+        data += sizeof(int64_t);
+        EXPECT_EQ((int64_t)7, *reinterpret_cast<const int64_t*>(data));
+    }
+
+    TEST_F(BinaryOutputStreamTest, InsertUInt64)
+    {
+        BinaryOutputStream outStream;
+        outStream << (uint64_t)0u << (uint64_t)5u << (uint64_t)6u << (uint64_t)7u << NumericLimits::Max<uint64_t>();
+
+        const char_t* data = outStream.getData();
+        EXPECT_EQ((uint64_t)0u, *reinterpret_cast<const uint64_t*>(data));
+        data += sizeof(uint64_t);
+        EXPECT_EQ((uint64_t)5u, *reinterpret_cast<const uint64_t*>(data));
+        data += sizeof(uint64_t);
+        EXPECT_EQ((uint64_t)6u, *reinterpret_cast<const uint64_t*>(data));
+        data += sizeof(uint64_t);
+        EXPECT_EQ((uint64_t)7u, *reinterpret_cast<const uint64_t*>(data));
+        data += sizeof(uint64_t);
+        EXPECT_EQ(NumericLimits::Max<uint64_t>(), *reinterpret_cast<const uint64_t*>(data));
+    }
+
     TEST_F(BinaryOutputStreamTest, InsertFloat)
     {
         BinaryOutputStream outStream;

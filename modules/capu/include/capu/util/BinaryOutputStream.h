@@ -55,6 +55,18 @@ namespace capu
         IOutputStream& operator<<(const uint32_t value);
 
         /**
+         * Write an integer into the stream
+         * @param value The variable to write to the stream
+         */
+        IOutputStream& operator<<(const int64_t value);
+
+        /**
+         * Write an integer into the stream
+         * @param value The variable to write to the stream
+         */
+        IOutputStream& operator<<(const uint64_t value);
+
+        /**
          * Write a string into the stream
          * @param value The variable to write to the stream
          */
@@ -200,6 +212,20 @@ namespace capu
     BinaryOutputStream::operator<<(const uint32_t value)
     {
         return write(&value, sizeof(uint32_t));
+    }
+
+    inline 
+    IOutputStream& 
+    BinaryOutputStream::operator<<(const int64_t value)
+    {
+        return write(&value, sizeof(int64_t));
+    }
+
+    inline 
+    IOutputStream& 
+    BinaryOutputStream::operator<<(const uint64_t value)
+    {
+        return write(&value, sizeof(uint64_t));
     }
 
     inline

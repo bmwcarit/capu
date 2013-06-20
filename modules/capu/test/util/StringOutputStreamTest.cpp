@@ -58,6 +58,22 @@ namespace capu
         EXPECT_EQ(4U, outputStream.length());
     }
 
+    TEST_F(StringOutputStreamTest, WriteInt64)
+    {
+        outputStream << 0x6464646432323232;
+        outputStream.flush();
+        EXPECT_STREQ("7234017282965516850", outputStream.c_str());
+        EXPECT_EQ(19U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteUInt64)
+    {
+        outputStream << 0x6464646432323232u;
+        outputStream.flush();
+        EXPECT_STREQ("7234017282965516850", outputStream.c_str());
+        EXPECT_EQ(19U, outputStream.length());
+    }
+
     TEST_F(StringOutputStreamTest, WriteString)
     {
         outputStream << String("Hello World");

@@ -25,6 +25,8 @@
 
 namespace capu
 {
+    uint64_t htonll(const uint64_t value);
+
     /* The SocketOutputStream writes data to a given socket*/
     template<uint16_t SNDBUFSIZE = 1450>
     class SocketOutputStream: public IOutputStream
@@ -49,6 +51,19 @@ namespace capu
          * @param value Value to write to the stream
          */
         IOutputStream& operator<<(const uint32_t value);
+
+
+        /**
+         * Write an integer to the stream
+         * @param value Value to write to the stream
+         */
+        IOutputStream& operator<<(const int64_t value);
+
+        /**
+         * Write an unsigned integer to the stream
+         * @param value Value to write to the stream
+         */
+        IOutputStream& operator<<(const uint64_t value);
 
         /**
          * Write a string to the stream
@@ -88,8 +103,6 @@ namespace capu
          * @param size Number of bytes to write tot he stream
          */
         IOutputStream& write(const void* data, const uint32_t size);
-
-        //UInt64 htonll(const UInt64 value);
 
         /**
          * Flushes the internal data to the socket. This also happens if the internal buffer is full.
@@ -165,6 +178,23 @@ namespace capu
     SocketOutputStream<SNDBUFSIZE>::operator<<(const uint32_t value)
     {
         return operator<<(static_cast<int32_t>(value));
+    }
+
+    template<uint16_t SNDBUFSIZE>
+    inline
+    IOutputStream&
+    SocketOutputStream<SNDBUFSIZE>::operator<<( const int64_t value)
+    {
+        const int64_t networkOrder = htonll(value);
+        return write(&networkOrder, sizeof(int64_t));
+    }
+    
+    template<uint16_t SNDBUFSIZE>
+    inline
+    IOutputStream& 
+    SocketOutputStream<SNDBUFSIZE>::operator<<( const uint64_t value)
+    {
+        return operator<<(static_cast<int64_t>(value));
     }
 
     template<uint16_t SNDBUFSIZE>
@@ -290,6 +320,26 @@ namespace capu
             sentBytes += numBytes;
         }
         while (sentBytes != size);
+    }
+
+
+    inline
+    uint64_t 
+    htonll(const uint64_t value)
+    {
+        int64_t checkNumber = 42;
+        if(*(char_t*)&checkNumber == 42)
+        {
+            // Little endian
+            const uint64_t lowbits  = (uint64_t)(htonl(value & 0xFFFFFFFF)) << 32LL;
+            const uint64_t highbits = (uint64_t)htonl(value >> 32);
+            return lowbits | highbits;
+        }
+        else
+        {
+            // Big endian
+            return value;
+        }
     }
 }
 

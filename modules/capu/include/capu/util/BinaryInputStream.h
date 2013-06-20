@@ -48,6 +48,20 @@ namespace capu
          */
         IInputStream& operator>>(uint32_t& value);
 
+         /**
+         * Reads an uint64_t value from the stream
+         * @param value the destination of the read value
+         * @return a reference to the input stream for further processing
+         */
+        IInputStream& operator>>(uint64_t& value);
+
+        /**
+         * Reads an int64_t value from the stream
+         * @param value the destination of the read value
+         * @return a reference to the input stream for further processing
+         */
+        IInputStream& operator>>(int64_t& value);
+
         /**
          * Read a String from the stream
          * @param value The variable to write the value to

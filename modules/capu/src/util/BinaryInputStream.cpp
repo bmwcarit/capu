@@ -42,6 +42,18 @@ namespace capu
         return *this;
     }
 
+    IInputStream& BinaryInputStream::operator>>(uint64_t& value)
+    {
+        read(reinterpret_cast<char_t*>(&value), sizeof(uint64_t));
+        return *this;
+    }
+
+    IInputStream& BinaryInputStream::operator>>(int64_t& value)
+    {
+        read(reinterpret_cast<char_t*>(&value), sizeof(int64_t));
+        return *this;
+    }
+
     IInputStream& BinaryInputStream::operator>>(String& value)
     {
         uint32_t length = 0;

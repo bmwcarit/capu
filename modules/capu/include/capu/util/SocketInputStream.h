@@ -25,6 +25,26 @@
 
 namespace capu
 {
+
+    inline
+    uint64_t 
+    ntohll(uint64_t & value)
+    {
+        int_t checkNumber = 42;
+        if(*(char_t*)&checkNumber == 42)
+        {
+            // Little endian
+            const uint64_t lowbits  = (uint64_t)(ntohl(value & 0xFFFFFFFF)) << 32LL;
+            const uint64_t highbits = (uint64_t)ntohl(value >> 32);
+            return lowbits | highbits;
+        }
+        else
+        {
+            // Big endian
+            return value;
+        }
+    }
+
     /**
      * The SocketInputStream reads date from a socket
      */
@@ -50,6 +70,20 @@ namespace capu
          * @param value Reference to variable to store the value read
          */
         IInputStream& operator>>(int32_t& value);
+
+         /**
+         * Reads an uint64_t value from the stream
+         * @param value the destination of the read value
+         * @return a reference to the input stream for further processing
+         */
+        IInputStream& operator>>(uint64_t& value);
+
+        /**
+         * Reads an int64_t value from the stream
+         * @param value the destination of the read value
+         * @return a reference to the input stream for further processing
+         */
+        IInputStream& operator>>(int64_t& value);
 
         /**
          * Read a string from the stream
@@ -98,6 +132,7 @@ namespace capu
          */
         void resetState();
 
+
     protected:
         /**
          * The state of the input stream
@@ -105,6 +140,8 @@ namespace capu
         status_t mState;
 
     private:
+
+
     };
 
     inline
@@ -134,6 +171,23 @@ namespace capu
         int32_t tmp;
         operator>>(tmp);
         value = static_cast<uint32_t>(tmp);
+        return *this;
+    }
+
+    inline
+    IInputStream& SocketInputStream::operator>>(uint64_t& value)
+    {
+        read(reinterpret_cast<char_t*>(&value), sizeof(uint64_t));
+        value = ntohll(value);
+        return *this;
+    }
+
+    inline
+    IInputStream& SocketInputStream::operator>>(int64_t& value)
+    {
+        uint64_t tmp = 0;
+        operator>>(tmp);
+        value = *reinterpret_cast<int64_t*>(&tmp);
         return *this;
     }
 

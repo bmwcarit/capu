@@ -20,6 +20,7 @@
 #include <capu/os/Thread.h>
 #include <capu/os/Math.h>
 #include <capu/os/NumericLimits.h>
+#include <capu/util/SocketOutputStream.h>
 
 namespace capu
 {
@@ -49,6 +50,28 @@ namespace capu
         {
             int32_t tmp = htonl(data);
             SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint32_t));
+        }
+    };
+
+
+    struct TcpUInt64TestSender: public TestTcpSocketSender
+    {
+        typedef uint64_t VALUE_TYPE;
+        static void Send(TcpSocket& socket, const uint64_t& data)
+        {
+            uint64_t tmp = htonll(data);
+            SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
+        }
+    };
+
+    struct TcpInt64TestSender: public TestTcpSocketSender
+    {
+        typedef int64_t VALUE_TYPE;
+        static void Send(TcpSocket& socket, const int64_t& data)
+        {
+            uint64_t tmp = htonll(static_cast<int64_t>(data));
+            
+            SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(int64_t));
         }
     };
 
@@ -209,6 +232,18 @@ namespace capu
         EXPECT_EQ(5u, TcpSocketInputStreamTestExecutor::Execute<TcpUInt32TestSender>(5u));
         EXPECT_EQ(0u, TcpSocketInputStreamTestExecutor::Execute<TcpUInt32TestSender>(0u));
         EXPECT_EQ(NumericLimits::Max<uint32_t>(), TcpSocketInputStreamTestExecutor::Execute<TcpUInt32TestSender>(NumericLimits::Max<uint32_t>()));
+    }
+
+    TEST_F(TcpSocketInputStreamTest, ReceiveInt64)
+    {
+        EXPECT_EQ(0x6464646432323232, TcpSocketInputStreamTestExecutor::Execute<TcpInt64TestSender>(0x6464646432323232));
+    }
+
+    TEST_F(TcpSocketInputStreamTest, ReceiveUInt64)
+    {
+        EXPECT_EQ(0x6464646432323232u, TcpSocketInputStreamTestExecutor::Execute<TcpUInt64TestSender>(0x6464646432323232u));
+        EXPECT_EQ(0u, TcpSocketInputStreamTestExecutor::Execute<TcpUInt64TestSender>(0u));
+        EXPECT_EQ(NumericLimits::Max<uint64_t>(), TcpSocketInputStreamTestExecutor::Execute<TcpUInt64TestSender>(NumericLimits::Max<uint64_t>()));
     }
 
     TEST_F(TcpSocketInputStreamTest, ReceiveString)

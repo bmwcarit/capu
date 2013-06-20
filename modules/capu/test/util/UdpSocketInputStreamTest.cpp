@@ -19,6 +19,7 @@
 #include <capu/util/Runnable.h>
 #include <capu/os/Thread.h>
 #include <capu/util/BinaryOutputStream.h>
+#include <capu/util/SocketOutputStream.h>
 
 #include <capu/os/Math.h>
 
@@ -49,6 +50,26 @@ namespace capu
         {
             int32_t tmp = htonl(data);
             SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint32_t));
+        }
+    };
+
+    struct UdpInt64TestSender: public TestUdpSocketSender
+    {
+        typedef int64_t VALUE_TYPE;
+        static void Send(const capu::uint16_t port, UdpSocket& socket, const int64_t& data)
+        {
+            int64_t tmp = htonll(data);
+            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(int64_t));
+        }
+    };
+
+    struct UdpUInt64TestSender: public TestUdpSocketSender
+    {
+        typedef uint64_t VALUE_TYPE;
+        static void Send(const capu::uint16_t port, UdpSocket& socket, const uint64_t& data)
+        {
+            int64_t tmp = htonll(data);
+            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
         }
     };
 
@@ -215,6 +236,16 @@ namespace capu
     TEST_F(UdpSocketInputStreamTest, ReceiveUInt32)
     {
         EXPECT_EQ(5u, UdpSocketInputStreamTestExecutor::Execute<UdpUInt32TestSender>(5u));
+    }
+
+    TEST_F(UdpSocketInputStreamTest, ReceiveInt64)
+    {
+        EXPECT_EQ(0x6464646432323232, UdpSocketInputStreamTestExecutor::Execute<UdpInt64TestSender>(0x6464646432323232));
+    }
+
+    TEST_F(UdpSocketInputStreamTest, ReceiveUInt64)
+    {
+        EXPECT_EQ(0x6464646432323232u, UdpSocketInputStreamTestExecutor::Execute<UdpUInt64TestSender>(0x6464646432323232u));
     }
 
     TEST_F(UdpSocketInputStreamTest, ReceiveString)

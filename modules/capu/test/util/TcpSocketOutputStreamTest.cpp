@@ -25,6 +25,7 @@
 #include <capu/os/CondVar.h>
 #include <capu/os/NumericLimits.h>
 #include <capu/util/IInputStream.h>
+#include <capu/util/SocketInputStream.h>
 
 namespace capu
 {
@@ -78,6 +79,24 @@ namespace capu
             operator>>(tmp);
             value = static_cast<uint32_t>(tmp);
             return *this;
+        }
+
+
+        IInputStream& operator>>(uint64_t& value)
+        {
+            uint64_t tmp;
+            receiveFromSocket(reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
+            value = ntohll(tmp);
+            return *this;
+        }
+
+        IInputStream& operator>>(int64_t& value)
+        {
+            uint64_t tmp;
+            operator>>(tmp);
+            value = static_cast<int64_t>(tmp);
+            return *this;
+
         }
 
         IInputStream& operator>>(String& value)
@@ -209,6 +228,18 @@ namespace capu
         EXPECT_EQ(5u, TcpSocketOutputStreamTestExecutor<uint32_t>::Execute(5u));
         EXPECT_EQ(0u, TcpSocketOutputStreamTestExecutor<uint32_t>::Execute(0u));
         EXPECT_EQ(NumericLimits::Max<uint32_t>(), TcpSocketOutputStreamTestExecutor<uint32_t>::Execute(NumericLimits::Max<uint32_t>()));
+    }
+
+    TEST_F(TcpSocketOutputStreamTest, SendInt64Data)
+    {
+        EXPECT_EQ(0x6464646432323232, TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232));
+    }
+
+    TEST_F(TcpSocketOutputStreamTest, SendUInt64Data)
+    {
+        EXPECT_EQ(0x6464646432323232u, TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232u));
+        EXPECT_EQ(0u, TcpSocketOutputStreamTestExecutor<uint32_t>::Execute(0u));
+        EXPECT_EQ(NumericLimits::Max<uint64_t>(), TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(NumericLimits::Max<uint64_t>()));
     }
 
     TEST_F(TcpSocketOutputStreamTest, SendFloatData)

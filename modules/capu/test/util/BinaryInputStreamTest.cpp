@@ -62,6 +62,33 @@ namespace capu
         EXPECT_EQ(5u, value);
     }
 
+    TEST_F(BinaryInputStreamTest, ReadInt64Value)
+    {
+        char buffer[8];
+        int64_t value = 5;
+        Memory::Copy(buffer, &value, sizeof(int64_t));
+
+        BinaryInputStream inStream(buffer);
+
+        inStream >> value;
+
+        EXPECT_EQ(5, value);
+    }
+
+    TEST_F(BinaryInputStreamTest, ReadUInt64Value)
+    {
+        char buffer[8];
+
+        uint64_t value = 5;
+        Memory::Copy(buffer, &value, sizeof(uint64_t));
+
+        BinaryInputStream inStream(buffer);
+
+        inStream >> value;
+
+        EXPECT_EQ(5u, value);
+    }
+
     TEST_F(BinaryInputStreamTest, ReadUInt16Value)
     {
         char buffer[2];

@@ -50,6 +50,20 @@ namespace capu
         virtual IInputStream& operator>>(uint32_t& value) = 0;
 
         /**
+         * Reads an uint64_t value from the stream
+         * @param value the destination of the read value
+         * @return a reference to the input stream for further processing
+         */
+        virtual IInputStream& operator>>(uint64_t& value) = 0;
+
+        /**
+         * Reads an int64_t value from the stream
+         * @param value the destination of the read value
+         * @return a reference to the input stream for further processing
+         */
+        virtual IInputStream& operator>>(int64_t& value) = 0;
+
+        /**
          * Reads a String value from the stream
          * @param value the destination of the read value
          * @return a reference to the input stream for further processing
@@ -94,7 +108,7 @@ namespace capu
 
     protected:
     private:
-    };
+    };  
 
     inline
     IInputStream::~IInputStream()
