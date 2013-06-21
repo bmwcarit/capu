@@ -105,6 +105,7 @@ ADD_UTIL_FILE(BinaryFileOutputStream)
 ADD_UTIL_FILE(BinaryFileInputStream)
 ADD_UTIL_FILE(StringOutputStream)
 ADD_UTIL_FILE(StringTokenizer)
+ADD_UTIL_FILE(Synchronized)
 
 ADD_DEFINITIONS(-DCAPU_LOGGING_ENABLED=1)
 
