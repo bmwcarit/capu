@@ -64,7 +64,7 @@ namespace capu
          * Returns the current length of the stream without terminating 0
          * @return length of the stream
          */
-        const uint32_t length() const;
+        uint32_t length() const;
 
     protected:
     private:
@@ -101,7 +101,7 @@ namespace capu
     }
 
     inline
-    const uint32_t
+    uint32_t
     StringOutputStream::length() const
     {
         return mSize;

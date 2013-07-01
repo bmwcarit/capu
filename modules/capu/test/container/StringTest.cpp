@@ -457,12 +457,12 @@ TEST(String, GetSubstring)
 {
     capu::String str1("hello c++ world.");
     capu::String substr = str1.substr(0, 5);
-    EXPECT_EQ(5, substr.getLength());
+    EXPECT_EQ(5u, substr.getLength());
     EXPECT_STREQ("hello", substr.c_str());
 
     // test when start is out of bounds
     capu::String substr2 = str1.substr(25, 5);
-    EXPECT_EQ(0, substr2.getLength());
+    EXPECT_EQ(0u, substr2.getLength());
 
     // test negative length
     capu::String substr3 = str1.substr(6, -1);

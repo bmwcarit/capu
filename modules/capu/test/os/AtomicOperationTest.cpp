@@ -153,7 +153,7 @@ TEST(AtomicOperation, Atomicity)
     thread4.join();
     thread5.join();
 
-    EXPECT_EQ(0, AtomicGlobals::var);
+    EXPECT_EQ(0u, AtomicGlobals::var);
     EXPECT_EQ(((AtomicGlobals::n * 5 * AtomicGlobals::n * 5) + AtomicGlobals::n * 5) / 2, AtomicGlobals::sum);
 
 

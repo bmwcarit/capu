@@ -79,6 +79,6 @@ namespace capu
             result += *iter;
         }
 
-        EXPECT_EQ(100, result);
+        EXPECT_EQ(100u, result);
     }
 }

@@ -26,7 +26,7 @@ TEST(StringTokenizer, TokenizeString)
     capu::StringTokenizer tokenizer(str, " ");
     capu::StringTokenizer::Iterator it = tokenizer.begin();
 
-    EXPECT_EQ(2, tokenizer.tokenCount());
+    EXPECT_EQ(2u, tokenizer.tokenCount());
     EXPECT_EQ(capu::String("Hello"), *it);
     it++;
     EXPECT_EQ(capu::String("World!"), *it);
@@ -39,7 +39,7 @@ TEST(StringTokenizer, TokenizeString)
     tokenizer.tokenize(str, "stop");
     it = tokenizer.begin();
 
-    EXPECT_EQ(5, tokenizer.tokenCount());
+    EXPECT_EQ(5u, tokenizer.tokenCount());
     EXPECT_EQ(capu::String("Hello"), *it);
     it++;
     EXPECT_EQ(capu::String("World"), *it);
@@ -58,12 +58,12 @@ TEST(StringTokenizer, TokenizeStringWithoutDelimiter)
     capu::String str("HelloWorld");
 
     capu::StringTokenizer tokenizer; //parameterless constructor
-    EXPECT_EQ(0, tokenizer.tokenCount());
+    EXPECT_EQ(0u, tokenizer.tokenCount());
     EXPECT_EQ(tokenizer.end(), tokenizer.begin());
 
     tokenizer.tokenize(str, "stop");
 
-    EXPECT_EQ(1, tokenizer.tokenCount());
+    EXPECT_EQ(1u, tokenizer.tokenCount());
     EXPECT_EQ(capu::String("HelloWorld"), *(tokenizer.begin()));
 }
 TEST(StringTokenizer, TokenizeEmptyString)
@@ -71,7 +71,7 @@ TEST(StringTokenizer, TokenizeEmptyString)
     capu::String str("");
     capu::StringTokenizer tokenizer(str, "stop");
 
-    EXPECT_EQ(0, tokenizer.tokenCount());
+    EXPECT_EQ(0u, tokenizer.tokenCount());
 }
 
 TEST(StringTokenizer, TokenizeEmptyDelimiter)
@@ -79,6 +79,6 @@ TEST(StringTokenizer, TokenizeEmptyDelimiter)
     capu::String str("Hello World");
     capu::StringTokenizer tokenizer(str, "");
 
-    EXPECT_EQ(1, tokenizer.tokenCount());
+    EXPECT_EQ(1u, tokenizer.tokenCount());
     EXPECT_EQ(capu::String("Hello World"), *(tokenizer.begin()));
 }

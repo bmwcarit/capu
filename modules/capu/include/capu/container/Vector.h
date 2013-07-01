@@ -94,7 +94,7 @@ namespace capu
          * Returns the current size of the Vector
          * @return size of the current Vector
          */
-        const uint32_t size() const;
+        uint32_t size() const;
 
         /**
          * Operator to access internal data with index
@@ -192,7 +192,7 @@ namespace capu
 
     template<typename T>
     inline
-    const uint32_t
+    uint32_t
     Vector<T>::size() const
     {
         return m_size;

@@ -102,8 +102,8 @@ namespace capu
             return;
         }
 
-        int currentPos = 0;
-        int foundPos = 0;
+        uint_t currentPos = 0;
+        int_t foundPos = 0;
 
         while ((foundPos = str.find(delim, currentPos)) > -1)
         {

@@ -541,7 +541,9 @@ namespace capu
                 return CAPU_SOCKET_ESOCKET;
             }
 
-            sockaddr_in client_address = {0};
+            sockaddr_in client_address;
+            memset(&client_address, 0, sizeof(sockaddr_in));
+
             socklen_t size = sizeof(client_address);
             if (getpeername(mSocket, (sockaddr*)&client_address, &size) < 0)
             {

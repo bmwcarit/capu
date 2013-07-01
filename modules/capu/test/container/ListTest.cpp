@@ -323,11 +323,11 @@ TEST(List, find)
     list->insert(data3);
 
     //find the elements
-    EXPECT_EQ(0, list->find(data1).currentIndex());
+    EXPECT_EQ(0u, list->find(data1).currentIndex());
 
-    EXPECT_EQ(1, list->find(data2).currentIndex());
+    EXPECT_EQ(1u, list->find(data2).currentIndex());
 
-    EXPECT_EQ(2, list->find(data3).currentIndex());
+    EXPECT_EQ(2u, list->find(data3).currentIndex());
 
     delete list;
 }
@@ -375,9 +375,9 @@ TEST(List, copyConstructor1)
     EXPECT_EQ(list.size(), copy.size());
     list.clear();
 
-    EXPECT_EQ(0, copy.find(data1).currentIndex());
-    EXPECT_EQ(1, copy.find(data2).currentIndex());
-    EXPECT_EQ(2, copy.find(data3).currentIndex());
+    EXPECT_EQ(0u, copy.find(data1).currentIndex());
+    EXPECT_EQ(1u, copy.find(data2).currentIndex());
+    EXPECT_EQ(2u, copy.find(data3).currentIndex());
 }
 
 TEST(List, copyConstructor2)
@@ -393,9 +393,9 @@ TEST(List, copyConstructor2)
     copy.insert(data2);
     copy.insert(data3);
 
-    EXPECT_EQ(0, copy.find(data1).currentIndex());
-    EXPECT_EQ(1, copy.find(data2).currentIndex());
-    EXPECT_EQ(2, copy.find(data3).currentIndex());
+    EXPECT_EQ(0u, copy.find(data1).currentIndex());
+    EXPECT_EQ(1u, copy.find(data2).currentIndex());
+    EXPECT_EQ(2u, copy.find(data3).currentIndex());
     EXPECT_TRUE(list.isEmpty());
 }
 
@@ -715,7 +715,7 @@ TEST(ListIterator, erase)
     EXPECT_EQ(capu::CAPU_EINVAL, list.erase(it));
     list.insert(1);
     it = list.begin();
-    EXPECT_EQ(0, it.currentIndex());
+    EXPECT_EQ(0u, it.currentIndex());
     EXPECT_EQ(capu::CAPU_OK, list.erase(it, &data1));
     EXPECT_EQ(list.end(), it);
     EXPECT_EQ(0u, list.size());
@@ -726,12 +726,12 @@ TEST(ListIterator, erase)
     list.insert(3);
 
     it = list.begin();
-    EXPECT_EQ(0, it.currentIndex());
+    EXPECT_EQ(0u, it.currentIndex());
     it++;
-    EXPECT_EQ(1, it.currentIndex());
+    EXPECT_EQ(1u, it.currentIndex());
     list.erase(it, &data1);
     EXPECT_EQ(2, data1);
-    EXPECT_EQ(0, it.currentIndex());
+    EXPECT_EQ(0u, it.currentIndex());
 
     capu::int32_t index = 1;
 
@@ -746,7 +746,7 @@ TEST(ListIterator, erase)
     index = 1;
 
     it = list.begin();
-    EXPECT_EQ(0, it.currentIndex()); // always pointing to first element of list
+    EXPECT_EQ(0u, it.currentIndex()); // always pointing to first element of list
 
     while (it != list.end())
     {
@@ -755,7 +755,7 @@ TEST(ListIterator, erase)
         ++index;
     }
 
-    EXPECT_EQ(0, list.size());
+    EXPECT_EQ(0u, list.size());
 }
 
 TEST(ListIterator, push_back)
@@ -857,11 +857,11 @@ TEST(ListIterator, insert)
     capu::status_t result = 0;
 
     list.insert(iter, 1);
-    EXPECT_EQ(0, iter.currentIndex());
+    EXPECT_EQ(0u, iter.currentIndex());
     list.insert(iter, 2);
-    EXPECT_EQ(1, iter.currentIndex());
+    EXPECT_EQ(1u, iter.currentIndex());
     list.insert(iter, 3);
-    EXPECT_EQ(2, iter.currentIndex());
+    EXPECT_EQ(2u, iter.currentIndex());
 
     EXPECT_EQ(1, list.get(0, &result));
     EXPECT_EQ(capu::CAPU_OK, result);
@@ -872,9 +872,9 @@ TEST(ListIterator, insert)
 
     iter = list.begin();
     iter++;
-    EXPECT_EQ(1, iter.currentIndex());
+    EXPECT_EQ(1u, iter.currentIndex());
     list.insert(iter, 4); // inserts before 2
-    EXPECT_EQ(2, iter.currentIndex());
+    EXPECT_EQ(2u, iter.currentIndex());
     EXPECT_EQ(2, *iter); // iter still points to 2
 
     EXPECT_EQ(1, list.get(0, &result));
@@ -887,7 +887,7 @@ TEST(ListIterator, insert)
     EXPECT_EQ(capu::CAPU_OK, result);
 
     iter++;
-    EXPECT_EQ(3, iter.currentIndex());
+    EXPECT_EQ(3u, iter.currentIndex());
     EXPECT_EQ(3, *iter);
     iter++;
     list.insert(iter, 5);
@@ -968,7 +968,7 @@ TEST(ListIterator, loopInserting)
     capu::int32_t i = 1;
     while (i <= 3)
     {
-        EXPECT_EQ(i - 1, iter.currentIndex());
+        EXPECT_EQ(i - 1u, iter.currentIndex());
         EXPECT_EQ(i, *iter);
         iter++;
         i++;

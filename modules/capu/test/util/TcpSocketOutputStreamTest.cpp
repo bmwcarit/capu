@@ -232,7 +232,7 @@ namespace capu
 
     TEST_F(TcpSocketOutputStreamTest, SendInt64Data)
     {
-        EXPECT_EQ(0x6464646432323232, TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232));
+        EXPECT_EQ(0x6464646432323232u, TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232));
     }
 
     TEST_F(TcpSocketOutputStreamTest, SendUInt64Data)
