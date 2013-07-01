@@ -506,9 +506,9 @@ namespace capu
         Iterator iter           = begin();
         const Iterator iterEnd  = end();
 
-        for(; iter != iterEnd; ++iter)
+        for (; iter != iterEnd; ++iter)
         {
-            if(*iter == element)
+            if (*iter == element)
             {
                 return iter;
             }

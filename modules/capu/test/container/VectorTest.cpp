@@ -75,7 +75,7 @@ namespace capu
 
         Vector<uint32_t> vector2;
 
-        for(Vector<uint32_t>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
+        for (Vector<uint32_t>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
@@ -107,7 +107,7 @@ namespace capu
 
         Vector<uint32_t> vector2;
 
-        for(Vector<TestStruct>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
+        for (Vector<TestStruct>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
         {
             vector2.push_back(iter->value1);
         }

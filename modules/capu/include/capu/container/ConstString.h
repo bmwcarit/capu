@@ -39,7 +39,7 @@ namespace capu
          * Create a string from some characters but not starting from the front
          * @param data Pointer to the characters
          * @param start Position within characters to start
-         */        
+         */
         ConstString(const char_t* data, const uint_t start);
 
         /**
@@ -134,13 +134,13 @@ namespace capu
         , m_length(other.m_length)
     {
     }
-    
+
     inline
     ConstString::ConstString(const char_t* data, const uint_t start)
         : m_data(0)
         , m_length(0)
     {
-        if(0 != data)
+        if (0 != data)
         {
             const char_t* startdata = &data[start];
             m_data = startdata;
@@ -156,7 +156,7 @@ namespace capu
     }
 
     inline
-    uint_t 
+    uint_t
     ConstString::length() const
     {
         return m_length;
@@ -169,21 +169,21 @@ namespace capu
     }
 
     inline
-    bool_t 
+    bool_t
     ConstString::operator==(const ConstString& other) const
     {
         return StringUtils::Strcmp(m_data, other.m_data) == 0;
     }
 
     inline
-    bool_t 
+    bool_t
     ConstString::operator!=(const ConstString& other) const
     {
         return !operator==(other);
     }
 
     inline
-    ConstString& 
+    ConstString&
     ConstString::operator=(const ConstString& other)
     {
         m_data = other.m_data;
@@ -192,21 +192,21 @@ namespace capu
     }
 
     inline
-    int_t 
+    int_t
     ConstString::find(const char_t ch, const uint_t offset) const
     {
         return StringUtils::IndexOf(c_str(), ch, offset);
     }
 
     inline
-    int_t 
+    int_t
     ConstString::find(const ConstString& substr, const uint_t offset) const
     {
         return StringUtils::IndexOf(c_str(), substr, offset);
     }
 
-    inline 
-    int_t 
+    inline
+    int_t
     ConstString::rfind(const char_t ch) const
     {
         return StringUtils::LastIndexOf(c_str(), ch);

@@ -37,7 +37,7 @@ namespace capu
         {
         public:
             friend class Vector<T>;
-            
+
             /**
              * Sets the current position to the next element
              */
@@ -68,7 +68,7 @@ namespace capu
             Iterator(T* start);
 
             /**
-             * Pointer to the current data 
+             * Pointer to the current data
              */
             T* m_current;
         };
@@ -153,16 +153,16 @@ namespace capu
 
     template<typename T>
     inline
-    status_t 
+    status_t
     Vector<T>::push_back(const T& value)
     {
         status_t status = CAPU_OK;
-        if(m_size == m_data.size())
+        if (m_size == m_data.size())
         {
             grow();
         }
 
-        if(CAPU_OK == status)
+        if (CAPU_OK == status)
         {
             m_data[m_size] = value;
             ++m_size;
@@ -184,7 +184,7 @@ namespace capu
 
     template<typename T>
     inline
-    T& 
+    T&
     Vector<T>::operator[](const uint32_t index) const
     {
         return m_data[index];
@@ -192,7 +192,7 @@ namespace capu
 
     template<typename T>
     inline
-    const uint32_t 
+    const uint32_t
     Vector<T>::size() const
     {
         return m_size;
@@ -200,7 +200,7 @@ namespace capu
 
     template<typename T>
     inline
-    typename Vector<T>::Iterator 
+    typename Vector<T>::Iterator
     Vector<T>::begin()
     {
         return Iterator(m_data.getRawData());
@@ -232,7 +232,7 @@ namespace capu
 
     template<typename T>
     inline
-    bool_t 
+    bool_t
     Vector<T>::Iterator::operator!=(const Iterator& other)
     {
         return m_current != other.m_current;
@@ -240,7 +240,7 @@ namespace capu
 
     template<typename T>
     inline
-    T& 
+    T&
     Vector<T>::Iterator::operator*()
     {
         return *m_current;
@@ -248,7 +248,7 @@ namespace capu
 
     template<typename T>
     inline
-    T* 
+    T*
     Vector<T>::Iterator::operator->()
     {
         return &** this;

@@ -60,7 +60,7 @@ namespace capu
 
         /**
          * Returns the current length of the stream without terminating 0
-         * @return length of the stream 
+         * @return length of the stream
          */
         const uint32_t length() const;
 
@@ -92,14 +92,14 @@ namespace capu
     };
 
     inline
-    const char_t* 
+    const char_t*
     StringOutputStream::c_str() const
     {
         return mBuffer.getRawData();
     }
 
     inline
-    const uint32_t 
+    const uint32_t
     StringOutputStream::length() const
     {
         return mSize;
@@ -184,7 +184,7 @@ namespace capu
     }
 
     inline
-    status_t 
+    status_t
     StringOutputStream::flush()
     {
         mBuffer[mSize] = '\0';
