@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 BMW Car IT GmbH
+ * Copyright (C) 2013 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,44 +14,30 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_POSIX_CONSOLE_H
-#define CAPU_POSIX_CONSOLE_H
+#ifndef CAPU_ANDROID_SEMAPHORE_H
+#define CAPU_ANDROID_SEMAPHORE_H
 
-#include <stdio.h>
-#include <capu/os/Memory.h>
+#include <capu/os/Posix/Semaphore.h>
 
 namespace capu
 {
-    namespace posix
+    namespace os
     {
-        class Console
+        class Semaphore: private capu::posix::Semaphore
         {
         public:
-            static bool_t IsInputAvailable();
+            Semaphore(uint32_t initialPermits);
+            using capu::posix::Semaphore::aquire;
+            using capu::posix::Semaphore::tryAquire;
+            using capu::posix::Semaphore::release;
         };
 
         inline
-        bool_t
-        Console::IsInputAvailable()
+        Semaphore::Semaphore(uint32_t initialPermits)
+            : capu::posix::Semaphore::Semaphore(initialPermits)
         {
-            fd_set fds;
-            FD_ZERO(&fds);
-            FD_SET(STDIN_FILENO, &fds);
-
-            struct timeval tv;
-            tv.tv_sec = 0;
-            tv.tv_usec = 0;
-
-            int ret = select(STDIN_FILENO + 1, &fds, 0, 0, &tv);
-			if (-1 == ret)
-			{
-				return false;
-			}
-
-            return FD_ISSET(STDIN_FILENO, &fds) != 0;
         }
-
     }
 }
 
-#endif //CAPU_POSIX_CONSOLE_H
+#endif // CAPU_ANDROID_SEMAPHORE_H

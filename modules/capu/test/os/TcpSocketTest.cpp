@@ -409,7 +409,7 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
 
     EXPECT_EQ(capu::CAPU_OK, socket->setLingerOption(false, 0));
     EXPECT_EQ(capu::CAPU_OK, socket->setNoDelay(true));
-    EXPECT_EQ(capu::CAPU_OK, socket->setTimeout(92));
+    EXPECT_EQ(capu::CAPU_OK, socket->setTimeout(100));
 
     //CHECK THE PROPERTIES ARE CORRECTLY SET
     EXPECT_EQ(capu::CAPU_OK, socket->getBufferSize(int_tmp));
@@ -425,7 +425,7 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
     EXPECT_EQ(capu::CAPU_OK, socket->getNoDelay(bool_tmp));
     EXPECT_TRUE(bool_tmp);
     EXPECT_EQ(capu::CAPU_OK, socket->getTimeout(int_tmp));
-    EXPECT_EQ(92, int_tmp);
+    EXPECT_EQ(100, int_tmp);
 
     socket->close();
     //TRY TO CHANGE THE PROPERTIES OF CLOSED SOCKET

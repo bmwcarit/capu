@@ -312,12 +312,16 @@ TEST(File, TestCopyOnExisitingFile)
     fileDest.write("hello", 5u);
     fileDest.close();
 
+    file.open(capu::WRITE_EXISTING_BINARY);
+    file.write("overridden", 10u);
+    file.close();
+
     EXPECT_EQ(capu::CAPU_OK, file.copyTo(fileDest.getFileName())); // will override the hello bytes.
 
     EXPECT_TRUE(fileDest.exists());
     capu::uint_t size;
     fileDest.getSizeInBytes(size);
-    EXPECT_EQ(0u, size);
+    EXPECT_EQ(10u, size);
 
     file.remove();
     fileDest.remove();

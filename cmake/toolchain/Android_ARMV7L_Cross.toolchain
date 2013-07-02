@@ -1,0 +1,56 @@
+#
+# Copyright (C) 2013 BMW Car IT GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+SET(CMAKE_SYSTEM_NAME Linux)
+SET(CMAKE_SYSTEM_VERSION 1)
+
+SET(TARGET_OS Android)
+
+SET(TARGET_ARCH ARMV7L)
+SET(TARGET_COMPILER GCC)
+
+SET(ANDROID_STANDALONE_TOOLCHAIN_DIR "C:/toolchains/android-ndk-8e-standalone")
+
+SET(ANDROID_STANDALONE_TOOLCHAIN_DIR ${ANDROID_STANDALONE_TOOLCHAIN_DIR} CACHE PATH "ANDROID_STANDALONE_TOOLCHAIN_DIR")
+SET(ANDROID_NDK_TOOL_DIRECTORY "${ANDROID_STANDALONE_TOOLCHAIN_DIR}/bin" CACHE PATH "ANDROID_NDK_TOOL_DIRECTORY")
+
+SET(CMAKE_FIND_ROOT_PATH ${ANDROID_STANDALONE_TOOLCHAIN_DIR})
+
+SET(CMAKE_INCLUDE_PATH ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++)
+
+SET(CMAKE_C_COMPILER "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-gcc.exe" CACHE PATH "")
+SET(CMAKE_CXX_COMPILER "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-g++.exe" CACHE PATH "")
+SET(CMAKE_AR           "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-ar.exe" CACHE PATH "")
+
+SET(CMAKE_C_FLAGS "--sysroot=${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot  -MMD -MP -MF -fpic -Wl,--fix-cortex-a8 -Wl,--exclude-libs,ALL -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -ffunction-sections -funwind-tables -fstack-protector -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Os -g -DNDEBUG -fomit-frame-pointer -fno-strict-aliasing -finline-limit=64")
+SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}")
+
+INCLUDE_DIRECTORIES( ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a)
+SET(CMAKE_REQUIRED_INCLUDES ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a)
+SET(CMAKE_INCLUDE_PATH ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a)
+
+SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
+
+SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY)
+
+add_definitions("-DANDROID")
+add_definitions("-DTARGET_OS=Android")
+add_definitions("-DTARGET_ARCH=ARMV7L")
+add_definitions("-DOS_ANDROID")
+add_definitions("-DARCH_ARMV7L")
