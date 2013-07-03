@@ -35,7 +35,8 @@ At the moment we support only a subset of the known STL constructs:
 - List 
 - Ring buffer 
 - Stack 
-- String 
+- String, ConstString
+- Vector
 
 ---------------------------
 Platform abstraction
@@ -48,20 +49,22 @@ Furthermore if the platform abstraction is the same on multiple platforms
 
 At the moment we have an abstraction for the following platforms/OS: 
 - Linux (X86 32/64 bit, ARMv7) 
-- QNX 
+- QNX (X86 32 bit)
 - GreenHills Integrity 
 - Windows (32/64 bit) 
-- Mac OSX
+- Mac OSX (64 bit)
+- Android (ARMv7)
 
 The following features are available on those platforms: 
 - Atomic Operations 
 - Condition Variables
+- Console abstraction
 - Debug (Assertions)
 - Dynamic Library
 - Environment variables
 - File, Filesystem iterator
-- Math 
-- Memory 
+- Math
+- Memory
 - Mutex 
 - Numeric Limits
 - Random numbers
@@ -71,7 +74,30 @@ The following features are available on those platforms:
 - Thread 
 - Time 
 
-Both the STL implementation and platform abstraction are heavily tested 
-by using the GoogleMock/GoogleTest framework. Furthermore it is possible 
-to execute the test execute on the all of the mentioned platforms. 
+------------------------------------------------------------
+Utils build on top of platform abstraction or STL containers
+------------------------------------------------------------
+
+- BinaryInputStream, BinaryOutputStream:
+  Classes for serializing and reading/writing primitive data type from/to binary files or TCP sockets
+- Logger, Console appender 
+  Logger implementation with expandable appender interface
+- ScopedLock, ReadWriteLock, CountDownLatch, easy synchronization
+  Classes for easier synchronization in multi-thread environments
+- File utils, File system traverser
+  File / file system utils often needed when dealing with files
+- SmartPointer, ScopedPointer
+  Automatic memory management by using reference counting
+- Memory allocators (static, dynamic, hybrid)
+  Memory allocation abstraction, e.g. the any STL container data type could use static or dynamic memory pool inside. A hybrid allocator uses static memory and tries to get more memory dynamically, if needed.
+- String tokenizer
+  Utils working on strings
+- Traits
+  Usefuls traits when dealing with templates
+- Threadpool
+
+
+
+All mentioned components are heavily tested by using the GoogleMock/GoogleTest framework. 
+Furthermore it is possible to execute the test executable on the all of the mentioned platforms.
 
