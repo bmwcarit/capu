@@ -57,6 +57,7 @@ MACRO(INTERNAL_JUST_DOIT)
 		IF(${${CURRENT_MODULE_NAME}_HAS_SOURCE_FILES})
 			# Create actual cmake target and add properties to them
 			INTERNAL_ADD_MODULE_TARGET()					# adds the "${${CURRENT_UPPER_MODULE_NAME}_MODULE_SOURCE_FILES}" to the generated library or executable target
+			INTERNAL_SET_TARGET_PROPERTIES()                # sets special target properties.
 			INTERNAL_ADD_FLAGS_TO_MODULE_TARGET()			# adds compiler and linker flags as well as debug and release definitions to the library or executable target
 			INTERNAL_SET_MODULE_TARGET_PROPERTIES()			# sets the "INCLUDE_DIRECTORIES" and "LINKER_LANGUAGE" property of the library or executable target 
 			INTERNAL_ADD_DEPENDENCIES_TO_MODULE_TARGET()	# adds the dependencies within "${${CURRENT_MODULE_NAME}_DEPENDENCIES}" to the library or executable target
@@ -159,7 +160,11 @@ MACRO(INTERNAL_COLLECT_DEPENDENCIES_TEST)
 
 	IF(NOT "${${CURRENT_MODULE_NAME}_TEST_FILES}" STREQUAL "")
 		FOREACH(current_dependency ${${CURRENT_MODULE_NAME}_DEPENDENCIES})
-             SET(collected_dependencies_test ${collected_dependencies_test} ${${current_dependency}_LIBRARIES})
+			IF(NOT ${CURRENT_MODULE_NAME}_${current_dependency}_ONLY_HEADERS)
+				SET(collected_dependencies_test ${collected_dependencies_test} ${${current_dependency}_LIBRARIES})
+			ELSE()
+				MESSAGE(VERBOSE "Not adding libraries of ${current_dependency} to ${CURRENT_MODULE_NAME}Test, because of ONLY_HEADERS option")
+			ENDIF()
 		ENDFOREACH()
 
 		FOREACH (googleMockDep ${GoogleMock_DEPENDENCIES})
@@ -261,6 +266,11 @@ MACRO(INTERNAL_COLLECT_PACKAGE_LINK_DIRECTORIES)
 		ENDFOREACH()	
 ENDMACRO(INTERNAL_COLLECT_PACKAGE_LINK_DIRECTORIES)
 
+MACRO(INTERNAL_SET_TARGET_PROPERTIES)
+	IF(NOT "" STREQUAL "${${CURRENT_MODULE_NAME}_OUTPUT_NAME}")
+		SET_TARGET_PROPERTIES(${CURRENT_MODULE_NAME} PROPERTIES OUTPUT_NAME ${${CURRENT_MODULE_NAME}_OUTPUT_NAME} )
+	ENDIF()
+ENDMACRO(INTERNAL_SET_TARGET_PROPERTIES)
 
 MACRO(INTERNAL_ADD_MODULE_TARGET)
   MESSAGE(VERBOSE "Adding module ${CURRENT_MODULE_NAME}")
@@ -335,7 +345,7 @@ MACRO(INTERNAL_SET_GLOBAL_TEST_VARIABLES)
                 MESSAGE(VERBOSE INTERNAL_SET_GLOBAL_TEST_VARIABLES "GLOBAL_TEST_LIBS=${GLOBAL_TEST_LIBS}")
 				
 				SET(GLOBAL_TEST_SOURCE ${GLOBAL_TEST_SOURCE} ${${CURRENT_MODULE_NAME}_TEST_FILES} CACHE INTERNAL "collect test source")
-				SET(GLOBAL_TEST_LINKER_DIRECTORIES ${GLOBAL_TEST_LINKER_DIRECTORIES} "${collected_dependency_dirs_test}" "${external_package_link_directories}" CACHE INTERNAL "collect test linker directories")
+				SET(GLOBAL_TEST_LINKER_DIRECTORIES ${GLOBAL_TEST_LINKER_DIRECTORIES} "${GLOBAL_EXTERNAL_LIBRARY_LIBRARIES_DIR}" "${collected_dependency_dirs_test}" "${external_package_link_directories}" CACHE INTERNAL "collect test linker directories")
 
 				IF(NOT "${GLOBAL_TEST_LINKER_DIRECTORIES}" STREQUAL "")
 					LIST(REMOVE_DUPLICATES GLOBAL_TEST_LINKER_DIRECTORIES)
