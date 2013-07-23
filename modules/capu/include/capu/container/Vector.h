@@ -85,6 +85,14 @@ namespace capu
         Vector(const uint32_t initialCapacity);
 
         /**
+         * Initializes the Vector with the given capacity and sets all elements
+         * to the given value
+         * @param initialCapacity for the Vector
+         * @param value to set for all elements
+         */
+        Vector(const uint32_t initialCapacity, const T& value);
+
+        /**
          * Adds an Element to the end of the vector
          * @param reference to the value to add
          */
@@ -95,6 +103,21 @@ namespace capu
          * @return size of the current Vector
          */
         uint32_t size() const;
+
+        /**
+         * Resizes the vector to the given size
+         * The currently containing data of the vector will
+         * be still available. If the new size is smaller than the
+         * old size only the elements which fit into the new size are
+         * available after resizing
+         * @param new size of the Vector
+         */
+        void resize(const uint32_t size);
+
+        /**
+         * Removes all elements from the Vector
+         */
+        void clear();
 
         /**
          * Operator to access internal data with index
@@ -144,6 +167,15 @@ namespace capu
 
     template<typename T>
     inline
+    Vector<T>::Vector(const uint32_t initialCapacity, const T& value)
+        : m_data(initialCapacity)
+        , m_size(static_cast<uint32_t>(m_data.size()))
+    {
+        m_data.set(value);
+    }
+
+    template<typename T>
+    inline
     Vector<T>::Vector(const uint32_t initialSize)
         : m_data(initialSize)
         , m_size(0)
@@ -174,12 +206,32 @@ namespace capu
     template<typename T>
     inline
     void
+    Vector<T>::clear()
+    {
+        m_size = 0;
+    }
+
+    template<typename T>
+    inline
+    void
     Vector<T>::grow()
     {
         Array<T> tmpArray(m_data.size()  * 2);
         m_data.swap(tmpArray);
 
         Memory::CopyObject(m_data.getRawData(), tmpArray.getRawData(), tmpArray.size());
+    }
+
+    template<typename T>
+    inline
+    void
+    Vector<T>::resize(const uint32_t size)
+    {
+        Array<T> tmpArray(size);
+        const uint32_t sizeToCopy = size < m_size ? size : m_size;
+
+        tmpArray.copy(m_data.getRawData(), sizeToCopy);
+        m_data.swap(tmpArray);
     }
 
     template<typename T>

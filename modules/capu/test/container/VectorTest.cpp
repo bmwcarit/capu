@@ -44,6 +44,21 @@ namespace capu
         EXPECT_EQ(0U, vector.size());
     }
 
+    TEST_F(VectorTest, ConstructorWithCapacity)
+    {
+        Vector<uint32_t> vector(3);
+        EXPECT_EQ(0u, vector.size());
+    }
+
+    TEST_F(VectorTest, ConstructorWithCapacityAndValue)
+    {
+        Vector<uint32_t> vector(3, 5);
+
+        EXPECT_EQ(5u, vector[0]);
+        EXPECT_EQ(5u, vector[1]);
+        EXPECT_EQ(5u, vector[2]);
+    }
+
     TEST_F(VectorTest, PushBack)
     {
         Vector<uint32_t> vector;
@@ -114,5 +129,51 @@ namespace capu
 
         EXPECT_EQ(47u, vector2[0]);
         EXPECT_EQ(8u, vector2[1]);
+    }
+
+    TEST_F(VectorTest, Resize)
+    {
+        Vector<uint32_t> vector(2);
+
+        vector.push_back(1);
+        vector.push_back(2);
+
+        vector.resize(19);
+
+        EXPECT_EQ(1u, vector[0]);
+        EXPECT_EQ(2u, vector[1]);
+
+        vector.resize(1);
+
+        EXPECT_EQ(1u, vector[0]);
+    }
+
+    TEST_F(VectorTest, Clear)
+    {
+        TestStruct struct1;
+        struct1.value1 = 47;
+        struct1.value2   = 11.f;
+
+        TestStruct struct2;
+        struct2.value1 = 8;
+        struct2.value2 = 15.f;
+
+
+        Vector<TestStruct> vector;
+
+        vector.push_back(struct1);
+        vector.push_back(struct2);
+
+        vector.clear();
+
+        vector.push_back(struct2);
+        vector.push_back(struct1);
+
+        EXPECT_EQ(struct2.value1, vector[0].value1);
+        EXPECT_EQ(struct2.value2, vector[0].value2);
+        EXPECT_EQ(struct1.value1, vector[1].value1);
+        EXPECT_EQ(struct1.value2, vector[1].value2);
+
+
     }
 }

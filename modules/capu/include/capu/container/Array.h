@@ -93,8 +93,8 @@ namespace capu
          * @param value initialization value
          * @param start start index
          * @param count number of elements
-         * @return ETCH_ERANGE if out of bounds
-         *         ETCH_OK otherwise
+         * @return CAPU_ERANGE if out of bounds
+         *         CAPU_OK otherwise
          */
         status_t set(const T& value, const uint_t start, const uint_t count);
 
@@ -103,8 +103,8 @@ namespace capu
          * @param start start index
          * @param count number of elements
          * @param dst destination index
-         * @return ETCH_ERANGE if out of bounds
-         *         ETCH_OK otherwise
+         * @return CAPU_ERANGE if out of bounds
+         *         CAPU_OK otherwise
          */
         status_t move(const uint_t start, const uint_t count, const uint_t dst);
 
@@ -112,8 +112,8 @@ namespace capu
          * Copies the given values into the array
          * @param other values for the contents of the array
          * @param size fix size of the array
-         * @return ETCH_ERANGE if size does not match array size
-         *         ETCH_OK otherwise
+         * @return CAPU_ERANGE if size is bigger array size
+         *         CAPU_OK otherwise
          */
         status_t copy(const T other[], const uint_t size);
 
@@ -274,7 +274,7 @@ namespace capu
     template<typename T>
     status_t Array<T>::copy(const T other[], const uint_t size)
     {
-        if (size != mSize)
+        if (size > mSize)
         {
             return CAPU_ERANGE;
         }

@@ -418,9 +418,9 @@ TEST(Array, CopyMethodInvalidSize)
     {
         original[i] = i;
     }
-    capu::uint32_t newVals[3];
+    capu::uint32_t newVals[7];
 
-    capu::status_t status = original.copy(newVals, 3); // give invalid size
+    capu::status_t status = original.copy(newVals, 7); // give invalid size
     EXPECT_EQ(capu::CAPU_ERANGE, status);
 
     // no changes in original array
