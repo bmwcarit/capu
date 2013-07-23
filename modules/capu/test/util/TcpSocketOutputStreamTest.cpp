@@ -249,7 +249,7 @@ namespace capu
 
     TEST_F(TcpSocketOutputStreamTest, SendStringData)
     {
-        EXPECT_STREQ("Hello World", TcpSocketOutputStreamTestExecutor<String>::Execute("Hello World"));
+        EXPECT_STREQ("Hello World", TcpSocketOutputStreamTestExecutor<String>::Execute("Hello World").c_str());
     }
 
     TEST_F(TcpSocketOutputStreamTest, SendUInt16Data)

@@ -179,7 +179,7 @@ namespace capu
         status_t
         UdpSocket::send(const char_t* buffer, const int32_t length, const SocketAddrInfo& receiverAddr)
         {
-            return send(buffer, length, receiverAddr.addr, receiverAddr.port);
+            return send(buffer, length, receiverAddr.addr.c_str(), receiverAddr.port);
         }
 
         inline

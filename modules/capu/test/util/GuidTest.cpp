@@ -120,5 +120,5 @@ TEST(GuidTest, CopyConstructor)
     capu::Guid id1;
     capu::Guid id2(id1);
 
-    EXPECT_STREQ(id1.toString(), id2.toString());
+    EXPECT_STREQ(id1.toString().c_str(), id2.toString().c_str());
 }

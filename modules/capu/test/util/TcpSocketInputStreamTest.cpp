@@ -248,7 +248,7 @@ namespace capu
 
     TEST_F(TcpSocketInputStreamTest, ReceiveString)
     {
-        EXPECT_STREQ("Hello World", TcpSocketInputStreamTestExecutor::Execute<TcpStringTestSender>("Hello World"));
+        EXPECT_STREQ("Hello World", TcpSocketInputStreamTestExecutor::Execute<TcpStringTestSender>("Hello World").c_str());
     }
 
     TEST_F(TcpSocketInputStreamTest, ReceiveBool)
@@ -299,7 +299,7 @@ namespace capu
         serverSocket.close();
 
         EXPECT_EQ(5, intResult);
-        EXPECT_STREQ("Hello World", stringResult);
+        EXPECT_STREQ("Hello World", stringResult.c_str());
         EXPECT_FLOAT_EQ(Math::LN2_f, floatResult);
         EXPECT_EQ(true, boolResult);
     }

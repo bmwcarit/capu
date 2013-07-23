@@ -67,7 +67,7 @@ namespace capu
 
         EXPECT_EQ(10, intVal);
         EXPECT_EQ(20.0f, floatVal);
-        EXPECT_STREQ("Dies ist ein Text", stringVal);
+        EXPECT_STREQ("Dies ist ein Text", stringVal.c_str());
 
     }
 }

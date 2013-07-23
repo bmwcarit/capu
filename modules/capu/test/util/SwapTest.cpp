@@ -37,8 +37,8 @@ TEST(SwapTest, String)
 
     capu::swap(first, second);
 
-    EXPECT_STREQ("first string", second);
-    EXPECT_STREQ("second string", first);
+    EXPECT_STREQ("first string", second.c_str());
+    EXPECT_STREQ("second string", first.c_str());
 }
 
 

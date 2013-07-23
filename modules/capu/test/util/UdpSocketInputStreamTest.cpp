@@ -250,7 +250,7 @@ namespace capu
 
     TEST_F(UdpSocketInputStreamTest, ReceiveString)
     {
-        EXPECT_STREQ("Hello World", UdpSocketInputStreamTestExecutor::Execute<UdpStringTestSender>("Hello World"));
+        EXPECT_STREQ("Hello World", UdpSocketInputStreamTestExecutor::Execute<UdpStringTestSender>("Hello World").c_str());
     }
 
     TEST_F(UdpSocketInputStreamTest, ReceiveFloat)
@@ -297,7 +297,7 @@ namespace capu
         serverSocket.close();
 
         EXPECT_EQ(5, intResult);
-        EXPECT_STREQ("Hello World", stringResult);
+        EXPECT_STREQ("Hello World", stringResult.c_str());
         EXPECT_FLOAT_EQ(Math::LN2_f, floatResult);
         EXPECT_EQ(true, boolResult);
     }

@@ -115,7 +115,7 @@ namespace capu
 
         inStream >> value;
 
-        EXPECT_STREQ("Hello World", value);
+        EXPECT_STREQ("Hello World", value.c_str());
     }
 
     TEST_F(BinaryInputStreamTest, ReadBoolValue)
@@ -171,7 +171,7 @@ namespace capu
 
         EXPECT_EQ(5, intVal);
         EXPECT_EQ(4.3f, floatVal);
-        EXPECT_STREQ("Hello World", stringVal);
+        EXPECT_STREQ("Hello World", stringVal.c_str());
         EXPECT_EQ(true, boolVal);
     }
 

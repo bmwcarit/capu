@@ -355,42 +355,42 @@ TEST(File, TestCopyOnNotExistingSourceFile)
 TEST(File, TestGetFilename)
 {
     capu::File f1("filename");
-    EXPECT_STREQ("filename", f1.getFileName());
+    EXPECT_STREQ("filename", f1.getFileName().c_str());
 
     capu::File f2("parent/filename");
-    EXPECT_STREQ("filename", f2.getFileName());
+    EXPECT_STREQ("filename", f2.getFileName().c_str());
 
     capu::File f3("filename.ext");
-    EXPECT_STREQ("filename.ext", f3.getFileName());
+    EXPECT_STREQ("filename.ext", f3.getFileName().c_str());
 
     capu::File f4("/parent/filename.ext");
-    EXPECT_STREQ("filename.ext", f4.getFileName());
+    EXPECT_STREQ("filename.ext", f4.getFileName().c_str());
 }
 TEST(File, TestGetExtension)
 {
     capu::File file("msdia80.dll");
-    EXPECT_STREQ("dll", file.getExtension());
+    EXPECT_STREQ("dll", file.getExtension().c_str());
 
     capu::File file2("myVacation.jpg");
-    EXPECT_STREQ("jpg", file2.getExtension());
+    EXPECT_STREQ("jpg", file2.getExtension().c_str());
 
     capu::File file3("noEnding");
-    EXPECT_STREQ("", file3.getExtension());
+    EXPECT_STREQ("", file3.getExtension().c_str());
 }
 
 TEST(File, TestGetPath)
 {
     capu::File f1("./relative");
-    EXPECT_STREQ("./relative", f1.getPath());
+    EXPECT_STREQ("./relative", f1.getPath().c_str());
 
     capu::File f2("parent/filename");
-    EXPECT_STREQ("parent/filename", f2.getPath());
+    EXPECT_STREQ("parent/filename", f2.getPath().c_str());
 
     capu::File f3("filename.ext");
-    EXPECT_STREQ("filename.ext", f3.getPath());
+    EXPECT_STREQ("filename.ext", f3.getPath().c_str());
 
     capu::File f4("/absolute/filename.ext");
-    EXPECT_STREQ("/absolute/filename.ext", f4.getPath());
+    EXPECT_STREQ("/absolute/filename.ext", f4.getPath().c_str());
 }
 
 TEST(File, TestGetFileSize)

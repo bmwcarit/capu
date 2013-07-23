@@ -345,7 +345,7 @@ namespace capu
     }
     inline const char_t* LoggerMessage::getTag() const
     {
-        return mTag;
+        return mTag.c_str();
     }
 
     // filename
@@ -355,7 +355,7 @@ namespace capu
     }
     inline const char_t* LoggerMessage::getFile() const
     {
-        return mFile;
+        return mFile.c_str();
     }
 
     // line
@@ -376,7 +376,7 @@ namespace capu
 
     inline const char_t* LoggerMessage::getMessage() const
     {
-        return mMessage;
+        return mMessage.c_str();
     }
 
     /*

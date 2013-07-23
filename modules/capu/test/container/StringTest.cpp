@@ -36,16 +36,29 @@ TEST(String, TestCopyConstructor)
     capu::String str("asdf");
     capu::String copy(str);
     EXPECT_EQ(0, capu::StringUtils::Strcmp("asdf", str.c_str()));
+    EXPECT_STREQ("asdf", str.c_str());
     EXPECT_EQ(str.getLength(), copy.getLength());
+}
+
+TEST(String, InitialSizeConstructor)
+{
+    capu::String str(5, 'a');
+
+    EXPECT_EQ(5u, str.getLength());
+    EXPECT_STREQ("aaaaa", str.c_str());
 }
 
 TEST(String, TestAssignOperator1)
 {
     capu::String str("asdf");
     capu::String other("other");
+    
+    EXPECT_EQ(4u, str.getLength());
+    EXPECT_EQ(5u, other.getLength());
     str = other;
     EXPECT_EQ(0, capu::StringUtils::Strcmp("other", str.c_str()));
-    EXPECT_EQ(str.getLength(), other.getLength());
+    EXPECT_EQ(5u, str.getLength());
+    EXPECT_EQ(5u, other.getLength());
 }
 
 TEST(String, TestToLowerCase1)
@@ -129,7 +142,7 @@ TEST(String, TestAssignOperator2)
 TEST(String, TestAssignOperator3)
 {
     capu::String str("asdf");
-    str = 0;
+    str = '\0';
     EXPECT_EQ(0, capu::StringUtils::Strcmp("", str.c_str()));
     EXPECT_EQ(0u, str.getLength());
 }
@@ -140,6 +153,22 @@ TEST(String, TestAssignOperator4)
     capu::String other;
     str = other;
     EXPECT_EQ(0, capu::StringUtils::Strcmp("", str.c_str()));
+    EXPECT_EQ(0u, str.getLength());
+}
+
+TEST(String, TestAssignOperator5)
+{
+    capu::String str("asdf");
+    str = 'z';
+    EXPECT_STREQ("z", str.c_str());
+    EXPECT_EQ(1u, str.getLength());
+}
+
+TEST(String, TestAssignOperator6)
+{
+    capu::String str("asdf");
+    str = '\0';
+    EXPECT_STREQ("", str.c_str());
     EXPECT_EQ(0u, str.getLength());
 }
 
@@ -234,31 +263,49 @@ TEST(String, TestAddition)
     EXPECT_EQ(0, capu::StringUtils::Strcmp("helloworld", str3.c_str()));
 }
 
+TEST(String, TestAddAssignString)
+{
+    capu::String str ("abc");
+    str += "def";
+
+    EXPECT_EQ(6u, str.getLength());
+    EXPECT_STREQ("abcdef", str.c_str());
+}
+
+TEST(String, TestAddAssignChar)
+{
+    capu::String str ("abc");
+    str += 'd';
+
+    EXPECT_EQ(4u, str.getLength());
+    EXPECT_STREQ("abcd", str.c_str());
+}
+
 TEST(String, TestSubStringCTor1)
 {
     capu::String str("0123456789", 4, 6);
-    EXPECT_STREQ("456", str);
+    EXPECT_STREQ("456", str.c_str());
     EXPECT_EQ(3u, str.getLength());
 }
 
 TEST(String, TestSubStringCTor2)
 {
     capu::String str("0123456789", 4);
-    EXPECT_STREQ("456789", str);
+    EXPECT_STREQ("456789", str.c_str());
     EXPECT_EQ(6u, str.getLength());
 }
 
 TEST(String, TestSubStringCTor3)
 {
-    capu::String str(0, 4);
-    EXPECT_STREQ("", str);
+    capu::String str(static_cast<const char*>(0), 4);
+    EXPECT_STREQ("", str.c_str());
     EXPECT_EQ(0u, str.getLength());
 }
 
 TEST(String, TestSubStringCTor4)
 {
     capu::String str(0, 4, 9);
-    EXPECT_STREQ("", str);
+    EXPECT_STREQ("", str.c_str());
     EXPECT_EQ(0u, str.getLength());
 }
 
@@ -276,10 +323,21 @@ TEST(String, TestSubStringCTor6)
     EXPECT_EQ(5u, str.getLength());
 }
 
+TEST(String, AccessOperator)
+{
+    capu::String str("abc");
+
+    EXPECT_EQ('b', str[1]);
+    
+    str[1] = 'z';
+    EXPECT_STREQ("azc", str.c_str());
+}
+
+
 TEST(String, AutoCast)
 {
     capu::String string = "TestString";
-    EXPECT_STREQ("TestString", string);
+    EXPECT_STREQ("TestString", string.c_str());
     EXPECT_EQ(10u, string.getLength());
 }
 

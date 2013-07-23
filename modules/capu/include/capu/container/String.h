@@ -32,18 +32,20 @@ namespace capu
     class String
     {
     public:
+
         String();
         /**
          * Create a string from some characters
          * @param data Pointer to characters
          */
         String(const char_t* data);
+
         /**
          * Create a string from some characters but not starting from the front
          * @param data Pointer to the characters to copy from
          * @param start Position within characters to start copying from
          */
-        String(const char_t* data, const uint_t start);
+        String(const char_t* data, uint_t start);
         /**
          * Create a string from some characters, only taking some from the middle
          * @param data Pointer to character
@@ -59,6 +61,14 @@ namespace capu
          * @param end Position within characters to stop copying
          */
         String(const String& other, const uint_t start, const uint_t end);
+
+        /**
+         * Create a string with initial size and all characters set to the given character
+         * @param initialSize for the string
+         * @param character to initialize string
+         */
+        String(uint32_t initialSize, char_t character);
+
 
         /**
          * Create a string by copying from another
@@ -78,12 +88,29 @@ namespace capu
         /**
          * Assign a string by copying from another
          */
-        String& operator=(String other);
+        String& operator=(const String& other);
 
         /**
          * Assign a string by copying from some characters
          */
         String& operator=(const char_t* other);
+
+        /**
+         * Assign a char to the string
+         */
+        String& operator=(char_t other);
+
+        /**
+         * Adds the given character string to the string
+         * @param character string to add
+         */
+        void operator+=(const char_t* other);
+
+        /**
+         * Adds the given character to the string
+         * @param character string to add
+         */
+        void operator+=(char_t other);
 
         /**
          * Add two strings together and return the concatenated string
@@ -106,10 +133,17 @@ namespace capu
         bool_t operator!=(const String& other) const;
 
         /**
-         * Return the string as characters
+         * Access operator to access a special character
+         * @param index of the character to access
+         * @return character at the given index
+         * @{
          */
-        operator const char_t* () const;
-
+        char_t& operator[](uint_t index);
+        const char_t& operator[](uint_t index) const;
+        /**
+         * @}
+         */
+        
         /**
          * Append the given string to this string
          * @param other The String to append
@@ -235,13 +269,21 @@ namespace capu
     {
     }
 
+    inline String::String(uint32_t initialSize, char_t character)
+        : m_data(initialSize + 1)
+        , m_size(initialSize)
+    {
+        m_data.set(character);
+        m_data[initialSize] = '\0';
+    }
+
     inline String::String(const char_t* other)
         : m_data(0), m_size(0)
     {
         initData(other);
     }
 
-    inline String::String(const char_t* data, const uint_t start)
+    inline String::String(const char_t* data, uint_t start)
         : m_data(0), m_size(0)
     {
         if (data)
@@ -261,6 +303,11 @@ namespace capu
         : m_data(0), m_size(0)
     {
         initFromGivenData(data, start, end, StringUtils::Strlen(data));
+    }
+
+    inline String::String(const String& other)
+        : m_data(other.m_data), m_size(other.m_size)
+    {
     }
 
     inline void String::initFromGivenData(const char_t* data, const uint_t start, const uint_t end, uint_t size)
@@ -300,24 +347,18 @@ namespace capu
         StringUtils::Strncpy(m_data.getRawData(), m_data.size(), startdata);
     }
 
-    inline String::String(const String& other)
-        : m_data(other.m_data), m_size(other.m_size)
-    {
-    }
+
 
     inline String::~String()
     {
         initData(0);
     }
 
-    inline String::operator const char_t* () const
+    inline String& String::operator=(const String& other)
     {
-        return c_str();
-    }
-
-    inline String& String::operator=(String other)
-    {
-        return swap(other);
+        m_data = other.m_data;
+        m_size = other.m_size;
+        return *this;
     }
 
     inline String& String::operator=(const char_t* other)
@@ -349,10 +390,38 @@ namespace capu
         return ConstString(c_str()) == ConstString(other.c_str());
     }
 
+    inline void String::operator+=(const char_t* other)
+    {
+        append(other);
+    }
+
+    inline String& String::operator=(char_t other)
+    {
+        char_t tmp[2] = {other, '\0'};
+        return operator=(tmp);
+    }
+
+    inline void String::operator+=(char_t other)
+    {
+        char_t tmp[2] = {other, '\0'};
+        operator+=(tmp);
+    }
+
     inline bool_t String::operator!=(const String& other) const
     {
         return !operator==(other);
     }
+
+    inline char_t& String::operator[](uint_t index)
+    {
+        return m_data[index];
+    }
+
+    inline const char_t& String::operator[](uint_t index) const
+    {
+        return m_data[index];
+    }
+
 
     inline String& String::append(const String& other)
     {

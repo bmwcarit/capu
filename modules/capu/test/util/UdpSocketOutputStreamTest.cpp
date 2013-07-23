@@ -223,7 +223,7 @@ namespace capu
 
     TEST_F(UdpSocketOutputStreamTest, SendStringData)
     {
-        EXPECT_STREQ("Hello World", UdpSocketOutputStreamTestExecutor<String>::Execute("Hello World"));
+        EXPECT_STREQ("Hello World", UdpSocketOutputStreamTestExecutor<String>::Execute("Hello World").c_str());
     }
 
     TEST_F(UdpSocketOutputStreamTest, SendUInt16Data)
@@ -256,6 +256,6 @@ namespace capu
         const SocketAddrInfo& addrInfo = stream.getAddrInfo();
 
         EXPECT_EQ(55555, addrInfo.port);
-        EXPECT_STREQ("127.0.0.1", addrInfo.addr);
+        EXPECT_STREQ("127.0.0.1", addrInfo.addr.c_str());
     }
 }

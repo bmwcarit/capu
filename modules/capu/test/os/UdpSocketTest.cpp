@@ -158,7 +158,7 @@ public:
         result = serverSocket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes, &remoteSocket);
         EXPECT_EQ(capu::CAPU_OK, result);
 
-        EXPECT_STREQ("127.0.0.1", remoteSocket.addr);
+        EXPECT_STREQ("127.0.0.1", remoteSocket.addr.c_str());
 
         //check value
         EXPECT_EQ(5, communication_variable);
@@ -317,7 +317,7 @@ TEST(UdpSocketAndUdpServerSocket, RandomPortTest)
 
     const capu::SocketAddrInfo& sockInfo = socket.getSocketAddrInfo();
 
-    EXPECT_STREQ("0.0.0.0", sockInfo.addr);
+    EXPECT_STREQ("0.0.0.0", sockInfo.addr.c_str());
     EXPECT_TRUE(1024 < sockInfo.port);  // port should be bigger than standard ports
 }
 

@@ -185,7 +185,7 @@ namespace capu
             file.remove();
         }
         file.open(capu::READ_WRITE_OVERWRITE_OLD);
-        file.write(content, content.getLength());
+        file.write(content.c_str(), content.getLength());
         file.flush();
         file.close();
         return CAPU_OK;
