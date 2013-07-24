@@ -114,6 +114,49 @@ namespace capu
         EXPECT_EQ(36U, outputStream.length());
     }
 
+
+    TEST_F(StringOutputStreamTest, WriteEndl)
+    {
+        outputStream << "test" << endl;
+        outputStream.flush();
+        EXPECT_STREQ("test\n", outputStream.c_str());
+        EXPECT_EQ(5u, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteFixed)
+    {
+        outputStream << 47.11f;
+        outputStream.flush();
+        EXPECT_STREQ("47.110001", outputStream.c_str());
+        EXPECT_EQ(9u, outputStream.length());
+        outputStream.clear();
+        outputStream << fixed << 47.11f;
+        outputStream.flush();
+        EXPECT_STREQ("47.1100", outputStream.c_str());
+        EXPECT_EQ(7u, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, Clear)
+    {
+        outputStream << "Some data";
+        outputStream.clear();
+        EXPECT_STREQ("", outputStream.c_str());
+        EXPECT_EQ(0u, outputStream.length());
+
+        outputStream << "Some data";
+        outputStream.flush();
+        outputStream.clear();
+        EXPECT_STREQ("", outputStream.c_str());
+        EXPECT_EQ(0u, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, AutoFlush)
+    {
+        outputStream << "Some data";
+        EXPECT_STREQ("Some data", outputStream.c_str());
+        EXPECT_EQ(9u, outputStream.length());
+    }
+
     TEST_F(StringOutputStreamTest, WriteData)
     {
         outputStream.write("Some data to write", 18);

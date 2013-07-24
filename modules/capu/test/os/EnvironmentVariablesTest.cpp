@@ -29,10 +29,11 @@ TEST(EnvironmentVariables, getTest)
     capu::EnvironmentVariables myEnv;
     capu::String tmp;
     capu::HashTable<capu::String, capu::String>::Iterator it = myEnv.getAll().begin();
-    while (it != myEnv.getAll().end())
+    const capu::HashTable<capu::String, capu::String>::Iterator end = myEnv.getAll().end();
+
+    for(; it != end; ++it)
     {
         EXPECT_TRUE(myEnv.get(it->key, tmp));
         EXPECT_EQ(tmp, it->value);
-        it++;
     }
 }

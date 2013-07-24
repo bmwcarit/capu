@@ -31,6 +31,13 @@ namespace capu
     class StringOutputStream: public IOutputStream
     {
     public:
+
+        enum FloatingPointType
+        {
+            NORMAL,
+            FIXED
+        };
+
         StringOutputStream();
 
         /**
@@ -38,33 +45,51 @@ namespace capu
          * @see  IOutputStream
          * @{
          */
-        virtual IOutputStream& operator<<(const float_t value);
-        virtual IOutputStream& operator<<(const int32_t value);
-        virtual IOutputStream& operator<<(const uint32_t value);
-        virtual IOutputStream& operator<<(const int64_t value);
-        virtual IOutputStream& operator<<(const uint64_t value);
-        virtual IOutputStream& operator<<(const String& value);
-        virtual IOutputStream& operator<<(const bool_t  value);
-        virtual IOutputStream& operator<<(const char_t* value);
-        virtual IOutputStream& operator<<(const uint16_t value);
-        virtual IOutputStream& operator<<(const Guid& value);
-        virtual IOutputStream& write(const void* data, const uint32_t size);
+        virtual StringOutputStream& operator<<(const float_t value);
+        virtual StringOutputStream& operator<<(const int32_t value);
+        virtual StringOutputStream& operator<<(const uint32_t value);
+        virtual StringOutputStream& operator<<(const int64_t value);
+        virtual StringOutputStream& operator<<(const uint64_t value);
+        virtual StringOutputStream& operator<<(const String& value);
+        virtual StringOutputStream& operator<<(const bool_t  value);
+        virtual StringOutputStream& operator<<(const char_t* value);
+        virtual StringOutputStream& operator<<(const uint16_t value);
+        virtual StringOutputStream& operator<<(const Guid& value);
+
+        virtual StringOutputStream& write(const void* data, const uint32_t size);
+
         virtual status_t flush();
         /**
          * @}
          */
 
         /**
+         * This method accepts pointer to method which itself accepts StringOuputStream
+         * The method is used for endl and fixed
+         * @param pointer to method
+         * @return stream
+         */
+        StringOutputStream& operator<< (StringOutputStream& (*pf)(StringOutputStream&));
+
+
+        /**
          * Returns a const char_t pointer to the content of the stream
          * @return the const char_t pointer to the content of the stream
          */
-        const char_t* c_str() const;
+        const char_t* c_str();
 
         /**
          * Returns the current length of the stream without terminating 0
          * @return length of the stream
          */
         uint32_t length() const;
+
+        /**
+         * Clears the stream
+         */
+        void clear();
+
+        void setFloatingPointType(FloatingPointType type);
 
     protected:
     private:
@@ -79,6 +104,8 @@ namespace capu
          */
         uint32_t      mSize;
 
+        FloatingPointType mFloatingPointType;
+
         /**
          * Resizes the internal buffer to minSize
          * @param minSize to resize the buffer
@@ -91,12 +118,14 @@ namespace capu
          * @param size to request on the stream
          */
         void requestSize(const uint32_t size);
+
     };
 
     inline
     const char_t*
-    StringOutputStream::c_str() const
+    StringOutputStream::c_str()
     {
+        flush();
         return mBuffer.getRawData();
     }
 
@@ -108,16 +137,25 @@ namespace capu
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const float_t value)
     {
         char_t buffer[16];
-        StringUtils::Sprintf(buffer, 16, "%f", value);
+        switch(mFloatingPointType)
+        {
+        case NORMAL:
+            StringUtils::Sprintf(buffer, 16, "%f", value);
+            break;
+        case FIXED:
+            StringUtils::Sprintf(buffer, 16, "%.4f", value);
+            break;
+        }
+
         return operator<<(buffer);
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const int32_t value)
     {
         char_t buffer[11];
@@ -126,7 +164,7 @@ namespace capu
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const uint32_t value)
     {
         char_t buffer[11];
@@ -135,7 +173,7 @@ namespace capu
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const int64_t value)
     {
         char_t buffer[21];
@@ -144,7 +182,7 @@ namespace capu
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const uint64_t value)
     {
         char_t buffer[21];
@@ -153,14 +191,14 @@ namespace capu
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const String& value)
     {
         return write(value.c_str(), static_cast<uint32_t>(value.getLength()));
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const bool_t  value)
     {
         char_t buffer[2];
@@ -169,7 +207,7 @@ namespace capu
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const char_t* value)
     {
         const uint_t length = ConstString(value).length();
@@ -177,7 +215,7 @@ namespace capu
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const uint16_t value)
     {
         char_t buffer[6];
@@ -187,14 +225,14 @@ namespace capu
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::operator<<(const Guid& value)
     {
         return operator<<(value.toString());
     }
 
     inline
-    IOutputStream&
+    StringOutputStream&
     StringOutputStream::write(const void* data, const uint32_t size)
     {
         requestSize(size + 1); // Terminating 0
@@ -204,11 +242,50 @@ namespace capu
     }
 
     inline
+    void
+    StringOutputStream::clear()
+    {
+        mSize = 0;
+        mBuffer[0] = '\0';
+    }
+
+    inline
     status_t
     StringOutputStream::flush()
     {
         mBuffer[mSize] = '\0';
         return CAPU_OK;
+    }
+
+    inline
+    void
+    StringOutputStream::setFloatingPointType(FloatingPointType type)
+    {
+        mFloatingPointType = type;
+    }
+
+    inline
+    StringOutputStream& StringOutputStream::operator<< (StringOutputStream& (*pf)(StringOutputStream&))
+    {
+        return pf(*this);
+    }
+
+    inline
+    StringOutputStream&
+    endl(StringOutputStream& outputStream)
+    {
+        const char_t c = '\n';
+        outputStream.write(&c, sizeof(char_t));
+        outputStream.flush();
+        return outputStream;
+    }
+
+    inline
+    StringOutputStream&
+    fixed(StringOutputStream& outputStream)
+    {
+        outputStream.setFloatingPointType(StringOutputStream::FIXED);
+        return outputStream;
     }
 }
 

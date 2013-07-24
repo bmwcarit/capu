@@ -20,9 +20,13 @@
 
 namespace capu
 {
+
+
+
     StringOutputStream::StringOutputStream()
         : mBuffer(16)
         , mSize(0)
+        , mFloatingPointType(NORMAL)
     {
 
     }
@@ -49,5 +53,4 @@ namespace capu
             resize(mSize + size);
         }
     }
-
 }
