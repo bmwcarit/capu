@@ -99,6 +99,40 @@ namespace capu
         EXPECT_EQ(47u, vector2[1]);
     }
 
+    TEST_F(VectorTest, IteratorOnConstVector)
+    {
+        Vector<uint32_t> vector;
+
+        const Vector<uint32_t>& constVector = vector;
+
+        vector.push_back(42u);
+        vector.push_back(47u);
+
+        Vector<uint32_t> vector2;
+
+        for (Vector<uint32_t>::Iterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        {
+            vector2.push_back(*iter);
+        }
+
+        EXPECT_EQ(42u, vector2[0]);
+        EXPECT_EQ(47u, vector2[1]);
+    }
+
+    TEST_F(VectorTest, AccessOperator)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(42u);
+        vector.push_back(47u);
+
+        vector[0] = 47u;
+        vector[1] = 42u;
+
+        EXPECT_EQ(47u, vector[0]);
+        EXPECT_EQ(42u, vector[1]);
+    }
+
     struct TestStruct
     {
         uint32_t value1;

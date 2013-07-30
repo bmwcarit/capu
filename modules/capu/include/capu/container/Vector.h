@@ -53,24 +53,24 @@ namespace capu
             /**
              * Dereferences the iterator to access the internal data
              */
-            T& operator*();
+            T const& operator*();
 
             /**
              * Allows access to methods and member of the internal data
              */
-            T* operator->();
+            T const* operator->();
         protected:
         private:
             /**
              * Creates a Iterator for the Vector
              * @param start pointer for the iterator
              */
-            Iterator(T* start);
+            Iterator(const T* start);
 
             /**
              * Pointer to the current data
              */
-            T* m_current;
+            T const* m_current;
         };
 
         /**
@@ -130,13 +130,13 @@ namespace capu
          * Returns a new Iterator to the start of the Vector
          * @return a new Iterator to the start of the Vector
          */
-        Iterator begin();
+        Iterator begin() const;
 
         /**
          * Returns a new Iterator to the end of the Vector
          * @return a new Iterator to the end of the Vector
          */
-        Iterator end();
+        Iterator end() const;
 
     protected:
     private:
@@ -253,7 +253,7 @@ namespace capu
     template<typename T>
     inline
     typename Vector<T>::Iterator
-    Vector<T>::begin()
+    Vector<T>::begin() const
     {
         return Iterator(m_data.getRawData());
     }
@@ -261,14 +261,14 @@ namespace capu
     template<typename T>
     inline
     typename Vector<T>::Iterator
-    Vector<T>::end()
+    Vector<T>::end() const
     {
         return Iterator(m_data.getRawData() + m_size);
     }
 
     template<typename T>
     inline
-    Vector<T>::Iterator::Iterator(T* start)
+    Vector<T>::Iterator::Iterator(const T* start)
         : m_current(start)
     {
 
@@ -292,7 +292,7 @@ namespace capu
 
     template<typename T>
     inline
-    T&
+    T const&
     Vector<T>::Iterator::operator*()
     {
         return *m_current;
@@ -300,7 +300,7 @@ namespace capu
 
     template<typename T>
     inline
-    T*
+    T const*
     Vector<T>::Iterator::operator->()
     {
         return &** this;
