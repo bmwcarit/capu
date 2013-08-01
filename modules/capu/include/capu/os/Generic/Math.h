@@ -82,14 +82,14 @@ namespace capu
 
         inline
         float_t
-        Floor(float_t val)
+        Math::Floor(float_t val)
         {
             return floorf(val);
         }
 
         inline
         double_t
-        Floor(double_t val)
+        Math::Floor(double_t val)
         {
             return floor(val);
         }
@@ -152,14 +152,14 @@ namespace capu
 
         inline
         float_t
-        Pow(float_t val, float_t exponent)
+        Math::Pow(float_t val, float_t exponent)
         {
             return powf(val, exponent);
         }
 
         inline
         double_t
-        Pow(double_t val, double_t exponent)
+        Math::Pow(double_t val, double_t exponent)
         {
             return pow(val, exponent);
         }
@@ -242,7 +242,8 @@ namespace capu
         }
 
         inline
-        float_t Math::Rad2Deg(float_t val)
+        float_t
+		Math::Rad2Deg(float_t val)
         {
             return val * (180.f / PI_f);
         }
