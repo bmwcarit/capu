@@ -107,6 +107,13 @@ ADD_UTIL_FILE(BinaryFileInputStream)
 ADD_UTIL_FILE(StringOutputStream)
 ADD_UTIL_FILE(StringTokenizer)
 ADD_UTIL_FILE(Synchronized)
+ADD_UTIL_FILE(LogLevel)
+ADD_UTIL_FILE(LogMessage)
+ADD_UTIL_FILE(LogContext)
+ADD_UTIL_FILE(LogSink)
+ADD_UTIL_FILE(ConsoleLogSink)
+ADD_UTIL_FILE(AsynchronousConsoleLogSink)
+ADD_UTIL_FILE(Logger2)
 
 ADD_DEFINITIONS(-DCAPU_LOGGING_ENABLED=1)
 

@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_WINDOWS_X86_64_CONSOLE_H
-#define CAPU_WINDOWS_X86_64_CONSOLE_H
+#ifndef CAPU_CONSOLELOGSINK_H
+#define CAPU_CONSOLELOGSINK_H
 
-#include <capu/os/Windows/Console.h>
+#include "capu/util/LogSink.h"
+#include "capu/util/LogMessage.h"
+#include "capu/os/Mutex.h"
 
 namespace capu
 {
-    namespace os
+
+    class ConsoleLogSink: public LogSink
     {
-        namespace arch
-        {
-            class Console: private capu::os::Console
-            {
-            public:
-                using capu::os::Console::IsInputAvailable;
-                using capu::os::Console::Print;
-            };
-        }
-    }
+    public:
+        virtual void log(const LogMessage& logMessage);
+    private:
+        Mutex m_logMutex;
+    };
 }
 
-#endif // CAPU_WINDOWS_X86_64_CONSOLE_H
+#endif // CAPU_CONSOLELOGSINK_H

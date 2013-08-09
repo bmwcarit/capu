@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_WINDOWS_X86_64_CONSOLE_H
-#define CAPU_WINDOWS_X86_64_CONSOLE_H
+#ifndef CAPU_ASYNCHRONOUSCONSOLELOGSINK_H
+#define CAPU_ASYNCHRONOUSCONSOLELOGSINK_H
 
-#include <capu/os/Windows/Console.h>
+#include "capu/os/Thread.h"
+#include "capu/util/ConsoleLogSink.h"
+#include "capu/container/BlockingQueue.h"
 
 namespace capu
 {
-    namespace os
+    class AsynchronousConsoleLogSink: public ConsoleLogSink, public Runnable
     {
-        namespace arch
-        {
-            class Console: private capu::os::Console
-            {
-            public:
-                using capu::os::Console::IsInputAvailable;
-                using capu::os::Console::Print;
-            };
-        }
-    }
+    public:
+
+        AsynchronousConsoleLogSink();
+        ~AsynchronousConsoleLogSink();
+
+        virtual void log(const LogMessage& logMessage);
+
+        virtual void run();
+
+    private:
+        Thread m_loggerThread;
+        BlockingQueue<LogMessage> m_logQueue;
+    };
 }
 
-#endif // CAPU_WINDOWS_X86_64_CONSOLE_H
+#endif CAPU_ASYNCHRONOUSCONSOLELOGSINK_H

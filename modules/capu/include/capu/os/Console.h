@@ -31,6 +31,19 @@ namespace capu
     class Console
     {
     public:
+
+        enum ConsoleColor
+        {
+            RED = 0,
+            BLUE, 
+            GREEN, 
+            YELLOW, 
+            WHITE
+        };
+
+        static void Print(const char_t* format, ...);
+        static void Print(ConsoleColor color, const char_t* format, ...);
+
         /**
          * Checks whether there is input on stdin available or not
          * @return true if input on stdin is available, false otherwise
@@ -43,6 +56,26 @@ namespace capu
     Console::IsInputAvailable()
     {
         return capu::os::arch::Console::IsInputAvailable();
+    }
+
+    inline
+    void
+    Console::Print(const char_t* format, ...)
+    {
+        va_list argptr;
+        va_start(argptr, format);
+        capu::os::arch::Console::Print(format, argptr);
+        va_end(argptr);
+    }
+
+    inline
+    void 
+    Console::Print(ConsoleColor color, const char_t* format, ...)
+    {
+        va_list argptr;
+        va_start(argptr, format);
+        capu::os::arch::Console::Print(color, format, argptr);
+        va_end(argptr);
     }
 }
 

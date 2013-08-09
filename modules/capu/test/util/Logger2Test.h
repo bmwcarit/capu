@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 BMW Car IT GmbH
+ * Copyright (C) 2013 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_WINDOWS_X86_64_CONSOLE_H
-#define CAPU_WINDOWS_X86_64_CONSOLE_H
 
-#include <capu/os/Windows/Console.h>
+#ifndef CAPU_LOGGER2TEST_H
+#define CAPU_LOGGER2TEST_H
+
+#include "gmock/gmock.h"
+#include <capu/container/Hash.h>
 
 namespace capu
 {
-    namespace os
+
+    class Logger2Test : public testing::Test
     {
-        namespace arch
-        {
-            class Console: private capu::os::Console
-            {
-            public:
-                using capu::os::Console::IsInputAvailable;
-                using capu::os::Console::Print;
-            };
-        }
-    }
+    public:
+        Logger2Test();
+        ~Logger2Test();
+    protected:
+    };
+
+
 }
 
-#endif // CAPU_WINDOWS_X86_64_CONSOLE_H
+#endif // CAPU_LOGGER2TEST_H

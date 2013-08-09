@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 BMW Car IT GmbH
+ * Copyright (C) 2013 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,29 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_WINDOWS_X86_64_CONSOLE_H
-#define CAPU_WINDOWS_X86_64_CONSOLE_H
+#ifndef CAPU_LOGCONTEXT_H
+#define CAPU_LOGCONTEXT_H
 
-#include <capu/os/Windows/Console.h>
+#include "capu/container/String.h"
 
 namespace capu
 {
-    namespace os
+    class LogContext
     {
-        namespace arch
-        {
-            class Console: private capu::os::Console
-            {
-            public:
-                using capu::os::Console::IsInputAvailable;
-                using capu::os::Console::Print;
-            };
-        }
+    public:
+        LogContext(const String& name);
+
+        const String& getContextName() const;
+    private:
+        const String m_contextName;
+    };
+
+    inline
+    const String& 
+    LogContext::getContextName() const
+    {
+        return m_contextName;
     }
 }
 
-#endif // CAPU_WINDOWS_X86_64_CONSOLE_H
+#endif // CAPU_LOGCONTEXT_H

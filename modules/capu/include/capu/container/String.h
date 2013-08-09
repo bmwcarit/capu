@@ -115,12 +115,12 @@ namespace capu
         /**
          * Add two strings together and return the concatenated string
          */
-        String operator+(const String& rOperand);
+        String operator+(const String& rOperand) const;
 
         /**
          * Concatenate a c-style string and return the result
          */
-        String operator+(const char_t* rOperand);
+        String operator+(const char_t* rOperand) const;
 
         /**
          * Return if this string equals another
@@ -367,13 +367,13 @@ namespace capu
         return *this;
     }
 
-    inline String String::operator+(const String& rOperand)
+    inline String String::operator+(const String& rOperand) const
     {
         String result(*this);
         return result.append(rOperand);
     }
 
-    inline String String::operator+(const char_t* rOperand)
+    inline String String::operator+(const char_t* rOperand) const
     {
         String result(c_str());
         return result.append(rOperand);
