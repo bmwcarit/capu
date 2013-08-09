@@ -29,6 +29,7 @@ namespace capu
             {
             public:
                 using capu::os::Console::IsInputAvailable;
+                using capu::os::Console::Print;
             };
         }
     }

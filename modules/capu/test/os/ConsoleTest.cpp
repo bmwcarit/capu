@@ -30,5 +30,17 @@ namespace capu
     {
         EXPECT_FALSE(Console::IsInputAvailable());
     }
+
+
+    TEST_F(ConsoleTest, Print)
+    {
+        Console::Print("The Message\n");
+    }
+
+    TEST_F(ConsoleTest, PrintColor)
+    {
+        Console::Print(Console::GREEN, "The Message\n");
+    }
+
 }
 

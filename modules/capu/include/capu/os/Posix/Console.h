@@ -19,6 +19,8 @@
 
 #include <stdio.h>
 #include <capu/os/Memory.h>
+#include <unistd.h>
+#include <stdarg.h>
 
 namespace capu
 {
@@ -28,7 +30,28 @@ namespace capu
         {
         public:
             static bool_t IsInputAvailable();
+            static void Print(const char_t* format, va_list values);
+            static void Print(uint32_t color, const char_t* format, va_list values);
+
+            static const char_t* Colors[];
+
         };
+
+        inline
+        void
+        Console::Print(const char_t* format, va_list values)
+        {
+            vprintf(format, values);
+        }
+
+        inline
+        void
+        Console::Print(uint32_t color, const char_t* format, va_list values)
+        {
+            printf(capu::posix::Console::Colors[color]);
+            vprintf(format, values);
+            printf("\e[0m");
+        }
 
         inline
         bool_t

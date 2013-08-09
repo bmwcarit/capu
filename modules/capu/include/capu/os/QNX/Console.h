@@ -28,6 +28,7 @@ namespace capu
         {
         public:
             using capu::posix::Console::IsInputAvailable;
+            using capu::posix::Console::Print;
         };
 
     }
