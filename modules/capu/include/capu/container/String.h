@@ -180,6 +180,13 @@ namespace capu
         int_t find(const String& substr, const uint_t offset = 0) const;
 
         /**
+         * Checks if the String starts with the given string
+         * @param other string to check
+         * @return true if String starts with other string. False otherwise
+         */
+        bool_t startsWith(const String& other) const;
+        
+        /**
          * Return the index of the last occurence of the given character within the string
          * @param ch The character whos last index is requested
          */
@@ -555,6 +562,14 @@ namespace capu
             return String(*this, start, start + length - 1);
         }
     }
+
+    inline
+    bool_t 
+    String::startsWith(const String& other) const
+    {
+        return find(other, 0) == 0;
+    }
+
 }
 
 #endif // CAPU_STRING_H

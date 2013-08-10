@@ -542,3 +542,15 @@ TEST(String, GetSubstring)
     capu::String substr7 = str1.substr(str1.getLength(), 4);
     EXPECT_STREQ("", substr7.c_str());
 }
+
+TEST(String, StartsWith)
+{
+    capu::String str("hello c++ world.");
+
+
+    EXPECT_TRUE(str.startsWith("hello"));
+    EXPECT_TRUE(str.startsWith("h"));
+    EXPECT_TRUE(str.startsWith("hello c++ world."));
+    EXPECT_FALSE(str.startsWith("c++"));
+
+}
