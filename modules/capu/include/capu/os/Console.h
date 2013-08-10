@@ -38,13 +38,14 @@ namespace capu
             BLUE,
             GREEN,
             YELLOW,
-            WHITE
+            WHITE,
+            AQUA
         };
 
         /**
          * Prints a message on the console
          * @param format of the message (like printf)
-         * @param parameters for the format (like printf)
+         * @param parameters for the format (like prints)
          */
         static void Print(const char_t* format, ...);
 
@@ -52,7 +53,7 @@ namespace capu
         * Prints a message on the console with the given color
         * @param color for the message
         * @param format of the message (like printf)
-        * @param parameters for the format (like printf)
+        * @param parameters for the format (like prints)
         */
         static void Print(ConsoleColor color, const char_t* format, ...);
 
@@ -81,7 +82,7 @@ namespace capu
     }
 
     inline
-    void
+    void 
     Console::Print(ConsoleColor color, const char_t* format, ...)
     {
         va_list argptr;

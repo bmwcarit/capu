@@ -8,7 +8,8 @@ namespace capu
         0x01, // BLUE
         0x0A, // GREEN
         0x0E, // YELLOW
-        0x0F  // WHITE
+        0x0F, // WHITE
+        0x0B, // AQUA
     };
 }
 

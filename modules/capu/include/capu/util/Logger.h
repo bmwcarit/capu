@@ -17,424 +17,277 @@
 #ifndef CAPU_LOGGER_H
 #define CAPU_LOGGER_H
 
-#include "capu/Error.h"
-#include "capu/Config.h"
-#include "capu/container/String.h"
-#include "capu/os/StringUtils.h"
-#include <stdarg.h>
-
-// Defines the max number of possible appenders
-#define LOGGER_APPENDER_MAX 10
-
-#if CAPU_LOGGING_ENABLED
-#define CAPU_LOG(logger, level, tag, format, ...) if(logger != NULL) logger->log(level, tag, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define CAPU_LOG_TRACE(logger, tag, format, ...) if(logger != NULL) logger->log(capu::CLL_TRACE, tag, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define CAPU_LOG_DEBUG(logger, tag, format, ...) if(logger != NULL) logger->log(capu::CLL_DEBUG, tag, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define CAPU_LOG_INFO(logger, tag, format, ...) if(logger != NULL) logger->log(capu::CLL_INFO, tag, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define CAPU_LOG_WARN(logger, tag, format, ...) if(logger != NULL) logger->log(capu::CLL_WARN, tag, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#define CAPU_LOG_ERROR(logger, tag, format, ...) if(logger != NULL) logger->log(capu::CLL_ERROR, tag, __FILE__, __LINE__, format, ##__VA_ARGS__)
-#else
-#define CAPU_LOG(logger, level, tag, format, ...)
-#define CAPU_LOG_TRACE(logger, tag, format, ...)
-#define CAPU_LOG_DEBUG(logger, tag, format, ...)
-#define CAPU_LOG_INFO(logger, tag, format, ...)
-#define CAPU_LOG_WARN(logger, tag, format, ...)
-#define CAPU_LOG_ERROR(logger, tag, format, ...)
-#endif
+#include "capu/container/HashSet.h"
+#include "capu/util/StringOutputStream.h"
+#include "capu/os/Mutex.h"
+#include "capu/util/LogLevel.h"
 
 namespace capu
 {
-    class Appender;
+    class ILogAppender;
+    class String;
+    class LogContext;
+    class LogMessage;
+
+#define LOG_EXT(logger, context, logLevel, message)                     \
+        if(logLevel >= logger.getLogLevel() && context.isEnabled())     \
+        {                                                               \
+            LogMessage logMessage(context, logLevel);                   \
+            (logMessage.getStream() << message).flush();                \
+            logger.log(logMessage);                                     \
+        }
+
+#define LOG(context, logLevel, message)           \
+    {                                             \
+    Logger* logger = Logger::GetDefaultLogger();  \
+    LOG_EXT((*logger), context, logLevel, message);  \
+    }
+
+#define LOG_TRACE_EXT(logger, context, message) \
+    LOG_EXT(logger, (context), LL_TRACE, message);
+
+#define LOG_INFO_EXT(logger, context, message) \
+    LOG_EXT(logger, (context), LL_INFO, message);
+
+#define LOG_DEBUG_EXT(logger, context, message) \
+    LOG_EXT(logger, (context), LL_DEBUG, message);
+
+#define LOG_WARN_EXT(logger, context, message) \
+    LOG_EXT(logger, (context), LL_WARN, message);
+
+#define LOG_ERROR_EXT(logger, context, message) \
+    LOG_EXT(logger, (context), LL_ERROR, message);
+
+#define LOG_FATAL_EXT(logger, context, message) \
+    LOG_EXT(logger, (context), LL_FATAL, message);
+
+
+#define LOG_TRACE(context, message) \
+    LOG((context), LL_TRACE, message);
+
+#define LOG_INFO(context, message) \
+    LOG((context), LL_INFO, message);
+
+#define LOG_DEBUG(context, message) \
+    LOG((context), LL_DEBUG, message);
+
+#define LOG_WARN(context, message) \
+    LOG((context), LL_WARN, message);
+
+#define LOG_ERROR(context, message) \
+    LOG((context), LL_ERROR, message);
+
+#define LOG_FATAL(context, message) \
+    LOG((context), LL_FATAL, message);
 
     /**
-     * Logger levels
-     */
-    enum LoggerLevel
-    {
-        CLL_INVALID,
-        CLL_TRACE,
-        CLL_DEBUG,
-        CLL_INFO,
-        CLL_WARN,
-        CLL_ERROR
-    };
-
-    /**
-     * Message for logging.
-     */
-    class LoggerMessage
-    {
-    public:
-        /**
-         * Creates a new LoggerMessage instance
-         */
-        LoggerMessage();
-
-        /**
-         * Set the id
-         * @param id the id to set
-         */
-        void setId(const int32_t id);
-
-        /**
-         * Get the message id
-         * @return the id
-         */
-        int32_t getId() const;
-
-        /**
-         * Set the timestamp
-         * @param timestamp the timestamp to set
-         */
-        void setTimestamp(const uint64_t timestamp);
-
-        /**
-         * Get the timestamp
-         * @return the timestamp
-         */
-        uint64_t getTimestamp() const;
-
-        /**
-         * Set the thread id
-         * @param threadId the thread id to set
-         */
-        void setThreadId(const uint_t threadId);
-
-        /**
-         * Get the thread id
-         * @return the thread id
-         */
-        uint_t getThreadId() const;
-
-        /**
-         * Set the log level
-         * @param level the log level to set
-         */
-        void setLevel(const LoggerLevel level);
-
-        /**
-         * Get the log level
-         * @return the log level
-         */
-        LoggerLevel getLevel() const;
-
-        /**
-         * Set the tag
-         * @param tag the tag to set
-         */
-        void setTag(const char_t* tag);
-
-        /**
-         * Get the tag
-         * @return the tag
-         */
-        const char_t* getTag() const;
-
-        /**
-         * Set the filename
-         * @param file the filename to set
-         */
-        void setFile(const char_t* file);
-
-        /**
-         * Get the filename
-         * @return the filename
-         */
-        const char_t* getFile() const;
-
-        /**
-         * Set the line
-         * @param line the line to set
-         */
-        void setLine(const int32_t line);
-
-        /**
-         * Get the line
-         * @return the line
-         */
-        int32_t getLine() const;
-
-        /**
-         * Set the log message
-         * @param message the message to set
-         */
-        void setMessage(const char_t* message);
-
-        /**
-         * Get the log message
-         * @return
-         */
-        const char_t* getMessage() const;
-
-        /**
-         * cleanup current message
-         */
-        ~LoggerMessage();
-
-    private:
-        int32_t mId;
-        uint64_t mTimestamp;
-        uint_t mThreadId;
-        LoggerLevel mLevel;
-        String mTag;
-        String mFile;
-        int32_t mLine;
-        String mMessage;
-    };
-
-    /**
-     * Class for logging
+     * Logs messages to a given ILogAppender
+     * There are two ways of logging available.
+     * 1. Set a default logger with Logger::SetDefaultLogger and 
+     *    use the log macros without "_EXT". In this case all log 
+     *    messages will use the default logger
+     * 2. Use the log macros with "_EXT" and provide a logger to the
+     *    macro. In this case the log message will use the provided logger
      */
     class Logger
     {
     public:
 
-        /**
-         * creats a new Logger
-         * @param id of the logger
-         */
-        Logger(int32_t id = 0);
+        void setLogLevel(ELogLevel logLevel);
+        static void SetLogLevel(ELogLevel logLevel);
 
         /**
-         * destroy logger instance
+         * Sets the default logger
+         * @return the method always returns 0. This is just 
+         *         to allow usage in static initializations
+         */
+        static void* SetDefaultLogger(Logger& logger);
+
+        /**
+         * Returns the instance to the global logger
+         * @return the instance to the global logger
+         */
+        static Logger* GetDefaultLogger();
+
+        /**
+         * Creates a new LogContext
+         * @param name of the LogContext
+         * @return the create LogContext
+         * @{
+         */
+        static LogContext* CreateContext(const String& name);
+        LogContext& createContext(const String& name);
+        /**
+         * @}
+         */
+
+        /**
+         * Logs the given LogMessage with all registered LogAppenders of 
+         * of the logger
+         * @param message to log
+         * @{
+         */
+        static void Log(const LogMessage& message);
+        virtual void log(const LogMessage& message);
+        /**
+         * @}
+         */
+
+        /**
+         * Returns the current logLevel of the Logger
+         * @return the current logLevel of the Logger
+         */
+        ELogLevel getLogLevel();
+
+        /**
+         * Constructor of the logger
+         * @param appender to use for logging
+         */
+        Logger(ILogAppender& appender);
+
+        /**
+         * Destructor of the Logger
          */
         ~Logger();
 
         /**
-         * sets an appender for the logger
+         * Sets all contexts to the given enabled value which start with the 
+         * given pattern.
+         * E.g. setEnabled(true, "capu"); 
+         * Will enable all contexts which start with capu
+         * @param enabled state of the context
+         * @param pattern for start of context
+         * @{
          */
-        status_t setAppender(Appender& appender);
+        void setEnabled(bool_t enabled, const String& pattern);
+        static void SetEnabled(bool_t enabled, const String& pattern);
+        /**
+         * @}
+         */
 
         /**
-         * removes the appender identified by name
+         * Adds the given appender to the logger
+         * @param appender to add
+         * @{
          */
-        status_t removeAppender(Appender& appender);
+        void addAppender(ILogAppender& appender);
+        static void AddAppender(ILogAppender& appender);
+        /**
+         * @}
+         */
 
         /**
-         * opens the logger
+         * Removes the given appender from the logger
+         * @parem appender to remove
+         * @{
          */
-        status_t open();
-
+        void removeAppender(ILogAppender& appender);
+        static void RemoveAppender(ILogAppender& appender);
         /**
-         * print trace message to the logger.
-         * @param tag that will be logged
-         * @param file name of the log call
-         * @param line number of the log call
-         * @param msgFormat of the log message
+         * @}
          */
-        status_t trace(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...);
 
-        /**
-         * print debug message to the logger.
-         * @param tag that will be logged
-         * @param file name of the log call
-         * @param line number of the log call
-         * @param msgFormat of the log message
-         */
-        status_t debug(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...);
+    protected:
 
-        /**
-         * print info message to the logger.
-         * @param tag that will be logged
-         * @param file name of the log call
-         * @param line number of the log call
-         * @param msgFormat of the log message
-         */
-        status_t info(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...);
-
-        /**
-         * print warn message to the logger.
-         * @param tag that will be logged
-         * @param file name of the log call
-         * @param line number of the log call
-         * @param msgFormat of the log message
-         */
-        status_t warn(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...);
-
-        /**
-         * print error message to the logger.
-         * @param tag that will be logged
-         * @param file name of the log call
-         * @param line number of the log call
-         * @param msgFormat of the log message
-         */
-        status_t error(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...);
-
-        /**
-         * print log message with given level to the logger.
-         * @param level of the lov message
-         * @param tag that will be logged
-         * @param file name of the log call
-         * @param line number of the log call
-         * @param msgFormat of the log message
-         */
-        status_t log(const LoggerLevel level, const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...);
-
-        /**
-         * close the logger
-         */
-        status_t close();
+        static Logger* DefaultLogger;
 
     private:
-        /**
-         * print log message with given level to the logger.
-         * @param level of the lov message
-         * @param tag that will be logged
-         * @param message that will be logged
-         * @param file name of the log call
-         * @param line number of the log call
-         * @param msgFormat of the log message
-         * @param args variable argument list
-         */
-        status_t vlog(const LoggerLevel level, const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, va_list args);
+        typedef HashSet<LogContext*> ContextSet;
+        typedef HashSet<ILogAppender*> AppenderSet;
 
-    private:
-        int32_t mId;
-        Appender* mAppenders[LOGGER_APPENDER_MAX];
-        bool_t mOpen;
+        /**
+         * HashSet with all LogContexts
+         */
+        ContextSet m_logContexts;
+
+        /**
+         * Set with all log appenders
+         */
+        AppenderSet m_appenders;
+
+        /**
+         * Current log level of the logger
+         */
+        ELogLevel m_logLevel;
+
+        /**
+         * Releases the stream
+         */
+        void releaseStream();
+
     };
 
-    /*
-     * Implementation LoggerMessage
-     */
-
-    // id
-    inline void LoggerMessage::setId(const int32_t id)
+    inline
+    Logger* Logger::GetDefaultLogger()
     {
-        mId = id;
-    }
-    inline int32_t LoggerMessage::getId() const
-    {
-        return mId;
+        return Logger::DefaultLogger;
     }
 
-    // timestamp
-    inline void LoggerMessage::setTimestamp(const uint64_t timestamp)
+    inline void Logger::setLogLevel(ELogLevel logLevel)
     {
-        mTimestamp = timestamp;
-    }
-    inline uint64_t LoggerMessage::getTimestamp() const
-    {
-        return mTimestamp;
+        m_logLevel = logLevel;
     }
 
-    // threadId
-    inline void LoggerMessage::setThreadId(const uint_t threadId)
+    inline void Logger::SetLogLevel(ELogLevel logLevel)
     {
-        mThreadId = threadId;
-    }
-    inline uint_t LoggerMessage::getThreadId() const
-    {
-        return mThreadId;
+        if(0 != DefaultLogger)
+        {
+            DefaultLogger->setLogLevel(logLevel);
+        }
     }
 
-    // level
-    inline void LoggerMessage::setLevel(const LoggerLevel level)
+    inline
+    ELogLevel Logger::getLogLevel()
     {
-        mLevel = level;
-    }
-    inline LoggerLevel LoggerMessage::getLevel() const
-    {
-        return mLevel;
+        return m_logLevel;
     }
 
-    // tag
-    inline void LoggerMessage::setTag(const char_t* tag)
+    inline
+    void
+    Logger::SetEnabled(bool_t enabled, const String& pattern)
     {
-        mTag = tag;
-    }
-    inline const char_t* LoggerMessage::getTag() const
-    {
-        return mTag.c_str();
-    }
-
-    // filename
-    inline void LoggerMessage::setFile(const char_t* file)
-    {
-        mFile = file;
-    }
-    inline const char_t* LoggerMessage::getFile() const
-    {
-        return mFile.c_str();
+        if(0 != DefaultLogger)
+        {
+            DefaultLogger->setEnabled(enabled, pattern);
+        }
     }
 
-    // line
-    inline void LoggerMessage::setLine(const int32_t line)
+    inline
+    void 
+    Logger::addAppender(ILogAppender& appender)
     {
-        mLine = line;
-    }
-    inline int32_t LoggerMessage::getLine() const
-    {
-        return mLine;
+        m_appenders.put(&appender);
     }
 
-    // message
-    inline void LoggerMessage::setMessage(const char_t* message)
+    
+    inline
+    void
+    Logger::removeAppender(ILogAppender& appender)
     {
-        mMessage = message;
+        m_appenders.remove(&appender);
     }
 
-    inline const char_t* LoggerMessage::getMessage() const
+    inline
+    void
+    Logger::RemoveAppender(ILogAppender& appender)
     {
-        return mMessage.c_str();
+         if(0 != DefaultLogger)
+         {
+             DefaultLogger->removeAppender(appender);
+         }
     }
 
-    /*
-     * Implementation Logger
-     */
 
-    inline status_t Logger::trace(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...)
+    inline
+    void 
+    Logger::AddAppender(ILogAppender& appender)
     {
-        va_list args;
-        va_start(args, msgFormat);
-        status_t status = vlog(CLL_TRACE, tag, file, line, msgFormat, args);
-        va_end(args);
-        return status;
+        if(0 != DefaultLogger)
+        {
+            DefaultLogger->addAppender(appender);
+        }
     }
 
-    inline status_t Logger::debug(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...)
-    {
-        va_list args;
-        va_start(args, msgFormat);
-        status_t status = vlog(CLL_DEBUG, tag, file, line, msgFormat, args);
-        va_end(args);
-        return status;
-    }
-
-    inline status_t Logger::info(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...)
-    {
-        va_list args;
-        va_start(args, msgFormat);
-        status_t status = vlog(CLL_INFO, tag, file, line, msgFormat, args);
-        va_end(args);
-        return status;
-    }
-
-    inline status_t Logger::warn(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...)
-    {
-        va_list args;
-        va_start(args, msgFormat);
-        status_t status = vlog(CLL_WARN, tag, file, line, msgFormat, args);
-        return status;
-    }
-
-    inline status_t Logger::error(const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...)
-    {
-        va_list args;
-        va_start(args, msgFormat);
-        status_t status = vlog(CLL_ERROR, tag, file, line, msgFormat, args);
-        va_end(args);
-        return status;
-    }
-
-    inline status_t Logger::log(LoggerLevel level, const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, ...)
-    {
-        va_list args;
-        va_start(args, msgFormat);
-        status_t status = vlog(level, tag, file, line, msgFormat, args);
-        va_end(args);
-        return status;
-    }
 }
 
-#endif /* CAPU_LOGGER_H */
+#endif // CAPU_LOGGER_H

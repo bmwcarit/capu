@@ -75,8 +75,14 @@ namespace capu
         /**
          * Returns a const char_t pointer to the content of the stream
          * @return the const char_t pointer to the content of the stream
+         * @{
          */
+        const char_t* c_str() const;
         const char_t* c_str();
+        /**
+         * @}
+         */
+
 
         /**
          * Returns the current length of the stream without terminating 0
@@ -130,6 +136,14 @@ namespace capu
     }
 
     inline
+    const char_t*
+    StringOutputStream::c_str() const
+    {
+        return mBuffer.getRawData();
+    }
+
+
+    inline
     uint32_t
     StringOutputStream::length() const
     {
@@ -144,7 +158,7 @@ namespace capu
         switch(mFloatingPointType)
         {
         case NORMAL:
-            StringUtils::Sprintf(buffer, 16, "%f", value);
+            StringUtils::Sprintf(buffer, sizeof(buffer), "%f", value);
             break;
         case FIXED:
             StringUtils::Sprintf(buffer, 16, "%.4f", value);
@@ -159,7 +173,7 @@ namespace capu
     StringOutputStream::operator<<(const int32_t value)
     {
         char_t buffer[11];
-        StringUtils::Sprintf(buffer, 11, "%d", value);
+        StringUtils::Sprintf(buffer, sizeof(buffer), "%d", value);
         return operator<<(buffer);
     }
 
@@ -168,7 +182,7 @@ namespace capu
     StringOutputStream::operator<<(const uint32_t value)
     {
         char_t buffer[11];
-        StringUtils::Sprintf(buffer, 11, "%u", value);
+        StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
         return operator<<(buffer);
     }
 
@@ -177,7 +191,7 @@ namespace capu
     StringOutputStream::operator<<(const int64_t value)
     {
         char_t buffer[21];
-        StringUtils::Sprintf(buffer, 21, "%lld", value);
+        StringUtils::Sprintf(buffer, sizeof(buffer), "%lld", value);
         return operator<<(buffer);
     }
 
@@ -186,7 +200,7 @@ namespace capu
     StringOutputStream::operator<<(const uint64_t value)
     {
         char_t buffer[21];
-        StringUtils::Sprintf(buffer, 21, "%llu", value);
+        StringUtils::Sprintf(buffer, sizeof(buffer), "%llu", value);
         return operator<<(buffer);
     }
 
@@ -202,7 +216,7 @@ namespace capu
     StringOutputStream::operator<<(const bool_t  value)
     {
         char_t buffer[2];
-        StringUtils::Sprintf(buffer, 2, "%u", value);
+        StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
         return operator<<(buffer);
     }
 
@@ -219,7 +233,7 @@ namespace capu
     StringOutputStream::operator<<(const uint16_t value)
     {
         char_t buffer[6];
-        StringUtils::Sprintf(buffer, 6, "%u", value);
+        StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
         return operator<<(buffer);
         return *this;
     }

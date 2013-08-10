@@ -1,143 +1,91 @@
-/*
- * Copyright (C) 2012 BMW Car IT GmbH
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 #include "capu/util/Logger.h"
-#include "capu/util/Appender.h"
-#include "capu/os/Memory.h"
-#include "capu/container/Array.h"
-#include "capu/os/Time.h"
-#include "capu/os/Thread.h"
+#include "capu/util/ILogAppender.h"
+#include "capu/container/String.h"
+#include "capu/util/LogContext.h"
+#include "capu/util/ConsoleLogAppender.h"
 
 namespace capu
 {
-    //
-    // LoggerMessage
-    //
+    Logger* Logger::DefaultLogger = 0;
 
-    LoggerMessage::LoggerMessage()
-        : mId(0)
-        , mTimestamp(0)
-        , mThreadId(0)
-        , mLevel(CLL_INVALID)
-        , mTag("")
-        , mFile("")
-        , mLine(0)
-        , mMessage("")
+    Logger::Logger(ILogAppender& appender)
+        : m_logLevel(LL_ERROR)
     {
-    }
-
-    LoggerMessage::~LoggerMessage()
-    {
-    }
-
-    //
-    // Logger
-    //
-
-    Logger::Logger(int32_t id)
-        : mId(id)
-        , mOpen(false)
-    {
-        Memory::Set(mAppenders, 0, sizeof(Appender*) * LOGGER_APPENDER_MAX);
+        addAppender(appender);
     }
 
     Logger::~Logger()
     {
-        if (mOpen)
+
+        ContextSet::Iterator current = m_logContexts.begin();
+        const ContextSet::Iterator end = m_logContexts.end();
+
+        for(;current != end; ++current)
         {
-            close();
+            delete (*current);
+        }
+
+        m_logContexts.clear();
+
+    }
+
+    void*
+    Logger::SetDefaultLogger(Logger& logger)
+    {
+        DefaultLogger = &logger;
+        return 0;
+    }
+
+    LogContext*
+    Logger::CreateContext(const String& name)
+    {
+        LogContext* context = 0;
+        if(0 != DefaultLogger)
+        {
+            context = &Logger::DefaultLogger->createContext(name);
+        }
+        return context;
+    }
+
+    LogContext&
+    Logger::createContext(const String& name)
+    {
+        LogContext* context = new LogContext(name);
+        m_logContexts.put(context);
+        return *context;
+    }
+
+    void
+    Logger::Log(const LogMessage& message)
+    {
+        Logger::DefaultLogger->log(message);
+    }
+
+    void
+    Logger::log(const LogMessage& message)
+    {
+        AppenderSet::Iterator current = m_appenders.begin();
+        const AppenderSet::Iterator end = m_appenders.end();
+
+        for(; current != end; ++current)
+        {
+            (*current)->log(message);
         }
     }
 
-    status_t Logger::setAppender(Appender& appender)
+    void
+    Logger::setEnabled(bool_t enabled, const String& pattern)
     {
-        for (int i = 0; i < LOGGER_APPENDER_MAX; i++)
+        ContextSet::Iterator current = m_logContexts.begin();
+        const ContextSet::Iterator end = m_logContexts.end();
+
+        for(; current != end; ++current)
         {
-            if (mAppenders[i] == NULL)
+            if((*current)->getContextName().startsWith(pattern))
             {
-                mAppenders[i] = &appender;
-                return CAPU_OK;
+                (*current)->setEnabled(enabled);
             }
         }
-        return CAPU_ERROR;
     }
 
-    status_t Logger::removeAppender(Appender& appender)
-    {
-        for (int i = 0; i < LOGGER_APPENDER_MAX; i++)
-        {
-            if (mAppenders[i] == &appender)
-            {
-                mAppenders[i] = NULL;
-                return CAPU_OK;
-            }
-        }
-        return CAPU_ERROR;
-    }
-
-    status_t Logger::open()
-    {
-        for (int i = 0; i < LOGGER_APPENDER_MAX; i++)
-        {
-            if (mAppenders[i] != NULL)
-            {
-                mAppenders[i]->open();
-            }
-        }
-        mOpen = true;
-        return CAPU_OK;
-    }
-
-    status_t Logger::vlog(const LoggerLevel level, const char_t* tag, const char_t* file, const int32_t line, const char_t* msgFormat, va_list args)
-    {
-        LoggerMessage msg;
-        msg.setId(mId);
-        msg.setTimestamp(Time::GetMilliseconds());
-        msg.setThreadId(Thread::CurrentThreadId());
-        msg.setLevel(level);
-        msg.setTag(tag);
-        msg.setFile(file);
-        msg.setLine(line);
-
-        const int32_t size = StringUtils::Vscprintf(msgFormat, args);
-        Array<char_t> buffer(size + 1);
-        StringUtils::Vsprintf(buffer.getRawData(), size + 1, msgFormat, args);
-        msg.setMessage(buffer.getRawData());
-
-        // log message
-        for (int i = 0; i < LOGGER_APPENDER_MAX; i++)
-        {
-            if (mAppenders[i] != NULL)
-            {
-                mAppenders[i]->log(msg);
-            }
-        }
-        return CAPU_OK;
-    }
-
-    status_t Logger::close()
-    {
-        for (int i = 0; i < LOGGER_APPENDER_MAX; i++)
-        {
-            if (mAppenders[i] != NULL)
-            {
-                mAppenders[i]->close();
-            }
-        }
-        mOpen = false;
-        return CAPU_OK;
-    }
 }

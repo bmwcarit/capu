@@ -8,5 +8,6 @@ namespace capu
         "\e[1;32m", // GREEN
         "\e[1;33m", // YELLOW
         "\e[1;37m", // WHITE
+		"\e[1;36m", // AQUA
     };
 }
