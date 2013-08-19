@@ -430,6 +430,16 @@ TEST(Array, CopyMethodInvalidSize)
     }
 }
 
+TEST(Array, CopyMethodZeroSize)
+{
+    capu::Array<capu::uint32_t> src(0);
+    capu::Array<capu::uint32_t> destination(5);
+
+    EXPECT_EQ(capu::CAPU_OK, destination.copy(src.getRawData(), src.size()));
+
+
+}
+
 TEST(Array, CopyMethodZeroSizeNormal)
 {
     capu::Array<capu::uint32_t> original(0);

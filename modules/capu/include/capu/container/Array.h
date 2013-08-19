@@ -279,7 +279,10 @@ namespace capu
             return CAPU_ERANGE;
         }
 
-        Memory::CopyObject(mInternalArray.getRawData(), other, size);
+        if(size > 0)
+        {
+            Memory::CopyObject(mInternalArray.getRawData(), other, size);
+        }
 
         return CAPU_OK;
     }
