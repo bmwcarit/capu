@@ -36,17 +36,6 @@ namespace capu
         return 0;
     }
 
-    LogContext*
-    Logger::CreateContext(const String& name)
-    {
-        LogContext* context = 0;
-        if(0 != DefaultLogger)
-        {
-            context = &Logger::DefaultLogger->createContext(name);
-        }
-        return context;
-    }
-
     LogContext&
     Logger::createContext(const String& name)
     {

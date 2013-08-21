@@ -172,7 +172,7 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const int32_t value)
     {
-        char_t buffer[11];
+        char_t buffer[12];
         StringUtils::Sprintf(buffer, sizeof(buffer), "%d", value);
         return operator<<(buffer);
     }

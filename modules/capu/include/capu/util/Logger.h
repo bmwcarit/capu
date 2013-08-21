@@ -21,64 +21,65 @@
 #include "capu/util/StringOutputStream.h"
 #include "capu/os/Mutex.h"
 #include "capu/util/LogLevel.h"
+#include "capu/util/LogMessage.h"
 
 namespace capu
 {
     class ILogAppender;
     class String;
     class LogContext;
-    class LogMessage;
+    
 
 #define LOG_EXT(logger, context, logLevel, message)                     \
         if(logLevel >= logger.getLogLevel() && context.isEnabled())     \
         {                                                               \
-            LogMessage logMessage(context, logLevel);                   \
+            capu::LogMessage logMessage(context, logLevel);                   \
             (logMessage.getStream() << message).flush();                \
             logger.log(logMessage);                                     \
         }
 
 #define LOG(context, logLevel, message)           \
     {                                             \
-    Logger* logger = Logger::GetDefaultLogger();  \
+    capu::Logger* logger = capu::Logger::GetDefaultLogger();  \
     LOG_EXT((*logger), context, logLevel, message);  \
     }
 
 #define LOG_TRACE_EXT(logger, context, message) \
-    LOG_EXT(logger, (context), LL_TRACE, message);
+    LOG_EXT(logger, (context), capu::LL_TRACE, message);
 
 #define LOG_INFO_EXT(logger, context, message) \
-    LOG_EXT(logger, (context), LL_INFO, message);
+    LOG_EXT(logger, (context), capu::LL_INFO, message);
 
 #define LOG_DEBUG_EXT(logger, context, message) \
-    LOG_EXT(logger, (context), LL_DEBUG, message);
+    LOG_EXT(logger, (context), capu::LL_DEBUG, message);
 
 #define LOG_WARN_EXT(logger, context, message) \
-    LOG_EXT(logger, (context), LL_WARN, message);
+    LOG_EXT(logger, (context), capu::LL_WARN, message);
 
 #define LOG_ERROR_EXT(logger, context, message) \
-    LOG_EXT(logger, (context), LL_ERROR, message);
+    LOG_EXT(logger, (context), capu::LL_ERROR, message);
 
 #define LOG_FATAL_EXT(logger, context, message) \
-    LOG_EXT(logger, (context), LL_FATAL, message);
+    LOG_EXT(logger, (context), capu::LL_FATAL, message);
 
 
 #define LOG_TRACE(context, message) \
-    LOG((context), LL_TRACE, message);
+    LOG((context), capu::LL_TRACE, message);
 
 #define LOG_INFO(context, message) \
-    LOG((context), LL_INFO, message);
+    LOG((context), capu::LL_INFO, message);
 
 #define LOG_DEBUG(context, message) \
-    LOG((context), LL_DEBUG, message);
+    LOG((context), capu::LL_DEBUG, message);
 
 #define LOG_WARN(context, message) \
-    LOG((context), LL_WARN, message);
+    LOG((context), capu::LL_WARN, message);
 
 #define LOG_ERROR(context, message) \
-    LOG((context), LL_ERROR, message);
+    LOG((context), capu::LL_ERROR, message);
 
 #define LOG_FATAL(context, message) \
-    LOG((context), LL_FATAL, message);
+    LOG((context), capu::LL_FATAL, message);
 
     /**
      * Logs messages to a given ILogAppender
@@ -113,13 +114,8 @@ namespace capu
          * Creates a new LogContext
          * @param name of the LogContext
          * @return the create LogContext
-         * @{
          */
-        static LogContext* CreateContext(const String& name);
         LogContext& createContext(const String& name);
-        /**
-         * @}
-         */
 
         /**
          * Logs the given LogMessage with all registered LogAppenders of 

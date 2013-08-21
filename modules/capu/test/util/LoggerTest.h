@@ -42,9 +42,9 @@ namespace capu
     protected:
         MockLogAppender appender;
         Logger defaultLogger;
-        LogContext* CAPU_CONTEXT; 
-        LogContext* LOGGER_CONTEXT;
-        LogContext* HELLO_CAPU_CONTEXT;
+        LogContext& CAPU_CONTEXT; 
+        LogContext& LOGGER_CONTEXT;
+        LogContext& HELLO_CAPU_CONTEXT;
 
         void logWithDefaultLogger();
         void logWithLocalLogger(Logger& logger);

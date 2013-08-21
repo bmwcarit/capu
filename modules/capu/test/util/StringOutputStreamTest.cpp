@@ -44,10 +44,10 @@ namespace capu
 
     TEST_F(StringOutputStreamTest, WriteInt32)
     {
-        outputStream << 4711;
+        outputStream << -1059192060;
         outputStream.flush();
-        EXPECT_STREQ("4711", outputStream.c_str());
-        EXPECT_EQ(4U, outputStream.length());
+        EXPECT_STREQ("-1059192060", outputStream.c_str());
+        EXPECT_EQ(11U, outputStream.length());
     }
 
     TEST_F(StringOutputStreamTest, WriteUInt32)
