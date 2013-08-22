@@ -46,8 +46,18 @@ namespace capu
     typedef bool    bool_t;
     typedef char    char_t;
 
-    typedef ::intptr_t  int_t;
-    typedef ::uintptr_t  uint_t;
+    #if defined(OS_MacOSX)
+        #if defined(ARCH_X86_64)
+            typedef ::int64_t  int_t;
+            typedef ::uint64_t  uint_t;
+        #else
+            typedef ::int32_t  int_t;
+            typedef ::uint32_t  uint_t;
+        #endif
+    #else
+        typedef ::intptr_t  int_t;
+        typedef ::uintptr_t  uint_t;
+    #endif
 }
 
 #endif //CAPU_CONFIG_H
