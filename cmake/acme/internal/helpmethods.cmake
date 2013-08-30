@@ -108,7 +108,7 @@ ENDMACRO(INTERNAL_ARGUMENT_SPLITTER)
 
 
 MACRO(INTERNAL_LIST_TO_STRING ilts_input ilts_output)
-	STRING(REGEX REPLACE ";" " " ${ilts_output} "${ilts_input}")
+	STRING(REGEX REPLACE ";" " " "${ilts_output}" "${ilts_input}")
 ENDMACRO(INTERNAL_LIST_TO_STRING)
 
 
