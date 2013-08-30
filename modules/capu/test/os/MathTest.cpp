@@ -53,3 +53,9 @@ TEST(Math, Log2)
     EXPECT_FLOAT_EQ(3.321928f, capu::Math::Log2(10.f));
     EXPECT_NEAR(3.3219280948873644, capu::Math::Log2(10.0), 0.0000000000001);
 }
+
+TEST(Math, Exp)
+{
+    EXPECT_FLOAT_EQ(200.33685f, capu::Math::Exp(5.3f));
+    EXPECT_NEAR(200.33680997479166, capu::Math::Exp(5.3), 0.0000000000001);
+}

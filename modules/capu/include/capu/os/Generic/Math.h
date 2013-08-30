@@ -64,6 +64,8 @@ namespace capu
             static double_t Deg2Rad(double_t val);
             static float_t  Log2(float_t val);
             static double_t Log2(double_t val);
+            static float_t  Exp(float_t val);
+            static double_t Exp(double_t val);
         };
 
         inline
@@ -282,6 +284,21 @@ namespace capu
         Math::Log2(double_t val)
         {
             return log(val) / Math::LN2_d;
+        }
+
+        inline
+            float_t
+            Math::Exp(float_t val)
+        {
+            return expf(val);
+
+        }
+
+        inline
+            double_t
+            Math::Exp(double_t val)
+        {
+            return exp(val);
         }
     }
 }

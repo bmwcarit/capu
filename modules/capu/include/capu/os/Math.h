@@ -191,6 +191,16 @@ namespace capu
          * Logrithm of val to the base 2
          */
         static double_t Log2(double_t val);
+
+        /**
+         * Exponential function (e)
+         */
+        static float_t Exp(float_t val);
+
+        /**
+         * Exponential function (e)
+         */
+        static double_t Exp(double_t val);
     };
 
     inline
@@ -404,6 +414,18 @@ namespace capu
     double_t Math::Log2(double_t val)
     {
         return os::arch::Math::Log2(val);
+    }
+
+    inline
+        float_t Math::Exp(float_t val)
+    {
+        return os::arch::Math::Exp(val);
+    }
+
+    inline
+        double_t Math::Exp(double_t val)
+    {
+        return os::arch::Math::Exp(val);
     }
 }
 

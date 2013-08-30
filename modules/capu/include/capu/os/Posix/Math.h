@@ -45,6 +45,7 @@ namespace capu
             using capu::generic::Math::Rad2Deg;
             using capu::generic::Math::Deg2Rad;
             using capu::generic::Math::Log2;
+            using capu::generic::Math::Exp;
         };
     }
 }
