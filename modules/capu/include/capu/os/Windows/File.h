@@ -24,10 +24,10 @@
 // Shlwapi also defines OS_WINDOWS.
 #ifdef OS_WINDOWS
 #undef OS_WINDOWS
+#endif
 #include <Shlwapi.h>
 #ifndef OS_WINDOWS
 #define OS_WINDOWS
-#endif
 #endif
 
 namespace capu
