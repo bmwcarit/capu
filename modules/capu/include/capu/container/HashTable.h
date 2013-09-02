@@ -44,9 +44,6 @@ namespace capu
         /**
          * Data structure to hold a key/value pair inside the hash table
          */
-#ifdef OS_WINDOWS
-#pragma pack(push,1) //set alignment of 1 byte to save memory while storing the hash table entries
-#endif
         class HashTableEntry
         {
         public:
@@ -96,9 +93,6 @@ namespace capu
 
             friend class HashTable<Key, T, C, H>;
         };
-#ifdef OS_WINDOWS
-#pragma pack(pop) //set alignment back to default value
-#endif
 
         /**
          * Internal helper class to perform iterations over the map entries.
