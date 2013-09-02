@@ -221,6 +221,18 @@ TEST(Array, Swap)
     EXPECT_EQ(1u, myArray2[0]);
     EXPECT_EQ(2u, myArray2[1]);
     EXPECT_EQ(3u, myArray2[2]);
+
+    // test swapping between heap and stack arrays
+    capu::Array<capu::uint32_t> myArrayStack;
+    capu::Array<capu::uint32_t> *myArrayHeap = new capu::Array<capu::uint32_t>();
+
+    capu::swap(myArrayStack, *myArrayHeap);
+    EXPECT_EQ(0, myArrayHeap->size());
+    delete myArrayHeap;
+
+    EXPECT_EQ(0, myArrayStack.size());
+
+
 }
 
 TEST(Array, Move)
@@ -362,6 +374,28 @@ TEST(Array, Assignment)
         EXPECT_EQ(i, tmp.getValueByPtr());
     }
 
+    // copy empty array into empty array
+    capu::Array<capu::uint32_t> myEmptyArray2;
+    capu::Array<capu::uint32_t> myEmptyArray3;
+
+    myEmptyArray2 = myEmptyArray3;
+
+    // one array on stack, one on heap
+    capu::Array<capu::uint32_t> myEmptyArrayStack1;
+    capu::Array<capu::uint32_t> myEmptyArrayStack2;
+    capu::Array<capu::uint32_t> *myEmptyArrayHeap1 = new capu::Array<capu::uint32_t>();
+    capu::Array<capu::uint32_t> *myEmptyArrayHeap2 = new capu::Array<capu::uint32_t>();
+
+
+    myEmptyArrayStack1 = *myEmptyArrayHeap1;
+    EXPECT_EQ(0u, myEmptyArrayHeap1->size());
+    EXPECT_EQ(0u, myEmptyArrayStack1.size());
+    delete myEmptyArrayHeap1;
+
+    *myEmptyArrayHeap2 = myEmptyArrayStack2;
+    EXPECT_EQ(0u, myEmptyArrayHeap2->size());
+    EXPECT_EQ(0u, myEmptyArrayStack2.size());
+    delete myEmptyArrayHeap2;
 
 
 }

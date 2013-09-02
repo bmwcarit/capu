@@ -59,6 +59,28 @@ TEST(String, TestAssignOperator1)
     EXPECT_EQ(0, capu::StringUtils::Strcmp("other", str.c_str()));
     EXPECT_EQ(5u, str.getLength());
     EXPECT_EQ(5u, other.getLength());
+
+    capu::String str2;
+    capu::String other2;
+    str2 = other2;
+    EXPECT_EQ(0, capu::StringUtils::Strcmp("", str2.c_str()));
+
+    // one string on stack, one on heap
+    capu::String stringStack1;
+    capu::String stringStack2;
+    capu::String *stringHeap1 = new capu::String();
+    capu::String *stringHeap2 = new capu::String();
+
+
+    stringStack1 = *stringHeap1;
+    EXPECT_EQ(0u, stringHeap1->getLength());
+    EXPECT_EQ(0u, stringStack1.getLength());
+    delete stringHeap1;
+
+    *stringHeap2 = stringStack2;
+    EXPECT_EQ(0u, stringHeap2->getLength());
+    EXPECT_EQ(0u, stringStack2.getLength());
+    delete stringHeap2;
 }
 
 TEST(String, TestToLowerCase1)
