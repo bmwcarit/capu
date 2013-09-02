@@ -236,8 +236,9 @@ namespace capu
             InternalArray tmpArray(mSize);
             mInternalArray.swap(tmpArray);
         }
-
-        Memory::CopyObject(getRawData(), other.getRawData(), other.size());
+        if (getRawData() && other.getRawData()) {
+            Memory::CopyObject(getRawData(), other.getRawData(), other.size());
+        }
         return *this;
     }
 
