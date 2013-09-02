@@ -53,7 +53,7 @@ namespace capu
          * @param _first The first element of the pair
          * @param _second The second element of the pair
          */
-        Pair(const T1 _first, const T2 _second)
+        Pair(const T1& _first, const T2& _second)
             : first(_first), second(_second)
         {
 
