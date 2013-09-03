@@ -154,14 +154,15 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const float_t value)
     {
-        char_t buffer[16];
+        // Maximum float value has 47 digits. +1 for termination 0
+        char_t buffer[48];
         switch(mFloatingPointType)
         {
         case NORMAL:
-            StringUtils::Sprintf(buffer, sizeof(buffer), "%f", value);
+            StringUtils::Sprintf(buffer, sizeof(buffer), "%.6f", value);
             break;
         case FIXED:
-            StringUtils::Sprintf(buffer, 16, "%.4f", value);
+            StringUtils::Sprintf(buffer, 48, "%.4f", value);
             break;
         }
 

@@ -15,6 +15,7 @@
  */
 
 #include "StringOutputStreamTest.h"
+#include "capu/os/NumericLimits.h"
 
 namespace capu
 {
@@ -40,6 +41,13 @@ namespace capu
         outputStream.flush();
         EXPECT_STREQ("47.110001", outputStream.c_str());
         EXPECT_EQ(9U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteFloatMaximumNegative)
+    {
+        outputStream << -capu::generic::NumericLimits::Max<capu::float_t>();
+        outputStream.flush();
+        EXPECT_EQ(47U, outputStream.length());
     }
 
     TEST_F(StringOutputStreamTest, WriteInt32)
