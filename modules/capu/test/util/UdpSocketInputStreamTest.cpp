@@ -164,7 +164,16 @@ namespace capu
 
             char_t* pos = buffer;
             int32_t networkInt   =  htonl(mIntValue);
-            int32_t networkFloat =  htonl(*reinterpret_cast<int32_t*>(&mFloatValue));
+            
+            union
+            {
+                float_t floatVal;
+                int32_t int32Val;
+            } int32Convert;
+
+            int32Convert.floatVal = mFloatValue;            
+
+            int32_t networkFloat =  htonl(int32Convert.int32Val);
             int32_t strLen       =  static_cast<int32_t>(mStringValue.getLength());
             int32_t netowrkStrlen = htonl(strLen);
 

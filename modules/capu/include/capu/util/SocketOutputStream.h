@@ -238,11 +238,16 @@ namespace capu
     IOutputStream&
     SocketOutputStream<SNDBUFSIZE>::operator<<(const float_t value)
     {
-        float_t val = value;
-
         // we assume that a float is 4 bytes long (=uint32_t)
-        const uint32_t converted = *reinterpret_cast<uint32_t*>(&val);
-        return operator<<(converted);
+        union
+        {
+            float_t floatVal;
+            uint32_t uint32Val;
+        } uint32Convert;
+
+        uint32Convert.floatVal = value;
+
+        return operator<<(uint32Convert.uint32Val);
     }
 
     template<uint16_t SNDBUFSIZE>

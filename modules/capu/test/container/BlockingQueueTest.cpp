@@ -107,7 +107,7 @@ TEST(BlockingQueue, TestEmpty)
 
 TEST(BlockingQueue, TestPeek)
 {
-    capu::int32_t val;
+    capu::int32_t val = 0;
     capu::BlockingQueue<capu::int32_t> queue;
     EXPECT_EQ(capu::CAPU_EINVAL, queue.peek(val));
     queue.push(3);

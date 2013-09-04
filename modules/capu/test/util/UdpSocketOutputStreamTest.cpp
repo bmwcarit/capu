@@ -97,7 +97,18 @@ namespace capu
         {
             char_t buffer[1024];
             receiveFromSocket(buffer, 15);
-            int32_t strLen = ntohl(*reinterpret_cast<int32_t*>(buffer));
+            
+            union
+            {
+              char_t  charVal[4];
+              int32_t int32Val;
+            } int32Convert;
+
+            int32Convert.charVal[0] = buffer[0];
+            int32Convert.charVal[1] = buffer[1];
+            int32Convert.charVal[2] = buffer[2];
+            int32Convert.charVal[3] = buffer[3];
+            int32_t strLen = ntohl(int32Convert.int32Val);
             char_t* strBuf = &buffer[sizeof(int32_t)];
             strBuf[strLen] = 0;
             value = strBuf;

@@ -33,6 +33,7 @@ namespace capu
         void
         Debug::Assert(bool_t condition)
         {
+            UNUSED(condition);
 #ifdef _DEBUG
             assert(condition);
 #endif

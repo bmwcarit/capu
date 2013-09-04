@@ -55,11 +55,36 @@ namespace capu
 
         EXPECT_EQ(capu::CAPU_OK, mFile.read(buffer, sizeof(capu::int32_t), numBytes));
         EXPECT_EQ(sizeof(capu::int32_t), numBytes);
-        EXPECT_EQ(10, *reinterpret_cast<capu::int32_t*>(buffer));
+
+        union
+        {
+           capu::char_t charVal[4];
+           capu::int32_t int32Val;
+        }int32Convert;
+
+        int32Convert.charVal[0] = buffer[0];
+        int32Convert.charVal[1] = buffer[1];
+        int32Convert.charVal[2] = buffer[2];
+        int32Convert.charVal[3] = buffer[3];
+
+        EXPECT_EQ(10, int32Convert.int32Val);
 
         EXPECT_EQ(capu::CAPU_OK, mFile.read(buffer, sizeof(capu::float_t), numBytes));
         EXPECT_EQ(sizeof(capu::float_t), numBytes);
-        EXPECT_EQ(20.0f, *reinterpret_cast<capu::float_t*>(buffer));
+        
+
+        union
+        {
+          capu::char_t charVal[4];
+          capu::float_t floatVal;
+        } floatConvert;
+
+        floatConvert.charVal[0] = buffer[0];
+        floatConvert.charVal[1] = buffer[1];
+        floatConvert.charVal[2] = buffer[2];
+        floatConvert.charVal[3] = buffer[3];
+
+        EXPECT_EQ(20.0f, floatConvert.floatVal);
 
         EXPECT_EQ(CAPU_OK, mFile.read(buffer, sizeof(uint32_t), numBytes));
         EXPECT_EQ(CAPU_OK, mFile.read(buffer, sizeof(capu::char_t) * mTestString.getLength(), numBytes));

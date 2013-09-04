@@ -202,10 +202,14 @@ namespace capu
     IInputStream&
     SocketInputStream::operator>>(float_t& value)
     {
-        uint32_t tmpValue = 0;
+        union
+        {
+            uint32_t intValue;
+            float_t  floatValue;
+        } floatConvert;
 
-        operator>>(tmpValue);
-        value = *reinterpret_cast<float_t*>(&tmpValue);
+        operator>>(floatConvert.intValue);
+        value = floatConvert.floatValue;
 
         return *this;
     }

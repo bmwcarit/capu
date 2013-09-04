@@ -227,10 +227,10 @@ TEST(Array, Swap)
     capu::Array<capu::uint32_t> *myArrayHeap = new capu::Array<capu::uint32_t>();
 
     capu::swap(myArrayStack, *myArrayHeap);
-    EXPECT_EQ(0, myArrayHeap->size());
+    EXPECT_EQ(0u, myArrayHeap->size());
     delete myArrayHeap;
 
-    EXPECT_EQ(0, myArrayStack.size());
+    EXPECT_EQ(0u, myArrayStack.size());
 
 
 }
