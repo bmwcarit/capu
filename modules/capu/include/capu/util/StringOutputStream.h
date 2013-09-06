@@ -235,7 +235,6 @@ namespace capu
         char_t buffer[6];
         StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
         return operator<<(buffer);
-        return *this;
     }
 
     inline
