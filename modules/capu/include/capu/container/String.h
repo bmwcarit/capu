@@ -67,7 +67,7 @@ namespace capu
          * @param initialSize for the string
          * @param character to initialize string
          */
-        String(uint32_t initialSize, char_t character);
+        String(uint_t initialSize, char_t character);
 
 
         /**
@@ -276,7 +276,7 @@ namespace capu
     {
     }
 
-    inline String::String(uint32_t initialSize, char_t character)
+    inline String::String(uint_t initialSize, char_t character)
         : m_data(initialSize + 1)
         , m_size(initialSize)
     {
