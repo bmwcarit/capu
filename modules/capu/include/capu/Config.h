@@ -48,7 +48,7 @@ namespace capu
     typedef bool    bool_t;
     typedef char    char_t;
 
-    #if defined(OS_MacOSX)
+    #if defined(OS_MacOSX) || defined(OS_IPHONEOS)
         #if defined(ARCH_X86_64)
             typedef ::int64_t  int_t;
             typedef ::uint64_t  uint_t;
