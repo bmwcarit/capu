@@ -78,7 +78,7 @@ namespace capu
                 {
                     return CAPU_ERROR;
                 }
-                size = tempSize.QuadPart;
+                size = static_cast<uint_t>(tempSize.QuadPart);
                 return CAPU_OK;
             }
         }
