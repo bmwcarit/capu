@@ -107,28 +107,41 @@ namespace capu
     void
     Memory::Set(void* dst, int32_t val, uint_t size)
     {
-        os::arch::Memory::Set(dst, val, size);
+        if(size > 0)
+        {
+            os::arch::Memory::Set(dst, val, size);
+        }
     }
 
     inline
     void
     Memory::Move(void* dst, const void* src, uint_t size)
     {
-        os::arch::Memory::Move(dst, src, size);
+        if(size > 0)
+        {
+            os::arch::Memory::Move(dst, src, size);
+        }
     }
 
     inline
     int32_t
     Memory::Compare(const void* ptr1, const void* ptr2, uint_t num)
     {
-        return os::arch::Memory::Compare(ptr1, ptr2, num);
+        if(num > 0)
+        {
+            return os::arch::Memory::Compare(ptr1, ptr2, num);
+        }
+        return 0;
     }
 
     inline
     void
     Memory::Copy(void* dst, const void* src, const uint_t size)
     {
-        os::arch::Memory::Copy(dst, src, size);
+        if(size > 0)
+        {
+            os::arch::Memory::Copy(dst, src, size);
+        }
     }
 
     template<typename T>
@@ -136,7 +149,10 @@ namespace capu
     void
     Memory::CopyObject(T* dst, const T* src, const uint_t count)
     {
-        os::arch::Memory::CopyObject(dst, src, count);
+        if(count > 0)
+        {
+            os::arch::Memory::CopyObject(dst, src, count);
+        }
     }
 
     template<typename T>
@@ -144,7 +160,10 @@ namespace capu
     void
     Memory::MoveObject(T* dst, const T* src, const uint_t count)
     {
-        os::arch::Memory::MoveObject(dst, src, count);
+        if(count > 0)
+        {
+            os::arch::Memory::MoveObject(dst, src, count);
+        }
     }
 }
 #endif // CAPU_MEMORY_H
