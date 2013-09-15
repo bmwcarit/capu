@@ -79,6 +79,16 @@ namespace capu
             return (*m_methodPtr)(m_objPtr, value1, value2);
         }
 
+        /**
+         * Compares two delegates
+         * @param other delegate to compare with
+         * @return true if both delegates are equal, false otherwise
+         */
+        bool_t operator==(const Delegate<ReturnType, Param1, Param2>& other) const
+        {
+            return m_objPtr == other.m_objPtr && m_methodPtr == other.m_methodPtr;
+        }
+
     private:
         typedef ReturnType(*MethodPtr)(void*, Param1, Param2);
  
@@ -163,6 +173,11 @@ namespace capu
             return (*m_methodPtr)(m_objPtr, value1);
         }
 
+        bool_t operator==(const Delegate<ReturnType, Param1>& other) const
+        {
+            return m_objPtr == other.m_objPtr && m_methodPtr == other.m_methodPtr;
+        }
+
     private:
         typedef ReturnType(*MethodPtr)(void*, Param1);
 
@@ -217,6 +232,11 @@ namespace capu
         ReturnType operator()()
         {
             return (*m_methodPtr)(m_objPtr);
+        }
+
+        bool_t operator==(const Delegate<ReturnType>& other) const
+        {
+            return m_objPtr == other.m_objPtr && m_methodPtr == other.m_methodPtr;
         }
 
     private:

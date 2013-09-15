@@ -131,6 +131,16 @@ namespace capu
         EXPECT_CALL(simpleClass, doPureVirtualStuff(5));
         delegate(5);
     }
+
+    TEST_F(DelegateTest, Compare)
+    {
+        MockSimpleClass simpleClass;
+        Delegate<void, uint32_t> delegate1 = Delegate<void, uint32_t>::Create<SimpleClass, &SimpleClass::doPureVirtualStuff>(simpleClass);
+        Delegate<void, uint32_t> delegate2 = Delegate<void, uint32_t>::Create<SimpleClass, &SimpleClass::doPureVirtualStuff>(simpleClass);
+
+        EXPECT_EQ(delegate1, delegate2);
+    }
+
 }
 
 
