@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <time.h>
 
 #define UNUSED(x) {(void)(x);}
 
@@ -40,7 +41,7 @@ namespace capu
     typedef ::int8_t    int8_t;
     typedef ::int16_t   int16_t;
     typedef unsigned char   uchar_t;
-    typedef ::int64_t   time_t;
+    typedef ::time_t   time_t;
     typedef ::uint8_t   uint8_t;
     typedef ::int16_t   int16_t;
     typedef ::uint16_t  uint16_t;
