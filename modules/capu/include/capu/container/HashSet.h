@@ -29,72 +29,90 @@ namespace capu
     class HashSet
     {
     private:
+
+        /**
+         * Iterator for HashSet
+         */
+        template<typename HashTableIteratorType>
         class HashSetIterator
         {
         public:
 
             /**
-             * constructor
-             *
-             * @param list     array of linked list which provide channing for hash set
-             * @param listSize size of hash set (size of linked list array)
+             * Copy Constructor
+             * @param iter iterator to copy
              */
-            HashSetIterator(const HashSetIterator& iter);
+            HashSetIterator(const HashSetIterator<HashTableIteratorType>& iter)
+                : m_iter(iter.m_iter)
+            {
+            }
 
-            /**
-             * destructor
-             */
-            ~HashSetIterator();
-
-            HashSetIterator& operator=(const HashSetIterator& iter);
+            /*
+            * Assignment Operator
+            * @param iter r-value iterator for assignment
+            */
+            HashSetIterator& operator=(const HashSetIterator<HashTableIteratorType>& iter)
+            {
+                m_iter = iter.m_iter;
+                return *this;
+            }
 
             /**
              * Indirection
              * @return the current value referenced by the iterator
              */
-            const T& operator*();
+            const T& operator*()
+            {
+                return (*m_iter).key;
+            }
 
             /**
              * Dereference
              * @return a pointer to the current object the iterator points to
              */
-            const T* operator->();
+            const T* operator->()
+            {
+                return &((*m_iter).key);
+            }
 
             /**
              * Compares two iterators
              * @return true if the iterators point to the same position
              */
-            capu::bool_t operator==(const HashSetIterator& iter) const;
+            capu::bool_t operator==(const HashSetIterator<HashTableIteratorType>& iter) const
+            {
+                return (m_iter == iter.m_iter);
+            }
 
             /**
              * Compares two iterators
              * @return true if the iterators do not point to the same position
              */
-            capu::bool_t operator!=(const HashSetIterator& iter) const;
+            capu::bool_t operator!=(const HashSetIterator<HashTableIteratorType>& iter) const
+            {
+                return (m_iter != iter.m_iter);
+            }
 
             /**
              * Step the iterator forward to the next element (prefix operator)
              * @return the next iterator
              */
-            const HashSetIterator& operator++() const;
-
-            /**
-             * Step the iterator forward to the next element (prefix operator)
-             * @return the next iterator
-             */
-            HashSetIterator& operator++();
-
-            /**
-             * Step the iterator forward to the next element (postfix operator)
-             * @return the next iterator
-             */
-            const HashSetIterator operator++(int32_t) const;
+            HashSetIterator<HashTableIteratorType>& operator++()
+            {
+                m_iter++;
+                return *this;
+            }
 
             /**
              * Step the iterator forward to the next element (postfix operator)
              * @return the next iterator
              */
-            HashSetIterator operator++(int32_t);
+            HashSetIterator<HashTableIteratorType> operator++(int32_t)
+            {
+                HashSetIterator<HashTableIteratorType> oldValue(*this);
+                ++(*this);
+                return oldValue;
+            }
 
         private:
 
@@ -103,11 +121,14 @@ namespace capu
             /**
              * Internal constructor for HashSet
              *
-             * @para iter iterator of the underlying hashtable
+             * @para iter iterator of the underlying hash table
              */
-            HashSetIterator(const typename HashTable<T, char_t, C, H>::Iterator& iter);
+            HashSetIterator(const HashTableIteratorType& iter)
+                : m_iter(iter)
+            {
+            }
 
-            typename HashTable<T, char_t, C, H>::Iterator m_iter;
+            HashTableIteratorType m_iter;
         };
 
     public:
@@ -115,7 +136,8 @@ namespace capu
         /**
          * Iterator for hashsets
          */
-        typedef HashSetIterator Iterator;
+        typedef HashSetIterator< typename HashTable<T, char_t, C, H>::Iterator >        Iterator;
+        typedef HashSetIterator< typename HashTable<T, char_t, C, H>::ConstIterator >   ConstIterator;
 
         /**
          * Default Constructor
@@ -188,13 +210,25 @@ namespace capu
          * Return iterator for iterating key value tuples.
          * @return Iterator
          */
-        Iterator begin() const;
+        Iterator begin();
 
         /**
-         * returns an interator pointing after the last element of the list
+         * Return ConstIterator for iterating read only key value tuples.
+         * @return ConstIterator
+         */
+        ConstIterator begin() const;
+
+        /**
+         * returns an iterator pointing after the last element of the list
          * @return iterator
          */
-        const Iterator end() const;
+        Iterator end();
+
+        /**
+         * returns a ConstIterator pointing after the last element of the list
+         * @return ConstIterator
+         */
+        ConstIterator end() const;
 
     private:
         HashTable<T, char_t, C, H> m_table;
@@ -259,96 +293,29 @@ namespace capu
     }
 
     template <class T, class C, class H>
-    typename HashSet<T, C, H>::Iterator HashSet<T, C, H>::begin() const
+    typename HashSet<T, C, H>::Iterator HashSet<T, C, H>::begin()
     {
         return Iterator(m_table.begin());
     }
 
     template <class T, class C, class H>
-    const typename HashSet<T, C, H>::Iterator HashSet<T, C, H>::end() const
+    typename HashSet<T, C, H>::ConstIterator HashSet<T, C, H>::begin() const
+    {
+        return ConstIterator(m_table.begin());
+    }
+
+    template <class T, class C, class H>
+    typename HashSet<T, C, H>::Iterator HashSet<T, C, H>::end()
     {
         return Iterator(m_table.end());
     }
 
     template <class T, class C, class H>
-    HashSet<T, C, H>::HashSetIterator::HashSetIterator(const typename HashTable<T, char_t, C, H>::Iterator& iter)
-        : m_iter(iter)
+    typename HashSet<T, C, H>::ConstIterator HashSet<T, C, H>::end() const
     {
+        return ConstIterator(m_table.end());
     }
 
-    template <class T, class C, class H>
-    HashSet<T, C, H>::HashSetIterator::HashSetIterator(const HashSetIterator& iter)
-        : m_iter(iter.m_iter)
-    {
-    }
-
-    template <class T, class C, class H>
-    HashSet<T, C, H>::HashSetIterator::~HashSetIterator()
-    {
-    }
-
-    template <class T, class C, class H>
-    typename HashSet<T, C, H>::HashSetIterator& HashSet<T, C, H>::HashSetIterator::operator=(const HashSetIterator& iter)
-    {
-        m_iter = iter.m_iter;
-        return *this;
-    }
-
-    template <class T, class C, class H>
-    const T& HashSet<T, C, H>::HashSetIterator::operator*()
-    {
-        typename HashTable<T, char_t, C, H>::HashTableEntry& entry = *m_iter;
-        return entry.key;
-    }
-
-    template <class T, class C, class H>
-    const T* HashSet<T, C, H>::HashSetIterator::operator->()
-    {
-        const typename HashTable<T, char_t, C, H>::HashTableEntry& entry = *m_iter;
-        return &(entry.key);
-    }
-
-    template <class T, class C, class H>
-    capu::bool_t HashSet<T, C, H>::HashSetIterator::operator==(const HashSetIterator& iter) const
-    {
-        return m_iter == iter.m_iter;
-    }
-
-    template <class T, class C, class H>
-    capu::bool_t HashSet<T, C, H>::HashSetIterator::operator!=(const HashSetIterator& iter) const
-    {
-        return m_iter != iter.m_iter;
-    }
-
-    template <class T, class C, class H>
-    const typename HashSet<T, C, H>::HashSetIterator& HashSet<T, C, H>::HashSetIterator::operator++() const
-    {
-        m_iter++;
-        return *this;
-    }
-
-    template <class T, class C, class H>
-    typename HashSet<T, C, H>::HashSetIterator& HashSet<T, C, H>::HashSetIterator::operator++()
-    {
-        m_iter++;
-        return *this;
-    }
-
-    template <class T, class C, class H>
-    const typename HashSet<T, C, H>::HashSetIterator HashSet<T, C, H>::HashSetIterator::operator++(int32_t) const
-    {
-        typename HashSet<T, C, H>::HashSetIterator oldValue(*this);
-        ++(*this);
-        return oldValue;
-    }
-
-    template <class T, class C, class H>
-    typename HashSet<T, C, H>::HashSetIterator HashSet<T, C, H>::HashSetIterator::operator++(int32_t)
-    {
-        typename HashSet<T, C, H>::HashSetIterator oldValue(*this);
-        ++(*this);
-        return oldValue;
-    }
 }
 
 #endif /* CAPU_HASHSET_H */

@@ -259,6 +259,16 @@ TEST(HashSet, performanceIterate)
     }
 }
 
+TEST(HashSet, performanceConstIterate)
+{
+    const capu::HashSet<capu::uint32_t>& setConstRef = set;
+    capu::HashSet<capu::uint32_t>::ConstIterator iter = setConstRef.begin();
+    while (iter != setConstRef.end())
+    {
+        iter++;
+    }
+}
+
 TEST(HashSet, performanceRemove)
 {
     // capu::HashSet<capu::uint32_t> set;

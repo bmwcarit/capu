@@ -78,7 +78,7 @@ namespace capu
 
     inline bool_t EnvironmentVariables::get(const String& key, String& value) const
     {
-        HashTable<String, String>::Iterator it = m_env.find(key);
+        HashTable<String, String>::ConstIterator it = m_env.find(key);
         if (it != m_env.end())
         {
             value = (*it).value;

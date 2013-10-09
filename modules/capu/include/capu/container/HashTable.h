@@ -97,6 +97,7 @@ namespace capu
         /**
          * Internal helper class to perform iterations over the map entries.
          */
+        template<typename TableEntryType>
         class HashTableIterator
         {
         public:
@@ -105,86 +106,92 @@ namespace capu
 
             /**
              * Constructor.
-             *
              * @param begin Pointer to the entry on which iteration should start.
              * @param end Pointer to an entry on which iteration should end (if begin == end).
              */
-            HashTableIterator(HashTableEntry* begin, HashTableEntry* end);
+            HashTableIterator(TableEntryType* begin, TableEntryType* end)
+                : mCurrentHashMapEntry(begin)
+                , mLastHashMapEntry(end)
+            {
+            }
 
             /**
-             * Destructor.
+             * Copy Constructor.
+             * @param iter non-const iterator to copy
              */
-            ~HashTableIterator();
+            HashTableIterator(const HashTableIterator<TableEntryType>& iter)
+                : mCurrentHashMapEntry(iter.mCurrentHashMapEntry)
+                , mLastHashMapEntry(iter.mLastHashMapEntry)
+            {
+            }
 
             /**
              * Indirection
              * @return the current value referenced by the iterator
              */
-            typename HashTable<Key, T, C, H>::HashTableEntry& operator*();
+            TableEntryType& operator*()
+            {
+                return *mCurrentHashMapEntry;
+            }
 
             /**
              * Dereference
              * @return a pointer to the current object the iterator points to
              */
-            typename HashTable<Key, T, C, H>::HashTableEntry* operator->();
-
-            /**
-             * Assigns the given iterator to this iterator.
-             * @param iter The other iterator.
-             * @return This iterator.
-             */
-            HashTableIterator& operator=(const HashTableIterator& iter)
+            TableEntryType* operator->()
             {
-                mCurrentHashMapEntry = iter.mCurrentHashMapEntry;
-                mLastHashMapEntry = iter.mLastHashMapEntry;
-                return *this;
+                return mCurrentHashMapEntry;
             }
 
             /**
              * Compares two iterators
              * @return true if the iterators point to the same position
              */
-            capu::bool_t operator==(const HashTableIterator& iter) const;
+            capu::bool_t operator==(const HashTableIterator<TableEntryType>& iter) const
+            {
+                return (mCurrentHashMapEntry == iter.mCurrentHashMapEntry);
+            }
 
             /**
              * Compares two iterators
              * @return true if the iterators do not point to the same position
              */
-            capu::bool_t operator!=(const HashTableIterator& iter) const;
+            capu::bool_t operator!=(const HashTableIterator<TableEntryType>& iter) const
+            {
+                return (mCurrentHashMapEntry != iter.mCurrentHashMapEntry);
+            }
 
             /**
              * Step the iterator forward to the next element (prefix operator)
              * @return the next iterator
              */
-            const HashTableIterator& operator++() const;
-
-            /**
-             * Step the iterator forward to the next element (prefix operator)
-             * @return the next iterator
-             */
-            HashTableIterator& operator++();
-
-            /**
-             * Step the iterator forward to the next element (postfix operator)
-             * @return the next iterator
-             */
-            const HashTableIterator operator++(int32_t) const;
+            HashTableIterator<TableEntryType>& operator++()
+            {
+                mCurrentHashMapEntry = mCurrentHashMapEntry->next;
+                return *this;
+            }
 
             /**
              * Step the iterator forward to the next element (postfix operator)
              * @return the next iterator
              */
-            HashTableIterator operator++(int32_t);
+            HashTableIterator<TableEntryType> operator++(int32_t)
+            {
+                HashTableIterator<TableEntryType> oldValue(*this);
+                ++(*this);
+                return oldValue;
+            }
 
         private:
-            HashTableEntry* mCurrentHashMapEntry;
-            HashTableEntry* mLastHashMapEntry;
+            TableEntryType* mCurrentHashMapEntry;
+            TableEntryType* mLastHashMapEntry;
         };
 
         /**
          * Iterator for hashtables
          */
-        typedef HashTableIterator Iterator;
+        typedef HashTableIterator<HashTableEntry>       Iterator;
+        typedef HashTableIterator<const HashTableEntry> ConstIterator;
 
         /**
          * Copy constructor
@@ -263,7 +270,18 @@ namespace capu
          * @return iterator pointing to the Hash Table entry where the key got found
          *         iterator pointing to the end() element otherwise
          */
-        Iterator find(const Key& key) const;
+        Iterator find(const Key& key);
+
+        /**
+         * Tries to find an element in read only Hash Table.
+         * If the element is found, it returns a ConstIterator to HashTableEntry for the given key
+         * If the element is not contained in the Hash Table, the end() constIterator is returned.
+         *
+         * @param key       Key
+         * @return ConstIterator pointing to the Hash Table entry where the key got found
+         *         ConstIterator pointing to the end() element otherwise
+         */
+        ConstIterator find(const Key& key) const;
 
         /**
          * Checks weather the given key is present in the table.
@@ -313,13 +331,25 @@ namespace capu
          * Returns an iterator for iterating over the key and values in the map.
          * @return Iterator
          */
-        Iterator begin() const;
+        Iterator begin();
 
         /**
-         * returns an interator pointing after the last element of the list
+         * Returns a ConstIterator for iterating over the key and values in the map.
+         * @return ConstIterator
+         */
+        ConstIterator begin() const;
+
+        /**
+         * returns an iterator pointing after the last element of the list
          * @return iterator
          */
-        const Iterator end() const;
+        Iterator end();
+
+        /**
+         * returns a ConstIterator pointing after the last element of the list
+         * @return ConstIterator
+         */
+        ConstIterator end() const;
 
         /**
          * Assignment operator for HashTable
@@ -388,7 +418,7 @@ namespace capu
         // right here, we have an empty map with the exact same size as the given other table
         // now we put each entry of the other map into this map (this may be a lot less than the actual size)
 
-        typename HashTable<Key, T, C, H>::Iterator iter = other.begin();
+        typename HashTable<Key, T, C, H>::ConstIterator iter = other.begin();
         while (iter != other.end())
         {
             mFirstFreeHashMapEntry->internalKey = iter->key;
@@ -452,7 +482,7 @@ namespace capu
         mLastHashMapEntry->previous = mLastHashMapEntry;
         mLastHashMapEntry->next = mLastHashMapEntry;
 
-        HashTable::Iterator iter = other.begin();
+        HashTable::ConstIterator iter = other.begin();
         while (iter != other.end())
         {
             HashTableEntry entry = *iter;
@@ -597,12 +627,26 @@ namespace capu
     }
 
     template <class Key, class T, class C, class H>
-    typename HashTable<Key, T, C, H>::Iterator HashTable<Key, T, C, H>::find(const Key& key) const
+    typename HashTable<Key, T, C, H>::Iterator HashTable<Key, T, C, H>::find(const Key& key)
     {
         if (HashTableEntry* entry = internalGet(key))
         {
             // set new iterator to this position
             Iterator it(entry, mLastHashMapEntry);
+            return it;
+        }
+
+        // no entry found -> return end iterator
+        return end();
+    }
+
+    template <class Key, class T, class C, class H>
+    typename HashTable<Key, T, C, H>::ConstIterator HashTable<Key, T, C, H>::find(const Key& key) const
+    {
+        if (HashTableEntry* entry = internalGet(key))
+        {
+            // set new iterator to this position
+            ConstIterator it(entry, mLastHashMapEntry);
             return it;
         }
 
@@ -698,81 +742,27 @@ namespace capu
     }
 
     template <class Key, class T, class C, class H>
-    inline typename HashTable<Key, T, C, H>::Iterator HashTable<Key, T, C, H>::begin() const
+    inline typename HashTable<Key, T, C, H>::Iterator HashTable<Key, T, C, H>::begin()
     {
         return typename HashTable<Key, T, C, H>::Iterator(mLastHashMapEntry->next, mLastHashMapEntry);
     }
 
     template <class Key, class T, class C, class H>
-    inline const typename HashTable<Key, T, C, H>::Iterator HashTable<Key, T, C, H>::end() const
+    inline typename HashTable<Key, T, C, H>::ConstIterator HashTable<Key, T, C, H>::begin() const
+    {
+        return typename HashTable<Key, T, C, H>::ConstIterator(mLastHashMapEntry->next, mLastHashMapEntry);
+    }
+
+    template <class Key, class T, class C, class H>
+    inline typename HashTable<Key, T, C, H>::Iterator HashTable<Key, T, C, H>::end()
     {
         return typename HashTable<Key, T, C, H>::Iterator(mLastHashMapEntry, mLastHashMapEntry);
     }
 
     template <class Key, class T, class C, class H>
-    inline HashTable<Key, T, C, H>::HashTableIterator::HashTableIterator(HashTableEntry* begin, HashTableEntry* end)
-        : mCurrentHashMapEntry(begin)
-        , mLastHashMapEntry(end)
+    inline typename HashTable<Key, T, C, H>::ConstIterator HashTable<Key, T, C, H>::end() const
     {
-    }
-
-    template <class Key, class T, class C, class H>
-    inline HashTable<Key, T, C, H>::HashTableIterator::~HashTableIterator()
-    {
-    }
-
-    template <class Key, class T, class C, class H>
-    inline typename HashTable<Key, T, C, H>::HashTableEntry& HashTable<Key, T, C, H>::HashTableIterator::operator*()
-    {
-        return *mCurrentHashMapEntry;
-    }
-
-    template <class Key, class T, class C, class H>
-    inline typename HashTable<Key, T, C, H>::HashTableEntry* HashTable<Key, T, C, H>::HashTableIterator::operator->()
-    {
-        return mCurrentHashMapEntry;
-    }
-
-    template <class Key, class T, class C, class H>
-    inline capu::bool_t HashTable<Key, T, C, H>::HashTableIterator::operator==(const HashTableIterator& iter) const
-    {
-        return mCurrentHashMapEntry == iter.mCurrentHashMapEntry;
-    }
-
-    template <class Key, class T, class C, class H>
-    inline capu::bool_t HashTable<Key, T, C, H>::HashTableIterator::operator!=(const HashTableIterator& iter) const
-    {
-        return mCurrentHashMapEntry != iter.mCurrentHashMapEntry;
-    }
-
-    template <class Key, class T, class C, class H>
-    inline const typename HashTable<Key, T, C, H>::HashTableIterator& HashTable<Key, T, C, H>::HashTableIterator::operator++() const
-    {
-        mCurrentHashMapEntry = mCurrentHashMapEntry->next;
-        return *this;
-    }
-
-    template <class Key, class T, class C, class H>
-    inline typename HashTable<Key, T, C, H>::HashTableIterator& HashTable<Key, T, C, H>::HashTableIterator::operator++()
-    {
-        mCurrentHashMapEntry = mCurrentHashMapEntry->next;
-        return *this;
-    }
-
-    template <class Key, class T, class C, class H>
-    inline const typename HashTable<Key, T, C, H>::HashTableIterator HashTable<Key, T, C, H>::HashTableIterator::operator++(int32_t) const
-    {
-        typename HashTable<Key, T, C, H>::HashTableIterator oldValue(*this);
-        ++(*this);
-        return oldValue;
-    }
-
-    template <class Key, class T, class C, class H>
-    inline typename HashTable<Key, T, C, H>::HashTableIterator HashTable<Key, T, C, H>::HashTableIterator::operator++(int32_t)
-    {
-        typename HashTable<Key, T, C, H>::HashTableIterator oldValue(*this);
-        ++(*this);
-        return oldValue;
+        return typename HashTable<Key, T, C, H>::ConstIterator(mLastHashMapEntry, mLastHashMapEntry);
     }
 
     template <class Key, class T, class C, class H>

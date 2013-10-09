@@ -28,8 +28,8 @@ TEST(EnvironmentVariables, getTest)
 {
     capu::EnvironmentVariables myEnv;
     capu::String tmp;
-    capu::HashTable<capu::String, capu::String>::Iterator it = myEnv.getAll().begin();
-    const capu::HashTable<capu::String, capu::String>::Iterator end = myEnv.getAll().end();
+    capu::HashTable<capu::String, capu::String>::ConstIterator it = myEnv.getAll().begin();
+    const capu::HashTable<capu::String, capu::String>::ConstIterator end = myEnv.getAll().end();
 
     for(; it != end; ++it)
     {

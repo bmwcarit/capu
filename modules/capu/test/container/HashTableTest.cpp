@@ -544,6 +544,64 @@ TEST_F(HashTableTest, TestIterator2)
     EXPECT_TRUE(it == newmap.end());
 }
 
+
+TEST_F(HashTableTest, TestConstIterator1)
+{
+    Int32HashMap newmap(5);
+    const Int32HashMap& newmapConstRef = newmap;
+
+    newmap.put(1, 10);
+    newmap.put(2, 20);
+    newmap.put(3, 30);
+
+    Int32HashMap::ConstIterator it = newmapConstRef.begin();
+
+    // TODO check values
+    EXPECT_NE(it, newmapConstRef.end());
+    const Int32HashMap::HashTableEntry& entry1 = *(it++);
+    EXPECT_EQ(entry1.key * 10, entry1.value);
+
+    EXPECT_NE(it, newmapConstRef.end());
+    const Int32HashMap::HashTableEntry& entry2 = *(it++);
+    EXPECT_EQ(entry2.key * 10, entry2.value);
+
+    EXPECT_NE(it, newmapConstRef.end());
+    const Int32HashMap::HashTableEntry& entry3 = *(it++);
+    EXPECT_EQ(entry3.key * 10, entry3.value);
+
+    EXPECT_EQ(it, newmapConstRef.end());
+}
+
+TEST_F(HashTableTest, TestConstIterator2)
+{
+    Int32HashMap newmap(5);
+    const Int32HashMap& newmapConstRef = newmap;
+
+    newmap.put(1, 10);
+    newmap.put(2, 20);
+    newmap.put(3, 30);
+
+    Int32HashMap::ConstIterator it = newmapConstRef.begin();
+    capu::Pair<capu::int32_t, capu::int32_t> pair;
+
+    EXPECT_NE(it, newmapConstRef.end());
+
+    EXPECT_EQ((*it).key * 10, (*it).value);
+    it++;
+
+    EXPECT_TRUE(it != newmapConstRef.end());
+    const Int32HashMap::HashTableEntry& entry2 = *it;
+    EXPECT_EQ(entry2.key * 10, entry2.value);
+    it++;
+
+    EXPECT_NE(it, newmapConstRef.end());
+    EXPECT_EQ((*it).key * 10, (*it).value);
+    it++;
+
+    EXPECT_TRUE(it == newmapConstRef.end());
+}
+
+
 TEST_F(HashTableTest, IteratorPrimitiveKeyComplexValue)
 {
     capu::List<capu::int32_t> mylist;
