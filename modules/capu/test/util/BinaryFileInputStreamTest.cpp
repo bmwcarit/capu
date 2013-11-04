@@ -70,4 +70,35 @@ namespace capu
         EXPECT_STREQ("Dies ist ein Text", stringVal.c_str());
 
     }
+
+    TEST_F(BinaryFileInputStreamTest, ReadclosedFile)
+    {
+        capu::BinaryFileInputStream inputStream(mFile);
+
+        // remove the file to make the after read fails
+        mFile.close();
+        mFile.remove();
+
+
+
+        capu::char_t data[1];
+        capu::uint32_t len = 1;
+        data[0] = 3;
+        inputStream.read(data, len);
+
+        EXPECT_EQ(3, data[0]);
+    }
+
+    TEST_F(BinaryFileInputStreamTest, ReadNonexistingFile)
+    {
+    	capu::File nonexistingFile("./IdontExist");
+        capu::BinaryFileInputStream inputStream(nonexistingFile);
+
+        capu::char_t data[1];
+        capu::uint32_t len = 1;
+        data[0] = 3;
+        inputStream.read(data, len);
+
+        EXPECT_EQ(3, data[0]);
+    }
 }

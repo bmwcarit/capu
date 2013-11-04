@@ -81,3 +81,11 @@ TEST(Stack, Size)
     stack.clear();
     EXPECT_EQ(0, stack.size());
 }
+
+TEST(Stack, PeekOnEmpty)
+{
+    capu::Stack<capu::uint32_t> stack;
+    capu::uint32_t val;
+    EXPECT_EQ(capu::CAPU_EINVAL, stack.peek(val));
+}
+

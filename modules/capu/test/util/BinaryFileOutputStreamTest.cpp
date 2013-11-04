@@ -91,5 +91,29 @@ namespace capu
         buffer[mTestString.getLength()] = 0;
         EXPECT_EQ(sizeof(capu::char_t) * mTestString.getLength(), numBytes);
         EXPECT_STREQ("Dies ist ein Text", buffer);
+
+        mFile.close();
+    }
+
+    TEST_F(BinaryFileOutputStreamTest, WriteFail)
+    {
+        EXPECT_EQ(capu::CAPU_OK, mFile.open(READ_EXISTING_BINARY));
+    	capu::BinaryFileOutputStream outputStream(mFile);
+
+    	capu::uint_t sizeBeforeWrite = 0;
+    	mFile.getSizeInBytes(sizeBeforeWrite);
+
+        capu::char_t buffer[1];
+        capu::uint_t numBytes = 1;
+        buffer[0] = 3;
+
+        outputStream.write(buffer,numBytes);
+
+        capu::uint_t sizeAfterWrite = 0;
+    	mFile.getSizeInBytes(sizeAfterWrite);
+
+        EXPECT_EQ(sizeAfterWrite, sizeBeforeWrite);
+
+        mFile.close();
     }
 }
