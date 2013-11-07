@@ -48,7 +48,7 @@ namespace capu
         void
         Console::Print(uint32_t color, const char_t* format, va_list values)
         {
-            printf(capu::posix::Console::Colors[color]);
+            printf("%s", capu::posix::Console::Colors[color]);
             vprintf(format, values);
             printf("\e[0m");
         }
