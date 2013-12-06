@@ -21,7 +21,7 @@
 
 namespace capu
 {
-    namespace os
+    namespace generic
     {
         class Random
         {

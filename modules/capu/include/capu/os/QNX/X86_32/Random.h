@@ -25,12 +25,12 @@ namespace capu
     {
         namespace arch
         {
-            class Random: public capu::os::Random
+            class Random: public capu::generic::Random
             {
             public:
-                using capu::os::Random::nextUInt8;
-                using capu::os::Random::nextUInt16;
-                using capu::os::Random::nextUInt32;
+                using capu::generic::Random::nextUInt8;
+                using capu::generic::Random::nextUInt16;
+                using capu::generic::Random::nextUInt32;
             };
         }
     }
