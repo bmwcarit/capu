@@ -81,3 +81,22 @@ TEST(Stack, Size)
     stack.clear();
     EXPECT_EQ(0, stack.size());
 }
+
+TEST(Stack, StaticMemory)
+{
+    capu::StaticStack<capu::uint32_t, 3u> stack;
+    EXPECT_EQ(capu::CAPU_OK, stack.push(1));
+    EXPECT_EQ(capu::CAPU_OK, stack.push(2));
+    EXPECT_EQ(capu::CAPU_OK, stack.push(3));
+    EXPECT_EQ(capu::CAPU_ENO_MEMORY, stack.push(4));
+    EXPECT_EQ(3u, stack.size());
+
+    stack.clear();
+    EXPECT_EQ(0u, stack.size());
+
+    EXPECT_EQ(capu::CAPU_OK, stack.push(1));
+    EXPECT_EQ(capu::CAPU_OK, stack.push(2));
+    EXPECT_EQ(capu::CAPU_OK, stack.push(3));
+    EXPECT_EQ(capu::CAPU_ENO_MEMORY, stack.push(4));
+    EXPECT_EQ(3u, stack.size());
+ }

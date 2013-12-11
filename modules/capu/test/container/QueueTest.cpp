@@ -200,43 +200,6 @@ TEST(Queue, pop)
     delete queue;
 }
 
-TEST(Queue, swap)
-{
-    capu::Queue<capu::int32_t> queue1;
-    capu::Queue<capu::int32_t> queue2;
-    capu::int32_t test;
-    capu::int32_t data1;
-    capu::int32_t data2;
-
-    EXPECT_TRUE(queue1.empty());
-    EXPECT_TRUE(queue2.empty());
-    data1 = 32;
-    data2 = 43;
-    queue1.push(data1);
-    queue2.push(data2);
-    queue2.push(data2);
-
-    EXPECT_EQ(1u, queue1.size());
-    EXPECT_EQ(2u, queue2.size());
-
-    capu::swap(queue1, queue2);
-
-    EXPECT_EQ(2u, queue1.size());
-    EXPECT_EQ(1u, queue2.size());
-
-    EXPECT_EQ(capu::CAPU_OK, queue2.pop(&test));
-    EXPECT_EQ(test, data1);
-
-    EXPECT_EQ(capu::CAPU_OK, queue1.pop(&test));
-    EXPECT_EQ(test, data2);
-
-    EXPECT_EQ(capu::CAPU_OK, queue1.pop(&test));
-    EXPECT_EQ(test, data2);
-
-    EXPECT_EQ(0u, queue1.size());
-    EXPECT_EQ(0u, queue2.size());
-}
-
 TEST(Queue, frontBack)
 {
     capu::Queue<capu::int32_t> queue;
@@ -297,4 +260,23 @@ TEST(Queue, popAll)
     list.clear();
     EXPECT_EQ(capu::CAPU_OK, queue.popAll(list));
     EXPECT_TRUE(list.isEmpty());
+}
+
+TEST(Queue, StaticMemory)
+{
+    capu::StaticQueue<capu::uint32_t, 3u> queue;
+    EXPECT_EQ(capu::CAPU_OK, queue.push(1));
+    EXPECT_EQ(capu::CAPU_OK, queue.push(2));
+    EXPECT_EQ(capu::CAPU_OK, queue.push(3));
+    EXPECT_EQ(capu::CAPU_ENO_MEMORY, queue.push(4));
+    EXPECT_EQ(3, queue.size());
+
+    queue.clear();
+    EXPECT_EQ(0, queue.size());
+
+    EXPECT_EQ(capu::CAPU_OK, queue.push(1));
+    EXPECT_EQ(capu::CAPU_OK, queue.push(2));
+    EXPECT_EQ(capu::CAPU_OK, queue.push(3));
+    EXPECT_EQ(capu::CAPU_ENO_MEMORY, queue.push(4));
+    EXPECT_EQ(3, queue.size());
 }

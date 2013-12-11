@@ -20,15 +20,15 @@
 #include "capu/Error.h"
 #include "capu/Config.h"
 #include "capu/container/List.h"
-#include "capu/util/Swap.h"
+#include "capu/util/StaticAllocator.h"
 
 namespace capu
 {
     /**
      * Queue. A container to which one can push and pop objects to and from the same side. The operations are not thread safe.
      */
-    template <typename T>
-    class Queue : private List<T>
+    template <class T, class A = Allocator<GenericListNode<T> >, class C = Comparator>
+    class Queue : private List<T, A, C>
     {
     public:
         /**
@@ -98,7 +98,7 @@ namespace capu
          * @param list the list in which the elements are added.
          * @return CAPU_OK if all elements were added to the queue, CAPU_ERROR otherwise.
          */
-        status_t popAll(List<T>& list);
+        status_t popAll(List<T, A, C>& list);
 
         /**
          * Return size of the queue
@@ -117,91 +117,65 @@ namespace capu
          * Remove all elements from queue
          */
         void clear();
-
-        /**
-         * Swaps the queue with another queue
-         * @param other the other queue
-         */
-        Queue<T>& swap(Queue<T>& other);
     };
-
-
-    /*
-     * Implementation specialized swap for queue
-     */
-
-    template <typename T>
-    void swap(Queue<T>& first, Queue<T>& second)
-    {
-        first.swap(second);
-    }
-
 
     /*
      * Implementation queue
      */
 
-    template <typename T>
-    Queue<T>::Queue()
+    template <class T, class A, class C>
+    Queue<T, A, C>::Queue()
     {
     }
 
-    template <typename T>
-    Queue<T>::~Queue()
+    template <class T, class A, class C>
+    Queue<T, A, C>::~Queue()
     {
     }
 
-    template <typename T>
-    inline Queue<T>& Queue<T>::swap(Queue< T >& other)
+    template <class T, class A, class C>
+    inline T& Queue<T, A, C>::front()
     {
-        List<T>::swap(other);
-        return *this;
+        return List<T, A, C>::front();
     }
 
-
-    template <typename T>
-    inline T& Queue<T>::front()
+    template <class T, class A, class C>
+    inline const T& Queue<T, A, C>::front() const
     {
-        return List<T>::front();
+        return List<T, A, C>::front();
     }
 
-    template <typename T>
-    inline const T& Queue<T>::front() const
+    template <class T, class A, class C>
+    inline T& Queue<T, A, C>::back()
     {
-        return List<T>::front();
+        return List<T, A, C>::back();
     }
 
-    template <typename T>
-    inline T& Queue<T>::back()
+    template <class T, class A, class C>
+    inline const T& Queue<T, A, C>::back() const
     {
-        return List<T>::back();
+        return List<T, A, C>::back();
     }
 
-    template <typename T>
-    inline const T& Queue<T>::back() const
-    {
-        return List<T>::back();
-    }
-
-    template <typename T>
-    inline status_t Queue<T>::peek(T& element) const
+    template <class T, class A, class C>
+    inline status_t Queue<T, A, C>::peek(T& element) const
     {
         if (empty())
         {
             return CAPU_EINVAL;
         }
-        element = List<T>::front();
+        element = List<T, A, C>::front();
         return CAPU_OK;
     }
 
-    template <typename T>
-    inline status_t Queue<T>::pop(T* element)
+    template <class T, class A, class C>
+    inline status_t Queue<T, A, C>::pop(T* element)
     {
-        return List<T>::erase(0, element);
+        return List<T, A, C>::erase(0, element);
     }
 
-    template <typename T>
-    inline status_t Queue<T>::popAll(List<T>& list)
+    template <class T, class A, class C>
+    inline status_t Queue<T, A, C>::popAll(List<T, A, C>& list)
     {
         T current;
         while (pop(&current) == CAPU_OK)
@@ -214,29 +188,37 @@ namespace capu
         return CAPU_OK;
     }
 
-    template <typename T>
-    inline uint_t Queue<T>::size() const
+    template <class T, class A, class C>
+    inline uint_t Queue<T, A, C>::size() const
     {
-        return List<T>::size();
+        return List<T, A, C>::size();
     }
 
-    template <typename T>
-    inline void Queue<T>::clear()
+    template <class T, class A, class C>
+    inline void Queue<T, A, C>::clear()
     {
-        List<T>::clear();
+        List<T, A, C>::clear();
     }
 
-    template <typename T>
-    inline bool_t Queue<T>::empty() const
+    template <class T, class A, class C>
+    inline bool_t Queue<T, A, C>::empty() const
     {
-        return List<T>::isEmpty();
+        return List<T, A, C>::isEmpty();
     }
 
-    template <typename T>
-    inline status_t Queue<T>::push(const T& element)
+    template <class T, class A, class C>
+    inline status_t Queue<T, A, C>::push(const T& element)
     {
-        return List<T>::insert(element);
+        return List<T, A, C>::insert(element);
     }
+
+    /**
+     * A queue class with a defined amount of static memory.
+     */
+     template<typename T, uint32_t COUNT, class C = Comparator>
+     class StaticQueue: public Queue<T, StaticAllocator<GenericListNode<T>, COUNT>, C>
+     {
+     };
 }
 
 #endif /* CAPU_QUEUE_H */
