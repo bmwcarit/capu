@@ -125,6 +125,17 @@ namespace capu
         }
     };
 
+    struct TcpEmptyTestSender: public TestTcpSocketSender
+    {
+    	typedef uint32_t VALUE_TYPE;
+        static void Send(TcpSocket& socket, const uint32_t&)
+        {
+        	char buf[1];
+            SendToSocket(socket, buf, 0);
+        }
+    };
+
+
     template<class T>
     class TestTcpSenderRunnable: public Runnable
     {
@@ -302,5 +313,63 @@ namespace capu
         EXPECT_STREQ("Hello World", stringResult.c_str());
         EXPECT_FLOAT_EQ(Math::LN2_f, floatResult);
         EXPECT_EQ(true, boolResult);
+    }
+
+    TEST_F(TcpSocketInputStreamTest, ReceiveNoData)
+    {
+        TcpServerSocket serverSocket;
+        serverSocket.bind(0);
+        serverSocket.listen(10);
+
+        TestTcpSenderRunnable<TcpInt32TestSender> testSender(5, serverSocket.port());
+        Thread thread;
+        thread.start(testSender);
+
+        TcpSocket* socket = serverSocket.accept();
+
+        TcpSocketInputStream inStream(*socket);
+
+        // receive the sent value
+        int32_t resultValue = 0;
+        inStream >> resultValue;
+        EXPECT_EQ(5, resultValue);
+
+        // receive one more time, should receive nothing
+        resultValue = 0;
+        inStream >> resultValue;
+        EXPECT_EQ(0, resultValue);
+
+        thread.join();
+
+        delete socket;
+        serverSocket.close();
+    }
+
+    TEST_F(TcpSocketInputStreamTest, ReceiveFail)
+    {
+        TcpServerSocket serverSocket;
+        serverSocket.bind(0);
+        serverSocket.listen(10);
+
+        TestTcpSenderRunnable<TcpInt32TestSender> testSender(5, serverSocket.port());
+        Thread thread;
+        thread.start(testSender);
+
+        TcpSocket* socket = serverSocket.accept();
+
+        TcpSocketInputStream inStream(*socket);
+
+        // close the socket to make the after receive to fail
+        socket->close();
+
+        // receive the sent value
+        int32_t resultValue = 0;
+        inStream >> resultValue;
+        EXPECT_EQ(0, resultValue);
+
+        thread.join();
+
+        delete socket;
+        serverSocket.close();
     }
 }
