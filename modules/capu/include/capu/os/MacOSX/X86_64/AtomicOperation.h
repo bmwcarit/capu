@@ -17,6 +17,7 @@
 #ifndef CAPU_MACOSX_X86_64_ATOMICOPERATION_H
 #define CAPU_MACOSX_X86_64_ATOMICOPERATION_H
 
+#include <capu/os/MacOSX/AtomicOperation.h>
 
 namespace capu
 {
@@ -24,57 +25,16 @@ namespace capu
     {
         namespace arch
         {
-            class AtomicOperation
+            class AtomicOperation: private capu::os::AtomicOperation
             {
             public:
-                static uint32_t AtomicAdd32(volatile uint32_t& mem, uint32_t summand);
-                static uint32_t AtomicSub32(volatile uint32_t& mem, uint32_t subtrahend);
-                static uint32_t AtomicInc32(volatile uint32_t& mem);
-                static uint32_t AtomicDec32(volatile uint32_t& mem);
+                using capu::os::AtomicOperation::AtomicAdd;
+                using capu::os::AtomicOperation::AtomicSub;
+                using capu::os::AtomicOperation::AtomicInc;
+                using capu::os::AtomicOperation::AtomicDec;
             };
-
-            inline
-            uint32_t
-            AtomicOperation::AtomicAdd32(volatile uint32_t& mem, uint32_t summand)
-            {
-                //This code comes from the Apache APR project (apache-apr/1.4.2/atomic/unix/ia32.c)
-                asm volatile("lock; xadd %0,%1"
-                             : "=r"(summand), "=m"(mem)
-                             : "0"(summand), "m"(mem)
-                             : "memory", "cc");
-
-                return summand;
-            }
-
-            inline
-            uint32_t
-            AtomicOperation::AtomicSub32(volatile uint32_t& mem, uint32_t subtrahend)
-            {
-                //This code comes from the Apache APR project (apache-apr/1.4.2/atomic/unix/ia32.c)
-
-                int32_t summand = subtrahend * -1;
-                asm volatile("lock; xadd %0,%1"
-                             : "=r"(summand), "=m"(mem)
-                             : "0"(summand), "m"(mem)
-                             : "memory", "cc");
-
-                return summand;
-            }
-
-            inline
-            uint32_t
-            AtomicOperation::AtomicInc32(volatile uint32_t& mem)
-            {
-                return AtomicAdd32(mem, 1);
-            }
-
-            inline
-            uint32_t
-            AtomicOperation::AtomicDec32(volatile uint32_t& mem)
-            {
-                return AtomicSub32(mem, 1);
-            }
         }
     }
 }
+
 #endif
