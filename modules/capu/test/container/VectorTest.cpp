@@ -440,7 +440,6 @@ namespace capu
         EXPECT_EQ(2u, vector[3]);
         EXPECT_EQ(4u, vector[4]);
     }
-
     TEST_F(VectorTest, ForEach)
     {
         capu::Vector<capu::int32_t> vector;
@@ -486,6 +485,5 @@ namespace capu
         EXPECT_FALSE(vector3 == vector2);
     
     }
-
-
 }
+
