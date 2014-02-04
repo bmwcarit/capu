@@ -1,9 +1,17 @@
-/3psw
-/build
-/build_64
-/deliverable
+3psw/
+[Bb]uild*/
+[Dd]eliverable*/
 *~
 *\.kdev4
 *\.orig
 *\.swp
 \.kdev_include_paths
+
+# Mac OS X related files
+
+.DS_Store
+.Spotlight-V100
+.Trashes
+*.swp
+*.lock
+profile
