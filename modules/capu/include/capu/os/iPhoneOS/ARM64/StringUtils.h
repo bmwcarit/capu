@@ -23,18 +23,18 @@ namespace capu
     {
         namespace arch
         {
-            class StringUtils: private capu::os::StringUtils
+            class StringUtils: private capu::iphoneos::StringUtils
             {
             public:
-                using capu::os::StringUtils::Strncpy;
-                using capu::os::StringUtils::Sprintf;
-                using capu::os::StringUtils::Vsprintf;
-                using capu::os::StringUtils::Vscprintf;
-                using capu::os::StringUtils::Strlen;
-                using capu::os::StringUtils::Strcmp;
-                using capu::os::StringUtils::LastIndexOf;
-                using capu::os::StringUtils::IndexOf;
-                using capu::os::StringUtils::StartsWith;
+                using capu::iphoneos::StringUtils::Strncpy;
+                using capu::iphoneos::StringUtils::Sprintf;
+                using capu::iphoneos::StringUtils::Vsprintf;
+                using capu::iphoneos::StringUtils::Vscprintf;
+                using capu::iphoneos::StringUtils::Strlen;
+                using capu::iphoneos::StringUtils::Strcmp;
+                using capu::iphoneos::StringUtils::LastIndexOf;
+                using capu::iphoneos::StringUtils::IndexOf;
+                using capu::iphoneos::StringUtils::StartsWith;
             };
         }
     }

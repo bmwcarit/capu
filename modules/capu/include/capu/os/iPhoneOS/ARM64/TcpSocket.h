@@ -23,29 +23,29 @@ namespace capu
     {
         namespace arch
         {
-            typedef capu::os::SocketDescription SocketDescription;
+            typedef capu::iphoneos::SocketDescription SocketDescription;
 
-            class TcpSocket: private capu::os::TcpSocket
+            class TcpSocket: private capu::iphoneos::TcpSocket
             {
             public:
                TcpSocket();
                TcpSocket(const SocketDescription& socketDescription);
 
-                using capu::os::TcpSocket::send;
-                using capu::os::TcpSocket::receive;
-                using capu::os::TcpSocket::close;
-                using capu::os::TcpSocket::connect;
-                using capu::os::TcpSocket::setBufferSize;
-                using capu::os::TcpSocket::setLingerOption;
-                using capu::os::TcpSocket::setNoDelay;
-                using capu::os::TcpSocket::setKeepAlive;
-                using capu::os::TcpSocket::setTimeout;
-                using capu::os::TcpSocket::getBufferSize;
-                using capu::os::TcpSocket::getLingerOption;
-                using capu::os::TcpSocket::getNoDelay;
-                using capu::os::TcpSocket::getKeepAlive;
-                using capu::os::TcpSocket::getTimeout;
-                using capu::os::TcpSocket::getRemoteAddress;
+                using capu::iphoneos::TcpSocket::send;
+                using capu::iphoneos::TcpSocket::receive;
+                using capu::iphoneos::TcpSocket::close;
+                using capu::iphoneos::TcpSocket::connect;
+                using capu::iphoneos::TcpSocket::setBufferSize;
+                using capu::iphoneos::TcpSocket::setLingerOption;
+                using capu::iphoneos::TcpSocket::setNoDelay;
+                using capu::iphoneos::TcpSocket::setKeepAlive;
+                using capu::iphoneos::TcpSocket::setTimeout;
+                using capu::iphoneos::TcpSocket::getBufferSize;
+                using capu::iphoneos::TcpSocket::getLingerOption;
+                using capu::iphoneos::TcpSocket::getNoDelay;
+                using capu::iphoneos::TcpSocket::getKeepAlive;
+                using capu::iphoneos::TcpSocket::getTimeout;
+                using capu::iphoneos::TcpSocket::getRemoteAddress;
             };
 
             inline
@@ -55,7 +55,7 @@ namespace capu
 
             inline
             TcpSocket::TcpSocket(const SocketDescription& socketDescription)
-                : capu::os::TcpSocket(socketDescription)
+                : capu::iphoneos::TcpSocket(socketDescription)
             {
 
             }

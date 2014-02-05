@@ -25,11 +25,11 @@ namespace capu
     {
         namespace arch
         {
-            class Console: private capu::os::Console
+            class Console: private capu::iphoneos::Console
             {
             public:
-                using capu::os::Console::IsInputAvailable;
-                using capu::os::Console::Print;
+                using capu::iphoneos::Console::IsInputAvailable;
+                using capu::iphoneos::Console::Print;
             };
         }
     }

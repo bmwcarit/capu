@@ -20,7 +20,7 @@
 
 namespace capu
 {
-    namespace os
+    namespace iphoneos
     {
         class NumericLimits: private capu::posix::NumericLimits
         {

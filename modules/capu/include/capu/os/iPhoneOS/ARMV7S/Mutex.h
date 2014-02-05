@@ -24,7 +24,7 @@ namespace capu
     {
         namespace arch
         {
-            class Mutex: public capu::os::Mutex
+            class Mutex: public capu::iphoneos::Mutex
             {
             };
         }

@@ -23,11 +23,11 @@ namespace capu
     {
         namespace arch
         {
-            class NumericLimits: private capu::os::NumericLimits
+            class NumericLimits: private capu::iphoneos::NumericLimits
             {
             public:
-                using capu::os::NumericLimits::Max;
-                using capu::os::NumericLimits::Min;
+                using capu::iphoneos::NumericLimits::Max;
+                using capu::iphoneos::NumericLimits::Min;
             };
         }
     }

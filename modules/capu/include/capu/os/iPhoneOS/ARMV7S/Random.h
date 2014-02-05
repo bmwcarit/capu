@@ -23,12 +23,12 @@ namespace capu
     {
         namespace arch
         {
-            class Random: private capu::os::Random
+            class Random: private capu::iphoneos::Random
             {
             public:
-                using capu::os::Random::nextUInt8;
-                using capu::os::Random::nextUInt16;
-                using capu::os::Random::nextUInt32;
+                using capu::iphoneos::Random::nextUInt8;
+                using capu::iphoneos::Random::nextUInt16;
+                using capu::iphoneos::Random::nextUInt32;
             };
         }
     }

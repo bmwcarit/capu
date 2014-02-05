@@ -23,18 +23,18 @@ namespace capu
     {
         namespace arch
         {
-            class UdpSocket: private capu::os::UdpSocket
+            class UdpSocket: private capu::iphoneos::UdpSocket
             {
             public:
-                using capu::os::UdpSocket::bind;
-                using capu::os::UdpSocket::send;
-                using capu::os::UdpSocket::receive;
-                using capu::os::UdpSocket::close;
-                using capu::os::UdpSocket::setBufferSize;
-                using capu::os::UdpSocket::setTimeout;
-                using capu::os::UdpSocket::getBufferSize;
-                using capu::os::UdpSocket::getTimeout;
-                using capu::os::UdpSocket::getSocketAddrInfo;
+                using capu::iphoneos::UdpSocket::bind;
+                using capu::iphoneos::UdpSocket::send;
+                using capu::iphoneos::UdpSocket::receive;
+                using capu::iphoneos::UdpSocket::close;
+                using capu::iphoneos::UdpSocket::setBufferSize;
+                using capu::iphoneos::UdpSocket::setTimeout;
+                using capu::iphoneos::UdpSocket::getBufferSize;
+                using capu::iphoneos::UdpSocket::getTimeout;
+                using capu::iphoneos::UdpSocket::getSocketAddrInfo;
             };
         }
     }

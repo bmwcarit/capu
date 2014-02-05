@@ -23,41 +23,41 @@ namespace capu
     {
         namespace arch
         {
-            class File: private capu::os::File
+            class File: private capu::iphoneos::File
             {
             public:
                 File(const String& path);
                 File(const File& parent, const capu::String& path);
-                using capu::os::File::open;
-                using capu::os::File::isOpen;
-                using capu::os::File::isEof;
-                using capu::os::File::read;
-                using capu::os::File::write;
-                using capu::os::File::flush;
-                using capu::os::File::close;
-                using capu::os::File::createFile;
-                using capu::os::File::createDirectory;
-                using capu::os::File::remove;
-                using capu::os::File::exists;
-                using capu::os::File::renameTo;
-                using capu::os::File::copyTo;
-                using capu::os::File::getFileName;
-                using capu::os::File::getExtension;
-                using capu::os::File::getPath;
-                using capu::os::File::getParentPath;
-                using capu::os::File::getSizeInBytes;
-                using capu::os::File::isDirectory;
+                using capu::iphoneos::File::open;
+                using capu::iphoneos::File::isOpen;
+                using capu::iphoneos::File::isEof;
+                using capu::iphoneos::File::read;
+                using capu::iphoneos::File::write;
+                using capu::iphoneos::File::flush;
+                using capu::iphoneos::File::close;
+                using capu::iphoneos::File::createFile;
+                using capu::iphoneos::File::createDirectory;
+                using capu::iphoneos::File::remove;
+                using capu::iphoneos::File::exists;
+                using capu::iphoneos::File::renameTo;
+                using capu::iphoneos::File::copyTo;
+                using capu::iphoneos::File::getFileName;
+                using capu::iphoneos::File::getExtension;
+                using capu::iphoneos::File::getPath;
+                using capu::iphoneos::File::getParentPath;
+                using capu::iphoneos::File::getSizeInBytes;
+                using capu::iphoneos::File::isDirectory;
             };
 
             inline
             File::File(const String& path)
-                : capu::os::File(path)
+                : capu::iphoneos::File(path)
             {
             }
 
             inline
             File::File(const File& parent, const capu::String& path)
-                : capu::os::File(parent, path)
+                : capu::iphoneos::File(parent, path)
             {
             }
         }

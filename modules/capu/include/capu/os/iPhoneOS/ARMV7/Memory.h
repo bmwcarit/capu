@@ -23,16 +23,16 @@ namespace capu
     {
         namespace arch
         {
-            class Memory: private capu::os::Memory
+            class Memory: private capu::iphoneos::Memory
             {
             public:
-                using capu::os::Memory::Copy;
-                using capu::os::Memory::CopyObject;
-                using capu::os::Memory::Compare;
-                using capu::os::Memory::Move;
-                using capu::os::Memory::MoveObject;
-                using capu::os::Memory::Set;
-                using capu::os::Memory::CurrentMemoryUsage;
+                using capu::iphoneos::Memory::Copy;
+                using capu::iphoneos::Memory::CopyObject;
+                using capu::iphoneos::Memory::Compare;
+                using capu::iphoneos::Memory::Move;
+                using capu::iphoneos::Memory::MoveObject;
+                using capu::iphoneos::Memory::Set;
+                using capu::iphoneos::Memory::CurrentMemoryUsage;
             };
         }
     }

@@ -23,10 +23,10 @@ namespace capu
     {
         namespace arch
         {
-            class Debug: private capu::os::Debug
+            class Debug: private capu::iphoneos::Debug
             {
             public:
-                using capu::os::Debug::Assert;
+                using capu::iphoneos::Debug::Assert;
             };
         }
     }
