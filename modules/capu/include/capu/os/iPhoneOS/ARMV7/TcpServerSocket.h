@@ -24,14 +24,14 @@ namespace capu
     {
         namespace arch
         {
-            class TcpServerSocket: private capu::os::TcpServerSocket
+            class TcpServerSocket: private capu::iphoneos::TcpServerSocket
             {
             public:
-                using capu::os::TcpServerSocket::accept;
-                using capu::os::TcpServerSocket::close;
-                using capu::os::TcpServerSocket::bind;
-                using capu::os::TcpServerSocket::listen;
-                using capu::os::TcpServerSocket::port;
+                using capu::iphoneos::TcpServerSocket::accept;
+                using capu::iphoneos::TcpServerSocket::close;
+                using capu::iphoneos::TcpServerSocket::bind;
+                using capu::iphoneos::TcpServerSocket::listen;
+                using capu::iphoneos::TcpServerSocket::port;
             };
         }
     }

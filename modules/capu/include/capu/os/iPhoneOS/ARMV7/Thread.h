@@ -23,16 +23,16 @@ namespace capu
     {
         namespace arch
         {
-            class Thread: private capu::os::Thread
+            class Thread: private capu::iphoneos::Thread
             {
             public:
-                using capu::os::Thread::start;
-                using capu::os::Thread::join;
-                using capu::os::Thread::cancel;
-                using capu::os::Thread::resetCancel;
-                using capu::os::Thread::getState;
-                using capu::os::Thread::Sleep;
-                using capu::os::Thread::CurrentThreadId;
+                using capu::iphoneos::Thread::start;
+                using capu::iphoneos::Thread::join;
+                using capu::iphoneos::Thread::cancel;
+                using capu::iphoneos::Thread::resetCancel;
+                using capu::iphoneos::Thread::getState;
+                using capu::iphoneos::Thread::Sleep;
+                using capu::iphoneos::Thread::CurrentThreadId;
             };
         }
     }

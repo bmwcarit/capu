@@ -23,29 +23,29 @@ namespace capu
     {
         namespace arch
         {
-            class Math: private capu::os::Math
+            class Math: private capu::iphoneos::Math
             {
             public:
-                using capu::os::Math::PI_f;
-                using capu::os::Math::PI_d;
-                using capu::os::Math::LN2_f;
-                using capu::os::Math::LN2_d;
-                using capu::os::Math::Ceil;
-                using capu::os::Math::Floor;
-                using capu::os::Math::Abs;
-                using capu::os::Math::Sqrt;
-                using capu::os::Math::Pow2;
-                using capu::os::Math::Pow;
-                using capu::os::Math::Cos;
-                using capu::os::Math::Sin;
-                using capu::os::Math::Tan;
-                using capu::os::Math::ArcCos;
-                using capu::os::Math::ArcSin;
-                using capu::os::Math::ArcTan;
-                using capu::os::Math::Rad2Deg;
-                using capu::os::Math::Deg2Rad;
-                using capu::os::Math::Log2;
-                using capu::os::Math::Exp;
+                using capu::iphoneos::Math::PI_f;
+                using capu::iphoneos::Math::PI_d;
+                using capu::iphoneos::Math::LN2_f;
+                using capu::iphoneos::Math::LN2_d;
+                using capu::iphoneos::Math::Ceil;
+                using capu::iphoneos::Math::Floor;
+                using capu::iphoneos::Math::Abs;
+                using capu::iphoneos::Math::Sqrt;
+                using capu::iphoneos::Math::Pow2;
+                using capu::iphoneos::Math::Pow;
+                using capu::iphoneos::Math::Cos;
+                using capu::iphoneos::Math::Sin;
+                using capu::iphoneos::Math::Tan;
+                using capu::iphoneos::Math::ArcCos;
+                using capu::iphoneos::Math::ArcSin;
+                using capu::iphoneos::Math::ArcTan;
+                using capu::iphoneos::Math::Rad2Deg;
+                using capu::iphoneos::Math::Deg2Rad;
+                using capu::iphoneos::Math::Log2;
+                using capu::iphoneos::Math::Exp;
             };
         }
     }

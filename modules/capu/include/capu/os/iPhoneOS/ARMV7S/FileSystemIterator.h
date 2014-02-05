@@ -23,20 +23,20 @@ namespace capu
     {
         namespace arch
         {
-            class FileSystemIterator: private capu::os::FileSystemIterator
+            class FileSystemIterator: private capu::iphoneos::FileSystemIterator
             {
             public:
                 FileSystemIterator(capu::File root);
 
-                using capu::os::FileSystemIterator::next;
-                using capu::os::FileSystemIterator::operator*;
-                using capu::os::FileSystemIterator::operator->;
-                using capu::os::FileSystemIterator::isValid;
-                using capu::os::FileSystemIterator::setStepIntoSubdirectories;
+                using capu::iphoneos::FileSystemIterator::next;
+                using capu::iphoneos::FileSystemIterator::operator*;
+                using capu::iphoneos::FileSystemIterator::operator->;
+                using capu::iphoneos::FileSystemIterator::isValid;
+                using capu::iphoneos::FileSystemIterator::setStepIntoSubdirectories;
             };
 
             inline FileSystemIterator::FileSystemIterator(capu::File root)
-                : capu::os::FileSystemIterator(root)
+                : capu::iphoneos::FileSystemIterator(root)
             {
             }
 

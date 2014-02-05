@@ -19,7 +19,7 @@
 
 namespace capu
 {
-    namespace os
+    namespace iphoneos
     {
         class CondVar: private capu::posix::CondVar
         {

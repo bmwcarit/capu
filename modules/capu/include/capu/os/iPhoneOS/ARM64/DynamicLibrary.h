@@ -23,19 +23,19 @@ namespace capu
     {
         namespace arch
         {
-            class DynamicLibrary: private capu::os::DynamicLibrary
+            class DynamicLibrary: private capu::iphoneos::DynamicLibrary
             {
             public:
                 DynamicLibrary(String path);
-                using capu::os::DynamicLibrary::load;
-                using capu::os::DynamicLibrary::unload;
-                using capu::os::DynamicLibrary::loadSymbol;
-                using capu::os::DynamicLibrary::getPath;
+                using capu::iphoneos::DynamicLibrary::load;
+                using capu::iphoneos::DynamicLibrary::unload;
+                using capu::iphoneos::DynamicLibrary::loadSymbol;
+                using capu::iphoneos::DynamicLibrary::getPath;
             };
 
             inline
             DynamicLibrary::DynamicLibrary(String path)
-                : capu::os::DynamicLibrary(path)
+                : capu::iphoneos::DynamicLibrary(path)
             {
             }
         }

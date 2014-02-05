@@ -19,7 +19,7 @@
 
 namespace capu
 {
-    namespace os
+    namespace iphoneos
     {
             class File: private capu::posix::File
             {

@@ -23,13 +23,13 @@ namespace capu
     {
         namespace arch
         {
-            class AtomicOperation: private capu::os::AtomicOperation
+            class AtomicOperation: private capu::iphoneos::AtomicOperation
             {
             public:
-                using capu::os::AtomicOperation::AtomicAdd;
-                using capu::os::AtomicOperation::AtomicSub;
-                using capu::os::AtomicOperation::AtomicInc;
-                using capu::os::AtomicOperation::AtomicDec;
+                using capu::iphoneos::AtomicOperation::AtomicAdd;
+                using capu::iphoneos::AtomicOperation::AtomicSub;
+                using capu::iphoneos::AtomicOperation::AtomicInc;
+                using capu::iphoneos::AtomicOperation::AtomicDec;
             };
         }
     }

@@ -23,18 +23,18 @@ namespace capu
     {
         namespace arch
         {
-            class Semaphore: private capu::os::Semaphore
+            class Semaphore: private capu::iphoneos::Semaphore
             {
             public:
                 Semaphore(uint32_t initialPermits);
-                using capu::os::Semaphore::aquire;
-                using capu::os::Semaphore::tryAquire;
-                using capu::os::Semaphore::release;
+                using capu::iphoneos::Semaphore::aquire;
+                using capu::iphoneos::Semaphore::tryAquire;
+                using capu::iphoneos::Semaphore::release;
             };
 
             inline
             Semaphore::Semaphore(uint32_t initialPermits)
-                : capu::os::Semaphore::Semaphore(initialPermits)
+                : capu::iphoneos::Semaphore::Semaphore(initialPermits)
             {
             }
         }

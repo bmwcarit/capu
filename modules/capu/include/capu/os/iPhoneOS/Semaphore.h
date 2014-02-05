@@ -24,7 +24,7 @@
 
 namespace capu
 {
-    namespace os
+    namespace iphoneos
     {
         class Semaphore
         {

@@ -24,10 +24,10 @@ namespace capu
     {
         namespace arch
         {
-            class Time : private capu::os::Time
+            class Time : private capu::iphoneos::Time
             {
             public:
-                using capu::os::Time::GetMilliseconds;
+                using capu::iphoneos::Time::GetMilliseconds;
             };
         }
     }

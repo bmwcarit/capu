@@ -19,7 +19,7 @@
 
 namespace capu
 {
-    namespace os
+    namespace iphoneos
     {
         class Debug: private capu::posix::Debug
         {

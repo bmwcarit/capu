@@ -23,12 +23,12 @@ namespace capu
     {
         namespace arch
         {
-            class CondVar: private capu::os::CondVar
+            class CondVar: private capu::iphoneos::CondVar
             {
             public:
-                using capu::os::CondVar::signal;
-                using capu::os::CondVar::wait;
-                using capu::os::CondVar::broadcast;
+                using capu::iphoneos::CondVar::signal;
+                using capu::iphoneos::CondVar::wait;
+                using capu::iphoneos::CondVar::broadcast;
             };
         }
     }

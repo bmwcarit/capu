@@ -20,7 +20,7 @@
 
 namespace capu
 {
-    namespace os
+    namespace iphoneos
     {
         class Memory: private capu::generic::Memory
         {
