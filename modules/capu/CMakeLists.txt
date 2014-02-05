@@ -145,6 +145,7 @@ IF("${TARGET_OS}" STREQUAL "Integrity")
     ACME_ADD_LINKER_FLAG("-kernel -lutil")
 ENDIF()
 
-ACME_ADD_DEPENDENCY(DynamicTestLibraryProject)
-
+IF( NOT ${TARGET_OS} STREQUAL "iPhoneOS" AND NOT ${TARGET_OS} STREQUAL "iPhoneSimulatorOS" )
+    ACME_ADD_DEPENDENCY(DynamicTestLibraryProject)
+ENDIF()
 ACME_CPPCHECK_TARGET()

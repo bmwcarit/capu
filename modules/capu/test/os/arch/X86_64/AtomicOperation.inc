@@ -17,21 +17,20 @@
 TEST(AtomicOperation, Add_NoOverflow_X86_64)
 {
     capu::uint32_t val = 4294967295u;
-    capu::uint32_t ret = capu::AtomicOperation::AtomicAdd32(val, 3);
+    capu::uint32_t ret = capu::AtomicOperation::AtomicAdd(val, 3);
     EXPECT_EQ((capu::uint32_t) 4294967298u, val);
     EXPECT_EQ(ret, 4294967295u);
 }
 
-//disabled until *64 methods are implemented
-/*TEST(AtomicOperation,Add64_Overflow_X86_64) {
+TEST(AtomicOperation,Add64_Overflow_X86_64) {
   capu::uint64_t val = 18446744073709551615u;
-  capu::AtomicOperation::AtomicAdd64(val, 3);
+  capu::AtomicOperation::AtomicAdd(val, 3);
   EXPECT_EQ((capu::uint32_t) 2,val);
 }
 
 TEST(AtomicOperation,Sub64_Overflow_X86_64) {
   capu::uint64_t val = 0;
-  capu::AtomicOperation::AtomicSub64(val, 5);
-  EXPECT_EQ((capu::uint32_t) 18446744073709551610u,val);
+  capu::AtomicOperation::AtomicSub(val, 5);
+  EXPECT_EQ(18446744073709551611u,val);
 }
-*/
+
