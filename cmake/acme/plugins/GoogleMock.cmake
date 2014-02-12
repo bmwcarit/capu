@@ -18,7 +18,8 @@ IF(NOT ${CONFIG_BUILD_UNITTESTS})
 	UNSET(BUILD_GoogleMock CACHE)
 ELSE()
 	IF("${CONFIG_GTEST_URL}" STREQUAL "")
-		SET(CONFIG_GTEST_URL "http://googlemock.googlecode.com/files/gmock-1.6.0.zip")
+		SET(CONFIG_GTEST_URL "http://googlemock.googlecode.com/files/gmock-1.7.0.zip")
+		SET(CONFIG_GTEST_URL_MD5_CHECKSUM "073b984d8798ea1594f5e44d85b20d66")
 	ENDIF()
 
 	SET(NEEDED_LIBRARIES "Thread")
@@ -30,7 +31,7 @@ ELSE()
 						LIBDIRS "src/GoogleMock-build" "src/GoogleMock-build/gtest"
 						INCLUDE_DIRS "src/GoogleMock/include" "src/GoogleMock/gtest/include"
 						URL "${CONFIG_GTEST_URL}"
-						CHECKSUM "f547f47321ca88d3965ca2efdcc2a3c1"
+						CHECKSUM "${CONFIG_GTEST_URL_MD5_CHECKSUM}"
 						CMAKE_ARGUMENTS "gtest_force_shared_crt:Bool=1"
 						REQUIRED_PACKAGES "${NEEDED_LIBRARIES}"
 						)
