@@ -21,6 +21,12 @@ namespace capu
 
         }
 
+        virtual void doVirtualStuff(uint32_t)
+        {
+        }
+
+        virtual void doPureVirtualStuff(uint32_t value) = 0;
+
         uint32_t doNonStaticStuff(uint32_t value)
         {
             return value;
@@ -30,6 +36,13 @@ namespace capu
         {
             return value1 + value2;
         }
+    };
+
+    class MockSimpleClass: public SimpleClass
+    {
+    public:
+        MOCK_METHOD1(doVirtualStuff, void(uint32_t value));
+        MOCK_METHOD1(doPureVirtualStuff, void(uint32_t value));
     };
 
     DelegateTest::DelegateTest()
@@ -80,25 +93,43 @@ namespace capu
 
     TEST_F(DelegateTest, DelegateStaticMemberFunctionWithReturnValue)
     {
-        Delegate<uint32_t, uint32_t> delegate = Delegate<uint32_t, uint32_t>::Create<&SimpleClass::DoStaticStuff>();
+        Delegate<uint32_t, uint32_t> delegate = Delegate<uint32_t, uint32_t>::Create<&MockSimpleClass::DoStaticStuff>();
 
         EXPECT_EQ(5u, delegate(5u));
     }
 
     TEST_F(DelegateTest, DelegateNonStaticMemberFunctionWithReturnValue)
     {
-        SimpleClass simpleClass;
-        Delegate<uint32_t, uint32_t> delegate = Delegate<uint32_t, uint32_t>::Create<SimpleClass, &SimpleClass::doNonStaticStuff>(simpleClass);
+        MockSimpleClass simpleClass;
+        Delegate<uint32_t, uint32_t> delegate = Delegate<uint32_t, uint32_t>::Create<SimpleClass, &MockSimpleClass::doNonStaticStuff>(simpleClass);
 
         EXPECT_EQ(5u, delegate(5u));
     }
 
     TEST_F(DelegateTest, DelegateNonStaticMemberFuncionWithTwoParametersAndReturnValue)
     {
-        SimpleClass simpleClass;
-        Delegate<uint32_t, uint32_t, uint32_t> delegate = Delegate<uint32_t, uint32_t, uint32_t>::Create<SimpleClass, &SimpleClass::doMoreNonStaticStuff>(simpleClass);
+        MockSimpleClass simpleClass;
+        Delegate<uint32_t, uint32_t, uint32_t> delegate = Delegate<uint32_t, uint32_t, uint32_t>::Create<SimpleClass, &MockSimpleClass::doMoreNonStaticStuff>(simpleClass);
 
         EXPECT_EQ(9u, delegate(5u, 4u));
+    }
+
+    TEST_F(DelegateTest, DelegateVirtualMethod)
+    {
+        MockSimpleClass simpleClass;
+        Delegate<void, uint32_t> delegate = Delegate<void, uint32_t>::Create<SimpleClass, &SimpleClass::doVirtualStuff>(simpleClass);
+
+        EXPECT_CALL(simpleClass, doVirtualStuff(5));
+        delegate(5);
+    }
+
+    TEST_F(DelegateTest, DelegatePureVirtualMethod)
+    {
+        MockSimpleClass simpleClass;
+        Delegate<void, uint32_t> delegate = Delegate<void, uint32_t>::Create<SimpleClass, &SimpleClass::doPureVirtualStuff>(simpleClass);
+
+        EXPECT_CALL(simpleClass, doPureVirtualStuff(5));
+        delegate(5);
     }
 }
 
