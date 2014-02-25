@@ -89,7 +89,7 @@ namespace capu
         bool_t exists() const;
         /**
          * Delete the file.
-         * @return true, if deletion was successfull.
+         * @return CAPU_OK, if deletion was successfull.
          */
         status_t remove();
         /**
