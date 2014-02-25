@@ -68,7 +68,8 @@ namespace capu
 
     TEST_F(StringOutputStreamTest, WriteInt64)
     {
-        outputStream << 0x6464646432323232L;
+        capu::int64_t value = 0x6464646432323232LL;
+        outputStream << value;
         outputStream.flush();
         EXPECT_STREQ("7234017282965516850", outputStream.c_str());
         EXPECT_EQ(19U, outputStream.length());
@@ -76,7 +77,8 @@ namespace capu
 
     TEST_F(StringOutputStreamTest, WriteUInt64)
     {
-        outputStream << 0x6464646432323232uL;
+        capu::uint64_t value = 0x6464646432323232uLL;
+        outputStream << value;
         outputStream.flush();
         EXPECT_STREQ("7234017282965516850", outputStream.c_str());
         EXPECT_EQ(19U, outputStream.length());
