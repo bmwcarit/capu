@@ -22,16 +22,16 @@
 
 struct AtomicGlobals
 {
-    static capu::uint32_t var;
-    static capu::uint32_t sum;
-    static capu::uint32_t n;
+    static capu::uint_t var;
+    static capu::uint_t sum;
+    static capu::uint_t n;
     static capu::Mutex mutex;
 
 };
 
-capu::uint32_t AtomicGlobals::var = 1;
-capu::uint32_t AtomicGlobals::sum = 0;
-capu::uint32_t AtomicGlobals::n = 100000;
+capu::uint_t AtomicGlobals::var = 1;
+capu::uint_t AtomicGlobals::sum = 0;
+capu::uint_t AtomicGlobals::n = 100000;
 capu::Mutex AtomicGlobals::mutex;
 
 class AtomicOperationIncrementThread : public capu::Runnable
@@ -39,10 +39,10 @@ class AtomicOperationIncrementThread : public capu::Runnable
 public:
     void run()
     {
-        capu::uint32_t oldValue = 0;
-        for (capu::uint32_t i = 0; i < AtomicGlobals::n; i++)
+        capu::uint_t oldValue = 0;
+        for (capu::uint_t i = 0; i < AtomicGlobals::n; i++)
         {
-            oldValue += capu::AtomicOperation::AtomicInc32(AtomicGlobals::var);
+            oldValue += capu::AtomicOperation::AtomicInc(AtomicGlobals::var);
         }
 
         AtomicGlobals::mutex.lock();
@@ -56,10 +56,10 @@ class AtomicOperationDecrementThread : public capu::Runnable
 public:
     void run()
     {
-        capu::uint32_t oldValue = 0;
-        for (capu::uint32_t i = 0; i < AtomicGlobals::n; i++)
+        capu::uint_t oldValue = 0;
+        for (capu::uint_t i = 0; i < AtomicGlobals::n; i++)
         {
-            oldValue += capu::AtomicOperation::AtomicDec32(AtomicGlobals::var);
+            oldValue += capu::AtomicOperation::AtomicDec(AtomicGlobals::var);
         }
 
         AtomicGlobals::mutex.lock();
@@ -75,34 +75,54 @@ public:
 
 TEST(AtomicOperation, Add)
 {
-    capu::uint32_t val = 100;
-    capu::uint32_t ret = capu::AtomicOperation::AtomicAdd32(val, 3);
+    capu::uint_t val = 100;
+    capu::uint_t ret = capu::AtomicOperation::AtomicAdd(val, 3);
     EXPECT_EQ(103u, val);
     EXPECT_EQ(100u, ret);
+
+    capu::int_t val2 = -50;
+    capu::int_t ret2 = capu::AtomicOperation::AtomicAdd(val2, 3);
+    EXPECT_EQ(-47, val2);
+    EXPECT_EQ(-50, ret2);
 }
 
 TEST(AtomicOperation, Sub)
 {
-    capu::uint32_t val = 13;
-    capu::uint32_t ret = capu::AtomicOperation::AtomicSub32(val, 5);
+    capu::uint_t val = 13;
+    capu::uint_t ret = capu::AtomicOperation::AtomicSub(val, 5);
     EXPECT_EQ(8u, val);
     EXPECT_EQ(13u, ret);
+
+    capu::int_t val2 = -13;
+    capu::int_t ret2 = capu::AtomicOperation::AtomicSub(val2, 5);
+    EXPECT_EQ(-18, val2);
+    EXPECT_EQ(-13, ret2);
 }
 
 TEST(AtomicOperation, Inc)
 {
-    capu::uint32_t val = 1;
-    capu::uint32_t ret = capu::AtomicOperation::AtomicInc32(val);
+    capu::uint_t val = 1;
+    capu::uint_t ret = capu::AtomicOperation::AtomicInc(val);
     EXPECT_EQ(2u, val);
     EXPECT_EQ(1u, ret);
+
+    capu::int_t val2 = -10;
+    capu::int_t ret2 = capu::AtomicOperation::AtomicInc(val2);
+    EXPECT_EQ(-9, val2);
+    EXPECT_EQ(-10, ret2);
 }
 
 TEST(AtomicOperation, Dec)
 {
-    capu::uint32_t val = 3;
-    capu::uint32_t ret = capu::AtomicOperation::AtomicDec32(val);
+    capu::uint_t val = 3;
+    capu::uint_t ret = capu::AtomicOperation::AtomicDec(val);
     EXPECT_EQ(2u, val);
     EXPECT_EQ(3u, ret);
+
+    capu::int_t val2 = -10;
+    capu::int_t ret2 = capu::AtomicOperation::AtomicDec(val2);
+    EXPECT_EQ(-11, val2);
+    EXPECT_EQ(-10, ret2);
 }
 
 TEST(AtomicOperation, Atomicity)

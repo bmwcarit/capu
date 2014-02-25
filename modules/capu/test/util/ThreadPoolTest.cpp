@@ -37,7 +37,7 @@ public:
 
     void run()
     {
-        capu::AtomicOperation::AtomicAdd32(Globals::var, 5);
+        capu::AtomicOperation::AtomicAdd(Globals::var, 5);
         capu::Thread::Sleep(10);
     }
 };
@@ -54,7 +54,7 @@ public:
 
     void run()
     {
-        capu::AtomicOperation::AtomicAdd32(Globals::var, 5);
+        capu::AtomicOperation::AtomicAdd(Globals::var, 5);
         m_semaphore.release();
         while (!isCancelRequested())
         {

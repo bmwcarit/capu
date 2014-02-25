@@ -45,7 +45,7 @@ public:
             mQueue.push(val);
             capu::uint32_t sleepTime = rand() % 100;
             capu::Thread::Sleep(sleepTime);
-            capu::AtomicOperation::AtomicAdd32(mSum, val);
+            capu::AtomicOperation::AtomicAdd(mSum, val);
         }
     }
 };
@@ -72,7 +72,7 @@ public:
         {
             capu::uint32_t tmp = 0;
             EXPECT_EQ(capu::CAPU_OK, mQueue.pop(&tmp));
-            capu::AtomicOperation::AtomicAdd32(mSum, tmp);
+            capu::AtomicOperation::AtomicAdd(mSum, tmp);
         }
     }
 };

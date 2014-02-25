@@ -28,10 +28,10 @@ namespace capu
             class AtomicOperation: private os::AtomicOperation
             {
             public:
-                using os::AtomicOperation::AtomicAdd32;
-                using os::AtomicOperation::AtomicSub32;
-                using os::AtomicOperation::AtomicInc32;
-                using os::AtomicOperation::AtomicDec32;
+                using os::AtomicOperation::AtomicAdd;
+                using os::AtomicOperation::AtomicSub;
+                using os::AtomicOperation::AtomicInc;
+                using os::AtomicOperation::AtomicDec;
             };
         }
     }

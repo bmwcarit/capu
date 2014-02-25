@@ -121,7 +121,7 @@ namespace capu
          * If the object does not exist, 0 ist returned
          * @return reference count
          */
-        capu::uint32_t getRefCount() const;
+        capu::uint_t getRefCount() const;
 
         /**
          * Cast a SmartPointer of type X to type T
@@ -132,7 +132,7 @@ namespace capu
 
     private:
         T* mData;
-        capu::uint32_t* mReferenceCount;
+        capu::uint_t* mReferenceCount;
 
         void incRefCount();
         void decRefCount();
@@ -157,7 +157,7 @@ namespace capu
         if (mData != ptr)
         {
             mData = ptr;
-            mReferenceCount = new capu::uint32_t(0);
+            mReferenceCount = new capu::uint_t(0);
             incRefCount();
         }
     }
@@ -214,7 +214,7 @@ namespace capu
             decRefCount();
 
             mData = ptr;
-            mReferenceCount = new capu::uint32_t(0);
+            mReferenceCount = new capu::uint_t(0);
 
             incRefCount();
         }
@@ -268,7 +268,7 @@ namespace capu
     {
         if (mReferenceCount)
         {
-            capu::AtomicOperation::AtomicInc32(*mReferenceCount);
+            capu::AtomicOperation::AtomicInc(*mReferenceCount);
         }
     }
 
@@ -278,7 +278,7 @@ namespace capu
     {
         if (mReferenceCount)
         {
-            uint32_t oldValue = capu::AtomicOperation::AtomicDec32(*mReferenceCount);
+            uint_t oldValue = capu::AtomicOperation::AtomicDec(*mReferenceCount);
             if (--oldValue == 0)
             {
                 freeData();
@@ -312,7 +312,7 @@ namespace capu
 
     template<class T>
     inline
-    capu::uint32_t SmartPointer<T>::getRefCount() const
+    capu::uint_t SmartPointer<T>::getRefCount() const
     {
         if (mReferenceCount != 0)
         {

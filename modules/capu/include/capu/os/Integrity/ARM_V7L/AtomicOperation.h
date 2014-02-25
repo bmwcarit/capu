@@ -28,15 +28,30 @@ namespace capu
             class AtomicOperation
             {
             public:
-                static uint32_t AtomicAdd32(volatile uint32_t& mem, uint32_t summand);
-                static uint32_t AtomicSub32(volatile uint32_t& mem, uint32_t subtrahend);
-                static uint32_t AtomicInc32(volatile uint32_t& mem);
-                static uint32_t AtomicDec32(volatile uint32_t& mem);
+                static uint32_t AtomicAdd(volatile uint32_t& mem, uint32_t summand);
+                static int32_t  AtomicAdd(volatile int32_t& mem, int32_t summand);
+                static uint64_t AtomicAdd(volatile uint64_t& mem, uint64_t summand);
+                static int64_t  AtomicAdd(volatile int64_t& mem, int64_t summand);
+
+                static uint32_t AtomicSub(volatile uint32_t& mem, uint32_t subtrahend);
+                static int32_t  AtomicSub(volatile int32_t& mem, int32_t subtrahend);
+                static uint64_t AtomicSub(volatile uint64_t& mem, uint64_t subtrahend);
+                static int64_t  AtomicSub(volatile int64_t& mem, int64_t subtrahend);
+
+                static uint32_t AtomicInc(volatile uint32_t& mem);
+                static int32_t  AtomicInc(volatile int32_t& mem);
+                static uint64_t AtomicInc(volatile uint64_t& mem);
+                static int64_t  AtomicInc(volatile int64_t& mem);
+
+                static uint32_t AtomicDec(volatile uint32_t& mem);
+                static int32_t  AtomicDec(volatile int32_t& mem);
+                static uint64_t AtomicDec(volatile uint64_t& mem);
+                static int64_t  AtomicDec(volatile int64_t& mem);
             };
 
             inline
             uint32_t
-            AtomicOperation::AtomicAdd32(volatile uint32_t& mem, uint32_t summand)
+            AtomicOperation::AtomicAdd(volatile uint32_t& mem, uint32_t summand)
             {
                 Address oldValue;
                 AtomicModify((Address*)mem, &oldValue, 0, (Address)(&summand));
@@ -45,7 +60,7 @@ namespace capu
 
             inline
             uint32_t
-            AtomicOperation::AtomicSub32(volatile uint32_t& mem, uint32_t subtrahend)
+            AtomicOperation::AtomicSub(volatile uint32_t& mem, uint32_t subtrahend)
             {
                 Address oldValue;
                 int32_t subValue = -subtrahend;
@@ -55,16 +70,115 @@ namespace capu
 
             inline
             uint32_t
-            AtomicOperation::AtomicInc32(volatile uint32_t& mem)
+            AtomicOperation::AtomicInc(volatile uint32_t& mem)
             {
-                AtomicAdd32(mem, 1);
+                AtomicAdd(mem, 1);
             }
 
             inline
             uint32_t
-            AtomicOperation::AtomicDec32(volatile uint32_t& mem)
+            AtomicOperation::AtomicDec(volatile uint32_t& mem)
             {
-                AtomicSub32(mem, 1);
+                AtomicSub(mem, 1);
+            }
+            
+            inline
+            int32_t
+            AtomicOperation::AtomicAdd(volatile int32_t& mem, int32_t summand)
+            {
+                Address oldValue;
+                AtomicModify((Address*)mem, &oldValue, 0, (Address)(&summand));
+                return oldValue;
+            }
+
+            inline
+            int32_t
+            AtomicOperation::AtomicSub(volatile int32_t& mem, int32_t subtrahend)
+            {
+                Address oldValue;
+                int32_t subValue = -subtrahend;
+                AtomicModify((Address*)mem, &oldValue, 0, (Address)(&subtrahend));
+                return oldValue;
+            }
+
+            inline
+            int32_t
+            AtomicOperation::AtomicInc(volatile int32_t& mem)
+            {
+                AtomicAdd(mem, 1);
+            }
+
+            inline
+            int32_t
+            AtomicOperation::AtomicDec(volatile int32_t& mem)
+            {
+                AtomicSub(mem, 1);
+            }
+            
+            inline
+            uint64_t
+            AtomicOperation::AtomicAdd(volatile uint64_t& mem, uint64_t summand)
+            {
+                Address oldValue;
+                AtomicModify((Address*)mem, &oldValue, 0, (Address)(&summand));
+                return oldValue;
+            }
+
+            inline
+            uint64_t
+            AtomicOperation::AtomicSub(volatile uint64_t& mem, uint64_t subtrahend)
+            {
+                Address oldValue;
+                int64_t subValue = -subtrahend;
+                AtomicModify((Address*)mem, &oldValue, 0, (Address)(&subtrahend));
+                return oldValue;
+            }
+
+            inline
+            uint64_t
+            AtomicOperation::AtomicInc(volatile uint64_t& mem)
+            {
+                AtomicAdd(mem, 1);
+            }
+
+            inline
+            uint64_t
+            AtomicOperation::AtomicDec(volatile uint64_t& mem)
+            {
+                AtomicSub(mem, 1);
+            }
+            
+            inline
+            int64_t
+            AtomicOperation::AtomicAdd(volatile int64_t& mem, int64_t summand)
+            {
+                Address oldValue;
+                AtomicModify((Address*)mem, &oldValue, 0, (Address)(&summand));
+                return oldValue;
+            }
+
+            inline
+            int64_t
+            AtomicOperation::AtomicSub(volatile int64_t& mem, int64_t subtrahend)
+            {
+                Address oldValue;
+                int64_t subValue = -subtrahend;
+                AtomicModify((Address*)mem, &oldValue, 0, (Address)(&subtrahend));
+                return oldValue;
+            }
+
+            inline
+            int64_t
+            AtomicOperation::AtomicInc(volatile int64_t& mem)
+            {
+                AtomicAdd(mem, 1);
+            }
+
+            inline
+            int64_t
+            AtomicOperation::AtomicDec(volatile int64_t& mem)
+            {
+                AtomicSub(mem, 1);
             }
         }
     }

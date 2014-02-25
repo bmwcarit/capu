@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2012 BMW Car IT GmbH
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,10 +12,8 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_WINDOWS_ATOMICOPERATION_H
-#define CAPU_WINDOWS_ATOMICOPERATION_H
-
-#include <Windows.h>
+#ifndef CAPU_UNIXBASED_ATOMICOPERATION_H
+#define CAPU_UNIXBASED_ATOMICOPERATION_H
 
 namespace capu
 {
@@ -51,117 +47,113 @@ namespace capu
         uint32_t
         AtomicOperation::AtomicAdd(volatile uint32_t& mem, uint32_t summand)
         {
-            return InterlockedExchangeAdd((long*)&mem, summand);
+            return __sync_fetch_and_add(&mem, summand);
         }
 
         inline
         int32_t
         AtomicOperation::AtomicAdd(volatile int32_t& mem, int32_t summand)
         {
-          return InterlockedExchangeAdd((long*)&mem, summand);
+            return __sync_fetch_and_add(&mem, summand);
         }
 
         inline
         uint64_t
         AtomicOperation::AtomicAdd(volatile uint64_t& mem, uint64_t summand)
         {
-          return InterlockedExchangeAdd64((long long*)&mem, summand);
+            return __sync_fetch_and_add(&mem, summand);
         }
 
         inline
         int64_t
         AtomicOperation::AtomicAdd(volatile int64_t& mem, int64_t summand)
         {
-          return InterlockedExchangeAdd64((long long*)&mem, summand);
+            return __sync_fetch_and_add(&mem, summand);
         }
 
         inline
         uint32_t
         AtomicOperation::AtomicSub(volatile uint32_t& mem, uint32_t subtrahend)
         {
-            return InterlockedExchangeAdd((long*)&mem, 0 - subtrahend);
+            return __sync_fetch_and_sub(&mem, subtrahend);
         }
 
         inline
         int32_t
         AtomicOperation::AtomicSub(volatile int32_t& mem, int32_t subtrahend)
         {
-          return InterlockedExchangeAdd((long*)&mem, 0 - subtrahend);
+            return __sync_fetch_and_sub(&mem, subtrahend);
         }
 
         inline
         uint64_t
         AtomicOperation::AtomicSub(volatile uint64_t& mem, uint64_t subtrahend)
         {
-          return InterlockedExchangeAdd64((long long*)&mem, 0 - subtrahend);
+            return __sync_fetch_and_sub(&mem, subtrahend);
         }
 
         inline
         int64_t
         AtomicOperation::AtomicSub(volatile int64_t& mem, int64_t subtrahend)
         {
-          return InterlockedExchangeAdd64((long long*)&mem, 0 - subtrahend);
+            return __sync_fetch_and_sub(&mem, subtrahend);
         }
 
         inline
         uint32_t
         AtomicOperation::AtomicInc(volatile uint32_t& mem)
         {
-            return AtomicAdd(mem, 1);
+            return __sync_fetch_and_add(&mem, 1);
         }
 
         inline
         int32_t
         AtomicOperation::AtomicInc(volatile int32_t& mem)
         {
-          return AtomicAdd(mem, 1);
+            return __sync_fetch_and_add(&mem, 1);
         }
 
         inline
         uint64_t
         AtomicOperation::AtomicInc(volatile uint64_t& mem)
         {
-          return AtomicAdd(mem, 1);
+            return __sync_fetch_and_add(&mem, 1);
         }
 
         inline
         int64_t
         AtomicOperation::AtomicInc(volatile int64_t& mem)
         {
-          return AtomicAdd(mem, 1);
+            return __sync_fetch_and_add(&mem, 1);
         }
 
         inline
         uint32_t
         AtomicOperation::AtomicDec(volatile uint32_t& mem)
         {
-            return AtomicSub(mem, 1);
+            return __sync_fetch_and_sub(&mem, 1);
         }
 
         inline
         int32_t
         AtomicOperation::AtomicDec(volatile int32_t& mem)
         {
-          return AtomicSub(mem, 1);
+            return __sync_fetch_and_sub(&mem, 1);
         }
 
         inline
         uint64_t
         AtomicOperation::AtomicDec(volatile uint64_t& mem)
         {
-          return AtomicSub(mem, 1);
+            return __sync_fetch_and_sub(&mem, 1);
         }
 
         inline
         int64_t
         AtomicOperation::AtomicDec(volatile int64_t& mem)
         {
-          return AtomicSub(mem, 1);
+            return __sync_fetch_and_sub(&mem, 1);
         }
     }
 }
-
-
-
-
-#endif //CAPU_WINDOWS_ATOMICOPERATION_H
+#endif
