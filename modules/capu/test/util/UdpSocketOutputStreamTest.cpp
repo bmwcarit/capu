@@ -142,6 +142,10 @@ namespace capu
             return *this;
         }
 
+        status_t getState() const
+        {
+            return CAPU_OK;
+        }
 
     };
 

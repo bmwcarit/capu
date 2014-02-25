@@ -23,6 +23,7 @@ namespace capu
     BinaryInputStream::BinaryInputStream(const char_t* buffer)
         : mBuffer(buffer)
         , mCurrent(mBuffer)
+        , mState(CAPU_OK)
     {
     }
 

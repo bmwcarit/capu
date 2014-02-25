@@ -125,7 +125,7 @@ namespace capu
          * CAPU_ERROR if there is a problem with the socket
          * @return the state of the socket
          */
-        status_t getState() const;
+        virtual status_t getState() const;
 
         /**
          * Resets the state to CAPU_OK

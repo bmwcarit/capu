@@ -20,21 +20,21 @@ namespace capu
 {
     IInputStream& BinaryFileInputStream::read(char_t* data, const uint32_t size)
     {
-        if (CAPU_OK == m_fileState)
+        if (CAPU_OK == getState())
         {
             uint_t readBytes = 0;
             uint_t numBytes = 0;
             while (readBytes < size)
             {
                 status_t retVal = m_file.read(data + readBytes, size, numBytes);
-                if (retVal != CAPU_OK && retVal != CAPU_EOF)
+                readBytes += numBytes;
+                if (retVal != CAPU_OK)
                 {
                     // error reading file, abort read method
                     // EOF is no error, but a valid return value, so we need a special handling here
-                    m_fileState = retVal;
+                    setState(retVal);
                     break;
                 }
-                readBytes += numBytes;
             }
         }
         return *this;

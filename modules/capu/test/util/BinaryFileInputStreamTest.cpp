@@ -63,8 +63,23 @@ namespace capu
         capu::float_t floatVal = 0.f;
         capu::String  stringVal = "";
 
-        inputStream >> intVal >> floatVal >> stringVal;
+        inputStream >> intVal;
+        
+        EXPECT_EQ(CAPU_OK, inputStream.getState());
+        
+        inputStream >> floatVal;
+        
+        EXPECT_EQ(CAPU_OK, inputStream.getState());
+       
+        inputStream >> stringVal;
 
+        EXPECT_EQ(CAPU_OK, inputStream.getState());
+
+        int32_t errorIntVal = 0;
+        inputStream >> errorIntVal;
+
+        EXPECT_EQ(CAPU_EOF, inputStream.getState());
+        
         EXPECT_EQ(10, intVal);
         EXPECT_EQ(20.0f, floatVal);
         EXPECT_STREQ("Dies ist ein Text", stringVal.c_str());

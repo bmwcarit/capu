@@ -106,6 +106,13 @@ namespace capu
          */
         virtual IInputStream& read(char_t* data, const uint32_t size) = 0;
 
+        /**
+         * Returns the current state of the stream. This can be used to
+         * determine if something went wrong during the last read operation
+         * @return the current state of the stream
+         */
+        virtual status_t getState() const = 0;
+
     protected:
     private:
     };  

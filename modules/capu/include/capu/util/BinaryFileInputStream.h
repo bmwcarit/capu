@@ -41,16 +41,14 @@ namespace capu
     protected:
     private:
         File& m_file;
-        status_t m_fileState;
     };
 
     inline
     BinaryFileInputStream::BinaryFileInputStream(File& file)
         : BinaryInputStream(0)  // no buffer is needed to read from since we read direct from file
         , m_file(file)
-        , m_fileState(CAPU_OK)
     {
-        m_fileState = m_file.open(READ_EXISTING_BINARY);
+        setState(m_file.open(READ_EXISTING_BINARY));
     }
 
     inline

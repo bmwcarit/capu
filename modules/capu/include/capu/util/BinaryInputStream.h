@@ -18,6 +18,7 @@
 #define CAPU_BINARYINPUTSTREAM_H
 
 #include <capu/util/IInputStream.h>
+#include <capu/Error.h>
 
 namespace capu
 {
@@ -100,11 +101,19 @@ namespace capu
         IInputStream& read(char_t* data, const uint32_t size);
 
         /**
+         * @see IInputstream
+         */
+        virtual status_t getState() const;
+
+        /**
          * Resets the current reading position to the start of the buffer
          */
         void reset();
 
     protected:
+
+        void setState(status_t state);
+
     private:
 
         /**
@@ -116,7 +125,28 @@ namespace capu
          * Pointer to the current position of the buffer
          */
         const char_t* mCurrent;
+
+        /**
+         * The current state of the stream
+         */
+        status_t mState;
     };
+
+    
+    inline
+    status_t
+    BinaryInputStream::getState() const
+    {
+        return mState;
+    }
+
+    inline
+    void 
+    BinaryInputStream::setState(status_t state)
+    {
+        mState = state;
+    }
+
 }
 
 #endif // CAPU_BINARYINPUTSTREAM_H

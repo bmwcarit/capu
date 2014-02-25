@@ -137,6 +137,11 @@ namespace capu
             receiveFromSocket(data, size);
             return *this;
         }
+
+        status_t getState() const
+        {
+            return CAPU_OK;
+        }
     };
 
     template<typename T>
