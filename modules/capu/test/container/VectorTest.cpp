@@ -461,4 +461,31 @@ namespace capu
         EXPECT_EQ(44, testVector[2]);
 
     }
+
+    
+    TEST_F(VectorTest, Compare)
+    {
+        Vector<uint32_t> vector1;
+        Vector<uint32_t> vector2;
+        Vector<uint32_t> vector3;
+
+        vector1.push_back(1);
+        vector1.push_back(2);
+        vector1.push_back(3);
+
+        vector2.push_back(1);
+        vector2.push_back(2);
+        vector2.push_back(2);
+
+        EXPECT_FALSE(vector1 == vector2);
+
+        vector2[2] = 3;
+        
+        EXPECT_TRUE(vector1 == vector2);
+
+        EXPECT_FALSE(vector3 == vector2);
+    
+    }
+
+
 }

@@ -502,3 +502,47 @@ TEST(Array, SetRawData)
     EXPECT_EQ(0u, array[1]);
     EXPECT_EQ(0u, array[2]);
 }
+
+TEST(Array, CompareEmptyArrays)
+{
+    capu::Array<capu::uint32_t> array1;
+    capu::Array<capu::uint32_t> array2;
+
+    EXPECT_EQ(array1, array2);
+}
+
+TEST(Array, CompareEmptyArrayWithNonEmptyArray)
+{
+    capu::Array<capu::uint32_t> array1(3u);
+    capu::Array<capu::uint32_t> array2;
+
+    array1[0] = 1;
+    array1[1] = 2;
+    array1[2] = 3;
+
+    EXPECT_FALSE(array1 == array2);
+}
+
+TEST(Array, Compare)
+{
+    capu::Array<capu::uint32_t> array1(3u);
+    capu::Array<capu::uint32_t> array2(3u);
+
+    array1[0] = 1;
+    array1[1] = 2;
+    array1[2] = 3;
+
+    array2[0] = 1;
+    array2[1] = 1;
+    array2[2] = 3;
+
+    EXPECT_FALSE(array1 == array2);
+
+    array2[1] = 2;
+
+    EXPECT_TRUE(array1 == array2);
+
+    capu::Array<capu::uint32_t> array3(2u);
+
+    EXPECT_FALSE(array2 == array3);
+}

@@ -209,6 +209,13 @@ namespace capu
         T& operator[](const uint_t index) const;
 
         /**
+         * Compares the content of two Vectors
+         * @param other Vector to compare with
+         * @return true if both vectors are identical
+         */
+        bool_t operator==(const Vector<T>& other) const;
+
+        /**
          * Returns a new Iterator to the start of the Vector
          * @return a new Iterator to the start of the Vector
          * @{
@@ -446,6 +453,19 @@ namespace capu
 
         return CAPU_OK;
     }
+
+    template<typename T>
+    inline
+    bool_t 
+    Vector<T>::operator==(const Vector<T>& other) const
+    {
+        if(size() == other.size())
+        {
+            return 0 == Memory::Compare(m_start.m_current, other.m_start.m_current, sizeof(T) * size());
+        }
+        return false;
+    }
+
 }
 
 #endif // CAPU_VECTOR_H

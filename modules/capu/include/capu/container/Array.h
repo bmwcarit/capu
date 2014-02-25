@@ -130,6 +130,13 @@ namespace capu
         T& operator [](const uint_t index) const;
 
         /**
+         * Compares the content of the array with other array
+         * @param other array to compare with
+         * @return true if both arrays are equal, false otherwise
+         */
+        bool_t operator==(const Array<T>& other) const;
+
+        /**
          * Sets the raw data of the array to the given value
          * @param value the byte value for all array elements
          */
@@ -386,6 +393,18 @@ namespace capu
         mInternalArray.swap(tmpArray);
         mSize = size;
     }
+
+    template<typename T>
+    bool_t 
+    Array<T>::operator==(const Array<T>& other) const
+    {
+        if(mSize == other.mSize)
+        {
+            return 0 == Memory::Compare(mInternalArray.getRawData(), other.mInternalArray.getRawData(), sizeof(T) * mSize);
+        }
+        return false;
+    }
+
 }
 
 
