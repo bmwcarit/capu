@@ -223,12 +223,12 @@ namespace capu
 
     TEST_F(UdpSocketOutputStreamTest, SendInt64Data)
     {
-        EXPECT_EQ(0x6464646432323232, UdpSocketOutputStreamTestExecutor<int64_t>::Execute(0x6464646432323232));
+        EXPECT_EQ(0x6464646432323232L, UdpSocketOutputStreamTestExecutor<int64_t>::Execute(0x6464646432323232L));
     }
 
     TEST_F(UdpSocketOutputStreamTest, SendUInt64Data)
     {
-        EXPECT_EQ(0x6464646432323232u, UdpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232u));
+        EXPECT_EQ(0x6464646432323232uL, UdpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232uL));
     }
 
     TEST_F(UdpSocketOutputStreamTest, SendFloatData)
