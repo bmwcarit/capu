@@ -38,15 +38,13 @@ namespace capu
     protected:
         MockLogAppender appender;
         AsynchronousLogger defaultLogger;
-        LogContext CAPU_CONTEXT;
-        LogContext LOGGER_CONTEXT;
-        LogContext HELLO_CAPU_CONTEXT;
+        LogContext& CAPU_CONTEXT;
+        LogContext& LOGGER_CONTEXT;
+        LogContext& HELLO_CAPU_CONTEXT;
 
         void logWithDefaultLogger();
 
     };
-
-
 }
 
 #endif // CAPU_ASYNCHRONOUSELOGGERTEST_H

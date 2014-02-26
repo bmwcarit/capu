@@ -9,7 +9,6 @@ namespace capu
     Logger* Logger::DefaultLogger = 0;
 
     Logger::Logger(ILogAppender& appender)
-        : m_logLevel(LL_ERROR)
     {
         addAppender(appender);
     }

@@ -31,9 +31,9 @@ namespace capu
     
 
 #define LOG_EXT(logger, context, logLevel, message)                     \
-        if(logLevel >= logger.getLogLevel() && context.isEnabled())     \
+        if(logLevel >= context.getLogLevel() && context.isEnabled())    \
         {                                                               \
-            capu::LogMessage logMessage(context, logLevel);                   \
+            capu::LogMessage logMessage(context, logLevel);             \
             (logMessage.getStream() << message).flush();                \
             logger.log(logMessage);                                     \
         }
@@ -94,8 +94,16 @@ namespace capu
     {
     public:
 
-        void setLogLevel(ELogLevel logLevel);
-        static void SetLogLevel(ELogLevel logLevel);
+        /**
+         * Sets the LogLevel of all contexts
+         * @param logLevel for all Contexts
+         * @{
+         */
+        static void SetLogLevel(const ELogLevel logLevel);
+        void setLogLevel(const ELogLevel logLevel);
+        /**
+         *@}
+         */
 
         /**
          * Sets the default logger
@@ -128,12 +136,6 @@ namespace capu
         /**
          * @}
          */
-
-        /**
-         * Returns the current logLevel of the Logger
-         * @return the current logLevel of the Logger
-         */
-        ELogLevel getLogLevel();
 
         /**
          * Constructor of the logger
@@ -204,7 +206,7 @@ namespace capu
         /**
          * Current log level of the logger
          */
-        ELogLevel m_logLevel;
+        //ELogLevel m_logLevel;
 
         /**
          * Releases the stream
@@ -219,12 +221,9 @@ namespace capu
         return Logger::DefaultLogger;
     }
 
-    inline void Logger::setLogLevel(ELogLevel logLevel)
-    {
-        m_logLevel = logLevel;
-    }
-
-    inline void Logger::SetLogLevel(ELogLevel logLevel)
+    inline 
+    void 
+    Logger::SetLogLevel(const ELogLevel logLevel)
     {
         if(0 != DefaultLogger)
         {
@@ -232,10 +231,17 @@ namespace capu
         }
     }
 
-    inline
-    ELogLevel Logger::getLogLevel()
+    inline 
+    void 
+    Logger::setLogLevel(const ELogLevel logLevel)
     {
-        return m_logLevel;
+        ContextSet::Iterator current = DefaultLogger->m_logContexts.begin();
+        const ContextSet::Iterator end = DefaultLogger->m_logContexts.end();
+
+        for(; current != end; ++current)
+        {
+            (*current)->setLogLevel(logLevel);
+        }
     }
 
     inline

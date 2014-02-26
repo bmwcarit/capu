@@ -18,6 +18,7 @@
 #define CAPU_LOGCONTEXT_H
 
 #include "capu/container/String.h"
+#include "capu/util/LogLevel.h"
 
 namespace capu
 {
@@ -54,6 +55,19 @@ namespace capu
          */
         bool_t isEnabled() const;
 
+
+        /**
+         * Sets the LogLevel of the context
+         * @param logLevel for the context
+         */
+        void setLogLevel(const ELogLevel logLevel);
+
+        /**
+         * Returns the current LogLevel of the Context
+         * @return the current LogLevel of the Context
+         */
+        ELogLevel getLogLevel() const;
+
     private:
 
         /**
@@ -65,7 +79,24 @@ namespace capu
          * Enabled state of the LogContext
          */
         bool_t m_enabled;
+
+        /**
+         * LogLevel of context
+         */
+        ELogLevel m_logLevel;
     };
+
+    inline
+    void LogContext::setLogLevel(const ELogLevel logLevel)
+    {
+        m_logLevel = logLevel;
+    }
+
+    inline
+    ELogLevel LogContext::getLogLevel() const
+    {
+        return m_logLevel;
+    }
 
     inline
     const String& 
