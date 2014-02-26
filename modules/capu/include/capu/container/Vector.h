@@ -28,12 +28,13 @@ namespace capu
     template<typename T>
     class Vector
     {
-    public:
+    private:
 
         /**
          * Iterator for Vector
          */
-        class Iterator
+        template<typename TYPE>
+        class InternalIterator
         {
         public:
             friend class Vector<T>;
@@ -41,37 +42,111 @@ namespace capu
             /**
              * Sets the current position to the next element
              */
-            void operator++();
+            void operator++()
+            {
+                ++m_current;
+            }
+
 
             /**
              * Compares two Iterators if their internal position is the same
              * @param other Iterator to compare with
              * @return true if Iterators don't point to the same data, false otherwise
              */
-            bool_t operator!=(const Iterator& other);
+            bool_t operator!=(const InternalIterator<TYPE>& other) const
+            {
+                return m_current != other.m_current;
+            }
 
             /**
              * Dereferences the iterator to access the internal data
+             * return a reference to the current data
              */
-            T const& operator*();
+            TYPE& operator*()
+            {
+                return *m_current;
+            }
+
+            /**
+             * Autocast to the pointer of the current element
+             * @return the pointer to the current element
+             */
+            operator TYPE*() const
+            {
+                return m_current;
+            }
 
             /**
              * Allows access to methods and member of the internal data
+             * @return the pointer to the current data
              */
-            T const* operator->();
+            TYPE* operator->()
+            {
+                return &** this;
+            }
+
+            /**
+             * Checks if the pointer of the other iterator is bigger than my own pointer
+             * @param other InternalIterator to check with
+             * @return true if other pointer is bigger than my one one, false otherwise
+             */
+            bool_t operator <(const InternalIterator<TYPE>& other)
+            {
+                return m_current < other.m_current;
+            }
+
+            /**
+             * Checks if the pointer of the other iterator is smaller than my own pointer
+             * @param other InternalIterator to check with
+             * @return true if other pointer is smaller than my one one, false otherwise
+             */
+            bool_t operator >(const InternalIterator<TYPE>& other)
+            {
+                return m_current > other.m_current;
+            }
+
+            /**
+             * Adds the given value to the internal pointer and returns a new iterator
+             * @param value to add to the internal pointer
+             * @return InternalIterator with the new pointer
+             */
+            InternalIterator operator+(const uint_t value) const
+            {
+                return InternalIterator(m_current + value);
+            }
+
+            /**
+             * Substracts the given value to the internal pointer and returns a new iterator
+             * @param value to substract from the internal pointer
+             * @return InternalIterator with the new pointer
+             */
+            InternalIterator operator-(const uint_t value) const
+            {
+                return InternalIterator(m_current - value);
+            }
+
         protected:
         private:
             /**
              * Creates a Iterator for the Vector
              * @param start pointer for the iterator
              */
-            Iterator(const T* start);
+            InternalIterator(TYPE* start)
+                : m_current(start)
+            {
+
+            }
 
             /**
              * Pointer to the current data
              */
-            T const* m_current;
+            TYPE* m_current;
         };
+
+    public:
+
+        typedef InternalIterator<T> Iterator;
+        typedef InternalIterator<const T> ConstIterator;
 
         /**
          * Creates a new vector. The initial capacity is 16
@@ -82,7 +157,7 @@ namespace capu
          * Creates a new Vector with a given initial capacity
          * @param initialCapacity for the Vector
          */
-        Vector(const uint32_t initialCapacity);
+        Vector(const uint_t initialCapacity);
 
         /**
          * Initializes the Vector with the given capacity and sets all elements
@@ -90,7 +165,7 @@ namespace capu
          * @param initialCapacity for the Vector
          * @param value to set for all elements
          */
-        Vector(const uint32_t initialCapacity, const T& value);
+        Vector(const uint_t initialCapacity, const T& value);
 
         /**
          * Adds an Element to the end of the vector
@@ -102,7 +177,7 @@ namespace capu
          * Returns the current size of the Vector
          * @return size of the current Vector
          */
-        uint32_t size() const;
+        uint_t size() const;
 
         /**
          * Resizes the vector to the given size
@@ -112,7 +187,7 @@ namespace capu
          * available after resizing
          * @param new size of the Vector
          */
-        void resize(const uint32_t size);
+        void resize(const uint_t size);
 
         /**
          * Removes all elements from the Vector
@@ -124,20 +199,30 @@ namespace capu
          * @param index of the element to access
          * @return reference to the element
          */
-        T& operator[](const uint32_t index) const;
+        T& operator[](const uint_t index) const;
 
         /**
          * Returns a new Iterator to the start of the Vector
          * @return a new Iterator to the start of the Vector
+         * @{
          */
-        Iterator begin() const;
+        Iterator begin();
+        ConstIterator begin() const;
+        /**
+         * @}
+         */
 
         /**
          * Returns a new Iterator to the end of the Vector
          * @return a new Iterator to the end of the Vector
+         * @{
          */
-        Iterator end() const;
-
+        Iterator end();
+        ConstIterator end() const;
+        /**
+        * @}
+        */
+		
     protected:
     private:
         /**
@@ -146,9 +231,14 @@ namespace capu
         Array<T> m_data;
 
         /**
-         * The current size of the vector
+         * Iterator which points to the start of the data
          */
-        uint32_t m_size;
+        Iterator m_start;
+
+        /**
+         * Iterator which points to one after the end of the data
+         */
+        Iterator m_end;
 
         /**
          * Internal method to double the current memory
@@ -160,25 +250,28 @@ namespace capu
     inline
     Vector<T>::Vector()
         : m_data(16)
-        , m_size(0)
+        , m_start(m_data.getRawData())
+        , m_end(m_data.getRawData())
     {
 
     }
 
     template<typename T>
     inline
-    Vector<T>::Vector(const uint32_t initialCapacity, const T& value)
+    Vector<T>::Vector(const uint_t initialCapacity, const T& value)
         : m_data(initialCapacity)
-        , m_size(static_cast<uint32_t>(m_data.size()))
+        , m_start(m_data.getRawData())
+        , m_end(m_data.getRawData() + m_data.size())
     {
         m_data.set(value);
     }
 
     template<typename T>
     inline
-    Vector<T>::Vector(const uint32_t initialSize)
+    Vector<T>::Vector(const uint_t initialSize)
         : m_data(initialSize)
-        , m_size(0)
+        , m_start(m_data.getRawData())
+        , m_end(m_data.getRawData())
     {
 
     }
@@ -189,16 +282,15 @@ namespace capu
     Vector<T>::push_back(const T& value)
     {
         status_t status = CAPU_OK;
-        if (m_size == m_data.size())
+        if (size() == m_data.size())
         {
+            /*status = */
+            // todo: should check status of grow here
             grow();
         }
 
-        if (CAPU_OK == status)
-        {
-            m_data[m_size] = value;
-            ++m_size;
-        }
+        (*m_end) = value;
+        ++m_end;
 
         return status;
     }
@@ -208,7 +300,7 @@ namespace capu
     void
     Vector<T>::clear()
     {
-        m_size = 0;
+        m_end = m_start;
     }
 
     template<typename T>
@@ -219,92 +311,76 @@ namespace capu
         Array<T> tmpArray(m_data.size()  * 2);
         m_data.swap(tmpArray);
 
-        Memory::CopyObject(m_data.getRawData(), tmpArray.getRawData(), tmpArray.size());
+        m_start = m_data.getRawData();
+        m_end   = m_data.getRawData() + tmpArray.size();
+
+        Memory::CopyObject(m_start.m_current, tmpArray.getRawData(), tmpArray.size());
     }
 
     template<typename T>
     inline
     void
-    Vector<T>::resize(const uint32_t size)
+    Vector<T>::resize(const uint_t size)
     {
         Array<T> tmpArray(size);
-        const uint32_t sizeToCopy = size < m_size ? size : m_size;
+        const uint_t mySize = Vector<T>::size();
+        const uint_t sizeToCopy = size < mySize ? size : mySize;
 
-        tmpArray.copy(m_data.getRawData(), sizeToCopy);
+        tmpArray.copy(m_start.m_current, sizeToCopy);
         m_data.swap(tmpArray);
+
+        m_start = m_data.getRawData();
+        m_end   = m_data.getRawData() + mySize;
     }
 
     template<typename T>
     inline
     T&
-    Vector<T>::operator[](const uint32_t index) const
+    Vector<T>::operator[](const uint_t index) const
     {
-        return m_data[index];
+        return *(m_start + index);
     }
 
     template<typename T>
     inline
-    uint32_t
+    uint_t
     Vector<T>::size() const
     {
-        return m_size;
+        return m_end.m_current - m_start.m_current;
     }
 
     template<typename T>
     inline
     typename Vector<T>::Iterator
+    Vector<T>::begin()
+    {
+        return m_start;
+    }
+
+    template<typename T>
+    inline
+    typename Vector<T>::ConstIterator
     Vector<T>::begin() const
     {
-        return Iterator(m_data.getRawData());
+        return ConstIterator(m_start.m_current);
     }
 
     template<typename T>
     inline
     typename Vector<T>::Iterator
+    Vector<T>::end()
+    {
+        return Iterator(m_end);
+    }
+
+    template<typename T>
+    inline
+    typename Vector<T>::ConstIterator
     Vector<T>::end() const
     {
-        return Iterator(m_data.getRawData() + m_size);
+        return ConstIterator(m_end);
     }
 
-    template<typename T>
-    inline
-    Vector<T>::Iterator::Iterator(const T* start)
-        : m_current(start)
-    {
-
-    }
-
-    template<typename T>
-    inline
-    void
-    Vector<T>::Iterator::operator++()
-    {
-        ++m_current;
-    }
-
-    template<typename T>
-    inline
-    bool_t
-    Vector<T>::Iterator::operator!=(const Iterator& other)
-    {
-        return m_current != other.m_current;
-    }
-
-    template<typename T>
-    inline
-    T const&
-    Vector<T>::Iterator::operator*()
-    {
-        return *m_current;
-    }
-
-    template<typename T>
-    inline
-    T const*
-    Vector<T>::Iterator::operator->()
-    {
-        return &** this;
-    }
 }
 
 #endif // CAPU_VECTOR_H

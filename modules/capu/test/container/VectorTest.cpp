@@ -81,6 +81,112 @@ namespace capu
         EXPECT_EQ(47u, vector[1]);
     }
 
+
+    TEST_F(VectorTest, IteratorInc)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+
+        Vector<uint32_t>::Iterator current = vector.begin();
+
+        EXPECT_EQ(1u, *current);
+        ++current;
+        EXPECT_EQ(2u, *current);
+        ++current;
+        EXPECT_EQ(3u, *current);
+        ++current;
+        EXPECT_EQ(4u, *current);
+    }
+
+
+    TEST_F(VectorTest, IteratorNotEqual)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+
+        Vector<uint32_t>::Iterator start = vector.begin();
+        Vector<uint32_t>::Iterator end = vector.end();
+
+        EXPECT_TRUE(start != end);
+        end = start;
+        EXPECT_FALSE(start != end);
+
+    }
+
+    TEST_F(VectorTest, IteratorSmaller)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+
+        Vector<uint32_t>::Iterator start = vector.begin();
+        Vector<uint32_t>::Iterator end = vector.end();
+
+        EXPECT_TRUE(start < end);
+        EXPECT_FALSE(end < start);
+    }
+
+    TEST_F(VectorTest, IteratorBigger)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+
+        Vector<uint32_t>::Iterator start = vector.begin();
+        Vector<uint32_t>::Iterator end = vector.end();
+
+        EXPECT_TRUE(end > start);
+        EXPECT_FALSE(start > end);
+    }
+
+    TEST_F(VectorTest, IteratorAddValue)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+
+        Vector<uint32_t>::Iterator start = vector.begin();
+
+        EXPECT_EQ(1u, *(start + 0u));
+        EXPECT_EQ(2u, *(start + 1u));
+        EXPECT_EQ(3u, *(start + 2u));
+        EXPECT_EQ(4u, *(start + 3u));
+    }
+
+    TEST_F(VectorTest, IteratorSubValue)
+    {
+         Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+
+        Vector<uint32_t>::Iterator end = vector.end();
+
+        EXPECT_EQ(4u, *(end - 1u));
+        EXPECT_EQ(3u, *(end - 2u));
+        EXPECT_EQ(2u, *(end - 3u));
+        EXPECT_EQ(1u, *(end - 4u));
+    }
+
     TEST_F(VectorTest, Iterator)
     {
         Vector<uint32_t> vector;
@@ -110,11 +216,12 @@ namespace capu
 
         Vector<uint32_t> vector2;
 
-        for (Vector<uint32_t>::Iterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        for (Vector<uint32_t>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
 
+        EXPECT_EQ(2u, vector2.size());
         EXPECT_EQ(42u, vector2[0]);
         EXPECT_EQ(47u, vector2[1]);
     }
