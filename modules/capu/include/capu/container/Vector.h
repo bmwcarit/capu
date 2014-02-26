@@ -229,7 +229,31 @@ namespace capu
         /**
         * @}
         */
-		
+
+         /**
+         * remove the element in the specified index and if the element_old
+         * parameter is not NULL, the removed element will be put to element_old
+         *
+         * NOTE: Not STL compatible
+         *
+         * @param index index of element that will be removed
+         * @param elementOld the buffer which will keep the copy of the removed element
+         * @return CAPU_EINVAL invalid index
+         *         CAPU_OK if the element is successfully removed
+         */
+        status_t erase(const uint_t index, T* elementOld = 0);
+
+        /**
+         * Removes the element in the specified iterator position and if the element_old
+         * parameter is not NULL, the removed element will be put to element_old
+         * @param iterator of element that will be removed
+         * @param elementOld the buffer which will keep the copy of the removed element
+         * @return CAPU_EINVAL invalid iterator
+         *         CAPU_OK if the element is successfully removed
+         *
+         */
+        status_t erase(const Iterator& iterator, T* elementOld = 0);
+
     protected:
     private:
         /**
@@ -388,6 +412,40 @@ namespace capu
         return ConstIterator(m_end);
     }
 
+    template<typename T>
+    inline
+    status_t Vector<T>::erase(const uint_t index, T* elementOld)
+    {
+        Iterator current = Iterator(m_start + index);
+        return erase(current, elementOld);
+    }
+
+    template<typename T>
+    inline
+    status_t Vector<T>::erase(const Iterator& iterator, T* elementOld)
+    {
+        if(iterator > m_end)
+        {
+            return CAPU_EINVAL;
+        }
+
+        if(0 != elementOld)
+        {
+            *elementOld = *iterator;
+        }
+
+        if(iterator == m_end - 1u)
+        {
+            --m_end;
+        }
+        else
+        {
+            Memory::Move(iterator, iterator + 1u, (m_end.m_current - iterator.m_current + 1u) * sizeof(T));
+            --m_end;
+        }
+
+        return CAPU_OK;
+    }
 }
 
 #endif // CAPU_VECTOR_H

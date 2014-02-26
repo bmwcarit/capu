@@ -334,6 +334,110 @@ namespace capu
         EXPECT_EQ(struct1.value1, vector[1].value1);
         EXPECT_EQ(struct1.value2, vector[1].value2);
 
+    }
 
+    TEST_F(VectorTest, EraseIterator)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+        vector.push_back(5u);
+
+
+        Vector<uint32_t>::Iterator iter = vector.begin();
+
+        vector.erase(iter + 2u);
+
+        EXPECT_EQ(4u, vector.size());
+        EXPECT_EQ(1u, vector[0]);
+        EXPECT_EQ(2u, vector[1]);
+        EXPECT_EQ(4u, vector[2]);
+        EXPECT_EQ(5u, vector[3]);
+
+        vector.erase(vector.begin());
+
+        EXPECT_EQ(3u, vector.size());
+        EXPECT_EQ(2u, vector[0]);
+        EXPECT_EQ(4u, vector[1]);
+        EXPECT_EQ(5u, vector[2]);
+
+        vector.erase(vector.end() - 1u);
+
+        EXPECT_EQ(2u, vector.size());
+        EXPECT_EQ(2u, vector[0]);
+        EXPECT_EQ(4u, vector[1]);
+
+        vector.erase(vector.begin());
+        vector.erase(vector.begin());
+
+        EXPECT_EQ(0u, vector.size());
+    }
+
+    TEST_F(VectorTest, EraseIndex)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+        vector.push_back(5u);
+
+        Vector<uint32_t>::Iterator iter = vector.begin();
+
+        ++iter;
+        ++iter;
+
+        vector.erase(iter);
+
+        EXPECT_EQ(4u, vector.size());
+        EXPECT_EQ(1u, vector[0]);
+        EXPECT_EQ(2u, vector[1]);
+        EXPECT_EQ(4u, vector[2]);
+        EXPECT_EQ(5u, vector[3]);
+
+        vector.erase(vector.begin());
+
+        EXPECT_EQ(3u, vector.size());
+        EXPECT_EQ(2u, vector[0]);
+        EXPECT_EQ(4u, vector[1]);
+        EXPECT_EQ(5u, vector[2]);
+
+        vector.erase(vector.end());
+
+        EXPECT_EQ(2u, vector.size());
+        EXPECT_EQ(2u, vector[0]);
+        EXPECT_EQ(4u, vector[1]);
+
+        vector.erase(vector.begin());
+        vector.erase(vector.begin());
+
+        EXPECT_EQ(0u, vector.size());
+    }
+
+    TEST_F(VectorTest, EraseAdd)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+        vector.push_back(5u);
+
+        vector.erase(3);
+        vector.erase(1);
+        vector.push_back(2u);
+        vector.push_back(4u);
+
+        EXPECT_EQ(5u, vector.size());
+        EXPECT_EQ(1u, vector[0]);
+        EXPECT_EQ(3u, vector[1]);
+        EXPECT_EQ(5u, vector[2]);
+        EXPECT_EQ(2u, vector[3]);
+        EXPECT_EQ(4u, vector[4]);
     }
 }
