@@ -216,6 +216,27 @@ TEST(HashSetIterator, next)
     delete h1;
 }
 
+TEST(HashSetIterator, ForEach)
+{
+    capu::HashSet<capu::int32_t> hashSet;
+
+    hashSet.put(32);
+    hashSet.put(43);
+    hashSet.put(44);
+
+    capu::HashSet<capu::int32_t> testHashSet;
+
+    capu_foreach(capu::HashSet<capu::int32_t>, hashSet, iter)
+    {
+        testHashSet.put(*iter);
+    }
+
+    EXPECT_TRUE(testHashSet.hasElement(32));
+    EXPECT_TRUE(testHashSet.hasElement(43));
+    EXPECT_TRUE(testHashSet.hasElement(44));
+
+}
+
 #define COUNT 500000
 
 capu::HashSet<capu::uint32_t> set;

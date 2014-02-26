@@ -440,4 +440,25 @@ namespace capu
         EXPECT_EQ(2u, vector[3]);
         EXPECT_EQ(4u, vector[4]);
     }
+
+    TEST_F(VectorTest, ForEach)
+    {
+        capu::Vector<capu::int32_t> vector;
+
+        vector.push_back(32);
+        vector.push_back(43);
+        vector.push_back(44);
+
+        capu::Vector<capu::int32_t> testVector;
+
+        capu_foreach(capu::Vector<capu::int32_t>, vector, iter)
+        {
+            testVector.push_back(*iter);
+        }
+
+        EXPECT_EQ(32, testVector[0]);
+        EXPECT_EQ(43, testVector[1]);
+        EXPECT_EQ(44, testVector[2]);
+
+    }
 }

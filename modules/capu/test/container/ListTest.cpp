@@ -974,3 +974,24 @@ TEST(ListIterator, loopInserting)
         i++;
     }
 }
+
+TEST(ListTest, ForEach)
+{
+    capu::List<capu::int32_t> list;
+
+    list.insert(32);
+    list.insert(43);
+    list.insert(44);
+
+    capu::List<capu::int32_t> testList;
+
+    capu_foreach(capu::List<capu::int32_t>, list, iter)
+    {
+        testList.insert(*iter);
+    }
+
+    EXPECT_EQ(32, testList.get(0));
+    EXPECT_EQ(43, testList.get(1));
+    EXPECT_EQ(44, testList.get(2));
+
+}

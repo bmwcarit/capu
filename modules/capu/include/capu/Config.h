@@ -30,6 +30,11 @@
 
 #define UNUSED(x) {(void)(x);}
 
+#define capu_foreach(IteratableType, Iteratable, Iter)\
+    IteratableType::Iterator Iter = Iteratable.begin();\
+    const IteratableType::Iterator end = Iteratable.end();\
+    for(; iter != end; ++iter)
+
 namespace capu
 {
     typedef ::int8_t    int8_t;

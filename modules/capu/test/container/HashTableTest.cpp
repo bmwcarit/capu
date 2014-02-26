@@ -691,3 +691,24 @@ TEST_F(HashTableTest, TestWildRemoving)
     newmap.put(2000, 2000); // TODO how to check that everything worked?
     EXPECT_EQ(static_cast<capu::uint32_t>(1001), newmap.count());
 }
+
+TEST_F(HashTableTest, ForEach)
+{
+    Int32HashMap hashMap;
+
+    hashMap.put(32,33);
+    hashMap.put(43,44);
+    hashMap.put(44,45);
+
+    Int32HashMap testHashMap;
+
+    capu_foreach(Int32HashMap, hashMap, iter)
+    {
+        testHashMap.put(iter->key, iter->value);
+    }
+
+    EXPECT_EQ(33, testHashMap.find(32)->value);
+    EXPECT_EQ(44, testHashMap.find(43)->value);
+    EXPECT_EQ(45, testHashMap.find(44)->value);
+
+}
