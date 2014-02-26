@@ -47,6 +47,13 @@ namespace capu
                 ++m_current;
             }
 
+            /**
+             *  Sets the current position to the previous element
+             */
+            void operator--()
+            {
+                --m_current;
+            }
 
             /**
              * Compares two Iterators if their internal position is the same

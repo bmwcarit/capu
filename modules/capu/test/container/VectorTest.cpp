@@ -102,6 +102,25 @@ namespace capu
         EXPECT_EQ(4u, *current);
     }
 
+    TEST_F(VectorTest, IteratorDec)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+
+        Vector<uint32_t>::Iterator end = vector.end();
+        --end;
+        EXPECT_EQ(4u, *end);
+        --end;
+        EXPECT_EQ(3u, *end);
+        --end;
+        EXPECT_EQ(2u, *end);
+        --end;
+        EXPECT_EQ(1u, *end);
+    }
 
     TEST_F(VectorTest, IteratorNotEqual)
     {
