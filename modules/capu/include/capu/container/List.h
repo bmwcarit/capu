@@ -57,6 +57,7 @@ namespace capu
     private:
         typedef GenericListNode<T> ListNode;
 
+        template<typename TYPE>
         class ListIterator
         {
         public:
@@ -65,55 +66,91 @@ namespace capu
             /**
              * destructor
              */
-            ~ListIterator();
+            ~ListIterator()
+            {
+
+            }
 
             /**
              * Indirection
              * @return the current value referenced by the iterator
              */
-            T& operator*();
+            T& operator*()
+            {
+                return mCurrentNode->mData;
+            }
 
             /**
              * Dereference
              * @return a pointer to the current object the iterator points to
              */
-            T* operator->();
+            T* operator->()
+            {
+                return &** this;
+            }
 
             /**
              * Compares two iterators
              * @return true if the iterators point to the same position
              */
-            capu::bool_t operator==(const ListIterator& iter) const;
+            capu::bool_t operator==(const ListIterator<TYPE>& other) const
+            {
+                return mCurrentNode == other.mCurrentNode;
+            }
 
             /**
              * Compares two iterators
              * @return true if the iterators do not point to the same position
              */
-            capu::bool_t operator!=(const ListIterator& iter) const;
+            capu::bool_t operator!=(const ListIterator& other) const
+            {
+                return !(*this == other);
+            }
 
             /**
              * Step the iterator forward to the next element (prefix operator)
              * @return the next iterator
              */
-            const ListIterator& operator++() const;
+            const ListIterator& operator++() const
+            {
+                mCurrentNode = mCurrentNode->mNext;
+                ++mIndex;
+                return *this;
+            }
 
             /**
              * Step the iterator forward to the next element (prefix operator)
              * @return the next iterator
              */
-            ListIterator& operator++();
+            ListIterator& operator++()
+            {
+                mCurrentNode = mCurrentNode->mNext;
+                ++mIndex;
+                return *this;
+            }
 
             /**
              * Step the iterator forward to the next element (postfix operator)
              * @return the next iterator
              */
-            const ListIterator operator++(capu::int32_t) const;
+            const ListIterator operator++(capu::int32_t) const
+            {
+                typename List<T, A, C>::ListIterator oldValue(*this);
+                ++(*this);
+                return oldValue;
+            }
+
 
             /**
              * Step the iterator forward to the next element (postfix operator)
              * @return the next iterator
              */
-            ListIterator operator++(capu::int32_t);
+            ListIterator<TYPE> operator++(capu::int32_t)
+            {
+                typename List<T, A, C>::ListIterator<TYPE> oldValue(*this);
+                ++(*this);
+                return oldValue;
+            }
 
             //TODO: Add other operators as --, +, -, ...
 
@@ -121,10 +158,20 @@ namespace capu
              * Returns the index of the current element.
              * @return The index of the current element. If there is no current element, the return value is undefined.
              */
-            uint_t currentIndex() const;
+            uint_t currentIndex() const
+            {
+                return mIndex;
+            }
 
         private:
-            ListIterator(const ListNode* boundary); // creation only in list.begin()
+            ListIterator(const ListNode* boundary) // creation only in list.begin()
+                : mInitialNode(boundary)
+                , mCurrentNode(boundary->mNext)
+                , mIndex(mCurrentNode == boundary ? -1 : 0) // if list is empty, the index is -1, otherwise 0.
+            {
+
+            }
+            
             const ListNode* mInitialNode;
             mutable ListNode* mCurrentNode;
             mutable int_t mIndex;
@@ -143,12 +190,12 @@ namespace capu
         /**
          * An iterator for lists
          */
-        typedef typename List<T, A , C>::ListIterator Iterator;
+        typedef typename ListIterator<T> Iterator;
 
         /**
          * An iterator for const lists
          */
-        typedef const typename List<T, A , C>::ListIterator ConstIterator;
+        typedef typename ListIterator<const T> ConstIterator;
 
         /**
          * Default Constructor
@@ -365,7 +412,7 @@ namespace capu
          *
          * @return iterator
          */
-        const Iterator begin() const;
+        ConstIterator begin() const;
 
         /**
          * Returns an iterator pointing to the end of list.
@@ -379,7 +426,7 @@ namespace capu
          *
          * @return iterator
          */
-        const Iterator end() const;
+        const ConstIterator end() const;
 
         /**
          * Returns a reference to the first element in the list
@@ -419,7 +466,19 @@ namespace capu
          * @return Iterator to the searched element if the element is found
          *         otherwise Iterator to the end of the list
          */
-        Iterator find(const T& element) const;
+        ConstIterator find(const T& element) const;
+
+        /**
+        * Finds the element in the link list
+        * if you are using an object you need to overload == operator
+        *
+        * NOTE: Not STL compatible
+        *
+        * @param element the value that will be searched
+        * @return Iterator to the searched element if the element is found
+        *         otherwise Iterator to the end of the list
+        */
+        Iterator find(const T& element);
 
         /**
          * Check that if the list contains the given parameter or not
@@ -464,8 +523,9 @@ namespace capu
         mBoundary.mPrev = &mBoundary;
 
         // add all items from the other List
-        Iterator it = other.begin();
-        while (it != other.end())
+        ConstIterator it = other.begin();
+        const ConstIterator endIter = other.end();
+        while (it != endIter)
         {
             insert(*it);
             it++;
@@ -501,10 +561,26 @@ namespace capu
     }
 
     template <class T, class A, class C>
-    typename List<T, A , C>::Iterator List<T, A , C>::find(const T& element) const
+    typename List<T, A , C>::ConstIterator List<T, A , C>::find(const T& element) const
     {
-        Iterator iter           = begin();
-        const Iterator iterEnd  = end();
+        ConstIterator iter           = begin();
+        const ConstIterator iterEnd  = end();
+
+        for (; iter != iterEnd; ++iter)
+        {
+            if (*iter == element)
+            {
+                return iter;
+            }
+        }
+        return iterEnd;
+    }
+
+    template <class T, class A, class C>
+    typename List<T, A, C>::Iterator List<T, A, C>::find(const T& element)
+    {
+        Iterator iter = begin();
+        const Iterator iterEnd = end();
 
         for (; iter != iterEnd; ++iter)
         {
@@ -767,20 +843,20 @@ namespace capu
     template <class T, class A, class C>
     typename List<T, A , C>::Iterator List<T, A , C>::begin()
     {
-        return ListIterator(&mBoundary);
+        return Iterator(&mBoundary);
     }
 
     template <class T, class A, class C>
-    const typename List<T, A , C>::Iterator List<T, A , C>::begin() const
+    typename List<T, A , C>::ConstIterator List<T, A , C>::begin() const
     {
-        const ListIterator result(&mBoundary);
+        ConstIterator result(&mBoundary);
         return result;
     }
 
     template <class T, class A, class C>
     typename List<T, A , C>::Iterator List<T, A , C>::end()
     {
-        ListIterator result(&mBoundary);
+        Iterator result(&mBoundary);
 
         result.mCurrentNode = result.mCurrentNode->mPrev;
         result.mIndex = size();
@@ -788,9 +864,9 @@ namespace capu
     }
 
     template <class T, class A, class C>
-    const typename List<T, A , C>::Iterator List<T, A , C>::end() const
+    const typename List<T, A , C>::ConstIterator List<T, A , C>::end() const
     {
-        const ListIterator result(&mBoundary);
+        const ConstIterator result(&mBoundary);
 
         // hack to get to a non const pointer to mBoundary without const cast
         result.mCurrentNode = result.mCurrentNode->mPrev;
@@ -836,9 +912,10 @@ namespace capu
             return false;
         }
 
-        ListIterator thisIter = begin();
-        ListIterator otherIter = other.begin();
-        while (thisIter != end())
+        Iterator thisIter = begin();
+        ConstIterator otherIter = other.begin();
+        const Iterator endIter = end();
+        while (thisIter != endIter)
         {
             if ((*thisIter) != (*otherIter))
             {
@@ -851,81 +928,6 @@ namespace capu
 
         // reached the end of both lists, this means they are equal
         return true;
-    }
-
-    template <class T, class A, class C>
-    List<T, A , C>::ListIterator::ListIterator(const ListNode* boundary)
-        : mInitialNode(boundary)
-        , mCurrentNode(boundary->mNext)
-        , mIndex(mCurrentNode == boundary ? -1 : 0) // if list is empty, the index is -1, otherwise 0.
-    {
-    }
-
-    template <class T, class A, class C>
-    List<T, A , C>::ListIterator::~ListIterator()
-    {
-    }
-
-    template <class T, class A, class C>
-    T& List<T, A , C>::ListIterator::operator*()
-    {
-        return mCurrentNode->mData;
-    }
-
-    template <class T, class A, class C>
-    T* List<T, A , C>::ListIterator::operator->()
-    {
-        return &** this;
-    }
-
-    template <class T, class A, class C>
-    capu::bool_t List<T, A , C>::ListIterator::operator==(const typename List<T, A , C>::ListIterator& other) const
-    {
-        return mCurrentNode == other.mCurrentNode;
-    }
-
-    template <class T, class A, class C>
-    capu::bool_t List<T, A , C>::ListIterator::operator!=(const typename List<T, A , C>::ListIterator& other) const
-    {
-        return !(*this == other);
-    }
-
-    template <class T, class A, class C>
-    const typename List<T, A , C>::ListIterator& List<T, A , C>::ListIterator::operator++() const
-    {
-        mCurrentNode = mCurrentNode->mNext;
-        ++mIndex;
-        return *this;
-    }
-
-    template <class T, class A, class C>
-    typename List<T, A , C>::ListIterator& List<T, A , C>::ListIterator::operator++()
-    {
-        mCurrentNode = mCurrentNode->mNext;
-        ++mIndex;
-        return *this;
-    }
-
-    template <class T, class A, class C>
-    const typename List<T, A , C>::ListIterator List<T, A , C>::ListIterator::operator++(capu::int32_t) const
-    {
-        typename List<T, A , C>::ListIterator oldValue(*this);
-        ++(*this);
-        return oldValue;
-    }
-
-    template <class T, class A, class C>
-    typename List<T, A , C>::ListIterator List<T, A , C>::ListIterator::operator++(capu::int32_t)
-    {
-        typename List<T, A , C>::ListIterator oldValue(*this);
-        ++(*this);
-        return oldValue;
-    }
-
-    template <class T, class A, class C>
-    uint_t List<T, A , C>::ListIterator::currentIndex() const
-    {
-        return mIndex;
     }
 }
 

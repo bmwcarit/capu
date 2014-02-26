@@ -219,7 +219,7 @@ TEST(List, loopThroughConstList)
     result = normalList.insert(data1);
     EXPECT_EQ(capu::CAPU_OK, result);
 
-    capu::List<capu::int32_t>::Iterator iterator = constantList.begin();
+    capu::List<capu::int32_t>::ConstIterator iterator = constantList.begin();
     capu::int32_t temp = 0;
     while (iterator != constantList.end())
     {
