@@ -209,7 +209,7 @@ namespace capu
             if (res == -1)
             {
                 numBytes = 0;
-                if (errno == EAGAIN)
+                if (errno == EAGAIN || errno == EINTR)
                 {
                     return CAPU_ETIMEOUT;
                 }
