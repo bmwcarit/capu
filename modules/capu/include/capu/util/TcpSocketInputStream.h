@@ -28,9 +28,10 @@ namespace capu
         TcpSocketInputStream(TcpSocket& socket);
         ~TcpSocketInputStream();
 
+        IInputStream& read(char_t* data, const uint32_t size);
+
     protected:
 
-        IInputStream& read(char_t* data, const uint32_t size);
 
     private:
         TcpSocket& m_socket;

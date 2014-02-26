@@ -248,8 +248,22 @@ namespace capu
             const int32_t result = ::send(mSocket, buffer, length, 0);
             if (result == SOCKET_ERROR)
             {
-                close();
-                return CAPU_ERROR;
+                int lastError = WSAGetLastError();
+                switch(lastError)
+                {
+                case WSAETIMEDOUT:
+                    /**
+                     * According to winsock documentation a timeout on send can be ignored.
+                     * This means we can ignore the timeout here
+                     * and set sentBytes to length.
+                     */
+                    sentBytes = length;
+                case WSAEINTR:
+                    return CAPU_OK;
+                default:
+                    close();
+                    return CAPU_ERROR;
+                }
             }
 
             sentBytes = result;
@@ -556,7 +570,7 @@ namespace capu
 
             sockaddr_in client_address = {0};
             int32_t size = sizeof(client_address);
-            auto ret = getpeername(mSocket, (sockaddr*)&client_address, &size); 
+            auto ret = getpeername(mSocket, (sockaddr*)&client_address, &size);
 
             if ( 0 != remoteAddress)
             {

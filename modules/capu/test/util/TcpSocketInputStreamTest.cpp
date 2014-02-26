@@ -21,6 +21,8 @@
 #include <capu/os/Math.h>
 #include <capu/os/NumericLimits.h>
 #include <capu/util/SocketOutputStream.h>
+#include <capu/util/TcpSocketOutputStream.h>
+#include "capu/os/Console.h"
 
 namespace capu
 {
@@ -302,5 +304,152 @@ namespace capu
         EXPECT_STREQ("Hello World", stringResult.c_str());
         EXPECT_FLOAT_EQ(Math::LN2_f, floatResult);
         EXPECT_EQ(true, boolResult);
+    }
+
+
+    enum SendType
+    {
+        SENDTYPE_UNKNOWN = -1,
+        SENDTYPE_INT32 = 1,
+        SENDTYPE_UINT8ARRAY,
+        SENDTYPE_UINT32,
+        SENDTYPE_FLOAT,
+        SENDTYPE_END,
+    };
+
+
+    class TestRandomSender: public Runnable
+    {
+    public:
+        TestRandomSender(uint16_t port)
+            : mPort(port)
+        {
+        }
+
+        void run()
+        {
+            TcpSocket socket;
+            socket.connect("127.0.0.1", mPort);
+
+            TcpSocketOutputStream<1450> outStream(socket);
+
+            const uint32_t dataSize = 1024*1024/8;
+            uint32_t messageCount = 10;
+
+            uint8_t* data = new uint8_t[dataSize];
+            
+            Memory::Set(data, 0x00000000, dataSize);
+
+            Random rnd;
+
+            while(messageCount--)
+            {
+
+                outStream << SENDTYPE_UINT32;
+                outStream << static_cast<uint32_t>(2);
+
+                outStream << SENDTYPE_UINT8ARRAY;
+                outStream << dataSize;
+                outStream.write(data, dataSize);
+
+                outStream << SENDTYPE_UINT8ARRAY;
+                outStream << dataSize;
+                outStream.write(data, dataSize);
+
+                outStream << SENDTYPE_UINT32;
+                outStream << static_cast<uint32_t>(2);
+                outStream.flush();
+            }
+
+            outStream << SENDTYPE_END;
+            outStream.flush();
+            
+            delete[] data;
+            socket.close();
+
+        }
+    private:
+        uint16_t mPort;
+    };
+
+
+    /**
+     * This test is used to test the timeout during send
+     * We have observed that there are problems if the receiver
+     * is to slow.
+     */
+    TEST_F(TcpSocketInputStreamTest, RandomTest)
+    {
+        TcpServerSocket serverSocket;
+        serverSocket.bind(0);
+        serverSocket.listen(10);
+
+        TestRandomSender sender(serverSocket.port());
+        Thread thread;
+        thread.start(sender);
+
+        TcpSocket* socket = serverSocket.accept();
+
+        TcpSocketInputStream inStream(*socket);
+
+        uint32_t type = SENDTYPE_UNKNOWN;
+
+        inStream >> type;
+
+        uint32_t receivecount = 0;
+
+        while(type != SENDTYPE_END)
+        {
+            ++receivecount;
+            switch(type)
+            {
+                case SENDTYPE_INT32: 
+                    {
+                        int32_t value;
+                        inStream >> value;
+                        EXPECT_EQ(1, value);
+                    }
+                    break;
+                case SENDTYPE_UINT32:
+                    {
+                        uint32_t value;
+                        inStream >> value;
+                        EXPECT_EQ(2U, value);
+                    }
+                    break;
+                case SENDTYPE_FLOAT:
+                    {
+                        float_t value;
+                        inStream >> value;
+                        EXPECT_EQ(3.0f, value);
+                    }
+                    break;
+                case SENDTYPE_UINT8ARRAY: 
+                    {
+                        uint32_t size = 0;
+                        inStream >> size;
+                        uint8_t* data = new uint8_t[size];
+                        inStream.read(reinterpret_cast<char_t*>(data), size);
+
+                        for(uint32_t i = 0; i < size; ++i)
+                        {
+                            EXPECT_EQ(0, data[i]);
+                        }
+
+                        delete[] data;
+                    }
+                    break;
+                default:
+                    ASSERT_FALSE(false);
+            }
+
+            Thread::Sleep(200);
+            inStream >> type;
+        }
+
+        thread.join();
+
+        delete socket;
+        serverSocket.close();
     }
 }
