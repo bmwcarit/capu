@@ -44,9 +44,9 @@ namespace capu
                 break;
             }
 
-            if (0 == length)
+            if (0 == length && mState == CAPU_OK) // other side closed connection
             {
-                mState = CAPU_OK;
+                mState = CAPU_ERROR;
                 break;
             }
 
