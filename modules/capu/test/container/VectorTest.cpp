@@ -59,6 +59,26 @@ namespace capu
         EXPECT_EQ(5u, vector[2]);
     }
 
+    TEST_F(VectorTest, CopyConstructor)
+    {
+        Vector<uint32_t>* vector = new Vector<uint32_t>(32);
+
+        for(uint32_t i = 0; i < 32; ++i)
+        {
+            vector->push_back(i);
+        }
+
+        const Vector<uint32_t> vectorCopy(*vector);
+        delete vector;
+
+        for(uint32_t i = 0; i < 32; ++i)
+        {
+            EXPECT_EQ(i, vectorCopy[i]);
+        }
+
+        EXPECT_EQ(32u, vectorCopy.size());
+    }
+
     TEST_F(VectorTest, PushBack)
     {
         Vector<uint32_t> vector;
@@ -243,6 +263,61 @@ namespace capu
         EXPECT_EQ(2u, vector2.size());
         EXPECT_EQ(42u, vector2[0]);
         EXPECT_EQ(47u, vector2[1]);
+    }
+
+    TEST_F(VectorTest, IteratorOnConstVectorWithInitialCapacity)
+    {
+        Vector<uint32_t> vector(32);
+
+        const Vector<uint32_t>& constVector = vector;
+
+        vector.push_back(42u);
+        vector.push_back(47u);
+
+        Vector<uint32_t> vector2;
+
+        for (Vector<uint32_t>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        {
+            vector2.push_back(*iter);
+        }
+
+        EXPECT_EQ(2u, vector2.size());
+        EXPECT_EQ(42u, vector2[0]);
+        EXPECT_EQ(47u, vector2[1]);
+    }
+
+    TEST_F(VectorTest, IteratorOnConstVectorWithInitialCapacityAndValues)
+    {
+        Vector<uint32_t> vector(12, 55u);
+
+        const Vector<uint32_t>& constVector = vector;
+
+        Vector<uint32_t> vector2;
+
+        Vector<uint32_t>::ConstIterator a = constVector.begin();
+        Vector<uint32_t>::Iterator b = vector.begin();
+
+        Vector<uint32_t>::ConstIterator c = constVector.end();
+        Vector<uint32_t>::Iterator d = vector.end();
+
+        for (Vector<uint32_t>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        {
+            vector2.push_back(*iter);
+        }
+
+        EXPECT_EQ(12u, vector2.size());
+        EXPECT_EQ(55u, vector2[0]);
+        EXPECT_EQ(55u, vector2[1]);
+        EXPECT_EQ(55u, vector2[2]);
+        EXPECT_EQ(55u, vector2[3]);
+        EXPECT_EQ(55u, vector2[4]);
+        EXPECT_EQ(55u, vector2[5]);
+        EXPECT_EQ(55u, vector2[6]);
+        EXPECT_EQ(55u, vector2[7]);
+        EXPECT_EQ(55u, vector2[8]);
+        EXPECT_EQ(55u, vector2[9]);
+        EXPECT_EQ(55u, vector2[10]);
+        EXPECT_EQ(55u, vector2[11]);
     }
 
     TEST_F(VectorTest, AccessOperator)

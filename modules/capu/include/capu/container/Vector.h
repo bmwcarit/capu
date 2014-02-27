@@ -161,18 +161,23 @@ namespace capu
         Vector();
 
         /**
-         * Creates a new Vector with a given initial capacity
+         * Creates a new vector with a given initial capacity
          * @param initialCapacity for the Vector
          */
         Vector(const uint_t initialCapacity);
 
         /**
-         * Initializes the Vector with the given capacity and sets all elements
+         * Initializes the vector with the given capacity and sets all elements
          * to the given value
          * @param initialCapacity for the Vector
          * @param value to set for all elements
          */
         Vector(const uint_t initialCapacity, const T& value);
+
+        /**
+         * Initializes the vector from another vector
+         */
+        Vector(const Vector& other);
 
         /**
          * Adds an Element to the end of the vector
@@ -283,6 +288,15 @@ namespace capu
          */
         void grow();
     };
+
+    template<typename T>
+    capu::Vector<T>::Vector(const Vector& other)
+        : m_data(other.m_data)
+        , m_start(m_data.getRawData())
+        , m_end(m_data.getRawData() + other.size())
+    {
+
+    }
 
     template<typename T>
     inline
