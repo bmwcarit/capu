@@ -135,7 +135,7 @@ namespace capu
              */
             const ListIterator operator++(capu::int32_t) const
             {
-                typename List<T, A, C>::ListIterator oldValue(*this);
+                ListIterator oldValue(*this);
                 ++(*this);
                 return oldValue;
             }
@@ -147,7 +147,7 @@ namespace capu
              */
             ListIterator<TYPE> operator++(capu::int32_t)
             {
-                typename List<T, A, C>::ListIterator<TYPE> oldValue(*this);
+                ListIterator<TYPE> oldValue(*this);
                 ++(*this);
                 return oldValue;
             }
@@ -190,12 +190,12 @@ namespace capu
         /**
          * An iterator for lists
          */
-        typedef typename ListIterator<T> Iterator;
+        typedef ListIterator<T> Iterator;
 
         /**
          * An iterator for const lists
          */
-        typedef typename ListIterator<const T> ConstIterator;
+        typedef ListIterator<const T> ConstIterator;
 
         /**
          * Default Constructor
