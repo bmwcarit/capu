@@ -235,8 +235,8 @@ namespace capu
     void 
     Logger::setLogLevel(const ELogLevel logLevel)
     {
-        ContextSet::Iterator current = DefaultLogger->m_logContexts.begin();
-        const ContextSet::Iterator end = DefaultLogger->m_logContexts.end();
+        ContextSet::Iterator current = m_logContexts.begin();
+        const ContextSet::Iterator end = m_logContexts.end();
 
         for(; current != end; ++current)
         {
