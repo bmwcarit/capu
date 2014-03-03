@@ -20,9 +20,11 @@
 #include <capu/os/Thread.h>
 #include <capu/os/Math.h>
 #include <capu/os/NumericLimits.h>
+#include <capu/os/Console.h>
+#include <capu/util/TestUtils.h>
 #include <capu/util/SocketOutputStream.h>
 #include <capu/util/TcpSocketOutputStream.h>
-#include "capu/os/Console.h"
+
 
 namespace capu
 {
@@ -318,10 +320,10 @@ namespace capu
     };
 
 
-    class TestRandomSender: public Runnable
+    class TestDifferentDatatypesSender: public Runnable
     {
     public:
-        TestRandomSender(uint16_t port)
+        TestDifferentDatatypesSender(uint16_t port)
             : mPort(port)
         {
         }
@@ -329,7 +331,14 @@ namespace capu
         void run()
         {
             TcpSocket socket;
-            socket.connect("127.0.0.1", mPort);
+            status_t connectStatus = CAPU_ERROR;
+            while (connectStatus != CAPU_OK) {
+                connectStatus = socket.connect("127.0.0.1", mPort);
+                if (connectStatus != CAPU_OK) {
+                    Thread::Sleep(100);
+                }
+            }
+
 
             TcpSocketOutputStream<1450> outStream(socket);
 
@@ -365,9 +374,12 @@ namespace capu
             outStream.flush();
             
             delete[] data;
+            WAIT_FOR_SYNC_CALL((*this), ReceivedData);
             socket.close();
 
         }
+    public:
+        REGISTER_SYNC_CALL(ReceivedData);
     private:
         uint16_t mPort;
     };
@@ -378,13 +390,13 @@ namespace capu
      * We have observed that there are problems if the receiver
      * is to slow.
      */
-    TEST_F(TcpSocketInputStreamTest, RandomTest)
+    TEST_F(TcpSocketInputStreamTest, TimeoutOnSlowReceiverTest)
     {
         TcpServerSocket serverSocket;
         serverSocket.bind(0);
         serverSocket.listen(10);
 
-        TestRandomSender sender(serverSocket.port());
+        TestDifferentDatatypesSender sender(serverSocket.port());
         Thread thread;
         thread.start(sender);
 
@@ -443,10 +455,13 @@ namespace capu
                     ASSERT_FALSE(false);
             }
 
+            //sleep to simulate slow receiver
             Thread::Sleep(200);
             inStream >> type;
+            ASSERT_TRUE(type <= SENDTYPE_END);
         }
 
+        SYNC_CALL_CONDVAR_OF_CALLER(sender, ReceivedData).signal();
         thread.join();
 
         delete socket;
