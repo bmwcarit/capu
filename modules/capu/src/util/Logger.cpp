@@ -15,7 +15,6 @@ namespace capu
 
     Logger::~Logger()
     {
-
         ContextSet::Iterator current = m_logContexts.begin();
         const ContextSet::Iterator end = m_logContexts.end();
 
@@ -25,7 +24,6 @@ namespace capu
         }
 
         m_logContexts.clear();
-
     }
 
     void*
@@ -46,7 +44,10 @@ namespace capu
     void
     Logger::Log(const LogMessage& message)
     {
-        Logger::DefaultLogger->log(message);
+        if(0 != DefaultLogger)
+        {
+            Logger::DefaultLogger->log(message);
+        }
     }
 
     void
