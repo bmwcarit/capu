@@ -14,44 +14,13 @@
 # limitations under the License.
 #
 
-SET(CMAKE_SYSTEM_VERSION 1)
-
 SET (TARGET_OS iPhoneOS)
 SET (TARGET_ARCH ARMV7)
-SET (TARGET_COMPILER clang++)
-SET (IOS True)
 
 INCLUDE(CMakeForceCompiler)
 CMAKE_FORCE_C_COMPILER(clang clang)
 CMAKE_FORCE_CXX_COMPILER(clang++ clang)
 
-# Skip the platform compiler checks for cross compiling
-SET (CMAKE_CXX_COMPILER_WORKS TRUE)
-SET (CMAKE_C_COMPILER_WORKS TRUE)
-
-# All iOS/Darwin specific SETtings - some may be redundant
-SET (CMAKE_SHARED_LIBRARY_PREFIX "lib")
-SET (CMAKE_SHARED_LIBRARY_SUFFIX ".dylib")
-SET (CMAKE_SHARED_MODULE_PREFIX "lib")
-SET (CMAKE_SHARED_MODULE_SUFFIX ".so")
-
-SET (CMAKE_C_OSX_COMPATIBILITY_VERSION_FLAG "-compatibility_version ")
-SET (CMAKE_C_OSX_CURRENT_VERSION_FLAG "-current_version ")
-SET (CMAKE_CXX_OSX_COMPATIBILITY_VERSION_FLAG "${CMAKE_C_OSX_COMPATIBILITY_VERSION_FLAG}")
-SET (CMAKE_CXX_OSX_CURRENT_VERSION_FLAG "${CMAKE_C_OSX_CURRENT_VERSION_FLAG}")
-
-# Hidden visibilty is required for cxx on iOS
-SET (CMAKE_C_FLAGS_INIT "")
-SET (CMAKE_CXX_FLAGS_INIT "-headerpad_max_install_names -fvisibility=hidden -fvisibility-inlines-hidden")
-
-SET (CMAKE_C_LINK_FLAGS "-Wl,-search_paths_first ${CMAKE_C_LINK_FLAGS}")
-SET (CMAKE_CXX_LINK_FLAGS "-Wl,-search_paths_first ${CMAKE_CXX_LINK_FLAGS}")
-
-SET (CMAKE_PLATFORM_HAS_INSTALLNAME 1)
-SET (CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS "-dynamiclib -headerpad_max_install_names")
-SET (CMAKE_SHARED_MODULE_CREATE_C_FLAGS "-bundle -headerpad_max_install_names")
-SET (CMAKE_SHARED_MODULE_LOADER_C_FLAG "-Wl,-bundle_loader,")
-SET (CMAKE_SHARED_MODULE_LOADER_CXX_FLAG "-Wl,-bundle_loader,")
 SET (CMAKE_FIND_LIBRARY_SUFFIXES ".dylib" ".so" ".a")
 
 IF(NOT SDK_VERSION)
