@@ -21,10 +21,6 @@ INCLUDE(CMakeForceCompiler)
 CMAKE_FORCE_C_COMPILER(clang clang)
 CMAKE_FORCE_CXX_COMPILER(clang++ clang)
 
-# Skip the platform compiler checks for cross compiling
-SET (CMAKE_CXX_COMPILER_WORKS TRUE)
-SET (CMAKE_C_COMPILER_WORKS TRUE)
-
 SET (CMAKE_FIND_LIBRARY_SUFFIXES ".dylib" ".so" ".a")
 
 IF(NOT SDK_VERSION)
