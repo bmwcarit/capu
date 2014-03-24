@@ -43,11 +43,13 @@ namespace capu
             status_t setLingerOption(bool_t isLinger, int32_t linger);
             status_t setNoDelay(bool_t noDelay);
             status_t setKeepAlive(bool_t keepAlive);
+            status_t setNoSigPipe(bool_t noSigPipe);
             status_t setTimeout(int32_t timeout);
             status_t getBufferSize(int32_t& bufferSize);
             status_t getLingerOption(bool_t& isLinger, int32_t& linger);
             status_t getNoDelay(bool_t& noDelay);
             status_t getKeepAlive(bool_t& keepAlive);
+            status_t getNoSigPipe(bool_t& noSigPipe);
             status_t getTimeout(int32_t& timeout);
             status_t getRemoteAddress(char_t** address);
 
@@ -63,12 +65,13 @@ namespace capu
             int32_t mLinger;
             bool_t  mNoDelay;
             bool_t  mKeepAlive;
-
+            bool_t  mNoSigPipe;
 
             status_t setBufferSizeInternal();
             status_t setLingerOptionInternal();
             status_t setNoDelayInternal();
             status_t setKeepAliveInternal();
+            status_t setNoSigPipeInternal();
             status_t setTimeoutInternal();
         };
 
@@ -82,6 +85,7 @@ namespace capu
             , mLinger(0)
             , mNoDelay(false)
             , mKeepAlive(false)
+            , mNoSigPipe(true)
         {
 
         }
@@ -96,6 +100,7 @@ namespace capu
             , mLinger(0)
             , mNoDelay(false)
             , mKeepAlive(false)
+            , mNoSigPipe(true)
         {
         }
 
@@ -153,7 +158,17 @@ namespace capu
             }
             return CAPU_OK;
         }
-
+        inline
+        status_t
+        TcpSocket::setNoSigPipe(bool_t noSigPipe)
+        {
+            mNoSigPipe = noSigPipe;
+            if (-1 != mSocket)
+            {
+                return setNoSigPipeInternal();
+            }
+            return CAPU_OK;
+        }
         inline
         status_t
         TcpSocket::setTimeout(int32_t timeout)
@@ -264,7 +279,7 @@ namespace capu
                 setNoDelayInternal();
                 setKeepAliveInternal();
                 setTimeoutInternal();
-
+                setNoSigPipeInternal();
                 mServer = gethostbyname(dest_addr);
                 if (mServer == NULL)
                 {
@@ -377,6 +392,28 @@ namespace capu
                 opt = 0;
             }
             if (setsockopt(mSocket, SOL_SOCKET, SO_KEEPALIVE, &opt, sizeof(opt)) < 0)
+            {
+                return CAPU_ERROR;
+            }
+            return CAPU_OK;
+        }
+
+        inline status_t TcpSocket::setNoSigPipeInternal()
+        {
+            if (mSocket == -1)
+            {
+                return CAPU_SOCKET_ESOCKET;
+            }
+            int32_t opt;
+            if (mNoSigPipe)
+            {
+                opt = 1;
+            }
+            else
+            {
+                opt = 0;
+            }
+            if (setsockopt(mSocket, SOL_SOCKET, SO_NOSIGPIPE, &opt, sizeof(opt)) < 0)
             {
                 return CAPU_ERROR;
             }
@@ -509,6 +546,35 @@ namespace capu
             }
 
             return CAPU_OK;
+        }
+
+        inline status_t TcpSocket::getNoSigPipe(bool_t& noSigPipe)
+        {
+            if (mSocket == -1)
+            {
+                noSigPipe = mNoSigPipe;
+                return CAPU_OK;
+            }
+
+            int32_t opt;
+
+            socklen_t len = sizeof(opt);
+            if (getsockopt(mSocket, SOL_SOCKET, SO_NOSIGPIPE, &opt, &len) < 0)
+            {
+                return CAPU_ERROR;
+            }
+
+            if (opt > 0)
+            {
+                noSigPipe = true;
+            }
+            else
+            {
+                noSigPipe = false;
+            }
+
+            return CAPU_OK;
+
         }
 
         inline status_t TcpSocket::getTimeout(int32_t& timeout)
