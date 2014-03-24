@@ -19,6 +19,7 @@
 
 #include "capu/os/Socket.h"
 #include "capu/os/Memory.h"
+#include "capu/os/TcpSocket.h"
 
 namespace capu
 {

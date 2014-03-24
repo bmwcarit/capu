@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 BMW Car IT GmbH
+ * Copyright (C) 2014 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +14,21 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_GENERIC_DEBUG_H
-#define CAPU_GENERIC_DEBUG_H
-
-#include <assert.h>
-#include "capu/Config.h"
+#ifndef CAPU_THREAD_STATE_H
+#define CAPU_THREAD_STATE_H
 
 namespace capu
 {
-    namespace generic
+    /**
+     * Thread states
+     */
+    enum ThreadState
     {
-        class Debug
-        {
-        public:
-            static void Assert(bool_t condition);
-        };
-
-        inline
-        void
-        Debug::Assert(bool_t condition)
-        {
-            UNUSED(condition);
-#ifdef _DEBUG
-            assert(condition);
-#endif
-        }
-    }
+        TS_NEW,
+        TS_STARTING,
+        TS_RUNNING,
+        TS_TERMINATED
+    };
 }
 
-
-#endif //CAPU_GENERIC_DEBUG_H
+#endif // CAPU_THREAD_STATE_H

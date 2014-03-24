@@ -17,6 +17,7 @@
 #ifndef CAPU_SCOPED_POINTER_H
 #define CAPU_SCOPED_POINTER_H
 
+#include "capu/Config.h"
 #include "capu/util/Swap.h"
 
 namespace capu

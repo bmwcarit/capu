@@ -18,11 +18,10 @@
 #define CAPU_GENERIC_THREAD_H
 
 #include "capu/util/Runnable.h"
+#include "capu/os/ThreadState.h"
 
 namespace capu
 {
-    enum ThreadState;
-
     namespace generic
     {
 

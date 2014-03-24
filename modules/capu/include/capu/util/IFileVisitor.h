@@ -17,6 +17,9 @@
 #ifndef CAPU_IFILEVISITOR_H
 #define CAPU_IFILEVISITOR_H
 
+#include "capu/Error.h"
+#include "capu/Config.h"
+
 namespace capu
 {
     class File;

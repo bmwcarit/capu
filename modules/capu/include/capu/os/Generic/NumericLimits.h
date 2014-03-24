@@ -17,6 +17,8 @@
 #ifndef CAPU_GENERIC_NUMERIC_LIMITS_H
 #define CAPU_GENERIC_NUMERIC_LIMITS_H
 
+#include "capu/Config.h"
+
 namespace capu
 {
     namespace generic

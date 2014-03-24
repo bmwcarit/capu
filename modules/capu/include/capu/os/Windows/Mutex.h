@@ -19,6 +19,8 @@
 
 
 #include <windows.h>
+#include "capu/Config.h"
+#include "capu/Error.h"
 
 namespace capu
 {

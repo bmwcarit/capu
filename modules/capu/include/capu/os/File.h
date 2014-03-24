@@ -19,23 +19,8 @@
 
 #include "capu/Config.h"
 #include "capu/Error.h"
-#include <capu/os/PlatformInclude.h>
-
-namespace capu
-{
-    /**
-     * Modes for opening files
-     */
-    enum FileMode
-    {
-        READ_ONLY,                // opens file for reading
-        WRITE_NEW,                // opens file as an empty file for writing
-        READ_WRITE_EXISTING,      // opens file for reading and writing. The file must exist
-        READ_WRITE_OVERWRITE_OLD, // opens file for reading and writing. Create a new file also of old one exists
-        WRITE_EXISTING_BINARY,    // opens file for writing in binary mode
-        READ_EXISTING_BINARY      // opens file for reading in binary mode
-    };
-}
+#include "capu/os/PlatformInclude.h"
+#include "capu/os/FileMode.h"
 
 #include CAPU_PLATFORM_INCLUDE(File)
 

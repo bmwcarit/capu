@@ -18,6 +18,7 @@
 #define CAPU_WINDOWS_FILE_H
 
 #include "capu/os/Generic/File.h"
+#include "capu/os/FileMode.h"
 #include <Windows.h>
 
 // Hack to remove OS_WINDOWS: macro redefinition.

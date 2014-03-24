@@ -18,6 +18,8 @@
 #define CAPU_WINDOWS_SEMAPHORE_H
 
 #include <windows.h>
+#include "capu/Config.h"
+#include "capu/Error.h"
 
 namespace capu
 {

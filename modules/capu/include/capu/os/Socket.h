@@ -17,10 +17,10 @@
 #ifndef CAPU_SOCKET_H
 #define CAPU_SOCKET_H
 
-#include <capu/Config.h>
-#include <capu/container/String.h>
+#include "capu/Config.h"
+#include "capu/container/String.h"
 
-#include <capu/os/PlatformInclude.h>
+#include "capu/os/PlatformInclude.h"
 #include CAPU_PLATFORM_INCLUDE(Socket)
 
 namespace capu

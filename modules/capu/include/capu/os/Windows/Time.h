@@ -19,6 +19,7 @@
 
 #define _WINSOCKAPI_
 #include <windows.h>
+#include "capu/Config.h"
 
 namespace capu
 {

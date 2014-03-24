@@ -17,23 +17,10 @@
 #ifndef CAPU_THREAD_H
 #define CAPU_THREAD_H
 
-#include <capu/os/PlatformInclude.h>
+#include "capu/os/PlatformInclude.h"
 #include "capu/Error.h"
 #include "capu/util/Runnable.h"
-
-namespace capu
-{
-    /**
-     * Thread states
-     */
-    enum ThreadState
-    {
-        TS_NEW,
-        TS_STARTING,
-        TS_RUNNING,
-        TS_TERMINATED
-    };
-}
+#include "capu/os/ThreadState.h"
 
 #include CAPU_PLATFORM_INCLUDE(Thread)
 

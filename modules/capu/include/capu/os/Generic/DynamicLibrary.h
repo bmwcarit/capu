@@ -17,6 +17,8 @@
 #ifndef CAPU_GENERIC_DYNAMICLIBRARY_H
 #define CAPU_GENERIC_DYNAMICLIBRARY_H
 
+#include "capu/container/String.h"
+
 namespace capu
 {
     namespace generic

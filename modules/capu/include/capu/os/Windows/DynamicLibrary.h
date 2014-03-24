@@ -19,6 +19,7 @@
 
 #include <Windows.h>
 #include "capu/os/Generic/DynamicLibrary.h"
+#include "capu/Error.h"
 
 namespace capu
 {

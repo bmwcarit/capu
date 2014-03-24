@@ -17,13 +17,13 @@
 #ifndef CAPU_WINDOWS_THREAD_H
 #define CAPU_WINDOWS_THREAD_H
 
-#include "capu/os/Generic/Thread.h"
 #include <windows.h>
+#include "capu/os/Generic/Thread.h"
+#include "capu/os/Thread.h"
+#include "capu/Error.h"
 
 namespace capu
 {
-    enum ThreadState;
-
     namespace os
     {
         class Thread : private generic::Thread

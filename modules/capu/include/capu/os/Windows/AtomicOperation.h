@@ -18,6 +18,7 @@
 #define CAPU_WINDOWS_ATOMICOPERATION_H
 
 #include <Windows.h>
+#include "capu/Config.h"
 
 namespace capu
 {

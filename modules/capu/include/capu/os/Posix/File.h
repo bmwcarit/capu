@@ -18,6 +18,7 @@
 #define CAPU_UNIXBASED_FILE_H
 
 #include "capu/os/Generic/File.h"
+#include "capu/os/FileMode.h"
 #include <sys/stat.h>
 #include <unistd.h>
 #include <climits>

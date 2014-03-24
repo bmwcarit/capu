@@ -19,6 +19,9 @@
 
 #include <windows.h>
 #include "capu/os/Time.h"
+#include "capu/Config.h"
+#include "capu/Error.h"
+#include "capu/os/Mutex.h"
 
 namespace capu
 {
