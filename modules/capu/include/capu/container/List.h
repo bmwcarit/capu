@@ -231,14 +231,14 @@ namespace capu
          * @param other list to compare
          * @return true if lists are equal false otherwise
          */
-        bool_t operator==(const List<T, A, C>& other);
+        bool_t operator==(const List<T, A, C>& other) const;
 
         /**
          * Checks if two lists are not equal
          * @param other list to compare
          * @return true if lists aren't equal false otherwise
          */
-        bool_t operator!=(const List<T, A, C>& other);
+        bool_t operator!=(const List<T, A, C>& other) const;
 
         /**
          * Inserts element at the end of the list
@@ -899,22 +899,22 @@ namespace capu
     }
 
     template <class T, class A, class C>
-    bool_t List<T, A, C>::operator!=(const List<T, A, C>& other)
+    bool_t List<T, A, C>::operator!=(const List<T, A, C>& other) const
     {
         return !(operator==(other));
     }
 
     template <class T, class A, class C>
-    bool_t List<T, A, C>::operator==(const List<T, A, C>& other)
+    bool_t List<T, A, C>::operator==(const List<T, A, C>& other) const
     {
         if (size() != other.size())
         {
             return false;
         }
 
-        Iterator thisIter = begin();
+        ConstIterator thisIter = begin();
         ConstIterator otherIter = other.begin();
-        const Iterator endIter = end();
+        const ConstIterator endIter = end();
         while (thisIter != endIter)
         {
             if ((*thisIter) != (*otherIter))
