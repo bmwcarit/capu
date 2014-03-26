@@ -146,7 +146,7 @@ namespace capu
         /**
          * Destructor of the Logger
          */
-        ~Logger();
+        virtual ~Logger();
 
         /**
          * Sets all contexts to the given enabled value which start with the 

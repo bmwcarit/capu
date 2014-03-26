@@ -36,6 +36,8 @@ namespace capu
          * @see ILogAppender
          */
         virtual void log(const LogMessage& logMessage);
+
+        virtual ~ConsoleLogAppender();
     private:
 
         /**
