@@ -5,6 +5,9 @@
 
 namespace capu
 {
+    ConsoleLogAppender::~ConsoleLogAppender()
+    {
+    }
 
     void ConsoleLogAppender::log(const LogMessage& logMessage)
     {

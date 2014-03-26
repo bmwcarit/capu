@@ -33,6 +33,8 @@ namespace capu
          * @param logMessage to log
          */
         virtual void log(const LogMessage& logMessage) = 0;
+
+        virtual ~ILogAppender(){}
     };
 
 }
