@@ -25,5 +25,15 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
+namespace capu {
+    namespace os {
+        typedef SOCKET SocketDescription;
+        typedef int32_t socketOptionLen;
+    }
+}
+
+#define CAPU_INVALID_SOCKET INVALID_SOCKET
+#define CAPU_SOCKET_ERROR SOCKET_ERROR
+
 #endif // CAPU_WINDOWS_SOCKET_H
 

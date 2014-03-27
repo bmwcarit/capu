@@ -40,7 +40,7 @@ namespace capu
          * Constructor with initial socket description
          * @param socketDescription Object describing the socket to create
          */
-        TcpSocket(const capu::os::arch::SocketDescription& socketDescription);
+        TcpSocket(const capu::os::SocketDescription& socketDescription);
 
         /**
          * Destructor
@@ -202,7 +202,7 @@ namespace capu
 
 
     inline
-    TcpSocket::TcpSocket(const capu::os::arch::SocketDescription& socketDescription)
+    TcpSocket::TcpSocket(const capu::os::SocketDescription& socketDescription)
         : capu::os::arch::TcpSocket(socketDescription)
     {
 

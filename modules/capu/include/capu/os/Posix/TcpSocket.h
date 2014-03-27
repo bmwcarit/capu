@@ -18,152 +18,71 @@
 #ifndef CAPU_UNIXBASED_TCP_SOCKET_H
 #define CAPU_UNIXBASED_TCP_SOCKET_H
 
-#include <capu/os/Socket.h>
-#include <cstring>
+#include <sys/socket.h>
 #include <netinet/tcp.h>
+#include <cstring>
+#include <capu/os/Socket.h>
+#include <capu/os/Generic/TcpSocket.h>
+
 
 namespace capu
 {
     namespace posix
     {
-        typedef int32_t SocketDescription;
 
-        class TcpSocket
+      class TcpSocket: private capu::generic::TcpSocket
         {
         public:
             TcpSocket();
-            TcpSocket(const SocketDescription& socketDescription);
+            TcpSocket(const capu::os::SocketDescription& socketDescription);
             ~TcpSocket();
 
             status_t send(const char_t* buffer, int32_t length, int32_t& sentBytes);
             status_t receive(char_t* buffer, int32_t length, int32_t& numBytes);
             status_t close();
             status_t connect(const char_t* dest_addr, uint16_t port);
-            status_t setBufferSize(int32_t bufferSize);
-            status_t setLingerOption(bool_t isLinger, int32_t linger);
-            status_t setNoDelay(bool_t noDelay);
-            status_t setKeepAlive(bool_t keepAlive);
+
             status_t setTimeout(int32_t timeout);
-            status_t getBufferSize(int32_t& bufferSize);
-            status_t getLingerOption(bool_t& isLinger, int32_t& linger);
-            status_t getNoDelay(bool_t& noDelay);
-            status_t getKeepAlive(bool_t& keepAlive);
             status_t getTimeout(int32_t& timeout);
-            status_t getRemoteAddress(char_t** address);
+
+            using capu::generic::TcpSocket::setBufferSize;
+            using capu::generic::TcpSocket::setLingerOption;
+            using capu::generic::TcpSocket::setNoDelay;
+            using capu::generic::TcpSocket::setKeepAlive;
+            using capu::generic::TcpSocket::getBufferSize;
+            using capu::generic::TcpSocket::getLingerOption;
+            using capu::generic::TcpSocket::getNoDelay;
+            using capu::generic::TcpSocket::getKeepAlive;
+            using capu::generic::TcpSocket::getRemoteAddress;
 
         protected:
-            int32_t mSocket;
+            status_t setPosixSocketParams();
             int32_t mTimeout;
+            using capu::generic::TcpSocket::mSocket;
+
         private:
-            struct sockaddr_in mServerAddress;
-            struct hostent* mServer;
-
-            int32_t mBufferSize;
-            bool_t  mIsLinger;
-            int32_t mLinger;
-            bool_t  mNoDelay;
-            bool_t  mKeepAlive;
-
-
-            status_t setBufferSizeInternal();
-            status_t setLingerOptionInternal();
-            status_t setNoDelayInternal();
-            status_t setKeepAliveInternal();
             status_t setTimeoutInternal();
+
         };
 
-        // cppcheck-suppress uninitMemberVar
-        inline TcpSocket::TcpSocket()
-            : mSocket(-1)
-            , mTimeout(-1)
-            , mServer(NULL)
-            , mBufferSize(-1)
-            , mIsLinger(false)
-            , mLinger(0)
-            , mNoDelay(false)
-            , mKeepAlive(false)
+        inline
+        TcpSocket::TcpSocket()
+        : mTimeout(-1)
         {
-
         }
 
-        // cppcheck-suppress uninitMemberVar
-        inline TcpSocket::TcpSocket(const SocketDescription& socketDescription)
-            : mSocket(socketDescription)
-            , mTimeout(-1)
-            , mServer(NULL)
-            , mBufferSize(-1)
-            , mIsLinger(false)
-            , mLinger(0)
-            , mNoDelay(false)
-            , mKeepAlive(false)
+        inline
+        TcpSocket::TcpSocket(const capu::os::SocketDescription& socketDescription)
+        : capu::generic::TcpSocket()
+        , mTimeout(-1)
         {
+            mSocket = socketDescription;
         }
 
         inline
         TcpSocket::~TcpSocket()
         {
             close();
-        }
-
-        inline
-        status_t
-        TcpSocket::setBufferSize(int32_t bufferSize)
-        {
-            mBufferSize = bufferSize;
-            if (-1 != mSocket)
-            {
-                return setBufferSizeInternal();
-            }
-            return CAPU_OK;
-        }
-
-        inline
-        status_t
-        TcpSocket::setLingerOption(bool_t isLinger, int32_t linger)
-        {
-            mIsLinger = isLinger;
-            mLinger   = linger;
-            if (-1 != mSocket)
-            {
-                return setLingerOptionInternal();
-            }
-            return CAPU_OK;
-        }
-
-        inline
-        status_t
-        TcpSocket::setNoDelay(bool_t noDelay)
-        {
-            mNoDelay = noDelay;
-            if (-1 != mSocket)
-            {
-                return setNoDelayInternal();
-            }
-            return CAPU_OK;
-        }
-
-        inline
-        status_t
-        TcpSocket::setKeepAlive(bool_t keepAlive)
-        {
-            mKeepAlive = keepAlive;
-            if (-1 != mSocket)
-            {
-                return setKeepAliveInternal();
-            }
-            return CAPU_OK;
-        }
-
-        inline
-        status_t
-        TcpSocket::setTimeout(int32_t timeout)
-        {
-            mTimeout = timeout;
-            if (-1 != mSocket)
-            {
-                return setTimeoutInternal();
-            }
-            return CAPU_OK;
         }
 
         inline
@@ -263,26 +182,20 @@ namespace capu
             }
             else
             {
-                setBufferSizeInternal();
-                setLingerOptionInternal();
-                setNoDelayInternal();
-                setKeepAliveInternal();
-                setTimeoutInternal();
-
-                mServer = gethostbyname(dest_addr);
-                if (mServer == NULL)
+                status_t status = setPosixSocketParams();
+                if (status != CAPU_OK && status != CAPU_EINVAL)
                 {
-                    return CAPU_SOCKET_EADDR;
+                    return status;
                 }
-                // for padding
-                memset((char*) &mServerAddress, 0x00, sizeof(mServerAddress));
-                mServerAddress.sin_family = AF_INET;
-                //destination ip is set
-                memcpy((char*) &mServerAddress.sin_addr.s_addr, (char*) mServer->h_addr_list[0], mServer->h_length);
-                //port is set
-                mServerAddress.sin_port = htons(port);
 
-                int32_t res = ::connect(mSocket, (const sockaddr*) &mServerAddress, sizeof(mServerAddress));
+                struct sockaddr_in serverAddress;
+                status = getSocketAddr(dest_addr, port, serverAddress);
+                if (status != CAPU_OK) 
+                {
+                    return status;
+                }
+
+                int32_t res = ::connect(mSocket, (const sockaddr*) &serverAddress, sizeof(serverAddress));
                 if (res == -1)
                 {
                     return CAPU_SOCKET_ECONNECT;
@@ -292,97 +205,30 @@ namespace capu
         }
 
         inline
-        status_t
-        TcpSocket::setBufferSizeInternal()
+        status_t TcpSocket::setPosixSocketParams()
         {
-            if (mSocket == -1)
-            {
-                return CAPU_SOCKET_ESOCKET;
-            }
-            if (mBufferSize < 0)
-            {
-                return CAPU_EINVAL;
-            }
-            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, &mBufferSize, sizeof(mBufferSize)) < 0)
-            {
-                return CAPU_ERROR;
+            status_t returnStatus = CAPU_OK;
+            status_t status = setSocketParameters();
+            if (status != CAPU_OK) {
+                returnStatus = status;
             }
 
-            return CAPU_OK;
+            status = setTimeoutInternal();
+            if (status != CAPU_OK) {
+                returnStatus = status;
+            }
+
+            return returnStatus;
         }
 
         inline
         status_t
-        TcpSocket::setLingerOptionInternal()
+        TcpSocket::setTimeout(int32_t timeout)
         {
-            if (mLinger < 0)
+            mTimeout = timeout;
+            if (-1 != mSocket)
             {
-                return CAPU_EINVAL;
-            }
-            if (mSocket == -1)
-            {
-                return CAPU_SOCKET_ESOCKET;
-            }
-
-            struct linger so_linger;
-            if (mIsLinger)
-            {
-                so_linger.l_onoff = 1;
-                so_linger.l_linger = mLinger;
-            }
-            else
-            {
-                so_linger.l_onoff = 0;
-                so_linger.l_linger = 0;
-            }
-
-            if (setsockopt(mSocket, SOL_SOCKET, SO_LINGER, &so_linger, sizeof(so_linger)) < 0)
-            {
-                return CAPU_ERROR;
-            }
-            return CAPU_OK;
-        }
-
-        inline status_t TcpSocket::setNoDelayInternal()
-        {
-            if (mSocket == -1)
-            {
-                return CAPU_SOCKET_ESOCKET;
-            }
-            int32_t opt;
-            if (mNoDelay)
-            {
-                opt = 1;
-            }
-            else
-            {
-                opt = 0;
-            }
-            if (setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, &opt, sizeof(opt)) < 0)
-            {
-                return CAPU_ERROR;
-            }
-            return CAPU_OK;
-        }
-
-        inline status_t TcpSocket::setKeepAliveInternal()
-        {
-            if (mSocket == -1)
-            {
-                return CAPU_SOCKET_ESOCKET;
-            }
-            int32_t opt;
-            if (mKeepAlive)
-            {
-                opt = 1;
-            }
-            else
-            {
-                opt = 0;
-            }
-            if (setsockopt(mSocket, SOL_SOCKET, SO_KEEPALIVE, &opt, sizeof(opt)) < 0)
-            {
-                return CAPU_ERROR;
+                return setTimeoutInternal();
             }
             return CAPU_OK;
         }
@@ -416,105 +262,6 @@ namespace capu
             return CAPU_OK;
         }
 
-        inline status_t TcpSocket::getBufferSize(int32_t& bufferSize)
-        {
-            if (mSocket == -1)
-            {
-                bufferSize = mBufferSize;
-                return CAPU_OK;
-            }
-
-            int32_t size;
-            socklen_t len = sizeof(size);
-            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, &size, &len) < 0)
-            {
-                return CAPU_ERROR;
-            }
-            bufferSize = size;
-            return CAPU_OK;
-        }
-
-        inline status_t TcpSocket::getLingerOption(bool_t& isLinger, int32_t& _linger)
-        {
-            if (mSocket == -1)
-            {
-                isLinger = mIsLinger;
-                _linger  = mLinger;
-                return CAPU_OK;
-            }
-            struct linger so_linger;
-
-            socklen_t len = sizeof(so_linger);
-            if (getsockopt(mSocket, SOL_SOCKET, SO_LINGER, &so_linger, &len) < 0)
-            {
-                return CAPU_ERROR;
-            }
-            _linger = so_linger.l_linger;
-            if (so_linger.l_onoff > 0)
-            {
-                isLinger = true;
-            }
-            else
-            {
-                isLinger = false;
-            }
-            return CAPU_OK;
-        }
-
-        inline status_t TcpSocket::getNoDelay(bool_t& noDelay)
-        {
-            if (mSocket == -1)
-            {
-                noDelay = mNoDelay;
-                return CAPU_OK;
-            }
-            int32_t opt;
-            socklen_t len = sizeof(opt);
-            if (getsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, &opt, &len) < 0)
-            {
-                return CAPU_ERROR;
-            }
-
-            if (opt > 0)
-            {
-                noDelay = true;
-            }
-            else
-            {
-                noDelay = false;
-            }
-
-            return CAPU_OK;
-        }
-
-        inline status_t TcpSocket::getKeepAlive(bool_t& keepAlive)
-        {
-            if (mSocket == -1)
-            {
-                keepAlive = mKeepAlive;
-                return CAPU_OK;
-            }
-
-            int32_t opt;
-
-            socklen_t len = sizeof(opt);
-            if (getsockopt(mSocket, SOL_SOCKET, SO_KEEPALIVE, &opt, &len) < 0)
-            {
-                return CAPU_ERROR;
-            }
-
-            if (opt > 0)
-            {
-                keepAlive = true;
-            }
-            else
-            {
-                keepAlive = false;
-            }
-
-            return CAPU_OK;
-        }
-
         inline status_t TcpSocket::getTimeout(int32_t& timeout)
         {
             if (mSocket == -1)
@@ -537,33 +284,9 @@ namespace capu
 
             return CAPU_OK;
         }
-
-        inline status_t TcpSocket::getRemoteAddress(char_t** remoteAddress)
-        {
-            if (mSocket == -1)
-            {
-                return CAPU_SOCKET_ESOCKET;
-            }
-
-            sockaddr_in client_address;
-            memset(&client_address, 0, sizeof(sockaddr_in));
-
-            socklen_t size = sizeof(client_address);
-            if (getpeername(mSocket, (sockaddr*)&client_address, &size) < 0)
-            {
-                return CAPU_ERROR;
-            }
-
-            if ( 0 != remoteAddress)
-            {
-                char *remoteIP = inet_ntoa(client_address.sin_addr);
-                uint_t stringLength = StringUtils::Strlen(remoteIP) + 1;
-                *remoteAddress = new char_t[stringLength];
-                StringUtils::Strncpy(*remoteAddress, stringLength, remoteIP);
-            }
-            return CAPU_OK;
-        }
     }
+
+
 }
 
 #endif // CAPU_UNIXBASED_TCP_SOCKET_H

@@ -25,13 +25,11 @@ namespace capu
     {
         namespace arch
         {
-            typedef capu::os::SocketDescription SocketDescription;
-
             class TcpSocket: private capu::os::TcpSocket
             {
             public:
                 TcpSocket();
-                TcpSocket(const SocketDescription& socketDescription);
+                TcpSocket(const capu::os::SocketDescription& socketDescription);
                 using capu::os::TcpSocket::send;
                 using capu::os::TcpSocket::receive;
                 using capu::os::TcpSocket::close;
@@ -56,7 +54,7 @@ namespace capu
             }
 
             inline
-            TcpSocket::TcpSocket(const SocketDescription& socketDescription)
+            TcpSocket::TcpSocket(const capu::os::SocketDescription& socketDescription)
                 : capu::os::TcpSocket(socketDescription)
             {
 

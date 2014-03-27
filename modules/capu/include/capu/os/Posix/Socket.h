@@ -25,5 +25,14 @@
 #include <errno.h>
 #include <arpa/inet.h>
 
+namespace capu {
+    namespace os {
+        typedef int32_t SocketDescription;
+        typedef socklen_t socketOptionLen;
+    }
+}
+
+#define CAPU_INVALID_SOCKET -1
+#define CAPU_SOCKET_ERROR -1
 
 #endif // CAPU_UNIXBASED_SOCKET_H

@@ -23,7 +23,6 @@ namespace capu
 {
     namespace os
     {
-        typedef capu::posix::SocketDescription SocketDescription;
 
         class TcpSocket: private capu::posix::TcpSocket
         {

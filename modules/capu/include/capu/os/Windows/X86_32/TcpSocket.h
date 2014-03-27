@@ -25,7 +25,6 @@ namespace capu
     {
         namespace arch
         {
-            typedef capu::os::SocketDescription SocketDescription;
 
             class TcpSocket: private capu::os::TcpSocket
             {
