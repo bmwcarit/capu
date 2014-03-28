@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_32_MUTEX_H
 #define CAPU_MACOSX_X86_32_MUTEX_H
 
-#include <capu/os/Linux/Mutex.h>
+#include <capu/os/MacOSX/Mutex.h>
 
 namespace capu
 {

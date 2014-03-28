@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_64_MATH_H
 #define CAPU_MACOSX_X86_64_MATH_H
 
-#include <capu/os/Linux/Math.h>
+#include <capu/os/MacOSX/Math.h>
 
 namespace capu
 {

@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_32_TIMESTAMP_H
 #define CAPU_MACOSX_X86_32_TIMESTAMP_H
 
-#include <capu/os/Posix/TimeStamp.h>
+#include <capu/os/MacOSX/TimeStamp.h>
 
 namespace capu
 {
@@ -26,7 +26,7 @@ namespace capu
         namespace arch
         {
 
-            class TimeStamp : public capu::posix::TimeStamp
+            class TimeStamp : public capu::os::TimeStamp
             {
             };
         }

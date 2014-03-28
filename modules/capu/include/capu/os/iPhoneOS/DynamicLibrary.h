@@ -17,25 +17,25 @@
 #ifndef CAPU_IPHONEOS_DYNAMICLIBRARY_H
 #define CAPU_IPHONEOS_DYNAMICLIBRARY_H
 
-#include <capu/os/Posix/DynamicLibrary.h>
+#include <capu/os/MacOSX/DynamicLibrary.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class DynamicLibrary: private capu::posix::DynamicLibrary
+        class DynamicLibrary: private capu::os::DynamicLibrary
         {
         public:
             DynamicLibrary(String path);
-            using capu::posix::DynamicLibrary::load;
-            using capu::posix::DynamicLibrary::unload;
-            using capu::posix::DynamicLibrary::loadSymbol;
-            using capu::posix::DynamicLibrary::getPath;
+            using capu::os::DynamicLibrary::load;
+            using capu::os::DynamicLibrary::unload;
+            using capu::os::DynamicLibrary::loadSymbol;
+            using capu::os::DynamicLibrary::getPath;
         };
 
         inline
         DynamicLibrary::DynamicLibrary(String path)
-            : capu::posix::DynamicLibrary(path)
+            : capu::os::DynamicLibrary(path)
         {
         }
     }

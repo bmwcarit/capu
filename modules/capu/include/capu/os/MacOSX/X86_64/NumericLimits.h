@@ -17,8 +17,7 @@
 #ifndef CAPU_MACOSX_X86_64_NUMERIC_LIMITS_H
 #define CAPU_MACOSX_X86_64_NUMERIC_LIMITS_H
 
-#include <float.h>
-#include <capu/os/Linux/NumericLimits.h>
+#include <capu/os/MacOSX/NumericLimits.h>
 
 namespace capu
 {

@@ -18,13 +18,13 @@
 #define CAPU_IPHONEOS_MUTEX_H
 
 
-#include <capu/os/Posix/Mutex.h>
+#include <capu/os/MacOSX/Mutex.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class Mutex: public capu::posix::Mutex
+        class Mutex: public capu::os::Mutex
         {
         };
     }

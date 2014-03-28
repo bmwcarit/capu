@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_32_DEBUG_H
 #define CAPU_MACOSX_X86_32_DEBUG_H
 
-#include <capu/os/Linux/Debug.h>
+#include <capu/os/MacOSX/Debug.h>
 
 namespace capu
 {

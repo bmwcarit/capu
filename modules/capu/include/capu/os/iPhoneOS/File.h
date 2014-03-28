@@ -17,47 +17,47 @@
 #ifndef CAPU_IPHONEOS_FILE_H
 #define CAPU_IPHONEOS_FILE_H
 
-#include <capu/os/Posix/File.h>
+#include <capu/os/MacOSX/File.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-            class File: private capu::posix::File
+            class File: private capu::os::File
             {
             public:
                 File(const String& path);
                 File(const File& parent, const capu::String& path);
-                using capu::posix::File::open;
-                using capu::posix::File::isOpen;
-                using capu::posix::File::isEof;
-                using capu::posix::File::read;
-                using capu::posix::File::write;
-                using capu::posix::File::flush;
-                using capu::posix::File::close;
-                using capu::posix::File::createFile;
-                using capu::posix::File::createDirectory;
-                using capu::posix::File::remove;
-                using capu::posix::File::exists;
-                using capu::posix::File::renameTo;
-                using capu::posix::File::copyTo;
-                using capu::posix::File::getFileName;
-                using capu::posix::File::getExtension;
-                using capu::posix::File::getPath;
-                using capu::posix::File::getParentPath;
-                using capu::posix::File::getSizeInBytes;
-                using capu::posix::File::isDirectory;
+                using capu::os::File::open;
+                using capu::os::File::isOpen;
+                using capu::os::File::isEof;
+                using capu::os::File::read;
+                using capu::os::File::write;
+                using capu::os::File::flush;
+                using capu::os::File::close;
+                using capu::os::File::createFile;
+                using capu::os::File::createDirectory;
+                using capu::os::File::remove;
+                using capu::os::File::exists;
+                using capu::os::File::renameTo;
+                using capu::os::File::copyTo;
+                using capu::os::File::getFileName;
+                using capu::os::File::getExtension;
+                using capu::os::File::getPath;
+                using capu::os::File::getParentPath;
+                using capu::os::File::getSizeInBytes;
+                using capu::os::File::isDirectory;
             };
 
             inline
             File::File(const String& path)
-                : capu::posix::File(path)
+                : capu::os::File(path)
             {
             }
 
             inline
             File::File(const File& parent, const capu::String& path)
-                : capu::posix::File(parent, path)
+                : capu::os::File(parent, path)
             {
             }
     }

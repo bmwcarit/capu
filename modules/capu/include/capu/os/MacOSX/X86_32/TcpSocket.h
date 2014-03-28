@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_32_TCP_SOCKET_H
 #define CAPU_MACOSX_X86_32_TCP_SOCKET_H
 
-#include <capu/os/Linux/TcpSocket.h>
+#include <capu/os/MacOSX/TcpSocket.h>
 
 namespace capu
 {

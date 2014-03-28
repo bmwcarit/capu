@@ -18,20 +18,20 @@
 #define CAPU_IPHONEOS_TCPSERVERSOCKET_H
 
 
-#include <capu/os/Posix/TcpServerSocket.h>
+#include <capu/os/MacOSX/TcpServerSocket.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class TcpServerSocket: private capu::posix::TcpServerSocket
+        class TcpServerSocket: private capu::os::TcpServerSocket
         {
         public:
-            using capu::posix::TcpServerSocket::accept;
-            using capu::posix::TcpServerSocket::close;
-            using capu::posix::TcpServerSocket::bind;
-            using capu::posix::TcpServerSocket::listen;
-            using capu::posix::TcpServerSocket::port;
+            using capu::os::TcpServerSocket::accept;
+            using capu::os::TcpServerSocket::close;
+            using capu::os::TcpServerSocket::bind;
+            using capu::os::TcpServerSocket::listen;
+            using capu::os::TcpServerSocket::port;
         };
     }
 }

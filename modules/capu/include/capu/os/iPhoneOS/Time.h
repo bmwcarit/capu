@@ -17,28 +17,17 @@
 #ifndef CAPU_IPHONEOS_TIME_H
 #define CAPU_IPHONEOS_TIME_H
 
-#include <mach/clock.h>
-#include <mach/mach.h>
+#include <capu/os/MacOSX/Time.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class Time
+        class Time: private capu::os::Time
         {
         public:
-            static uint64_t GetMilliseconds();
+            using capu::os::Time::GetMilliseconds;
         };
-
-        inline uint64_t Time::GetMilliseconds()
-        {
-            mach_timespec_t ts;
-            clock_serv_t cl;
-            host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cl);
-            clock_get_time(cl, &ts);
-            mach_port_deallocate(mach_task_self(), cl);
-            return (static_cast<uint64_t>(ts.tv_sec) * 1000) + (ts.tv_nsec / 1000000);
-        }
     }
 }
 #endif // CAPU_IPHONEOS_TIME_H

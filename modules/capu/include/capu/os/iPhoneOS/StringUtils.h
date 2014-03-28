@@ -17,24 +17,24 @@
 #ifndef CAPU_IPHONEOS_STRINGUTILS_H
 #define CAPU_IPHONEOS_STRINGUTILS_H
 
-#include <capu/os/Posix/StringUtils.h>
+#include <capu/os/MacOSX/StringUtils.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class StringUtils: private capu::posix::StringUtils
+        class StringUtils: private capu::os::StringUtils
         {
         public:
-            using capu::posix::StringUtils::Strncpy;
-            using capu::posix::StringUtils::Sprintf;
-            using capu::posix::StringUtils::Vsprintf;
-            using capu::posix::StringUtils::Vscprintf;
-            using capu::posix::StringUtils::Strlen;
-            using capu::posix::StringUtils::Strcmp;
-            using capu::posix::StringUtils::LastIndexOf;
-            using capu::posix::StringUtils::IndexOf;
-            using capu::posix::StringUtils::StartsWith;
+            using capu::os::StringUtils::Strncpy;
+            using capu::os::StringUtils::Sprintf;
+            using capu::os::StringUtils::Vsprintf;
+            using capu::os::StringUtils::Vscprintf;
+            using capu::os::StringUtils::Strlen;
+            using capu::os::StringUtils::Strcmp;
+            using capu::os::StringUtils::LastIndexOf;
+            using capu::os::StringUtils::IndexOf;
+            using capu::os::StringUtils::StartsWith;
         };
     }
 }

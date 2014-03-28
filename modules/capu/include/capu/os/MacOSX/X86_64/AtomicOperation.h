@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_64_ATOMICOPERATION_H
 #define CAPU_MACOSX_X86_64_ATOMICOPERATION_H
 
-#include <capu/os/posix/AtomicOperation.h>
+#include <capu/os/Posix/AtomicOperation.h>
 
 namespace capu
 {

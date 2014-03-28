@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_64_DYNAMICLIBRARY_H
 #define CAPU_MACOSX_X86_64_DYNAMICLIBRARY_H
 
-#include <capu/os/Linux/DynamicLibrary.h>
+#include <capu/os/MacOSX/DynamicLibrary.h>
 
 namespace capu
 {

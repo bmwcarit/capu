@@ -17,6 +17,6 @@
 #ifndef CAPU_MACOSX_X86_32_SOCKET_H
 #define CAPU_MACOSX_X86_32_SOCKET_H
 
-#include "capu/os/Posix/Socket.h"
+#include "capu/os/MacOSX/Socket.h"
 
 #endif // CAPU_MACOSX_X86_32_SOCKET_H

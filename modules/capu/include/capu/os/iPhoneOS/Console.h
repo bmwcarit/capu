@@ -17,17 +17,17 @@
 #ifndef CAPU_IPHONEOS_CONSOLE_H
 #define CAPU_IPHONEOS_CONSOLE_H
 
-#include <capu/os/Posix/Console.h>
+#include <capu/os/MacOSX/Console.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class Console: private capu::posix::Console
+        class Console: private capu::os::Console
         {
         public:
-            using capu::posix::Console::IsInputAvailable;
-            using capu::posix::Console::Print;
+            using capu::os::Console::IsInputAvailable;
+            using capu::os::Console::Print;
         };
     }
 }

@@ -17,35 +17,35 @@
 #ifndef CAPU_IPHONEOS_TCP_SOCKET_H
 #define CAPU_IPHONEOS_TCP_SOCKET_H
 
-#include <capu/os/Posix/TcpSocket.h>
+#include <capu/os/MacOSX/TcpSocket.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        typedef capu::posix::SocketDescription SocketDescription;
+        typedef capu::os::SocketDescription SocketDescription;
 
-        class TcpSocket: private capu::posix::TcpSocket
+        class TcpSocket: private capu::os::TcpSocket
         {
         public:
             TcpSocket();
             TcpSocket(const SocketDescription& socketDescription);
 
-            using capu::posix::TcpSocket::send;
-            using capu::posix::TcpSocket::receive;
-            using capu::posix::TcpSocket::close;
-            using capu::posix::TcpSocket::connect;
-            using capu::posix::TcpSocket::setBufferSize;
-            using capu::posix::TcpSocket::setLingerOption;
-            using capu::posix::TcpSocket::setNoDelay;
-            using capu::posix::TcpSocket::setKeepAlive;
-            using capu::posix::TcpSocket::setTimeout;
-            using capu::posix::TcpSocket::getBufferSize;
-            using capu::posix::TcpSocket::getLingerOption;
-            using capu::posix::TcpSocket::getNoDelay;
-            using capu::posix::TcpSocket::getKeepAlive;
-            using capu::posix::TcpSocket::getTimeout;
-            using capu::posix::TcpSocket::getRemoteAddress;
+            using capu::os::TcpSocket::send;
+            using capu::os::TcpSocket::receive;
+            using capu::os::TcpSocket::close;
+            using capu::os::TcpSocket::connect;
+            using capu::os::TcpSocket::setBufferSize;
+            using capu::os::TcpSocket::setLingerOption;
+            using capu::os::TcpSocket::setNoDelay;
+            using capu::os::TcpSocket::setKeepAlive;
+            using capu::os::TcpSocket::setTimeout;
+            using capu::os::TcpSocket::getBufferSize;
+            using capu::os::TcpSocket::getLingerOption;
+            using capu::os::TcpSocket::getNoDelay;
+            using capu::os::TcpSocket::getKeepAlive;
+            using capu::os::TcpSocket::getTimeout;
+            using capu::os::TcpSocket::getRemoteAddress;
 
         };
 
@@ -56,7 +56,7 @@ namespace capu
 
         inline
         TcpSocket::TcpSocket(const SocketDescription& socketDescription)
-            : capu::posix::TcpSocket(socketDescription)
+            : capu::os::TcpSocket(socketDescription)
         {
 
         }

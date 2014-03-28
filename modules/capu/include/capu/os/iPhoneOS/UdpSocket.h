@@ -17,24 +17,24 @@
 #ifndef CAPU_IPHONEOS_UDP_SOCKET_H
 #define CAPU_IPHONEOS_UDP_SOCKET_H
 
-#include <capu/os/Posix/UdpSocket.h>
+#include <capu/os/MacOSX/UdpSocket.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class UdpSocket: private capu::posix::UdpSocket
+        class UdpSocket: private capu::os::UdpSocket
         {
         public:
-            using capu::posix::UdpSocket::bind;
-            using capu::posix::UdpSocket::send;
-            using capu::posix::UdpSocket::receive;
-            using capu::posix::UdpSocket::close;
-            using capu::posix::UdpSocket::setBufferSize;
-            using capu::posix::UdpSocket::setTimeout;
-            using capu::posix::UdpSocket::getBufferSize;
-            using capu::posix::UdpSocket::getTimeout;
-            using capu::posix::UdpSocket::getSocketAddrInfo;
+            using capu::os::UdpSocket::bind;
+            using capu::os::UdpSocket::send;
+            using capu::os::UdpSocket::receive;
+            using capu::os::UdpSocket::close;
+            using capu::os::UdpSocket::setBufferSize;
+            using capu::os::UdpSocket::setTimeout;
+            using capu::os::UdpSocket::getBufferSize;
+            using capu::os::UdpSocket::getTimeout;
+            using capu::os::UdpSocket::getSocketAddrInfo;
         };
     }
 }

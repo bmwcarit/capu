@@ -17,18 +17,18 @@
 #ifndef CAPU_IPHONEOS_CONDVAR_H
 #define CAPU_IPHONEOS_CONDVAR_H
 
-#include <capu/os/Posix/CondVar.h>
+#include <capu/os/MacOSX/CondVar.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class CondVar: private capu::posix::CondVar
+        class CondVar: private capu::os::CondVar
         {
         public:
-            using capu::posix::CondVar::signal;
-            using capu::posix::CondVar::wait;
-            using capu::posix::CondVar::broadcast;
+            using capu::os::CondVar::signal;
+            using capu::os::CondVar::wait;
+            using capu::os::CondVar::broadcast;
         };
     }
 }

@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_32_THREAD_H
 #define CAPU_MACOSX_X86_32_THREAD_H
 
-#include <capu/os/Posix/Thread.h>
+#include <capu/os/MacOSX/Thread.h>
 
 namespace capu
 {
@@ -25,16 +25,16 @@ namespace capu
     {
         namespace arch
         {
-            class Thread: private capu::posix::Thread
+            class Thread: private capu::os::Thread
             {
 
             public:
-                using capu::posix::Thread::start;
-                using capu::posix::Thread::join;
-                using capu::posix::Thread::cancel;
-                using capu::posix::Thread::resetCancel;
-                using capu::posix::Thread::getState;
-                using capu::posix::Thread::Sleep;
+                using capu::os::Thread::start;
+                using capu::os::Thread::join;
+                using capu::os::Thread::cancel;
+                using capu::os::Thread::resetCancel;
+                using capu::os::Thread::getState;
+                using capu::os::Thread::Sleep;
                 static uint_t CurrentThreadId();
             };
 

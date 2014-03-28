@@ -17,13 +17,13 @@
 #ifndef CAPU_IPHONEOS_TIMESTAMP_H
 #define CAPU_IPHONEOS_TIMESTAMP_H
 
-#include <capu/os/Posix/TimeStamp.h>
+#include <capu/os/MacOSX/TimeStamp.h>
 
 namespace capu
 {
     namespace os
     {
-        class TimeStamp : public capu::posix::TimeStamp
+        class TimeStamp : public capu::os::TimeStamp
         {
         };
     }

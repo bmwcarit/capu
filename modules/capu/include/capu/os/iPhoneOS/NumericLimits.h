@@ -17,18 +17,17 @@
 #ifndef CAPU_IPHONEOS_NUMERIC_LIMITS_H
 #define CAPU_IPHONEOS_NUMERIC_LIMITS_H
 
-#include <float.h>
-#include <capu/os/Posix/NumericLimits.h>
+#include <capu/os/MacOSX/NumericLimits.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class NumericLimits: private capu::posix::NumericLimits
+        class NumericLimits: private capu::os::NumericLimits
         {
         public:
-            using capu::posix::NumericLimits::Max;
-            using capu::posix::NumericLimits::Min;
+            using capu::os::NumericLimits::Max;
+            using capu::os::NumericLimits::Min;
         };
     }
 }

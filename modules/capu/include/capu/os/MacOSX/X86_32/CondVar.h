@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_32_CONDVAR_H
 #define CAPU_MACOSX_X86_32_CONDVAR_H
 
-#include <capu/os/Linux/CondVar.h>
+#include <capu/os/MacOSX/CondVar.h>
 
 namespace capu
 {

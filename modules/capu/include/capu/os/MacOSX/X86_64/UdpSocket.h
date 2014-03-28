@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_64_UDP_SOCKET_H
 #define CAPU_MACOSX_X86_64_UDP_SOCKET_H
 
-#include <capu/os/Linux/UdpSocket.h>
+#include <capu/os/MacOSX/UdpSocket.h>
 
 namespace capu
 {

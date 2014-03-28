@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_64_FILESYSTEMITERATOR_H
 #define CAPU_MACOSX_X86_64_FILESYSTEMITERATOR_H
 
-#include <capu/os/Linux/FileSystemIterator.h>
+#include <capu/os/MacOSX/FileSystemIterator.h>
 
 namespace capu
 {

@@ -17,7 +17,7 @@
 #ifndef CAPU_MACOSX_X86_32_STRINGUTILS_H
 #define CAPU_MACOSX_X86_32_STRINGUTILS_H
 
-#include <capu/os/Linux/StringUtils.h>
+#include <capu/os/MacOSX/StringUtils.h>
 
 namespace capu
 {

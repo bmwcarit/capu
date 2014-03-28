@@ -17,105 +17,29 @@
 #ifndef CAPU_IPHONEOS_SEMAPHORE_H
 #define CAPU_IPHONEOS_SEMAPHORE_H
 
-#include "capu/Config.h"
-#include "capu/Error.h"
-#include <mach/semaphore.h>
-#include <mach/task.h>
-#include <mach/mach_traps.h>
-#include <mach/mach.h>
+#include <capu/os/MacOSX/Semaphore.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class Semaphore
+        namespace capu
         {
-        public:
-            Semaphore(uint32_t initialPermits);
-            ~Semaphore();
-            status_t aquire();
-            status_t tryAquire(uint32_t timeoutMillis);
-            status_t release(uint32_t permits);
-        private:
-            semaphore_t mSemaphore;
-            mach_port_t mTask;
-        };
-
-        inline
-        Semaphore::Semaphore(uint32_t initialPermits)
-        {
-            mTask = mach_task_self();
-            semaphore_create(mTask, &mSemaphore, SYNC_POLICY_FIFO, 0);
-        }
-
-        inline
-        Semaphore::~Semaphore()
-        {
-            semaphore_destroy(mTask, mSemaphore);
-        }
-
-        inline
-        status_t Semaphore::aquire()
-        {
-            return tryAquire(0);
-        }
-
-        inline
-        status_t
-        Semaphore::tryAquire(uint32_t timeoutMillis)
-        {
-            kern_return_t waitResult;
-
-            if (timeoutMillis != 0)
+            class Semaphore: private capu::os::Semaphore
             {
-                mach_timespec_t timeout;
-                timeout.tv_sec = timeoutMillis / 1000;
-                timeout.tv_nsec = (timeoutMillis % 1000) * 1000000;
-
-                bool_t keepWaiting = true;
-                while (keepWaiting)
-                {
-                    waitResult = semaphore_timedwait(mSemaphore, timeout);
-                    if (waitResult == KERN_SUCCESS || waitResult == KERN_OPERATION_TIMED_OUT)
-                    {
-                        keepWaiting = false;
-                    }
-                }
-            }
-            else
+            public:
+                Semaphore(uint32_t initialPermits);
+                
+                using capu::os::Semaphore::aquire;
+                using capu::os::Semaphore::tryAquire;
+                using capu::os::Semaphore::release;
+            };
+            
+            inline
+            Semaphore::Semaphore(uint32_t initialPermits)
+            : capu::os::Semaphore(initialPermits)
             {
-                waitResult = semaphore_wait(mSemaphore);
             }
-
-            if (KERN_SUCCESS == waitResult)
-            {
-                return CAPU_OK;
-            }
-            else
-            {
-                if (waitResult == KERN_OPERATION_TIMED_OUT)
-                {
-                    return CAPU_ETIMEOUT;
-                }
-                else
-                {
-                    return CAPU_ERROR;
-                }
-            }
-        }
-
-        inline
-        status_t
-        Semaphore::release(uint32_t permits)
-        {
-            uint32_t _permits = permits;
-            bool_t result  = true;
-            while (_permits)
-            {
-                result &= semaphore_signal(mSemaphore) == KERN_SUCCESS;
-                --_permits;
-            }
-            return result ? CAPU_OK : CAPU_ERROR;
         }
     }
 }

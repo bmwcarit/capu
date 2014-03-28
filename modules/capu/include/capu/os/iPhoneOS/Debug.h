@@ -17,16 +17,16 @@
 #ifndef CAPU_IPHONEOS_DEBUG_H
 #define CAPU_IPHONEOS_DEBUG_H
 
-#include <capu/os/Posix/Debug.h>
+#include <capu/os/MacOSX/Debug.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class Debug: private capu::posix::Debug
+        class Debug: private capu::os::Debug
         {
         public:
-            using capu::posix::Debug::Assert;
+            using capu::os::Debug::Assert;
         };
     }
 }

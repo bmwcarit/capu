@@ -17,35 +17,35 @@
 #ifndef CAPU_IPHONEOS_MATH_H
 #define CAPU_IPHONEOS_MATH_H
 
-#include <capu/os/Posix/Math.h>
+#include <capu/os/MacOSX/Math.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class Math: private capu::posix::Math
+        class Math: private capu::os::Math
         {
         public:
-            using capu::posix::Math::PI_f;
-            using capu::posix::Math::PI_d;
-            using capu::posix::Math::LN2_f;
-            using capu::posix::Math::LN2_d;
-            using capu::posix::Math::Ceil;
-            using capu::posix::Math::Floor;
-            using capu::posix::Math::Abs;
-            using capu::posix::Math::Sqrt;
-            using capu::posix::Math::Pow2;
-            using capu::posix::Math::Pow;
-            using capu::posix::Math::Cos;
-            using capu::posix::Math::Sin;
-            using capu::posix::Math::Tan;
-            using capu::posix::Math::ArcCos;
-            using capu::posix::Math::ArcSin;
-            using capu::posix::Math::ArcTan;
-            using capu::posix::Math::Rad2Deg;
-            using capu::posix::Math::Deg2Rad;
-            using capu::posix::Math::Log2;
-            using capu::posix::Math::Exp;
+            using capu::os::Math::PI_f;
+            using capu::os::Math::PI_d;
+            using capu::os::Math::LN2_f;
+            using capu::os::Math::LN2_d;
+            using capu::os::Math::Ceil;
+            using capu::os::Math::Floor;
+            using capu::os::Math::Abs;
+            using capu::os::Math::Sqrt;
+            using capu::os::Math::Pow2;
+            using capu::os::Math::Pow;
+            using capu::os::Math::Cos;
+            using capu::os::Math::Sin;
+            using capu::os::Math::Tan;
+            using capu::os::Math::ArcCos;
+            using capu::os::Math::ArcSin;
+            using capu::os::Math::ArcTan;
+            using capu::os::Math::Rad2Deg;
+            using capu::os::Math::Deg2Rad;
+            using capu::os::Math::Log2;
+            using capu::os::Math::Exp;
         };
     }
 }

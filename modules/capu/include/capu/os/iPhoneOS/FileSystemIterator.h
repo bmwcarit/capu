@@ -17,26 +17,26 @@
 #ifndef CAPU_IPHONEOS_FILESYSTEMITERATOR_H
 #define CAPU_IPHONEOS_FILESYSTEMITERATOR_H
 
-#include <capu/os/Posix/FileSystemIterator.h>
+#include <capu/os/MacOSX/FileSystemIterator.h>
 
 namespace capu
 {
     namespace iphoneos
     {
-        class FileSystemIterator: private capu::posix::FileSystemIterator
+        class FileSystemIterator: private capu::os::FileSystemIterator
         {
         public:
             FileSystemIterator(capu::File root);
 
-            using capu::posix::FileSystemIterator::next;
-            using capu::posix::FileSystemIterator::operator*;
-            using capu::posix::FileSystemIterator::operator->;
-            using capu::posix::FileSystemIterator::isValid;
-            using capu::posix::FileSystemIterator::setStepIntoSubdirectories;
+            using capu::os::FileSystemIterator::next;
+            using capu::os::FileSystemIterator::operator*;
+            using capu::os::FileSystemIterator::operator->;
+            using capu::os::FileSystemIterator::isValid;
+            using capu::os::FileSystemIterator::setStepIntoSubdirectories;
         };
 
         inline FileSystemIterator::FileSystemIterator(capu::File root)
-            : capu::posix::FileSystemIterator(root)
+            : capu::os::FileSystemIterator(root)
         {
         }
 

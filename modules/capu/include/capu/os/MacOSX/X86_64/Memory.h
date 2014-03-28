@@ -17,8 +17,7 @@
 #ifndef CAPU_MACOSX_X86_64_MEMORY_H
 #define CAPU_MACOSX_X86_64_MEMORY_H
 
-#include <capu/os/Generic/Memory.h>
-#include <mach/mach.h>
+#include <capu/os/MacOSX/Memory.h>
 
 namespace capu
 {
@@ -26,30 +25,17 @@ namespace capu
     {
         namespace arch
         {
-            class Memory: private capu::generic::Memory
+            class Memory: private capu::os::Memory
             {
             public:
-                using capu::generic::Memory::Copy;
-                using capu::generic::Memory::CopyObject;
-                using capu::generic::Memory::Compare;
-                using capu::generic::Memory::Move;
-                using capu::generic::Memory::MoveObject;
-                using capu::generic::Memory::Set;
-                static uint_t CurrentMemoryUsage();
+                using capu::os::Memory::Copy;
+                using capu::os::Memory::CopyObject;
+                using capu::os::Memory::Compare;
+                using capu::os::Memory::Move;
+                using capu::os::Memory::MoveObject;
+                using capu::os::Memory::Set;
+                using capu::os::Memory::CurrentMemoryUsage;
             };
-
-            inline uint_t Memory::CurrentMemoryUsage()
-            {
-                struct task_basic_info result;
-                mach_msg_type_number_t infoCount = TASK_BASIC_INFO_COUNT;
-                kern_return_t retVal = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t) &result, &infoCount);
-                if (retVal != KERN_SUCCESS)
-                {
-                    // something went wrong!
-                    return -1;
-                }
-                return result.virtual_size;
-            }
         }
     }
 }
