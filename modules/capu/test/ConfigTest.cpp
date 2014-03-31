@@ -44,6 +44,8 @@ namespace capu
         EXPECT_EQ(8u, sizeof(time_t));
 #elif defined (ARCH_ARMV7L)
         EXPECT_EQ(4u, sizeof(time_t));
+#elif defined (ARCH_ARM64)
+        EXPECT_EQ(8u, sizeof(time_t));
 #endif
 
 #if defined (ARCH_X86_32)
@@ -55,6 +57,9 @@ namespace capu
 #elif defined (ARCH_ARMV7L)
         EXPECT_EQ(4u, sizeof(int_t));
         EXPECT_EQ(4u, sizeof(uint_t));
+#elif defined (ARCH_ARM64)
+        EXPECT_EQ(8u, sizeof(int_t));
+        EXPECT_EQ(8u, sizeof(uint_t));
 #endif
     }
 }
