@@ -344,7 +344,7 @@ namespace capu
                 return CAPU_ERROR;
             }
 
-            if (opt == 1)
+            if (opt > 0)
             {
                 noDelay = true;
             }

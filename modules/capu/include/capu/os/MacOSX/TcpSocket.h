@@ -28,10 +28,12 @@ namespace capu
         public:
             TcpSocket();
             TcpSocket(const SocketDescription& socketDescription);
+
+            status_t connect(const char_t* dest_addr, uint16_t port);
+
             using capu::posix::TcpSocket::send;
             using capu::posix::TcpSocket::receive;
             using capu::posix::TcpSocket::close;
-            using capu::posix::TcpSocket::connect;
             using capu::posix::TcpSocket::setBufferSize;
             using capu::posix::TcpSocket::setLingerOption;
             using capu::posix::TcpSocket::setNoDelay;
@@ -43,6 +45,9 @@ namespace capu
             using capu::posix::TcpSocket::getKeepAlive;
             using capu::posix::TcpSocket::getTimeout;
             using capu::posix::TcpSocket::getRemoteAddress;
+
+        private:
+            status_t setNoSigPipe();
 
         };
 
@@ -56,6 +61,68 @@ namespace capu
             : capu::posix::TcpSocket(socketDescription)
         {
 
+        }
+
+        inline
+        status_t
+        TcpSocket::connect(const char_t* dest_addr, uint16_t port)
+        {
+            if ((dest_addr == NULL) || (port == 0))
+            {
+                return CAPU_EINVAL;
+            }
+            mSocket = socket(AF_INET, SOCK_STREAM, 0);
+
+            if (mSocket == -1)
+            {
+                return CAPU_SOCKET_ESOCKET;
+            }
+            else
+            {
+                status_t status = setPosixSocketParams();
+                if (status != CAPU_OK && status != CAPU_EINVAL)
+                {
+                    return status;
+                }
+
+                status = setNoSigPipe();
+                if (status != CAPU_OK)
+                {
+                    return status;
+                }
+
+                struct sockaddr_in serverAddress;
+                status = getSocketAddr(dest_addr, port, serverAddress);
+                if (status != CAPU_OK)
+                {
+                    return status;
+                }
+
+                int32_t res = ::connect(mSocket, (const sockaddr*) &serverAddress, sizeof(serverAddress));
+                if (res == -1)
+                {
+                    return CAPU_SOCKET_ECONNECT;
+                }
+
+                return CAPU_OK;
+            }
+        }
+
+        inline
+        status_t
+        TcpSocket::setNoSigPipe()
+        {
+            if (mSocket == -1)
+            {
+                return CAPU_SOCKET_ESOCKET;
+            }
+            int32_t opt = 1;
+
+            if (setsockopt(mSocket, SOL_SOCKET, SO_NOSIGPIPE, &opt, sizeof(opt)) < 0)
+            {
+                return CAPU_ERROR;
+            }
+            return CAPU_OK;
         }
     }
 }

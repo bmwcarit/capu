@@ -59,6 +59,7 @@ namespace capu
             status_t setPosixSocketParams();
             int32_t mTimeout;
             using capu::generic::TcpSocket::mSocket;
+            using capu::generic::TcpSocket::getSocketAddr;
 
         private:
             status_t setTimeoutInternal();
