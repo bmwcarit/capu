@@ -35,9 +35,8 @@ namespace capu
         EXPECT_EQ(1u, sizeof(bool_t));
         EXPECT_EQ(1u, sizeof(char_t));
         EXPECT_EQ(1u, sizeof(uchar_t));
-#if defined (OS_MacOSX)
-        EXPECT_EQ(4u, sizeof(time_t));
-#elif defined (OS_WINDOWS)
+
+#if defined (OS_WINDOWS)
         EXPECT_EQ(8u, sizeof(time_t));
 #elif defined (ARCH_X86_32)
         EXPECT_EQ(4u, sizeof(time_t));
