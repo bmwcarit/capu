@@ -20,6 +20,7 @@
 #include "capu/os/TcpSocket.h"
 #include "capu/os/Mutex.h"
 #include "capu/os/CondVar.h"
+#include "capu/util/TcpSocketOutputStream.h"
 
 capu::Mutex mutex;
 capu::CondVar cv;
@@ -104,20 +105,21 @@ public:
     }
 };
 
-class ThreadTimeoutClientTest : public capu::Runnable
+class ThreadTimeoutOnReceiveClientTest : public capu::Runnable
 {
     capu::uint16_t port;
 public:
     //timeout test
-    ThreadTimeoutClientTest(capu::uint16_t port) : port(port) {}
+    ThreadTimeoutOnReceiveClientTest(capu::uint16_t port) : port(port) {}
 
     void run()
     {
         capu::int32_t communication_variable;
         capu::int32_t numBytes = 0;
         capu::TcpSocket* cli_socket = new capu::TcpSocket();
-        //timeout is 2 second;
+
         cli_socket->setTimeout(2);
+
         //connects to he given id
         capu::status_t result = capu::CAPU_ERROR;
         //wait for server to start up
@@ -153,6 +155,70 @@ public:
         EXPECT_EQ(capu::CAPU_OK, cli_socket->close());
         //deallocating
         delete cli_socket;
+    }
+};
+
+class ThreadTimeoutOnSendClientTest : public capu::Runnable
+{
+    capu::uint16_t port;
+public:
+    //timeout test
+    ThreadTimeoutOnSendClientTest(capu::uint16_t port) : port(port) {}
+
+    void run()
+    {
+        capu::TcpSocket cli_socket;
+
+        cli_socket.setTimeout(200);
+
+        //wait for server to start up
+        mutex.lock();
+        while (!cond)
+        {
+            cv.wait(&mutex);
+        }
+        if (0 == port)
+        {
+            port = chosenPort;
+        }
+        cond = false;
+        mutex.unlock();
+
+        capu::status_t connectStatus = capu::CAPU_ERROR;
+        while (connectStatus != capu::CAPU_OK) {
+            connectStatus = cli_socket.connect("localhost", port);
+            if (connectStatus != capu::CAPU_OK) {
+                capu::Thread::Sleep(100);
+            }
+        }
+
+        const uint32_t dataSize = 1024*1024/8;
+        uint32_t messageCount = 100;
+
+        capu::char_t* data = new capu::char_t[dataSize];
+
+        capu::Memory::Set(data, 0x00000000, dataSize);
+
+        capu::int32_t sentBytes;
+        capu::status_t status;
+
+        while(messageCount--)
+        {
+            status = cli_socket.send(data, dataSize, sentBytes);
+            if (status == capu::CAPU_ETIMEOUT) {
+                break;
+            }
+        }
+
+        EXPECT_EQ(capu::CAPU_ETIMEOUT, status);
+
+        mutex.lock();
+        cond = true;
+        cv.signal();
+        mutex.unlock();
+
+        EXPECT_EQ(capu::CAPU_OK, cli_socket.close());
+
     }
 };
 
@@ -222,13 +288,13 @@ public:
     }
 };
 
-class ThreadTimeoutServerTest : public capu::Runnable
+class ThreadTimeoutOnReceiveServerTest : public capu::Runnable
 {
     capu::uint16_t mPort;
 
 public:
     //timeout test
-    ThreadTimeoutServerTest(capu::uint16_t port) : mPort(port) {}
+    ThreadTimeoutOnReceiveServerTest(capu::uint16_t port) : mPort(port) {}
     inline void run()
     {
         capu::int32_t communication_variable;
@@ -261,6 +327,58 @@ public:
         EXPECT_EQ(capu::CAPU_OK, result);
         //CHECK VALUE
         EXPECT_EQ(5, communication_variable);
+
+        //wait for timeout on client side
+        mutex.lock();
+        while (!cond)
+        {
+            cv.wait(&mutex);
+        }
+        cond = false;
+        mutex.unlock();
+
+        //close session
+        EXPECT_EQ(capu::CAPU_OK, new_socket->close());
+        //deallocate session identifier
+        delete new_socket;
+        EXPECT_EQ(capu::CAPU_OK, socket->close());
+        delete socket;
+    }
+};
+
+class ThreadTimeoutOnSendServerTest : public capu::Runnable
+{
+    capu::uint16_t mPort;
+
+public:
+    //timeout test
+    ThreadTimeoutOnSendServerTest(capu::uint16_t port) : mPort(port) {}
+    inline void run()
+    {
+        //server socket allocation
+        capu::TcpServerSocket* socket = new capu::TcpServerSocket();
+
+        //bind to given address
+        EXPECT_EQ(capu::CAPU_OK, socket->bind(mPort, "0.0.0.0"));
+
+        if (0 == mPort)
+        {
+            mPort = socket->port();
+            chosenPort = mPort;
+        }
+
+        //start listening
+        EXPECT_EQ(capu::CAPU_OK, socket->listen(5));
+
+        //server is ready to accept clients
+        mutex.lock();
+        cond = true;
+        cv.signal();
+        mutex.unlock();
+        //accept connection
+        capu::TcpSocket* new_socket = socket->accept();
+
+        //do not call receive to cause a timeout on sender side
 
         //wait for timeout on client side
         mutex.lock();
@@ -489,15 +607,35 @@ TEST(SocketAndTcpServerSocket, ReconnectTest)
 
 }
 
-TEST(SocketAndTcpServerSocket, TimeoutTest)
+TEST(SocketAndTcpServerSocket, TimeoutOnReceiveTest)
 {
     cond = false;
 
-    ThreadTimeoutServerTest server(0);
+    ThreadTimeoutOnReceiveServerTest server(0);
     capu::Thread* server_thread = new capu::Thread();
     server_thread->start(server);
 
-    ThreadTimeoutClientTest client(0);
+    ThreadTimeoutOnReceiveClientTest client(0);
+    capu::Thread* client_thread = new capu::Thread();
+    client_thread->start(client);
+
+    //client_thread two threads which will behave like client and server to test functionality
+    server_thread->join();
+    client_thread->join();
+
+    delete client_thread;
+    delete server_thread;
+}
+
+TEST(SocketAndTcpServerSocket, TimeoutOnSendTest)
+{
+    cond = false;
+
+    ThreadTimeoutOnSendServerTest server(0);
+    capu::Thread* server_thread = new capu::Thread();
+    server_thread->start(server);
+
+    ThreadTimeoutOnSendClientTest client(0);
     capu::Thread* client_thread = new capu::Thread();
     client_thread->start(client);
 

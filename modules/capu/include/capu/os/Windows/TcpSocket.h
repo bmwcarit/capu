@@ -252,12 +252,12 @@ namespace capu
                 switch(lastError)
                 {
                 case WSAETIMEDOUT:
-                    /**
-                     * According to winsock documentation a timeout on send can be ignored.
-                     * This means we can ignore the timeout here
-                     * and set sentBytes to length.
-                     */
-                    sentBytes = length;
+                    // When getting a timeout on send on Windows Socket,s the MSDN documentation http://msdn.microsoft.com/en-us/library/ms740476
+                    // says that the "socket state is indeterminate, and should not be used" anymore. Therefore we report an error here.
+                    // This timeout on send is especially seen in case the TCP receive window gets zero. In this case some Windows implementations
+                    // return this timeout error and send a TCP package with the RST flag to the remote peer. This causes a connection reset on the 
+                    // remote site, so the connection cannot be used anymore.
+                    return CAPU_ERROR;
                 case WSAEINTR:
                     return CAPU_OK;
                 default:

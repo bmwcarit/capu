@@ -184,7 +184,11 @@ namespace capu
 
             if (res < 0)
             {
-                return CAPU_ERROR;
+                if (errno == EAGAIN) {
+                    return CAPU_ETIMEOUT;
+                } else {
+                    return CAPU_ERROR;
+                }
             }
 
             sentBytes = res;
