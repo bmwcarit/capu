@@ -183,6 +183,17 @@ namespace capu
         status_t remove(const T& value);
 
         /**
+         * Remove iterator associated with key in the hash set.
+         *
+         * @param iterator iterator pointing to value that will be removed
+         *
+         * @return CAPU_OK if removal was successful
+         *         CAPU_ENOT_EXISTS if the key was not found in the set
+         *
+         */
+        status_t removeAt(Iterator& iterator);
+
+        /**
          * Checks if the provided value is already contained in the hash set.
          *
          * @param value             value that will be checked
@@ -271,6 +282,12 @@ namespace capu
     status_t HashSet<T, C, H>::remove(const T& value)
     {
         return m_table.remove(value);
+    }
+
+    template <class T, class C, class H>
+    status_t HashSet<T, C, H>::removeAt(Iterator& it)
+    {
+        return m_table.remove(it.m_iter);
     }
 
     template <class T, class C, class H>
