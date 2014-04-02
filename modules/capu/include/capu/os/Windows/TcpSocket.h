@@ -205,6 +205,7 @@ namespace capu
                     // This timeout on send is especially seen in case the TCP receive window gets zero. In this case some Windows implementations
                     // return this timeout error and send a TCP package with the RST flag to the remote peer. This causes a connection reset on the 
                     // remote site, so the connection cannot be used anymore.
+                    close();
                     return CAPU_ERROR;
                 case WSAEINTR:
                     return CAPU_OK;

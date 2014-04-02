@@ -21,6 +21,8 @@
 #include "capu/os/Mutex.h"
 #include "capu/os/CondVar.h"
 #include "capu/util/TcpSocketOutputStream.h"
+#include "gmock/gmock-matchers.h"
+#include "gmock/gmock-generated-matchers.h"
 
 capu::Mutex mutex;
 capu::CondVar cv;
@@ -165,10 +167,50 @@ public:
     //timeout test
     ThreadTimeoutOnSendClientTest(capu::uint16_t port) : port(port) {}
 
+private:
+    capu::TcpSocket cli_socket;
+
+    /*
+    TCP stacks on different platforms behave differently in case a timeout
+    on send occurred. This function ensures that the combination of states
+    are valid.
+    */
+    void testSendOnASocketWherePreviousSendTimedOut(capu::status_t previousErrorOnSend)
+    {
+
+        //try to send again on broken socket
+        capu::char_t data = 5;
+        capu::int32_t sentBytes = 0;
+        capu::status_t currentErrorOnSend = cli_socket.send(&data, sizeof(capu::int32_t), sentBytes);
+        if (previousErrorOnSend == capu::CAPU_ERROR)
+        {
+            EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, currentErrorOnSend);
+        }
+
+        if (previousErrorOnSend == capu::CAPU_ETIMEOUT)
+        {
+            EXPECT_EQ(capu::CAPU_ETIMEOUT, currentErrorOnSend);
+        }
+
+    }
+
+    void testCloseSocketOnASocketWherePreviousSendTimedOut(capu::status_t previousErrorOnSend)
+    {
+        if (previousErrorOnSend == capu::CAPU_ERROR)
+        {
+            EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, cli_socket.close());
+        }
+
+        if (previousErrorOnSend == capu::CAPU_ETIMEOUT)
+        {
+            EXPECT_EQ(capu::CAPU_OK, cli_socket.close());
+        }
+    }
+
+public:
+
     void run()
     {
-        capu::TcpSocket cli_socket;
-
         cli_socket.setTimeout(200);
 
         //wait for server to start up
@@ -205,19 +247,23 @@ public:
         while(messageCount--)
         {
             status = cli_socket.send(data, dataSize, sentBytes);
-            if (status == capu::CAPU_ETIMEOUT) {
+            if (status == capu::CAPU_ERROR || status == capu::CAPU_ETIMEOUT) {
                 break;
             }
         }
 
-        EXPECT_EQ(capu::CAPU_ETIMEOUT, status);
+        //Some TCP stacks a timeout on send returns a CAPU_ERROR as the connection has been closed.
+        //Other stacks return a CAPU_ETIMEOUT and the socket can be still used.
+        EXPECT_THAT(status, testing::AnyOf(capu::CAPU_ERROR, capu::CAPU_ETIMEOUT));
+
+        testSendOnASocketWherePreviousSendTimedOut(status);
 
         mutex.lock();
         cond = true;
         cv.signal();
         mutex.unlock();
 
-        EXPECT_EQ(capu::CAPU_OK, cli_socket.close());
+        testCloseSocketOnASocketWherePreviousSendTimedOut(status);
 
     }
 };
