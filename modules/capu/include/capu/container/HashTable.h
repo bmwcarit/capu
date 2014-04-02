@@ -94,11 +94,99 @@ namespace capu
             friend class HashTable<Key, T, C, H>;
         };
 
+        class ConstIterator
+        {
+        public:
+
+            friend class HashTable;
+            friend class Iterator;
+
+            /**
+             * Constructor.
+             * @param begin Pointer to the entry on which iteration should start.
+             * @param end Pointer to an entry on which iteration should end (if begin == end).
+             */
+            ConstIterator(HashTableEntry* begin, HashTableEntry* end)
+                : mCurrentHashMapEntry(begin)
+                , mLastHashMapEntry(end)
+            {
+            }
+
+            /**
+             * Copy Constructor.
+             * @param iter non-const iterator to copy
+             */
+            ConstIterator(const ConstIterator& iter)
+                : mCurrentHashMapEntry(iter.mCurrentHashMapEntry)
+                , mLastHashMapEntry(iter.mLastHashMapEntry)
+            {
+            }
+
+            /**
+             * Indirection
+             * @return the current value referenced by the iterator
+             */
+            const HashTableEntry& operator*()
+            {
+                return *mCurrentHashMapEntry;
+            }
+
+            /**
+             * Dereference
+             * @return a pointer to the current object the iterator points to
+             */
+            const HashTableEntry* operator->()
+            {
+                return mCurrentHashMapEntry;
+            }
+
+            /**
+             * Compares two iterators
+             * @return true if the iterators point to the same position
+             */
+            capu::bool_t operator==(const ConstIterator& iter) const
+            {
+                return (mCurrentHashMapEntry == iter.mCurrentHashMapEntry);
+            }
+
+            /**
+             * Compares two iterators
+             * @return true if the iterators do not point to the same position
+             */
+            capu::bool_t operator!=(const ConstIterator& iter) const
+            {
+                return (mCurrentHashMapEntry != iter.mCurrentHashMapEntry);
+            }
+
+            /**
+             * Step the iterator forward to the next element (prefix operator)
+             * @return the next iterator
+             */
+            ConstIterator& operator++()
+            {
+                mCurrentHashMapEntry = mCurrentHashMapEntry->next;
+                return *this;
+            }
+
+            /**
+             * Step the iterator forward to the next element (postfix operator)
+             * @return the next iterator
+             */
+            ConstIterator operator++(int32_t)
+            {
+                ConstIterator oldValue(*this);
+                ++(*this);
+                return oldValue;
+            }
+
+        private:
+            HashTableEntry* mCurrentHashMapEntry;
+            HashTableEntry* mLastHashMapEntry;
+        };
         /**
          * Internal helper class to perform iterations over the map entries.
          */
-        template<typename TableEntryType>
-        class HashTableIterator
+        class Iterator
         {
         public:
 
@@ -109,7 +197,7 @@ namespace capu
              * @param begin Pointer to the entry on which iteration should start.
              * @param end Pointer to an entry on which iteration should end (if begin == end).
              */
-            HashTableIterator(TableEntryType* begin, TableEntryType* end)
+            Iterator(HashTableEntry* begin, HashTableEntry* end)
                 : mCurrentHashMapEntry(begin)
                 , mLastHashMapEntry(end)
             {
@@ -119,7 +207,17 @@ namespace capu
              * Copy Constructor.
              * @param iter non-const iterator to copy
              */
-            HashTableIterator(const HashTableIterator<TableEntryType>& iter)
+            Iterator(const Iterator& iter)
+                : mCurrentHashMapEntry(iter.mCurrentHashMapEntry)
+                , mLastHashMapEntry(iter.mLastHashMapEntry)
+            {
+            }
+
+            /**
+             * Convert Constructor
+             * @param iter ConstIterator to convert from
+             */
+            Iterator(const ConstIterator& iter)
                 : mCurrentHashMapEntry(iter.mCurrentHashMapEntry)
                 , mLastHashMapEntry(iter.mLastHashMapEntry)
             {
@@ -129,7 +227,7 @@ namespace capu
              * Indirection
              * @return the current value referenced by the iterator
              */
-            TableEntryType& operator*()
+            HashTableEntry& operator*()
             {
                 return *mCurrentHashMapEntry;
             }
@@ -138,7 +236,7 @@ namespace capu
              * Dereference
              * @return a pointer to the current object the iterator points to
              */
-            TableEntryType* operator->()
+            HashTableEntry* operator->()
             {
                 return mCurrentHashMapEntry;
             }
@@ -147,7 +245,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators point to the same position
              */
-            capu::bool_t operator==(const HashTableIterator<TableEntryType>& iter) const
+            capu::bool_t operator==(const Iterator& iter) const
             {
                 return (mCurrentHashMapEntry == iter.mCurrentHashMapEntry);
             }
@@ -156,7 +254,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators do not point to the same position
              */
-            capu::bool_t operator!=(const HashTableIterator<TableEntryType>& iter) const
+            capu::bool_t operator!=(const Iterator& iter) const
             {
                 return (mCurrentHashMapEntry != iter.mCurrentHashMapEntry);
             }
@@ -165,7 +263,7 @@ namespace capu
              * Step the iterator forward to the next element (prefix operator)
              * @return the next iterator
              */
-            HashTableIterator<TableEntryType>& operator++()
+            Iterator& operator++()
             {
                 mCurrentHashMapEntry = mCurrentHashMapEntry->next;
                 return *this;
@@ -175,23 +273,19 @@ namespace capu
              * Step the iterator forward to the next element (postfix operator)
              * @return the next iterator
              */
-            HashTableIterator<TableEntryType> operator++(int32_t)
+            Iterator operator++(int32_t)
             {
-                HashTableIterator<TableEntryType> oldValue(*this);
+                Iterator oldValue(*this);
                 ++(*this);
                 return oldValue;
             }
 
         private:
-            TableEntryType* mCurrentHashMapEntry;
-            TableEntryType* mLastHashMapEntry;
+            HashTableEntry* mCurrentHashMapEntry;
+            HashTableEntry* mLastHashMapEntry;
         };
 
-        /**
-         * Iterator for hashtables
-         */
-        typedef HashTableIterator<HashTableEntry>       Iterator;
-        typedef HashTableIterator<const HashTableEntry> ConstIterator;
+
 
         /**
          * Copy constructor
