@@ -23,23 +23,20 @@ namespace capu
 {
     namespace iphoneos
     {
-        namespace capu
+        class Semaphore: private capu::os::Semaphore
         {
-            class Semaphore: private capu::os::Semaphore
-            {
-            public:
-                Semaphore(uint32_t initialPermits);
-                
-                using capu::os::Semaphore::aquire;
-                using capu::os::Semaphore::tryAquire;
-                using capu::os::Semaphore::release;
-            };
+        public:
+            Semaphore(uint32_t initialPermits);
             
-            inline
-            Semaphore::Semaphore(uint32_t initialPermits)
-            : capu::os::Semaphore(initialPermits)
-            {
-            }
+            using capu::os::Semaphore::aquire;
+            using capu::os::Semaphore::tryAquire;
+            using capu::os::Semaphore::release;
+        };
+
+        inline
+        Semaphore::Semaphore(uint32_t initialPermits)
+        : capu::os::Semaphore(initialPermits)
+        {
         }
     }
 }

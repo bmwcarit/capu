@@ -32,7 +32,7 @@ namespace capu
             using capu::os::Memory::Move;
             using capu::os::Memory::MoveObject;
             using capu::os::Memory::Set;
-            using capu::os::CurrentMemoryUsage;
+            using capu::os::Memory::CurrentMemoryUsage;
         };
     }
 }
