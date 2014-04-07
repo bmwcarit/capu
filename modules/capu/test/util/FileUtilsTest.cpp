@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  * Copyright (C) 2012 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,7 +102,7 @@ TEST(FileUtilsTest, ReadWriteAllText)
     capu::File temp("temp.txt");
     EXPECT_FALSE(temp.exists());
 
-    capu::String content("this is some text\nwith multi lines and\ngerman umlauts öäüß !§$%&/()\r\nas well as some different line breaks and \\ escapes.");
+    capu::String content("this is some text\nwith multi lines and\ngerman umlauts Ã¶Ã¤Ã¼ÃŸ !Â§$%&/()\r\nas well as some different line breaks and \\ escapes.");
     capu::FileUtils::writeAllText(temp, content);
     EXPECT_TRUE(temp.exists());
 
