@@ -421,8 +421,9 @@ namespace capu
         vector.push_back(4u);
         vector.push_back(5u);
 
-
         Vector<uint32_t>::Iterator iter = vector.begin();
+
+        EXPECT_EQ(capu::CAPU_EINVAL, vector.erase(iter + 8u));
 
         vector.erase(iter + 2u);
 
@@ -493,6 +494,25 @@ namespace capu
         EXPECT_EQ(0u, vector.size());
     }
 
+    TEST_F(VectorTest, EraseWithElementOld)
+    {
+        Vector<uint32_t> vector;
+
+        vector.push_back(1u);
+        vector.push_back(2u);
+        vector.push_back(3u);
+        vector.push_back(4u);
+        vector.push_back(5u);
+
+        uint32_t old;
+
+        vector.erase(vector.begin(), &old);
+        EXPECT_EQ(old, 1u);
+
+        vector.erase(vector.begin()+2u, &old);
+        EXPECT_EQ(old, 4u);
+    }
+
     TEST_F(VectorTest, EraseAdd)
     {
         Vector<uint32_t> vector;
@@ -561,4 +581,3 @@ namespace capu
     
     }
 }
-
