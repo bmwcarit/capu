@@ -53,6 +53,21 @@ namespace capu
         EXPECT_EQ(32u, outStream.getCapacity());
     }
 
+    TEST_F(BinaryOutputStreamTest, InsertUInt16)
+    {
+        BinaryOutputStream outStream;
+
+        outStream << static_cast<uint16_t>(5) << static_cast<uint16_t>(6) << static_cast<uint16_t>(7);
+
+        const char_t* data = outStream.getData();
+        EXPECT_EQ(5, *reinterpret_cast<const uint16_t*>(data));
+        data += sizeof(uint16_t);
+        EXPECT_EQ(6, *reinterpret_cast<const uint16_t*>(data));
+        data += sizeof(uint16_t);
+        EXPECT_EQ(7, *reinterpret_cast<const uint16_t*>(data));
+    }
+
+
     TEST_F(BinaryOutputStreamTest, InsertInt)
     {
         BinaryOutputStream outStream;
