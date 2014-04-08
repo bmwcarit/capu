@@ -41,6 +41,8 @@ namespace capu
     protected:
     private:
         File& m_file;
+
+        BinaryFileInputStream operator=(const BinaryFileInputStream bfis);
     };
 
     inline

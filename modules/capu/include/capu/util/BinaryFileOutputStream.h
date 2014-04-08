@@ -42,6 +42,8 @@ namespace capu
     private:
         File& m_file;
         status_t m_fileState;
+
+        BinaryFileOutputStream operator=(const BinaryFileOutputStream bfos);
     };
 
     inline

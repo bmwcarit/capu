@@ -31,6 +31,8 @@ namespace capu
             String getPath() const;
         protected:
             const String mPath;
+        private:
+            DynamicLibrary operator=(const DynamicLibrary dl);
         };
 
         inline

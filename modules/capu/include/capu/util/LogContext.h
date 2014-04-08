@@ -84,6 +84,11 @@ namespace capu
          * LogLevel of context
          */
         ELogLevel m_logLevel;
+        
+        /**
+         * Private assignment operator prevents misuse
+         */
+        LogContext operator=(const LogContext lc);
     };
 
     inline

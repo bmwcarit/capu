@@ -35,6 +35,8 @@ namespace capu
 
     private:
         TcpSocket& m_socket;
+
+        TcpSocketInputStream operator=(const TcpSocketInputStream tsis);
     };
 }
 

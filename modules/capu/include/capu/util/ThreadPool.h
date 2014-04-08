@@ -89,6 +89,8 @@ namespace capu
             ThreadPool& mPool;
             Mutex mCurrentRunnableMutex;
             Runnable* mCurrentRunnable;
+
+            PoolRunnable operator=(const PoolRunnable pr);
         };
 
         class PoolWorker
@@ -106,6 +108,8 @@ namespace capu
             Thread mThread;
 
             bool_t mValid;
+
+            PoolWorker operator=(const PoolWorker pw);
         };
 
         typedef SmartPointer<PoolWorker> PoolWorkerPtr;
