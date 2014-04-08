@@ -59,3 +59,107 @@ TEST(Math, Exp)
     EXPECT_FLOAT_EQ(200.33685f, capu::Math::Exp(5.3f));
     EXPECT_NEAR(200.33680997479166, capu::Math::Exp(5.3), 0.0000000000001);
 }
+
+TEST(Math, Ceil)
+{
+    EXPECT_FLOAT_EQ(3.0f, capu::Math::Ceil(2.3f));
+    EXPECT_FLOAT_EQ(3.0f, capu::Math::Ceil(2.8f));
+    EXPECT_FLOAT_EQ(-2.0f, capu::Math::Ceil(-2.8f));
+    EXPECT_DOUBLE_EQ(3.0, capu::Math::Ceil(2.3));
+    EXPECT_DOUBLE_EQ(3.0, capu::Math::Ceil(2.8));
+    EXPECT_DOUBLE_EQ(-2.0, capu::Math::Ceil(-2.8));
+}
+
+TEST(Math, Floor)
+{
+    EXPECT_FLOAT_EQ(2.0f, capu::Math::Floor(2.3f));
+    EXPECT_FLOAT_EQ(2.0f, capu::Math::Floor(2.8f));
+    EXPECT_FLOAT_EQ(-3.0f, capu::Math::Floor(-2.3f));
+    EXPECT_DOUBLE_EQ(2.0, capu::Math::Floor(2.3));
+    EXPECT_DOUBLE_EQ(2.0, capu::Math::Floor(2.8));
+    EXPECT_DOUBLE_EQ(-3.0, capu::Math::Floor(-2.3));
+}
+
+TEST(Math, Sqrt)
+{
+    EXPECT_FLOAT_EQ(3.0f, capu::Math::Sqrt(9.0f));
+    EXPECT_DOUBLE_EQ(3.0, capu::Math::Sqrt(9.0));
+}
+
+TEST(Math, Pow)
+{
+    EXPECT_FLOAT_EQ(4.0f, capu::Math::Pow2(2.0f));
+    EXPECT_DOUBLE_EQ(4.0, capu::Math::Pow2(2.0));
+
+    EXPECT_FLOAT_EQ(8.0f, capu::Math::Pow(2.0f, 3.0f));
+    EXPECT_DOUBLE_EQ(8.0, capu::Math::Pow(2.0, 3.0));
+
+    EXPECT_FLOAT_EQ(capu::Math::Pow(4.0f, 2.0f), capu::Math::Pow2(4.0f));
+    EXPECT_DOUBLE_EQ(capu::Math::Pow(4.0, 2.0), capu::Math::Pow2(4.0));
+}
+
+TEST(Math, Cos)
+{
+    capu::double_t pid = capu::Math::PI_d;
+    capu::float_t pif = capu::Math::PI_f;
+
+    EXPECT_FLOAT_EQ(-1.0f, capu::Math::Cos(pif));
+    EXPECT_DOUBLE_EQ(-1.0, capu::Math::Cos(pid));
+}
+
+TEST(Math, Sin)
+{
+    capu::double_t pid = capu::Math::PI_d;
+    capu::float_t pif = capu::Math::PI_f;
+
+    EXPECT_FLOAT_EQ(1.0f, capu::Math::Sin(pif/2.0f));
+    EXPECT_DOUBLE_EQ(1.0, capu::Math::Sin(pid/2.0));
+}
+
+TEST(Math, Tan)
+{
+    capu::double_t pid = capu::Math::PI_d;
+    capu::float_t pif = capu::Math::PI_f;
+
+    EXPECT_FLOAT_EQ(1.0f, capu::Math::Tan(pif/4.0f));
+    EXPECT_DOUBLE_EQ(1.0, capu::Math::Tan(pid/4.0));
+}
+
+TEST(Math, ArcCos)
+{
+    capu::double_t pid = capu::Math::PI_d;
+    capu::float_t pif = capu::Math::PI_f;
+
+    EXPECT_FLOAT_EQ(pif, capu::Math::ArcCos(-1.0f));
+    EXPECT_DOUBLE_EQ(pid, capu::Math::ArcCos(-1.0));
+}
+
+TEST(Math, ArcSin)
+{
+    capu::double_t pid = capu::Math::PI_d;
+    capu::float_t pif = capu::Math::PI_f;
+
+    EXPECT_FLOAT_EQ(pif/2.0f, capu::Math::ArcSin(1.0f));
+    EXPECT_DOUBLE_EQ(pid/2.0, capu::Math::ArcSin(1.0));
+}
+
+TEST(Math, ArcTan)
+{
+    capu::double_t pid = capu::Math::PI_d;
+    capu::float_t pif = capu::Math::PI_f;
+
+    EXPECT_FLOAT_EQ(pif/4.0f, capu::Math::ArcTan(1.0f));
+    EXPECT_DOUBLE_EQ(pid/4.0, capu::Math::ArcTan(1.0));
+}
+
+TEST(Math, Rad2Deg)
+{
+    EXPECT_FLOAT_EQ(180.0f, capu::Math::Rad2Deg(capu::Math::PI_f));
+    EXPECT_DOUBLE_EQ(180.0, capu::Math::Rad2Deg(capu::Math::PI_d));
+}
+
+TEST(Math, Deg2Rad)
+{
+    EXPECT_FLOAT_EQ(capu::Math::PI_f, capu::Math::Deg2Rad(180.0f));
+    EXPECT_DOUBLE_EQ(capu::Math::PI_d, capu::Math::Deg2Rad(180.0));
+}
