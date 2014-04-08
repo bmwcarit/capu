@@ -174,6 +174,17 @@ TEST(RingBuffer, TestSize)
     EXPECT_EQ(0u, buffer2.size());
 }
 
+TEST(RingBuffer, ClearBuffer)
+{
+    capu::RingBuffer<capu::uint32_t> buffer(20u);
+
+    buffer.add(10u);
+    buffer.add(60666u);
+    EXPECT_TRUE(buffer.begin().hasNext());
+    EXPECT_EQ(capu::CAPU_OK, buffer.clear());
+    EXPECT_FALSE(buffer.begin().hasNext());
+}
+
 //uncomment to run performance tests
 /*
 TEST(RingBuffer, TestBufferPerformance)
