@@ -285,16 +285,16 @@ namespace capu
         {
             // successful scan
             m_id.Data1 = data1;
-            m_id.Data2 = data2;
-            m_id.Data3 = data3;
-            m_id.Data4[0] = data40;
-            m_id.Data4[1] = data41;
-            m_id.Data4[2] = data42;
-            m_id.Data4[3] = data43;
-            m_id.Data4[4] = data44;
-            m_id.Data4[5] = data45;
-            m_id.Data4[6] = data46;
-            m_id.Data4[7] = data47;
+            m_id.Data2 = static_cast<uint16_t>(data2);
+            m_id.Data3 = static_cast<uint16_t>(data3);
+            m_id.Data4[0] = static_cast<uint8_t>(data40);
+            m_id.Data4[1] = static_cast<uint8_t>(data41);
+            m_id.Data4[2] = static_cast<uint8_t>(data42);
+            m_id.Data4[3] = static_cast<uint8_t>(data43);
+            m_id.Data4[4] = static_cast<uint8_t>(data44);
+            m_id.Data4[5] = static_cast<uint8_t>(data45);
+            m_id.Data4[6] = static_cast<uint8_t>(data46);
+            m_id.Data4[7] = static_cast<uint8_t>(data47);
             m_stringRepresentation = guid;
             m_stringRepresentation.toUpperCase();
             m_stringRepresentationIsInvalid = false;
