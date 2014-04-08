@@ -92,4 +92,15 @@ namespace capu
         EXPECT_EQ(sizeof(capu::char_t) * mTestString.getLength(), numBytes);
         EXPECT_STREQ("Dies ist ein Text", buffer);
     }
+
+    TEST_F(BinaryFileOutputStreamTest, BadFileObj)
+    {
+        capu::File file("some/non/existing/path");
+        capu::BinaryFileOutputStream outputStream(file);
+
+        char_t data = '1';
+        int size = 1;
+
+        outputStream.write(&data, size);
+    }
 }
