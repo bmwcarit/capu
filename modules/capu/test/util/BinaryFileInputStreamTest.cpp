@@ -83,6 +83,18 @@ namespace capu
         EXPECT_EQ(10, intVal);
         EXPECT_EQ(20.0f, floatVal);
         EXPECT_STREQ("Dies ist ein Text", stringVal.c_str());
+    }
 
+    TEST_F(BinaryFileInputStreamTest, BadFileObj)
+    {
+        capu::File file("some/non/existing/path");
+        capu::BinaryFileInputStream inputStream(file);
+
+        char_t data;
+        int size = 1;
+
+        inputStream.read(&data, size);
+
+        EXPECT_NE(CAPU_OK, inputStream.getState());
     }
 }
