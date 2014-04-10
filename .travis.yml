@@ -1,0 +1,57 @@
+#
+# Copyright (C) 2015 BMW Car IT GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "OZjpvAtK1Zn0HpHaP0omUYmoG9RyLSzdaTPQko3tjbcHxT6ndxsFdZBMTkpzILl3/pJzcHGMgvDM1kBbLeH9poBUogg4YFmf+IYfzfJKCwqZ27er77CfwJnpr1ctd6D0eIM6OmvgDWvwnWi/bYTxxD/WPKhPa87qQbrI3i/RDPo="
+
+language: c++
+
+compiler:
+  - gcc
+
+script:
+  - cd $TRAVIS_BUILD_DIR/build
+  - make install
+  - cd $TRAVIS_BUILD_DIR/build/install
+  - find
+  - cp -r lib/* bin
+  - cd bin
+  - LD_LIBRARY_PATH=. ./Capu_Test
+
+before_install:
+  - cd ..
+  - wget http://www.cmake.org/files/v2.8/cmake-2.8.10.tar.gz
+  - tar xf cmake-2.8.10.tar.gz
+  - cd cmake-2.8.10
+
+install:
+  - sudo apt-get install libcurl3-dev
+  - ./bootstrap --system-curl
+  - make -j4
+  - sudo make install
+
+addons:
+  coverity_scan:
+    project:
+      name: "bmwcarit/capu"
+      description: "Collections and Platform Utils"
+    notification_email: martin.veith@bmw-carit.de
+    build_command_prepend: "cd $TRAVIS_BUILD_DIR && mkdir build && cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/Linux_X86_64.toolchain -DCMAKE_BUILD_TYPE:String=Release -DCapu_BUILD_TESTS:BOOL=1 -DCMAKE_INSTALL_PREFIX=$TRAVIS_BUILD_DIR/build/install ../"
+    build_command: "make -j4"
+    branch_pattern: .*
