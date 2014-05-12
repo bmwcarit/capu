@@ -169,7 +169,6 @@ namespace capu
 
             if (::connect(mSocket, (sockaddr*) &serverAddress, sizeof(serverAddress)) == SOCKET_ERROR)
             {
-                int32_t errorCode = WSAGetLastError();
                 close();
                 return CAPU_SOCKET_ECONNECT;
             }
