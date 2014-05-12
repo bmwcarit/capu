@@ -542,6 +542,7 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
     EXPECT_EQ(capu::CAPU_OK, socket->setTimeout(90));
 
     capu::int32_t int_tmp = 0;
+    capu::uint16_t short_tmp = 0;
     capu::bool_t bool_tmp = false;
     capu::char_t* remoteIP = 0;
 
@@ -553,8 +554,8 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
     EXPECT_TRUE(int_tmp >= 1024);
     EXPECT_EQ(capu::CAPU_OK, socket->getKeepAlive(bool_tmp));
     EXPECT_TRUE(bool_tmp);
-    EXPECT_EQ(capu::CAPU_OK, socket->getLingerOption(bool_tmp, int_tmp));
-    EXPECT_EQ(90, int_tmp);
+    EXPECT_EQ(capu::CAPU_OK, socket->getLingerOption(bool_tmp, short_tmp));
+    EXPECT_EQ(90, short_tmp);
     EXPECT_TRUE(bool_tmp);
     EXPECT_EQ(capu::CAPU_OK, socket->getNoDelay(bool_tmp));
     EXPECT_FALSE(bool_tmp);
@@ -584,8 +585,9 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
     EXPECT_TRUE(int_tmp >= 2024);
     EXPECT_EQ(capu::CAPU_OK, socket->getKeepAlive(bool_tmp));
     EXPECT_FALSE(bool_tmp);
-    EXPECT_EQ(capu::CAPU_OK, socket->getLingerOption(bool_tmp, int_tmp));
+    EXPECT_EQ(capu::CAPU_OK, socket->getLingerOption(bool_tmp, short_tmp));
     EXPECT_FALSE(bool_tmp);
+    EXPECT_EQ(short_tmp, 0);
     EXPECT_EQ(capu::CAPU_OK, socket->getNoDelay(bool_tmp));
     EXPECT_TRUE(bool_tmp);
     EXPECT_EQ(capu::CAPU_OK, socket->getTimeout(int_tmp));

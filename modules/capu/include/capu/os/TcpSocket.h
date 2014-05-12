@@ -108,7 +108,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t setLingerOption(bool_t isLinger, int32_t linger);
+        inline status_t setLingerOption(bool_t isLinger, uint16_t linger);
 
 
         /**
@@ -153,7 +153,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t getLingerOption(bool_t& isLinger, int32_t& linger);
+        inline status_t getLingerOption(bool_t& isLinger, uint16_t& linger);
 
         /**
          * Get no delay option
@@ -245,7 +245,7 @@ namespace capu
 
     inline
     status_t
-    TcpSocket::setLingerOption(bool_t isLinger, int32_t linger)
+    TcpSocket::setLingerOption(bool_t isLinger, uint16_t linger)
     {
         return capu::os::arch::TcpSocket::setLingerOption(isLinger, linger);
     }
@@ -280,7 +280,7 @@ namespace capu
 
     inline
     status_t
-    TcpSocket::getLingerOption(bool_t& isLinger, int32_t& linger)
+    TcpSocket::getLingerOption(bool_t& isLinger, uint16_t& linger)
     {
         return capu::os::arch::TcpSocket::getLingerOption(isLinger, linger);
     }
