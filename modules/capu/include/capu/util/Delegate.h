@@ -126,6 +126,7 @@ namespace capu
         template<ReturnType (*Method)(Param1, Param2)>
         static ReturnType FunctionCall(void* obj_ptr, Param1 param1, Param2 param2)
         {
+            UNUSED(obj_ptr);
             return (*Method)(param1, param2);
         }
 
