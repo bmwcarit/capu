@@ -591,7 +591,8 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
     EXPECT_EQ(capu::CAPU_OK, socket->getNoDelay(bool_tmp));
     EXPECT_TRUE(bool_tmp);
     EXPECT_EQ(capu::CAPU_OK, socket->getTimeout(int_tmp));
-    EXPECT_EQ(100, int_tmp);
+    EXPECT_GE(int_tmp, 100);
+    EXPECT_LT(int_tmp, 110);
 
     socket->close();
     //TRY TO CHANGE THE PROPERTIES OF CLOSED SOCKET
