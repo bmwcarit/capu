@@ -44,6 +44,30 @@ namespace capu
          * Write an integer to the stream
          * @param value Value to write to the stream
          */
+        IOutputStream& operator<<(const int8_t value);
+
+        /**
+         * Write an unsigned integer to the stream
+         * @param value Value to write to the stream
+         */
+        IOutputStream& operator<<(const uint8_t value);
+
+        /**
+         * Write an integer to the stream
+         * @param value Value to write to the stream
+         */
+        IOutputStream& operator<<(const int16_t value);
+
+        /**
+         * Write an unsigned integer to the stream
+         * @param value Value to write to the stream
+         */
+        IOutputStream& operator<<(const uint16_t value);
+
+        /**
+         * Write an integer to the stream
+         * @param value Value to write to the stream
+         */
         IOutputStream& operator<<(const int32_t value);
 
         /**
@@ -94,8 +118,12 @@ namespace capu
          * @param value Value to write to the stream
          */
         IOutputStream& operator<<(const void* value);
+
+        /**
+         * Write a Guid to the stream
+         * @param value Value to write to the stream
+         */
         IOutputStream& operator<<(const Guid& value);
-        IOutputStream& operator<<(const uint16_t value);
 
         /**
          * Write bytes to the stream
@@ -218,11 +246,34 @@ namespace capu
     }
 
     template<uint16_t SNDBUFSIZE>
-    IOutputStream&
-    SocketOutputStream<SNDBUFSIZE>::operator<<(const uint16_t value)
+    inline
+    IOutputStream& SocketOutputStream<SNDBUFSIZE>::operator<<(const int16_t value)
     {
         const int16_t networkOrder = htons(value);
         return write(&networkOrder, sizeof(int16_t));
+    }
+
+    template<uint16_t SNDBUFSIZE>
+    inline
+    IOutputStream&
+    SocketOutputStream<SNDBUFSIZE>::operator<<(const uint16_t value)
+    {
+        return operator<<(static_cast<int16_t>(value));
+    }
+
+    template<uint16_t SNDBUFSIZE>
+    inline
+    IOutputStream& SocketOutputStream<SNDBUFSIZE>::operator<<(const int8_t value)
+    {
+        return write(&value, sizeof(int8_t));
+    }
+
+    template<uint16_t SNDBUFSIZE>
+    inline
+    IOutputStream&
+    SocketOutputStream<SNDBUFSIZE>::operator<<(const uint8_t value)
+    {
+        return operator<<(static_cast<int8_t>(value));
     }
 
     template<uint16_t SNDBUFSIZE>

@@ -121,10 +121,32 @@ namespace capu
             return *this;
         }
 
+        IInputStream& operator>>(int16_t& value)
+        {
+            receiveFromSocket(reinterpret_cast<char_t*>(&value), sizeof(int16_t));
+            value = ntohs(value);
+            return *this;
+        }
+
         IInputStream& operator>>(uint16_t& value)
         {
-            receiveFromSocket(reinterpret_cast<char_t*>(&value), sizeof(uint16_t));
-            value = ntohs(value);
+            int16_t tmp;
+            operator>>(tmp);
+            value = static_cast<uint16_t>(tmp);
+            return *this;
+        }
+
+        IInputStream& operator>>(int8_t& value)
+        {
+            receiveFromSocket(reinterpret_cast<char_t*>(&value), sizeof(int8_t));
+            return *this;
+        }
+
+        IInputStream& operator>>(uint8_t& value)
+        {
+            int8_t tmp;
+            operator>>(tmp);
+            value = static_cast<uint8_t>(tmp);
             return *this;
         }
 
@@ -245,7 +267,22 @@ namespace capu
 
     TEST_F(UdpSocketOutputStreamTest, SendUInt16Data)
     {
-        EXPECT_EQ((uint16_t)(4), UdpSocketOutputStreamTestExecutor<uint16_t>::Execute(4));
+        EXPECT_EQ((uint16_t)(4u), UdpSocketOutputStreamTestExecutor<uint16_t>::Execute(4u));
+    }
+
+    TEST_F(UdpSocketOutputStreamTest, SendInt16Data)
+    {
+        EXPECT_EQ(5, UdpSocketOutputStreamTestExecutor<int16_t>::Execute(5));
+    }
+
+    TEST_F(UdpSocketOutputStreamTest, SendInt8Data)
+    {
+        EXPECT_EQ(5, UdpSocketOutputStreamTestExecutor<int8_t>::Execute(5));
+    }
+
+    TEST_F(UdpSocketOutputStreamTest, SendUInt8Data)
+    {
+        EXPECT_EQ(5u, UdpSocketOutputStreamTestExecutor<uint8_t>::Execute(5u));
     }
 
     TEST_F(UdpSocketOutputStreamTest, SendGuidData)
