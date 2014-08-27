@@ -74,7 +74,8 @@ namespace capu
             tcsetattr(fileno(stdin), TCSANOW, &temporaryWithoutEcho);
 
             // read the wanted char
-            read(fileno(stdin), &buffer, 1);
+            ssize_t nReadSize = read(fileno(stdin), &buffer, 1);
+            UNUSED(nReadSize);
 
             // revert temporary console settings
             tcsetattr(fileno(stdin), TCSANOW, &oldTerminalSettings);
