@@ -19,7 +19,7 @@
 
 #include "capu/Error.h"
 #include <capu/os/PlatformInclude.h>
-
+#include "capu/os/Mutex.h"
 #include CAPU_PLATFORM_INCLUDE(TcpSocket)
 
 namespace capu
@@ -196,6 +196,8 @@ namespace capu
          */
         inline const capu::os::SocketDescription& getSocketDescription() const;
         
+        private:
+            capu::Mutex m_mutex;
     };
 
     inline
@@ -220,14 +222,21 @@ namespace capu
     status_t
     TcpSocket::send(const char_t* buffer, int32_t length, int32_t& sentBytes)
     {
-        return capu::os::arch::TcpSocket::send(buffer, length, sentBytes);
+        m_mutex.lock();
+        status_t result = capu::os::arch::TcpSocket::send(buffer, length, sentBytes);
+        m_mutex.unlock();
+        return result;
+
     }
 
     inline
     status_t
     TcpSocket::receive(char_t* buffer, int32_t length, int32_t& numBytes)
     {
-        return capu::os::arch::TcpSocket::receive(buffer, length, numBytes);
+        m_mutex.lock();
+        status_t result = capu::os::arch::TcpSocket::receive(buffer, length, numBytes);
+        m_mutex.unlock();
+        return result;
     }
 
     inline

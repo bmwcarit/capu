@@ -25,10 +25,16 @@
 #include <errno.h>
 #include <arpa/inet.h>
 
+#include <capu/container/Pair.h>
+#include <capu/util/Delegate.h>
+
 namespace capu {
     namespace os {
         typedef int32_t SocketDescription;
         typedef socklen_t socketOptionLen;
+
+        typedef Delegate<void, const capu::os::SocketDescription&> SocketDelegate;
+        typedef Pair<capu::os::SocketDescription, SocketDelegate> SocketInfoPair;
     }
 }
 

@@ -25,10 +25,16 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
+#include <capu/util/Delegate.h>
+#include <capu/container/Pair.h>
+
 namespace capu {
     namespace os {
         typedef SOCKET SocketDescription;
         typedef int32_t socketOptionLen;
+
+        typedef Delegate<void, const capu::os::SocketDescription&> SocketDelegate;
+        typedef Pair<capu::os::SocketDescription, SocketDelegate> SocketInfoPair;
     }
 }
 
