@@ -467,30 +467,49 @@ namespace capu
         ++iter;
         ++iter;
 
-        vector.erase(iter);
+        status_t result = vector.erase(iter);
 
+        EXPECT_TRUE(CAPU_OK == result);
         EXPECT_EQ(4u, vector.size());
         EXPECT_EQ(1u, vector[0]);
         EXPECT_EQ(2u, vector[1]);
         EXPECT_EQ(4u, vector[2]);
         EXPECT_EQ(5u, vector[3]);
 
-        vector.erase(vector.begin());
+        result = vector.erase(vector.begin());
 
+        EXPECT_TRUE(CAPU_OK == result);
         EXPECT_EQ(3u, vector.size());
         EXPECT_EQ(2u, vector[0]);
         EXPECT_EQ(4u, vector[1]);
         EXPECT_EQ(5u, vector[2]);
 
-        vector.erase(vector.end());
+        iter = vector.end();
 
+        result = vector.erase(iter);
+
+        EXPECT_FALSE(CAPU_OK == result);
+        EXPECT_EQ(3u, vector.size());
+        EXPECT_EQ(2u, vector[0]);
+        EXPECT_EQ(4u, vector[1]);
+        EXPECT_EQ(5u, vector[2]);
+
+        --iter;
+
+        result = vector.erase(iter);
+
+        EXPECT_TRUE(CAPU_OK == result);
         EXPECT_EQ(2u, vector.size());
         EXPECT_EQ(2u, vector[0]);
         EXPECT_EQ(4u, vector[1]);
 
-        vector.erase(vector.begin());
-        vector.erase(vector.begin());
+        result = vector.erase(vector.begin());
 
+        EXPECT_TRUE(CAPU_OK == result);
+
+        result = vector.erase(vector.begin());
+
+        EXPECT_TRUE(CAPU_OK == result);
         EXPECT_EQ(0u, vector.size());
     }
 

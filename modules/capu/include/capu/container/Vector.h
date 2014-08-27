@@ -445,7 +445,7 @@ namespace capu
     inline
     status_t Vector<T>::erase(const Iterator& iterator, T* elementOld)
     {
-        if(iterator > m_end)
+        if(iterator >= m_end)
         {
             return CAPU_EINVAL;
         }
@@ -461,7 +461,7 @@ namespace capu
         }
         else
         {
-            Memory::Move(iterator, iterator + 1u, (m_end.m_current - iterator.m_current + 1u) * sizeof(T));
+            Memory::Move(iterator, iterator + 1u, (m_end.m_current - (iterator.m_current + 1u)) * sizeof(T));
             --m_end;
         }
 
