@@ -56,6 +56,7 @@ namespace capu
         UdpSocket::UdpSocket()
             : mIsBound(false)
             , mIsInitilized(false)
+            , mSocket(INVALID_SOCKET)
         {
             initialize();
         }
@@ -248,26 +249,30 @@ namespace capu
         UdpSocket::close()
         {
             int32_t returnValue = CAPU_OK;
-            if (mSocket == INVALID_SOCKET)
+
+            if (mIsBound)
             {
-                returnValue = CAPU_SOCKET_ESOCKET;
-            }
-            else
-            {
-                int32_t result = closesocket(mSocket);
-                if (result != 0)
+                if (mSocket == INVALID_SOCKET)
                 {
-                    result = WSAGetLastError();
-                    if (result != WSANOTINITIALISED)  //socket has already been closed
+                    returnValue = CAPU_SOCKET_ESOCKET;
+                }
+                else
+                {
+                    int32_t result = closesocket(mSocket);
+                    if (result != 0)
                     {
-                        returnValue = CAPU_SOCKET_ECLOSE;
+                        result = WSAGetLastError();
+                        if (result != WSANOTINITIALISED)  //socket has already been closed
+                        {
+                            returnValue = CAPU_SOCKET_ECLOSE;
+                        }
                     }
                 }
+                WSACleanup();
+                mIsBound = false;
+                mIsInitilized = false;
             }
             mSocket = INVALID_SOCKET;
-            WSACleanup();
-            mIsBound = false;
-            mIsInitilized = false;
             return returnValue;
         }
 

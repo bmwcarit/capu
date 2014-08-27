@@ -230,23 +230,27 @@ namespace capu
         status_t
         UdpSocket::close()
         {
-            mIsInitialized = false;
-            mIsBound = false;
+		    if(mIsBound)
+			{
+		     	mIsInitialized = false;
+				mIsBound = false;
 
-            if (mSocket == -1)
-            {
-                return CAPU_SOCKET_ESOCKET;
-            }
-            else
-            {
-                if (::close(mSocket) < 0)
-                {
-                    mSocket = -1;
-                    return CAPU_SOCKET_ECLOSE;
-                }
-                mSocket = -1;
-                return CAPU_OK;
-            }
+				if (mSocket == -1)
+				{
+					return CAPU_SOCKET_ESOCKET;
+				}
+				else
+				{
+					if (::close(mSocket) < 0)
+					{
+						mSocket = -1;
+						return CAPU_SOCKET_ECLOSE;
+					}
+				}
+			}
+            mSocket = -1;
+
+            return CAPU_OK;
         }
 
         inline
