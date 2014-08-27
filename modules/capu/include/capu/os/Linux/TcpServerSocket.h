@@ -32,6 +32,7 @@ namespace capu
             using capu::posix::TcpServerSocket::bind;
             using capu::posix::TcpServerSocket::listen;
             using capu::posix::TcpServerSocket::port;
+            using capu::posix::TcpServerSocket::getSocketDescription;
         };
     }
 }

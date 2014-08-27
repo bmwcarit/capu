@@ -35,6 +35,7 @@ namespace capu
             using capu::os::UdpSocket::getBufferSize;
             using capu::os::UdpSocket::getTimeout;
             using capu::os::UdpSocket::getSocketAddrInfo;
+            using capu::os::UdpSocket::getSocketDescription;
         };
     }
 }

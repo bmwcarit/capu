@@ -54,6 +54,7 @@ namespace capu
             using capu::generic::TcpSocket::getNoDelay;
             using capu::generic::TcpSocket::getKeepAlive;
             using capu::generic::TcpSocket::getRemoteAddress;
+            using capu::generic::TcpSocket::getSocketDescription;
 
         protected:
             status_t setPosixSocketParams();

@@ -40,9 +40,10 @@ namespace capu
             status_t getBufferSize(int32_t& bufferSize);
             status_t getTimeout(int32_t& timeout);
             const SocketAddrInfo& getSocketAddrInfo() const;
+            const capu::os::SocketDescription& getSocketDescription() const;
 
         private:
-            SOCKET mSocket;
+            SocketDescription mSocket;
             WSADATA mWsaData;
             bool_t mIsBound;
             SocketAddrInfo mAddrInfo;
@@ -351,7 +352,15 @@ namespace capu
 
             return CAPU_OK;
         }
+
+        inline
+        const capu::os::SocketDescription& 
+        UdpSocket::getSocketDescription() const
+        {
+            return mSocket;
+        }
     }
+
 }
 
 #endif //CAPU_WINDOWS_UDP_SOCKET_H

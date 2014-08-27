@@ -80,6 +80,14 @@ namespace capu
          *         is not bound yet.
          */
         capu::uint16_t port();
+        
+        /**
+         * Returns the internal descriptor of the socket. This can be different on 
+         * different operating systems. 
+         *
+         * @return The internal descriptor of the socket 
+         */
+        const capu::os::SocketDescription& getSocketDescription() const;
     };
 
     inline
@@ -117,6 +125,12 @@ namespace capu
         return capu::os::arch::TcpServerSocket::port();
     }
 
+    inline 
+    const capu::os::SocketDescription& 
+    TcpServerSocket::getSocketDescription() const
+    {
+        return capu::os::arch::TcpServerSocket::getSocketDescription();
+    }
 }
 #endif //CAPU_TCPSERVERSOCKET_H
 

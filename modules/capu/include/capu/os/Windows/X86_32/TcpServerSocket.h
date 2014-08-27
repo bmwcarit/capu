@@ -33,6 +33,7 @@ namespace capu
                 using capu::os::TcpServerSocket::bind;
                 using capu::os::TcpServerSocket::listen;
                 using capu::os::TcpServerSocket::port;
+                using capu::os::TcpServerSocket::getSocketDescription;
             };
         }
     }

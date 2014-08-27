@@ -187,6 +187,14 @@ namespace capu
          * @return CAPU_ERROR otherwise
          **/
         inline status_t getRemoteAddress(char_t** address);
+
+        /**
+         * Returns the internal socket descriptor. This can be different on 
+         * different os
+         * 
+         * @return the internal descriptor of the socket
+         */
+        inline const capu::os::SocketDescription& getSocketDescription() const;
         
     };
 
@@ -311,6 +319,12 @@ namespace capu
     TcpSocket::getRemoteAddress(char_t** address)
     {
         return capu::os::arch::TcpSocket::getRemoteAddress(address);
+    }
+    inline 
+    const capu::os::SocketDescription& 
+    TcpSocket::getSocketDescription() const
+    {
+        return capu::os::arch::TcpSocket::getSocketDescription();
     }
 }
 

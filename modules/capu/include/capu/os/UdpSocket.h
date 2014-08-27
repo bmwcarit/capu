@@ -135,6 +135,14 @@ namespace capu
          * @return The socket info object.
          */
         const SocketAddrInfo& getSocketAddrInfo() const;
+
+        /**
+        * Returns the internal socket descriptor. This can be different on
+        * different os
+        *
+        * @return the internal descriptor of the socket
+        */
+        inline const capu::os::SocketDescription& getSocketDescription() const;
     };
 
     inline
@@ -201,10 +209,17 @@ namespace capu
     }
 
     inline
-    const
-    SocketAddrInfo& UdpSocket::getSocketAddrInfo() const
+    const SocketAddrInfo& 
+    UdpSocket::getSocketAddrInfo() const
     {
         return capu::os::arch::UdpSocket::getSocketAddrInfo();
+    }
+
+    inline 
+    const capu::os::SocketDescription& 
+    UdpSocket::getSocketDescription() const
+    {
+        return capu::os::arch::UdpSocket::getSocketDescription();
     }
 }
 

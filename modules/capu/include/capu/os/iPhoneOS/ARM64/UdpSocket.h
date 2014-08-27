@@ -37,6 +37,7 @@ namespace capu
                 using capu::iphoneos::UdpSocket::getBufferSize;
                 using capu::iphoneos::UdpSocket::getTimeout;
                 using capu::iphoneos::UdpSocket::getSocketAddrInfo;
+                using capu::iphoneos::UdpSocket::getSocketDescription;
             };
         }
     }

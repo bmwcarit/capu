@@ -38,6 +38,7 @@ namespace capu
             status_t getNoDelay(bool_t& noDelay);
             status_t getKeepAlive(bool_t& keepAlive);
             status_t getRemoteAddress(char_t** remoteAddress);
+            const capu::os::SocketDescription& getSocketDescription() const;
 
         protected:
             TcpSocket();
@@ -380,7 +381,13 @@ namespace capu
             return CAPU_OK;
         }
 
+        inline const capu::os::SocketDescription& TcpSocket::getSocketDescription() const
+        {
+            return mSocket;
+        }
     }
+
+
 }
 
 #endif //CAPU_GENERIC_TCPSOCKET_H

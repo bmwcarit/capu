@@ -35,9 +35,10 @@ namespace capu
             status_t bind(uint16_t port, const char_t* addr = NULL);
             status_t listen(uint8_t backlog);
             uint16_t port();
+            const capu::os::SocketDescription& getSocketDescription() const;
 
         private:
-            int32_t mServerSock;
+            capu::os::SocketDescription mServerSock;
             bool_t mIsBound;
             uint16_t mPort;
         };
@@ -192,6 +193,12 @@ namespace capu
         uint16_t TcpServerSocket::port()
         {
             return mPort;
+        }
+
+        inline
+        const capu::os::SocketDescription& TcpServerSocket::getSocketDescription() const
+        {
+            return mServerSock;
         }
 
     }

@@ -45,6 +45,7 @@ namespace capu
             using capu::posix::TcpSocket::getKeepAlive;
             using capu::posix::TcpSocket::getTimeout;
             using capu::posix::TcpSocket::getRemoteAddress;
+            using capu::posix::TcpSocket::getSocketDescription;
 
         private:
             status_t setNoSigPipe();

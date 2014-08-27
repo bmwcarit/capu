@@ -45,6 +45,7 @@ namespace capu
                 using capu::os::TcpSocket::getKeepAlive;
                 using capu::os::TcpSocket::getTimeout;
                 using capu::os::TcpSocket::getRemoteAddress;
+                using capu::os::TcpSocket::getSocketDescription;
 
             };
 

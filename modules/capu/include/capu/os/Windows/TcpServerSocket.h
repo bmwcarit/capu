@@ -36,8 +36,9 @@ namespace capu
             status_t bind(uint16_t port, const char_t* addr = NULL);
             status_t listen(uint8_t backlog);
             uint16_t port();
+            const capu::os::SocketDescription& getSocketDescription() const;
         private:
-            SOCKET mTcpServerSocket;
+            SocketDescription mTcpServerSocket;
             WSADATA mWsaData;
             bool_t mIsBound;
             capu::uint16_t mPort;
@@ -95,7 +96,8 @@ namespace capu
                 }
             }
 
-            SOCKET socket = ::accept(mTcpServerSocket, NULL, NULL);
+            SocketDescription socket = ::accept(mTcpServerSocket, NULL, NULL);
+
             if (socket == INVALID_SOCKET)
             {
                 return 0;
@@ -218,6 +220,13 @@ namespace capu
         {
             return mPort;
         }
+
+        inline
+        const capu::os::SocketDescription& TcpServerSocket::getSocketDescription() const
+        {
+            return mTcpServerSocket;
+        }
+
     }
 }
 #endif //CAPU_WINDOWS_TCPSERVERSOCKET_H

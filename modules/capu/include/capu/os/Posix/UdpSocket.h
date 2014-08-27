@@ -40,6 +40,7 @@ namespace capu
             status_t getBufferSize(int32_t& bufferSize);
             status_t getTimeout(int32_t& timeout);
             const SocketAddrInfo& getSocketAddrInfo() const;
+            const capu::os::SocketDescription& getSocketDescription() const;
 
         protected:
             int32_t mSocket;
@@ -332,6 +333,13 @@ namespace capu
             timeout = soTimeout.tv_sec * 1000 + (soTimeout.tv_usec / 1000);
 
             return CAPU_OK;
+        }
+
+        inline
+        const capu::os::SocketDescription& 
+        UdpSocket::getSocketDescription() const
+        {
+            return mSocket;
         }
     }
 }

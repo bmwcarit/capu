@@ -34,6 +34,7 @@ namespace capu
                 using capu::iphoneos::TcpServerSocket::bind;
                 using capu::iphoneos::TcpServerSocket::listen;
                 using capu::iphoneos::TcpServerSocket::port;
+                using capu::iphoneos::TcpServerSocket::getSocketDescription;
             };
         }
     }
