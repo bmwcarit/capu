@@ -42,5 +42,13 @@ namespace capu
         Console::Print(Console::GREEN, "The Message\n");
     }
 
+    // Input must be tested manually
+    // Disabled tests can be forcefully enabled from commandline to test this
+    TEST_F(ConsoleTest, DISABLED_ReadChar)
+	{
+		char_t readChar = Console::ReadChar();
+		Console::Print("I have read: %c",readChar);
+	}
+
 }
 

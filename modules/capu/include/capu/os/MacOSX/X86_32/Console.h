@@ -30,6 +30,7 @@ namespace capu
             public:
                 using capu::os::Console::IsInputAvailable;
                 using capu::os::Console::Print;
+                using capu::os::Console::ReadChar;
             };
         }
     }

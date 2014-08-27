@@ -30,6 +30,7 @@ namespace capu
             public:
                 using capu::iphoneos::Console::IsInputAvailable;
                 using capu::iphoneos::Console::Print;
+                using capu::iphoneos::Console::ReadChar;
             };
         }
     }

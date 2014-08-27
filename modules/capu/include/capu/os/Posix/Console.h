@@ -21,6 +21,7 @@
 #include <capu/os/Memory.h>
 #include <unistd.h>
 #include <stdarg.h>
+#include <termios.h>
 
 namespace capu
 {
@@ -32,7 +33,7 @@ namespace capu
             static bool_t IsInputAvailable();
             static void Print(const char_t* format, va_list values);
             static void Print(uint32_t color, const char_t* format, va_list values);
-
+            static char_t ReadChar();
             static const char_t* Colors[];
 
         };
@@ -51,6 +52,34 @@ namespace capu
             printf("%s", capu::posix::Console::Colors[color]);
             vprintf(format, values);
             printf("\e[0m");
+        }
+
+        inline
+        char_t
+        Console::ReadChar()
+        {
+            char buffer = 0;
+            struct termios oldTerminalSettings, temporaryWithoutEcho;
+
+            // save previous settings
+            tcgetattr(fileno(stdin), &oldTerminalSettings);
+
+            // create new settings on top of previous settings
+            Memory::Copy(&temporaryWithoutEcho, &oldTerminalSettings, sizeof(struct termios));
+            temporaryWithoutEcho.c_lflag &= ~(ECHO | ICANON);
+            temporaryWithoutEcho.c_cc[VTIME] = 0;
+            temporaryWithoutEcho.c_cc[VMIN] = 1;
+
+            // use new settings
+            tcsetattr(fileno(stdin), TCSANOW, &temporaryWithoutEcho);
+
+            // read the wanted char
+            read(fileno(stdin), &buffer, 1);
+
+            // revert temporary console settings
+            tcsetattr(fileno(stdin), TCSANOW, &oldTerminalSettings);
+
+            return buffer;
         }
 
         inline

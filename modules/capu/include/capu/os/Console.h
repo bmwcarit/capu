@@ -62,6 +62,8 @@ namespace capu
          * @return true if input on stdin is available, false otherwise
          */
         static bool_t IsInputAvailable();
+
+        static char_t ReadChar();
     };
 
     inline
@@ -69,6 +71,13 @@ namespace capu
     Console::IsInputAvailable()
     {
         return capu::os::arch::Console::IsInputAvailable();
+    }
+
+    inline
+    char_t
+    Console::ReadChar()
+    {
+        return capu::os::arch::Console::ReadChar();
     }
 
     inline

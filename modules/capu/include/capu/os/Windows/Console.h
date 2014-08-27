@@ -30,6 +30,7 @@ namespace capu
             static bool_t IsInputAvailable();
             static void Print(const char_t* format, va_list values);
             static void Print(uint32_t color, const char_t* format, va_list values);
+            static char_t ReadChar();
 
         private:
 
@@ -65,6 +66,13 @@ namespace capu
 
             SetConsoleTextAttribute( hstdout, csbi.wAttributes);
 
+        }
+
+        inline
+        char_t Console::ReadChar()
+        {
+            char_t c = _getch();
+            return c;
         }
 
     }
