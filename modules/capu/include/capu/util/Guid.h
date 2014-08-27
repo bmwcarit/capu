@@ -265,7 +265,7 @@ namespace capu
                           &data44,
                           &data45,
                           &data46,
-                          &data47, 36);
+                          &data47);
 #else
         retVal = sscanf(guid.c_str(), "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
                         &data1,

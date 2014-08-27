@@ -71,7 +71,7 @@ namespace capu
         inline
         char_t Console::ReadChar()
         {
-            char_t c = _getch();
+            char_t c = static_cast<char_t>(_getch());
             return c;
         }
 

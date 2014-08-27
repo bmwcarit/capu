@@ -272,7 +272,7 @@ namespace capu
     SocketOutputStream<SNDBUFSIZE>::writeToInternalBuffer(const void* data, const uint32_t size)
     {
         Memory::Copy(&mBuffer[mBufferSize], data, size);
-        mBufferSize += size;
+        mBufferSize += static_cast<uint16_t>(size);
     }
 
     template<uint16_t SNDBUFSIZE>

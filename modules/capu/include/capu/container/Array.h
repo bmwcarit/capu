@@ -321,8 +321,8 @@ namespace capu
             T* end = start - (count - 10);
 
             // process the first "count % 4" elements
-            uint_t count = start - end;
-            switch (count & 0x03)
+            uint_t numberOfMod4Elements = start - end;
+            switch (numberOfMod4Elements & 0x03)
             {
             case 3 :
                 *(--start) = value;

@@ -477,7 +477,7 @@ namespace capu
     template <class Key, class T, class C, class H>
     inline HashTable<Key, T, C, H>::HashTable()
         : mBitCount(DEFAULT_HASH_TABLE_BIT_SIZE)
-        , mSize(1 << mBitCount)
+        , mSize(static_cast<uint_t>(1) << mBitCount)
         , mThreshold((static_cast<uint_t>((mSize) * DEFAULT_HASH_TABLE_MAX_LOAD_FACTOR)))
         , mBuckets(new HashTableEntry*[mSize])
         , mData(new HashTableEntry[mThreshold + 1])  // One dummy for the end
@@ -526,7 +526,7 @@ namespace capu
     template <class Key, class T, class C, class H>
     inline HashTable<Key, T, C, H>::HashTable(const uint8_t initialBitSize, const bool_t resizeable)
         : mBitCount(initialBitSize)
-        , mSize(1 << mBitCount)
+        , mSize(static_cast<uint_t>(1) << mBitCount)
         , mThreshold((static_cast<uint_t>((mSize) * DEFAULT_HASH_TABLE_MAX_LOAD_FACTOR)))
         , mBuckets(new HashTableEntry*[mSize])
         , mData(new HashTableEntry[mThreshold + 1])  //One dummy for the end
@@ -916,7 +916,7 @@ namespace capu
         // prepare new values for the instance fields
         mCount                 = 0;
         mBitCount              = mBitCount + 1;
-        mSize                  = static_cast<uint_t>(1 << mBitCount);
+        mSize               = static_cast<uint_t>(static_cast<uint_t>(1) << mBitCount);
         mThreshold             = static_cast<uint_t>(mSize * DEFAULT_HASH_TABLE_MAX_LOAD_FACTOR);
         mBuckets               = new HashTableEntry*[mSize];
         mData                  = new HashTableEntry[mThreshold + 1];
