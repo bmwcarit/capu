@@ -180,6 +180,13 @@ namespace capu
         Vector(const Vector& other);
 
         /**
+         * Assignment operator for vector
+         * @param Vector to copy from
+         * @return reference to Vector with copied data
+         */
+        Vector& operator=(const Vector& other);
+
+        /**
          * Adds an Element to the end of the vector
          * @param reference to the value to add
          */
@@ -326,6 +333,18 @@ namespace capu
         , m_end(m_data.getRawData())
     {
 
+    }
+
+    template<typename T>
+    inline
+    Vector<T>&
+    Vector<T>::operator=(const Vector<T>& other)
+    {
+        m_data  = other.m_data;
+        m_start = m_data.getRawData();
+        m_end   = m_data.getRawData() + other.size();
+
+        return *this;
     }
 
     template<typename T>
