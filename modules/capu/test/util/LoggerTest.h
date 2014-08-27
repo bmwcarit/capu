@@ -28,6 +28,7 @@ namespace capu
     class MockLogAppender: public ILogAppender
     {
     public:
+        virtual ~MockLogAppender(){}
         MOCK_METHOD1(log, void(const LogMessage& logMessage));
     };
 

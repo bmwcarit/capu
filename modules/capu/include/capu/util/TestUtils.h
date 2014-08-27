@@ -28,6 +28,17 @@ namespace capu
      */
     ACTION_P(ReleaseSyncCall, CondVar)
     {
+        UNUSED(arg9);
+        UNUSED(arg8);
+        UNUSED(arg7);
+        UNUSED(arg6);
+        UNUSED(arg5);
+        UNUSED(arg4);
+        UNUSED(arg3);
+        UNUSED(arg2);
+        UNUSED(arg1);
+        UNUSED(arg0);
+        UNUSED(args);
         CondVar->signal();
     }
 

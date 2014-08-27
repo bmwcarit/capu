@@ -147,7 +147,7 @@ namespace capu
     class TestUdpMultipleSender: public Runnable
     {
     public:
-        TestUdpMultipleSender(const uint32_t port, const int32_t intValue, const String& stringValue, const float_t floatValue, const bool_t boolValue)
+        TestUdpMultipleSender(const uint16_t port, const int32_t intValue, const String& stringValue, const float_t floatValue, const bool_t boolValue)
             : mIntValue(intValue)
             , mStringValue(stringValue)
             , mFloatValue(floatValue)
@@ -195,7 +195,7 @@ namespace capu
         String  mStringValue;
         float_t mFloatValue;
         bool_t  mBoolValue;
-        uint32_t mPort;
+        uint16_t mPort;
     };
 
     UdpSocketInputStreamTest::UdpSocketInputStreamTest()

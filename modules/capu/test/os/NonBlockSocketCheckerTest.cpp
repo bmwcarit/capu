@@ -114,7 +114,7 @@ public:
     {
 
     }
-    void receiveSomeData(const capu::os::SocketDescription& socketDescription)
+    void receiveSomeData(const capu::os::SocketDescription&)
     {
         capu::int32_t data;
         capu::int32_t numbytes;

@@ -48,6 +48,7 @@ namespace capu
     class MockSimpleClass: public SimpleClass
     {
     public:
+        virtual ~MockSimpleClass(){};
         MOCK_METHOD1(doVirtualStuff, void(uint32_t value));
         MOCK_METHOD1(doPureVirtualStuff, void(uint32_t value));
         MOCK_METHOD2(doPureVirtualStuff2, void(uint32_t value1, uint32_t value2));

@@ -699,7 +699,7 @@ class TestServer: public capu::Runnable
 {
 public:
     capu::TcpServerSocket server;
-    capu::uint32_t port;
+    capu::uint16_t port;
     capu::int32_t receivedLength;
     capu::status_t receivedRetVal;
     capu::Thread t;
