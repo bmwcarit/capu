@@ -36,6 +36,11 @@
     const IteratableType::Iterator end = Iteratable.end();\
     for(; iter != end; ++iter)
 
+#define capu_const_foreach(IteratableType, Iteratable, Iter)\
+    IteratableType::ConstIterator Iter = Iteratable.begin(); \
+    const IteratableType::ConstIterator end = Iteratable.end(); \
+for (; Iter != end; ++Iter)
+
 namespace capu
 {
     typedef ::int8_t    int8_t;
