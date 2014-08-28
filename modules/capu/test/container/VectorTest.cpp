@@ -101,6 +101,14 @@ namespace capu
         EXPECT_EQ(47u, vector[1]);
     }
 
+    TEST_F(VectorTest, PushBack3)
+    {
+        Vector<uint32_t> vector(0);
+
+        vector.push_back(42u);
+
+        EXPECT_EQ(42u, vector[0]);
+    }
 
     TEST_F(VectorTest, IteratorInc)
     {

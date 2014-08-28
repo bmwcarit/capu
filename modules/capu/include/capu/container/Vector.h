@@ -379,7 +379,13 @@ namespace capu
     void
     Vector<T>::grow()
     {
-        Array<T> tmpArray(m_data.size()  * 2);
+        uint_t newSize = 2 * m_data.size();
+        if(0 == newSize)
+        {
+            newSize = 1;
+        }
+
+        Array<T> tmpArray(newSize);
         m_data.swap(tmpArray);
 
         m_start = m_data.getRawData();
