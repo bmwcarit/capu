@@ -302,12 +302,6 @@ namespace capu
 
         Vector<uint32_t> vector2;
 
-        Vector<uint32_t>::ConstIterator a = constVector.begin();
-        Vector<uint32_t>::Iterator b = vector.begin();
-
-        Vector<uint32_t>::ConstIterator c = constVector.end();
-        Vector<uint32_t>::Iterator d = vector.end();
-
         for (Vector<uint32_t>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
         {
             vector2.push_back(*iter);
