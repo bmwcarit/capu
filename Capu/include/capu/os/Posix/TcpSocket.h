@@ -200,6 +200,7 @@ namespace capu
                 int32_t res = ::connect(mSocket, (const sockaddr*) &serverAddress, sizeof(serverAddress));
                 if (res == -1)
                 {
+                    close();
                     return CAPU_SOCKET_ECONNECT;
                 }
             }
