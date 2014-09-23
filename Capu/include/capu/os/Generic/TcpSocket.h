@@ -147,7 +147,13 @@ namespace capu
 
             if ( 0 != remoteAddress)
             {
-                char *remoteIP = inet_ntoa(client_address.sin_addr);
+                char_t buffer[INET_ADDRSTRLEN] = { '\0' };
+                const char *remoteIP = inet_ntop(AF_INET, &(client_address.sin_addr), buffer, INET_ADDRSTRLEN);
+                if (NULL == remoteIP)
+                {
+                    return CAPU_ERROR;
+                }
+
                 uint_t stringLength = StringUtils::Strlen(remoteIP) + 1;
                 *remoteAddress = new char_t[stringLength];
                 StringUtils::Strncpy(*remoteAddress, stringLength, remoteIP);

@@ -142,12 +142,10 @@ namespace capu
             socklen_t len = sizeof(sin);
             if (getsockname(mSocket, (struct sockaddr*)&sin, &len) != -1)
             {
-                // inet_ntop also supports IPv6, which is not supported under VS2005,
-                // therefore we use inet_ntoa (IPv6 is not supported by capu anyway)
-                //char_t str[INET_ADDRSTRLEN];
-                //inet_ntop(AF_INET, &(sin.sin_addr.s_addr), str, INET_ADDRSTRLEN);
-                mAddrInfo.addr = inet_ntoa(sin.sin_addr);
+                char_t str[INET_ADDRSTRLEN] = { '\0' };
+                inet_ntop(AF_INET, &(sin.sin_addr.s_addr), str, INET_ADDRSTRLEN);
                 mAddrInfo.port = ntohs(sin.sin_port);
+                mAddrInfo.addr = str;
             }
 
             mIsBound = true;
@@ -234,9 +232,15 @@ namespace capu
             {
                 if (sender != 0)
                 {
+                    char_t buffer[INET_ADDRSTRLEN] = { '\0' };
+                    const char_t* result = inet_ntop(AF_INET, &(remoteSocketAddr.sin_addr), buffer, INET_ADDRSTRLEN);
+                    if (0 == result)
+                    {
+                        return CAPU_ERROR;
+                    }
+
                     sender->port = ntohs(remoteSocketAddr.sin_port);
-                    char_t* addr = inet_ntoa(remoteSocketAddr.sin_addr);
-                    sender->addr = addr;
+                    sender->addr = result;
                 }
             }
 
