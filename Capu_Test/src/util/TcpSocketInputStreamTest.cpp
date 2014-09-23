@@ -74,7 +74,6 @@ namespace capu
         static void Send(TcpSocket& socket, const int64_t& data)
         {
             uint64_t tmp = htonll(static_cast<int64_t>(data));
-            
             SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(int64_t));
         }
     };
@@ -240,12 +239,14 @@ namespace capu
 
     TEST_F(TcpSocketInputStreamTest, ReceiveInt64)
     {
-        EXPECT_EQ(0x6464646432323232, TcpSocketInputStreamTestExecutor::Execute<TcpInt64TestSender>(0x6464646432323232));
+        const int64_t value = 9223372036854775807LL;
+        EXPECT_EQ(value, TcpSocketInputStreamTestExecutor::Execute<TcpInt64TestSender>(value));
     }
 
     TEST_F(TcpSocketInputStreamTest, ReceiveUInt64)
     {
-        EXPECT_EQ(0x6464646432323232u, TcpSocketInputStreamTestExecutor::Execute<TcpUInt64TestSender>(0x6464646432323232u));
+        const uint64_t value = 18446744073709551615uLL;
+        EXPECT_EQ(value, TcpSocketInputStreamTestExecutor::Execute<TcpUInt64TestSender>(value));
         EXPECT_EQ(0u, TcpSocketInputStreamTestExecutor::Execute<TcpUInt64TestSender>(0u));
         EXPECT_EQ(NumericLimits::Max<uint64_t>(), TcpSocketInputStreamTestExecutor::Execute<TcpUInt64TestSender>(NumericLimits::Max<uint64_t>()));
     }

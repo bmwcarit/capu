@@ -244,12 +244,14 @@ namespace capu
 
     TEST_F(TcpSocketOutputStreamTest, SendInt64Data)
     {
-        EXPECT_EQ(0x6464646432323232uL, TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232L));
+        const uint64_t value = 9223372036854775807LL;
+        EXPECT_EQ(value, TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(value));
     }
 
     TEST_F(TcpSocketOutputStreamTest, SendUInt64Data)
     {
-        EXPECT_EQ(0x6464646432323232uL, TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(0x6464646432323232uL));
+        const uint64_t value = 18446744073709551615uLL;
+        EXPECT_EQ(value, TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(value));
         EXPECT_EQ(0u, TcpSocketOutputStreamTestExecutor<uint32_t>::Execute(0u));
         EXPECT_EQ(NumericLimits::Max<uint64_t>(), TcpSocketOutputStreamTestExecutor<uint64_t>::Execute(NumericLimits::Max<uint64_t>()));
     }

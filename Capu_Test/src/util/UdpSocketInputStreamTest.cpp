@@ -249,12 +249,14 @@ namespace capu
 
     TEST_F(UdpSocketInputStreamTest, ReceiveInt64)
     {
-        EXPECT_EQ(0x6464646432323232L, UdpSocketInputStreamTestExecutor::Execute<UdpInt64TestSender>(0x6464646432323232L));
+        const int64_t value = 9223372036854775807LL;
+        EXPECT_EQ(value, UdpSocketInputStreamTestExecutor::Execute<UdpInt64TestSender>(value));
     }
 
     TEST_F(UdpSocketInputStreamTest, ReceiveUInt64)
     {
-        EXPECT_EQ(0x6464646432323232uL, UdpSocketInputStreamTestExecutor::Execute<UdpUInt64TestSender>(0x6464646432323232uL));
+        const uint64_t value = 18446744073709551615uLL;
+        EXPECT_EQ(value, UdpSocketInputStreamTestExecutor::Execute<UdpUInt64TestSender>(value));
     }
 
     TEST_F(UdpSocketInputStreamTest, ReceiveString)
