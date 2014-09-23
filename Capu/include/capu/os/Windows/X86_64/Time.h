@@ -29,6 +29,7 @@ namespace capu
             {
             public:
                 using capu::os::Time::GetMilliseconds;
+                using capu::os::Time::GetMicroseconds;
             };
         }
     }

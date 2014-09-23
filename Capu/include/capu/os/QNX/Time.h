@@ -27,6 +27,7 @@ namespace capu
         {
         public:
             using capu::posix::Time::GetMilliseconds;
+            using capu::posix::Time::GetMicroseconds;
         };
     }
 }

@@ -32,3 +32,11 @@ TEST(Time, isBiggerThanSomeReferenceTime)
     capu::uint64_t milliSeconds = capu::Time::GetMilliseconds();
     EXPECT_GE(milliSeconds, 1357210706813ull); // check against some reference time (03.01.2013, 12:00)
 }
+
+TEST(Time, getMicrosecondsTest)
+{
+    capu::uint64_t milliSeconds = capu::Time::GetMicroseconds();
+    capu::Thread::Sleep(50);
+    capu::uint64_t milliSeconds2 = capu::Time::GetMicroseconds();
+    EXPECT_TRUE((milliSeconds2 - milliSeconds) > 40000);
+}

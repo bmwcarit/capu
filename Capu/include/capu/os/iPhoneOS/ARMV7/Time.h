@@ -30,6 +30,7 @@ namespace capu
             {
             public:
                 using capu::iphoneos::Time::GetMilliseconds;
+                using capu::iphoneos::Time::GetMicroseconds;
             };
         }
     }

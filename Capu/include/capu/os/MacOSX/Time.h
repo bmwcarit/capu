@@ -28,16 +28,39 @@ namespace capu
         {
         public:
             static uint64_t GetMilliseconds();
+            static uint64_t GetMicroseconds();
+        private:
+            static void getTimeInternal(mach_timespec_t& ts);
+            static uint64_t getMultipliedTime(const uint_t& secondsFactor, const uint_t& nanosecondsFactor);
         };
 
         inline uint64_t Time::GetMilliseconds()
         {
-            mach_timespec_t ts;
+            const uint_t millisecondsPerSecond = 1000;
+            const uint_t nanosecondsPerMillisecond = 1000000;
+            return getMultipliedTime(millisecondsPerSecond, nanosecondsPerMillisecond);
+        }
+
+        inline uint64_t Time::GetMicroseconds()
+        {
+            const uint_t microsecondsPerSecond = 1000000;
+            const uint_t nanosecondsPerMicrosecond = 1000;
+            return getMultipliedTime(microsecondsPerSecond, nanosecondsPerMicrosecond);
+        }
+
+        inline void Time::getTimeInternal(mach_timespec_t& ts)
+        {
             clock_serv_t cl;
             host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cl);
             clock_get_time(cl, &ts);
             mach_port_deallocate(mach_task_self(), cl);
-            return (static_cast<uint64_t>(ts.tv_sec) * 1000) + (ts.tv_nsec / 1000000);
+        }
+
+        inline uint64_t Time::getMultipliedTime(const uint_t& secondsFactor, const uint_t& nanosecondsFactor)
+        {
+            mach_timespec_t ts;
+            getTimeInternal(ts);
+            return (static_cast<uint64_t>(ts.tv_sec) * secondsFactor) + (ts.tv_nsec / nanosecondsFactor);
         }
     }
 }

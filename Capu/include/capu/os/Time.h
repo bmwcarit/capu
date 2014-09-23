@@ -33,6 +33,7 @@ namespace capu
          * Get the current time in milliseconds since 01.01.1970.
          */
         static uint64_t GetMilliseconds();
+        static uint64_t GetMicroseconds();
     };
 
     inline
@@ -40,6 +41,13 @@ namespace capu
     Time::GetMilliseconds()
     {
         return capu::os::arch::Time::GetMilliseconds();
+    }
+
+    inline
+    uint64_t
+    Time::GetMicroseconds()
+    {
+        return capu::os::arch::Time::GetMicroseconds();
     }
 }
 #endif //CAPU_TIME_H

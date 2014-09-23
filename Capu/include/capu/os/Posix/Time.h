@@ -27,9 +27,26 @@ namespace capu
         {
         public:
             static uint64_t GetMilliseconds();
+            static uint64_t GetMicroseconds();
+        private:
+            static uint64_t getMultipliedTime(const uint_t& secondsFactor, const uint_t& nanosecondsFactor);
         };
 
         inline uint64_t Time::GetMilliseconds()
+        {
+            const uint_t millisecondsPerSecond = 1000;
+            const uint_t nanosecondsPerMillisecond = 1000000;
+            return getMultipliedTime(millisecondsPerSecond, nanosecondsPerMillisecond);
+        }
+
+        inline uint64_t Time::GetMicroseconds()
+        {
+            const uint_t microsecondsPerSecond = 1000000;
+            const uint_t nanosecondsPerMicrosecond = 1000;
+            return getMultipliedTime(microsecondsPerSecond, nanosecondsPerMicrosecond);
+        }
+
+        inline uint64_t Time::getMultipliedTime(const uint_t& secondsFactor, const uint_t& nanosecondsFactor)
         {
             struct timespec currentTime;
             if (clock_gettime(CLOCK_REALTIME, &currentTime) != 0)
@@ -37,8 +54,8 @@ namespace capu
                 // handle error somehow?
                 return 0;
             }
-            uint64_t millisecs = (static_cast<uint64_t>(currentTime.tv_sec) * 1000) + (currentTime.tv_nsec / 1000000);
-            return millisecs;
+
+            return (static_cast<uint64_t>(currentTime.tv_sec) * secondsFactor) + (currentTime.tv_nsec / nanosecondsFactor);
         }
     }
 }
