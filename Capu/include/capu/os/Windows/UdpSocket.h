@@ -121,14 +121,15 @@ namespace capu
             {
                 socketAddr.sin_addr.s_addr = INADDR_ANY;
             }
-            else if (inet_addr(addr) == INADDR_NONE)
-            {
-                return CAPU_SOCKET_EADDR;
-            }
             else
             {
-                socketAddr.sin_addr.s_addr = inet_addr(addr);
+                const int32_t result = inet_pton(AF_INET, addr, &(socketAddr.sin_addr.s_addr));
+                if ((result <= 0) || (INADDR_NONE == socketAddr.sin_addr.s_addr))
+                {
+                    return CAPU_SOCKET_EADDR;
+                }
             }
+
             socketAddr.sin_port = htons(port);
 
             int32_t result = ::bind(mSocket, (sockaddr*) &socketAddr, sizeof(socketAddr));
@@ -179,9 +180,14 @@ namespace capu
 
             receiverSockAddr.sin_family = AF_INET;
             receiverSockAddr.sin_port = htons(receiverPort);
-            receiverSockAddr.sin_addr.s_addr = inet_addr(receiverAddr);
 
-            const int32_t result = sendto(mSocket, buffer, length, 0, (sockaddr*) &receiverSockAddr, sizeof(receiverSockAddr));
+            int32_t result = inet_pton(AF_INET, receiverAddr, &(receiverSockAddr.sin_addr.s_addr));
+            if ((result <= 0) || (INADDR_NONE == receiverSockAddr.sin_addr.s_addr))
+            {
+                return CAPU_SOCKET_EADDR;
+            }
+
+            result = sendto(mSocket, buffer, length, 0, (sockaddr*) &receiverSockAddr, sizeof(receiverSockAddr));
 
             if (result == SOCKET_ERROR)
             {

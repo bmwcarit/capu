@@ -157,14 +157,15 @@ namespace capu
             {
                 socketAddr.sin_addr.s_addr = INADDR_ANY;
             }
-            else if (inet_addr(addr) == INADDR_NONE)
-            {
-                return CAPU_SOCKET_EADDR;
-            }
             else
             {
-                socketAddr.sin_addr.s_addr = inet_addr(addr);
+                const int32_t result = inet_pton(AF_INET, addr, &(socketAddr.sin_addr.s_addr));
+                if ((result <= 0) || (INADDR_NONE == socketAddr.sin_addr.s_addr))
+                {
+                    return CAPU_SOCKET_EADDR;
+                }
             }
+
             socketAddr.sin_port = htons(port);
 
             int32_t result = ::bind(mTcpServerSocket, (sockaddr*) &socketAddr, sizeof(socketAddr));
