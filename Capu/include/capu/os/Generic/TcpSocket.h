@@ -98,22 +98,33 @@ namespace capu
         inline
             status_t TcpSocket::getSocketAddr(const char_t* dest_addr, uint16_t port, struct sockaddr_in& socketAddressInfo)
         {
-            struct hostent* serverHost = gethostbyname((const char_t*) dest_addr);
-            if (serverHost == NULL)
+            addrinfo *res = NULL;
+            addrinfo hints;
+            capu::Memory::Set((char_t*)&hints, 0x00, sizeof(addrinfo));
+            hints.ai_family = AF_INET;
+
+            if (0 != getaddrinfo((const char_t*)dest_addr, NULL, &hints, &res))
             {
                 return CAPU_SOCKET_EADDR;
             }
 
-            struct sockaddr_in serverAddress;
-            capu::Memory::Set((char_t*) &serverAddress, 0x00, sizeof(serverAddress));
+            for (addrinfo *ptr = res; ptr != NULL; ptr = ptr->ai_next)
+            {
+                if (ptr->ai_family == AF_INET)
+                {
+                    capu::Memory::Set((char_t*)&socketAddressInfo, 0x00, sizeof(sockaddr_in));
 
-            serverAddress.sin_family = AF_INET;
-            capu::Memory::Copy((char_t*) &serverAddress.sin_addr.s_addr, (char_t*) serverHost->h_addr_list[0], serverHost->h_length);
-            serverAddress.sin_port = htons(port);
+                    socketAddressInfo.sin_family = AF_INET;
+                    capu::Memory::Copy((char_t*)&(socketAddressInfo.sin_addr.s_addr), (char_t*)(ptr->ai_addr->sa_data) + 2, sizeof(in_addr));
+                    socketAddressInfo.sin_port = htons(port);
 
-            socketAddressInfo = serverAddress;
-            return CAPU_OK;
+                    freeaddrinfo(res);
+                    return CAPU_OK;
+                }
+            }
 
+            freeaddrinfo(res);
+            return CAPU_SOCKET_ERROR;
         }
 
         inline status_t TcpSocket::getRemoteAddress(char_t** remoteAddress)
