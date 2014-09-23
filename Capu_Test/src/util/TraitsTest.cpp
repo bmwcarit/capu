@@ -46,6 +46,10 @@ public:
 class SomeClassWithEnumSize
 {
     capu::uint32_t myValue;
+
+    SomeClassWithEnumSize(){
+        UNUSED(myValue);
+    }
 };
 
 union SomeUnion
