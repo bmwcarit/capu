@@ -13,13 +13,41 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)  # Must be first line
+#set default install prefix to stay backward compatible with version 0.13.0
+SET (CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/deliverable/${TARGET_OS}_${TARGET_ARCH}/${CMAKE_BUILD_TYPE})
 
-PROJECT(Capu)                        # Must be second line
+SET(CMAKE_MODULE_PATH
+    ${CMAKE_INSTALL_PREFIX}/lib/cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/acme2
+)
 
-INCLUDE(cmake/acme/acme.cmake)       # Must be third line
+FIND_PACKAGE(ACME2)
 
-ACME_ADD_SUBDIRECTORY(modules)
+# custom setup for integrating gtest & gmock
+set(gtest_force_shared_crt true CACHE BOOL "Must be enabled for linking our unit tests" FORCE)
+IF(Capu_BUILD_TESTS AND NOT TARGET gmock)
+    ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/external/gmock)
+ENDIF()
 
-ACME_FINALIZE()
+ACME2_PROJECT(
+    #==========================================================================
+    # project metadata
+    #==========================================================================
+    NAME                        Capu
+    VERSION_MAJOR               0
+    VERSION_MINOR               13
+    VERSION_PATCH               0
+    DESCRIPTION                 "Collections and Platform Utils"
+    EMAIL                       "martin.veith@bmw-carit.de"
+    COMPANY                     "BMW Car IT GmbH"
+
+    #==========================================================================
+    # project content
+    #==========================================================================
+    CONTENT                     ./Capu
+                                ./DynamicTestLibrary
+                                ./Capu_Test
+)

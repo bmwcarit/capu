@@ -22,7 +22,7 @@ SET(TARGET_OS Android)
 SET(TARGET_ARCH ARMV7L)
 SET(TARGET_COMPILER GCC)
 
-SET(ANDROID_STANDALONE_TOOLCHAIN_DIR "C:/toolchains/android-ndk-8e-standalone")
+SET(ANDROID_STANDALONE_TOOLCHAIN_DIR "/opt/android-ndk-r8e/toolchains/arm-linux-androideabi-4.7/prebuilt/linux-x86_64")
 
 SET(ANDROID_STANDALONE_TOOLCHAIN_DIR ${ANDROID_STANDALONE_TOOLCHAIN_DIR} CACHE PATH "ANDROID_STANDALONE_TOOLCHAIN_DIR")
 SET(ANDROID_NDK_TOOL_DIRECTORY "${ANDROID_STANDALONE_TOOLCHAIN_DIR}/bin" CACHE PATH "ANDROID_NDK_TOOL_DIRECTORY")
@@ -31,19 +31,23 @@ SET(CMAKE_FIND_ROOT_PATH ${ANDROID_STANDALONE_TOOLCHAIN_DIR})
 
 SET(CMAKE_INCLUDE_PATH ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++)
 
-SET(CMAKE_C_COMPILER "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-gcc.exe" CACHE PATH "")
-SET(CMAKE_CXX_COMPILER "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-g++.exe" CACHE PATH "")
-SET(CMAKE_AR           "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-ar.exe" CACHE PATH "")
+SET(CMAKE_C_COMPILER "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-gcc" CACHE PATH "")
+SET(CMAKE_CXX_COMPILER "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-g++" CACHE PATH "")
+SET(CMAKE_AR           "${ANDROID_NDK_TOOL_DIRECTORY}/arm-linux-androideabi-ar" CACHE PATH "")
 
-SET(CMAKE_C_FLAGS "--sysroot=${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot  -MMD -MP -MF -fpic -Wl,--fix-cortex-a8 -Wl,--exclude-libs,ALL -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -ffunction-sections -funwind-tables -fstack-protector -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Os -g -DNDEBUG -fomit-frame-pointer -fno-strict-aliasing -finline-limit=64")
-SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}")
+SET(CMAKE_C_FLAGS "--sysroot=${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot  -MMD -MP -MF -fpic -Wl,--fix-cortex-a8 -Wl,--exclude-libs,ALL -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -ffunction-sections -funwind-tables -fstack-protector -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Os -g -DNDEBUG -fomit-frame-pointer -fno-strict-aliasing -finline-limit=64" CACHE STRING "")
+SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -I${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include -I${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ -I${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include -I${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a -I/opt/android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.7/include -I/opt/android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi/include" CACHE STRING "")
 
-INCLUDE_DIRECTORIES( ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a)
-SET(CMAKE_REQUIRED_INCLUDES ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a)
-SET(CMAKE_INCLUDE_PATH ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a)
+#INCLUDE_DIRECTORIES( ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a)
+SET(CMAKE_REQUIRED_INCLUDES ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a CACHE STRING "")
+SET(CMAKE_INCLUDE_PATH ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/sysroot/usr/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++ ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include ${ANDROID_STANDALONE_TOOLCHAIN_DIR}/include/c++/arm-linux-androideabi/armv7-a CACHE STRING "")
 
-SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0")
+SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0 CACHE STRING """)
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g -O0 CACHE STRING """)
+
+SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -L/opt/android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi -lgnustl_shared" CACHE STRING "")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -L/opt/android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi -lgnustl_shared" CACHE STRING "")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/opt/android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.7/libs/armeabi -lgnustl_shared" CACHE STRING "")
 
 SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
