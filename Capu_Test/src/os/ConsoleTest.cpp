@@ -26,12 +26,6 @@ namespace capu
     {
     }
 
-    TEST_F(ConsoleTest, CheckForInput)
-    {
-        EXPECT_FALSE(Console::IsInputAvailable());
-    }
-
-
     TEST_F(ConsoleTest, Print)
     {
         Console::Print("The Message\n");
@@ -42,7 +36,13 @@ namespace capu
         Console::Print(Console::GREEN, "The Message\n");
     }
 
-    // Input must be tested manually
+    // Console must be tested manually
+
+    TEST_F(ConsoleTest, DISABLED_CheckForInput)
+    {
+        EXPECT_FALSE(Console::IsInputAvailable());
+    }
+
     // Disabled tests can be forcefully enabled from commandline to test this
     TEST_F(ConsoleTest, DISABLED_ReadChar)
 	{
