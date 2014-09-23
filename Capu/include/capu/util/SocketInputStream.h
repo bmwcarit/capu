@@ -60,6 +60,30 @@ namespace capu
         ~SocketInputStream();
 
         /**
+         * Read an uint8_t value from the stream
+         * @param value Reference to variable to store the value read
+         */
+        IInputStream& operator>>(uint8_t& value);
+
+        /**
+         * Read an uint8_t value from the stream
+         * @param value Reference to variable to store the value read
+         */
+        IInputStream& operator>>(int8_t& value);
+
+        /**
+         * Read an uint16_t value from the stream
+         * @param value Reference to variable to store the value read
+         */
+        IInputStream& operator>>(uint16_t& value);
+
+        /**
+         * Read an int16_t value from the stream
+         * @param value Reference to variable to store the value read
+         */
+        IInputStream& operator>>(int16_t& value);
+
+        /**
          * Read an unsigned int from the stream
          * @param value Reference to variable to store the value read
          */
@@ -109,7 +133,6 @@ namespace capu
          */
         IInputStream& operator>>(Guid& value);
 
-        IInputStream& operator>>(uint16_t& value);
 
         /**
          * Read bytes from the stream
@@ -220,6 +243,34 @@ namespace capu
     {
         read(reinterpret_cast<char_t*>(&value), sizeof(uint16_t));
         value = ntohs(value);
+        return *this;
+    }
+
+    inline
+    IInputStream&
+    SocketInputStream::operator>>(int16_t& value)
+    {
+        uint16_t tmp = 0;
+        operator>>(tmp);
+        value = *reinterpret_cast<int16_t*>(&tmp);
+        return *this;
+    }
+
+    inline
+    IInputStream&
+    SocketInputStream::operator>>(uint8_t& value)
+    {
+        read(reinterpret_cast<char_t*>(&value), sizeof(uint8_t));
+        return *this;
+    }
+
+    inline
+    IInputStream&
+    SocketInputStream::operator>>(int8_t& value)
+    {
+        uint8_t tmp = 0;
+        operator>>(tmp);
+        value = *reinterpret_cast<int8_t*>(&tmp);
         return *this;
     }
 

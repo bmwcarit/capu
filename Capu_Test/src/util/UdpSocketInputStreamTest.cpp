@@ -83,6 +83,34 @@ namespace capu
         }
     };
 
+    struct UdpInt16TestSender: public TestUdpSocketSender
+    {
+        typedef int16_t VALUE_TYPE;
+        static void Send(const capu::uint16_t port, UdpSocket& socket, const int16_t& data)
+        {
+            int16_t tmp = htons(data);
+            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(int16_t));
+        }
+    };
+
+    struct UdpInt8TestSender: public TestUdpSocketSender
+    {
+        typedef int8_t VALUE_TYPE;
+        static void Send(const capu::uint16_t port, UdpSocket& socket, const int8_t& data)
+        {
+            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&data), sizeof(int8_t));
+        }
+    };
+
+    struct UdpUInt8TestSender: public TestUdpSocketSender
+    {
+        typedef uint8_t VALUE_TYPE;
+        static void Send(const capu::uint16_t port, UdpSocket& socket, const uint8_t& data)
+        {
+            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&data), sizeof(uint8_t));
+        }
+    };
+
     struct UdpBoolTestSender: public TestUdpSocketSender
     {
         typedef bool_t VALUE_TYPE;
@@ -277,6 +305,21 @@ namespace capu
     TEST_F(UdpSocketInputStreamTest, ReceiveUInt16)
     {
         EXPECT_EQ(4, UdpSocketInputStreamTestExecutor::Execute<UdpUInt16TestSender>(4));
+    }
+
+    TEST_F(UdpSocketInputStreamTest, ReceiveInt16)
+    {
+        EXPECT_EQ(4, UdpSocketInputStreamTestExecutor::Execute<UdpInt16TestSender>(4));
+    }
+
+    TEST_F(UdpSocketInputStreamTest, ReceiveInt8)
+    {
+        EXPECT_EQ(5, UdpSocketInputStreamTestExecutor::Execute<UdpInt8TestSender>(5));
+    }
+
+    TEST_F(UdpSocketInputStreamTest, ReceiveUInt8)
+    {
+        EXPECT_EQ(5u, UdpSocketInputStreamTestExecutor::Execute<UdpUInt8TestSender>(5u));
     }
 
     TEST_F(UdpSocketInputStreamTest, ReceiveGuid)
