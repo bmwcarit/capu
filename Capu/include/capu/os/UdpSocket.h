@@ -114,6 +114,14 @@ namespace capu
         status_t setTimeout(const int32_t timeout);
 
         /**
+         * Enable or disable the transmission of broadcast packets
+         * @return CAPU_OK if the broadcast flag is successfully set
+         *         CAPU_SOCKET_ESOCKET if the socket has not been created successfully
+         *         CAPU_ERROR otherwise
+         */
+        status_t allowBroadcast(const bool_t broadcast);
+
+        /**
          * get the send and receive buffer size
          * gets buffer size information.
          * @return CAPU_OK if the buffer is successfully set for both receive and send operations
@@ -192,6 +200,13 @@ namespace capu
     UdpSocket::setTimeout(const int32_t timeout)
     {
         return capu::os::arch::UdpSocket::setTimeout(timeout);
+    }
+
+    inline
+    status_t
+    UdpSocket::allowBroadcast(const bool_t broadcast)
+    {
+        return capu::os::arch::UdpSocket::allowBroadcast(broadcast);
     }
 
     inline

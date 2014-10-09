@@ -34,6 +34,7 @@ namespace capu
                 using capu::iphoneos::UdpSocket::close;
                 using capu::iphoneos::UdpSocket::setBufferSize;
                 using capu::iphoneos::UdpSocket::setTimeout;
+                using capu::iphoneos::UdpSocket::allowBroadcast;
                 using capu::iphoneos::UdpSocket::getBufferSize;
                 using capu::iphoneos::UdpSocket::getTimeout;
                 using capu::iphoneos::UdpSocket::getSocketAddrInfo;

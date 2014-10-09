@@ -37,6 +37,7 @@ namespace capu
             status_t close();
             status_t setBufferSize(const int32_t bufferSize);
             status_t setTimeout(const int32_t timeout);
+            status_t allowBroadcast(const bool_t broadcast);
             status_t getBufferSize(int32_t& bufferSize);
             status_t getTimeout(int32_t& timeout);
             const SocketAddrInfo& getSocketAddrInfo() const;
@@ -182,7 +183,7 @@ namespace capu
             receiverSockAddr.sin_port = htons(receiverPort);
 
             int32_t result = inet_pton(AF_INET, receiverAddr, &(receiverSockAddr.sin_addr.s_addr));
-            if ((result <= 0) || (INADDR_NONE == receiverSockAddr.sin_addr.s_addr))
+            if (result <= 0)
             {
                 return CAPU_SOCKET_EADDR;
             }
@@ -321,6 +322,28 @@ namespace capu
                 return CAPU_ERROR;
             }
             if (setsockopt(mSocket, SOL_SOCKET, SO_SNDTIMEO, (char_t*)&timeout, sizeof(int32_t)) == SOCKET_ERROR)
+            {
+                return CAPU_ERROR;
+            }
+
+            return CAPU_OK;
+        }
+
+        inline
+        status_t
+        UdpSocket::allowBroadcast(const bool_t broadcast)
+        {
+            if (mSocket == INVALID_SOCKET)
+            {
+                return CAPU_SOCKET_ESOCKET;
+            }
+
+            int32_t allow = 0;
+
+            if (broadcast)
+                allow = 1;
+
+            if (setsockopt(mSocket, SOL_SOCKET, SO_BROADCAST, (char_t*)&allow, sizeof(int32_t)) == SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }

@@ -37,6 +37,7 @@ namespace capu
             status_t close();
             status_t setBufferSize(const int32_t bufferSize);
             status_t setTimeout(const int32_t timeout);
+            status_t allowBroadcast(const bool_t broadcast);
             status_t getBufferSize(int32_t& bufferSize);
             status_t getTimeout(int32_t& timeout);
             const SocketAddrInfo& getSocketAddrInfo() const;
@@ -267,6 +268,28 @@ namespace capu
             }
 
             if (setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char*)&bufferSize, sizeof(bufferSize)) == -1)
+            {
+                return CAPU_ERROR;
+            }
+
+            return CAPU_OK;
+        }
+
+        inline
+        status_t
+        UdpSocket::allowBroadcast(const bool_t broadcast)
+        {
+            if (mSocket == -1)
+            {
+                return CAPU_SOCKET_ESOCKET;
+            }
+
+            int32_t allow = 0;
+
+            if (broadcast)
+                allow = 1;
+
+            if (setsockopt(mSocket, SOL_SOCKET, SO_BROADCAST, (char*)&allow, sizeof(int32_t)) == -1)
             {
                 return CAPU_ERROR;
             }

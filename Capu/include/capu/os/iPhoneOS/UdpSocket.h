@@ -32,6 +32,7 @@ namespace capu
             using capu::os::UdpSocket::close;
             using capu::os::UdpSocket::setBufferSize;
             using capu::os::UdpSocket::setTimeout;
+            using capu::os::UdpSocket::allowBroadcast;
             using capu::os::UdpSocket::getBufferSize;
             using capu::os::UdpSocket::getTimeout;
             using capu::os::UdpSocket::getSocketAddrInfo;

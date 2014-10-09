@@ -32,6 +32,7 @@ namespace capu
             using capu::posix::UdpSocket::receive;
             using capu::posix::UdpSocket::close;
             using capu::posix::UdpSocket::setBufferSize;
+            using capu::posix::UdpSocket::allowBroadcast;
             status_t setTimeout(const int32_t timeout);
             using capu::posix::UdpSocket::getBufferSize;
             using capu::posix::UdpSocket::getTimeout;
