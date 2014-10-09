@@ -647,6 +647,47 @@ TEST(ListIterator, next)
     delete list;
 }
 
+TEST(ListIterator, prev)
+{
+    capu::List<capu::int32_t>* list = new capu::List<capu::int32_t > ();
+    capu::int32_t data1;
+    capu::int32_t data2;
+
+    capu::List<capu::int32_t>::Iterator it = list->begin();
+    capu::int32_t cnt = 0;
+    EXPECT_EQ(list->end(), it);
+    data1 = 32;
+    data2 = 43;
+    list->insert(data1);
+    list->insert(data2);
+
+    it = list->end();
+
+    EXPECT_NE(list->begin(), it);
+    --it;
+    EXPECT_NE(list->begin(), it);
+    --it;
+    EXPECT_EQ(list->begin(), it);
+
+    it = list->end();
+
+    do
+    {
+        --it;
+        if (cnt == 0)
+        {
+            EXPECT_EQ(*it, data2);
+        }
+        else
+        {
+            EXPECT_EQ(*it, data1);
+        }
+        cnt++;
+    } while (it != list->begin());
+
+    delete list;
+}
+
 TEST(ListIterator, beginEnd)
 {
     const capu::List<MyStruct> constList;
@@ -706,6 +747,27 @@ TEST(ListIterator, current)
     }
 }
 
+TEST(ListIterator, currentBackwards)
+{
+    capu::List<capu::int32_t> list;
+    capu::List<capu::int32_t>::Iterator it = list.begin();
+
+    list.insert(1);
+    it = list.begin();
+    EXPECT_EQ(1, *it);
+    list.insert(2);
+    list.insert(3);
+
+    capu::int32_t index = 3;
+    it = list.end();
+    do
+    {
+        --it;
+        EXPECT_EQ(index,*it);
+        index--;
+    } while (it != list.begin());
+}
+
 TEST(ListIterator, erase)
 {
     capu::List<capu::int32_t> list;
@@ -740,6 +802,60 @@ TEST(ListIterator, erase)
         EXPECT_EQ(*it, index);
         index += 2;
     }
+
+    list.insert(1, 2);
+
+    index = 1;
+
+    it = list.begin();
+    EXPECT_EQ(0u, it.currentIndex()); // always pointing to first element of list
+
+    while (it != list.end())
+    {
+        list.erase(it, &data1);
+        EXPECT_EQ(data1, index);
+        ++index;
+    }
+
+    EXPECT_EQ(0u, list.size());
+}
+
+TEST(ListIterator, eraseBackwards)
+{
+    capu::List<capu::int32_t> list;
+    capu::int32_t data1 = 0;
+    capu::List<capu::int32_t>::Iterator it = list.begin();
+
+    EXPECT_EQ(capu::CAPU_EINVAL, list.erase(it));
+    list.insert(1);
+    it = list.begin();
+    EXPECT_EQ(0u, it.currentIndex());
+    EXPECT_EQ(capu::CAPU_OK, list.erase(it, &data1));
+    EXPECT_EQ(list.end(), it);
+    EXPECT_EQ(0u, list.size());
+    EXPECT_EQ(1, data1);
+
+    list.insert(1);
+    list.insert(2);
+    list.insert(3);
+
+    it = list.end();
+    --it;
+    EXPECT_EQ(2u, it.currentIndex());
+    --it;
+    EXPECT_EQ(1u, it.currentIndex());
+    list.erase(it, &data1);
+    EXPECT_EQ(2, data1);
+    EXPECT_EQ(0u, it.currentIndex());
+
+    capu::int32_t index = 3;
+
+    it = list.end();
+    do {
+        --it;
+        EXPECT_EQ(*it, index);
+        index -= 2;
+    } while (it != list.begin());
 
     list.insert(1, 2);
 

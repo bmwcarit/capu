@@ -130,6 +130,28 @@ namespace capu
             }
 
             /**
+             * Step the iterator backwards to the previous element (prefix operator)
+             * @return the previous iterator
+             */
+            const ListIterator& operator--() const
+            {
+                mCurrentNode = mCurrentNode->mPrev;
+                --mIndex;
+                return *this;
+            }
+
+            /**
+             * Step the iterator backwards to the previous element (prefix operator)
+             * @return the previous iterator
+             */
+            ListIterator& operator--()
+            {
+                mCurrentNode = mCurrentNode->mPrev;
+                --mIndex;
+                return *this;
+            }
+
+            /**
              * Step the iterator forward to the next element (postfix operator)
              * @return the next iterator
              */
