@@ -125,7 +125,7 @@ namespace capu
             else
             {
                 const int32_t result = inet_pton(AF_INET, addr, &(socketAddr.sin_addr.s_addr));
-                if ((result <= 0) || (INADDR_NONE == socketAddr.sin_addr.s_addr))
+                if (result <= 0)
                 {
                     return CAPU_SOCKET_EADDR;
                 }
