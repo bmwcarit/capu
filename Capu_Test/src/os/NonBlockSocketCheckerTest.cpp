@@ -40,7 +40,7 @@ class AsyncSocketHandler
 {
 public:
 
-    AsyncSocketHandler(const uint32_t numberOfClients, uint16_t port)
+    AsyncSocketHandler(const capu::uint32_t numberOfClients, capu::uint16_t port)
         : m_socketInfos(numberOfClients*2)
         , m_receiveCount(0)
     {
@@ -78,8 +78,8 @@ public:
 
         for (; current != end; ++current)
         {
-            uint32_t sendValue = 42;
-            int32_t sendBytes;
+            capu::uint32_t sendValue = 42;
+            capu::int32_t sendBytes;
             current->value->send(reinterpret_cast<capu::char_t*>(&sendValue), sizeof(sendValue), sendBytes);
         }
     }
@@ -142,16 +142,16 @@ public:
 
         if (m_send)
         {
-            uint32_t sendValue = 42;
-            int32_t sendBytes;
+            capu::uint32_t sendValue = 42;
+            capu::int32_t sendBytes;
             m_clientSocket.send(reinterpret_cast<capu::char_t*>(&sendValue), sizeof(sendValue), sendBytes);
-            EXPECT_EQ(static_cast<int32_t>(sizeof(sendValue)), sendBytes);
+            EXPECT_EQ(static_cast<capu::int32_t>(sizeof(sendValue)), sendBytes);
         }
     }
      
 
 
-    void start(uint16_t port, capu::bool_t send)
+    void start(capu::uint16_t port, capu::bool_t send)
     {
         m_port = port;
         m_send = send;
@@ -170,17 +170,17 @@ public:
         return &m_clientSocket;
     }
 
-    uint16_t m_port;
+    capu::uint16_t m_port;
     capu::bool_t m_send;
     capu::TcpSocket m_clientSocket;
     capu::Thread m_thread;
     capu::Vector<capu::os::SocketInfoPair> m_socketInfos;
-    uint32_t m_receiveCount;
+    capu::uint32_t m_receiveCount;
 };
 
 TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
 {
-    static const uint32_t clientcount = 50;
+    static const capu::uint32_t clientcount = 50;
 
     capu::uint16_t port = RandomPort::get();
 
@@ -188,7 +188,7 @@ TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
 
     AsyncClient asyncClient[clientcount];
 
-    for (uint32_t i = 0; i < clientcount; ++i)
+    for (capu::uint32_t i = 0; i < clientcount; ++i)
     {
         asyncClient[i].start(port, false);
     }
@@ -198,7 +198,7 @@ TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
         capu::NonBlockSocketChecker::CheckSocketsForIncomingData(asyncSocketHandler.m_socketInfos, 10);
     }
 
-    for (uint32_t i = 0; i < clientcount; ++i)
+    for (capu::uint32_t i = 0; i < clientcount; ++i)
     {
         asyncClient[i].stop();
     }
@@ -206,7 +206,7 @@ TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
 
 TEST(NonBlockSocketCheckerTest, DISABLED_ReceiveDataFromALotOfClients)
 {
-    static const uint32_t clientcount = 50;
+    static const capu::uint32_t clientcount = 50;
 
     capu::uint16_t port = RandomPort::get();
 
@@ -215,7 +215,7 @@ TEST(NonBlockSocketCheckerTest, DISABLED_ReceiveDataFromALotOfClients)
 
     AsyncClient asyncClient[clientcount];
 
-    for (uint32_t i = 0; i < clientcount; ++i)
+    for (capu::uint32_t i = 0; i < clientcount; ++i)
     {
         asyncClient[i].start(port, true);
     }
@@ -225,7 +225,7 @@ TEST(NonBlockSocketCheckerTest, DISABLED_ReceiveDataFromALotOfClients)
         capu::NonBlockSocketChecker::CheckSocketsForIncomingData(asyncSocketHandler.m_socketInfos, 10);
     }
 
-    for (uint32_t i = 0; i < clientcount; ++i)
+    for (capu::uint32_t i = 0; i < clientcount; ++i)
     {
         asyncClient[i].stop();
     }

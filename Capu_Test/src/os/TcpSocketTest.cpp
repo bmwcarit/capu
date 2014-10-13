@@ -234,8 +234,8 @@ public:
             }
         }
 
-        const uint32_t dataSize = 1024*1024/8;
-        uint32_t messageCount = 100;
+        const capu::uint32_t dataSize = 1024 * 1024 / 8;
+        capu::uint32_t messageCount = 100;
 
         capu::char_t* data = new capu::char_t[dataSize];
 

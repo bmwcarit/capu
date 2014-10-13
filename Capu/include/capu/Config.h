@@ -26,7 +26,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <time.h>
 
 #define UNUSED(x) {(void)(x);}
@@ -43,33 +42,27 @@ for (; Iter != end; ++Iter)
 
 namespace capu
 {
-    typedef ::int8_t    int8_t;
-    typedef ::int16_t   int16_t;
+    typedef signed char    int8_t;
+    typedef signed short   int16_t;
     typedef unsigned char   uchar_t;
-    typedef ::time_t   time_t;
-    typedef ::uint8_t   uint8_t;
-    typedef ::int16_t   int16_t;
-    typedef ::uint16_t  uint16_t;
-    typedef ::int32_t   int32_t;
-    typedef ::int64_t   int64_t;
-    typedef ::uint32_t  uint32_t;
-    typedef ::uint64_t  uint64_t;
+    typedef unsigned char   uint8_t;
+    typedef unsigned short  uint16_t;
+    typedef signed int int32_t;
+    typedef signed long long int int64_t;
+    typedef unsigned int uint32_t;
+    typedef unsigned long long int uint64_t;
     typedef float   float_t;
     typedef double  double_t;
     typedef bool    bool_t;
     typedef char    char_t;
+    typedef ::time_t time_t;
 
-    #if defined(OS_MacOSX) || defined(OS_IPHONEOS) || defined(OS_IPHONESIMULATOROS)
-        #if defined(ARCH_X86_64) || defined(ARCH_ARM64)
-            typedef ::int64_t  int_t;
-            typedef ::uint64_t  uint_t;
-        #else
-            typedef ::int32_t  int_t;
-            typedef ::uint32_t  uint_t;
-        #endif
+    #if defined(ARCH_X86_64) || defined(ARCH_ARM64)
+        typedef signed long long int int_t;
+        typedef unsigned long long  int uint_t;
     #else
-        typedef ::intptr_t  int_t;
-        typedef ::uintptr_t  uint_t;
+        typedef signed int int_t;
+        typedef unsigned int uint_t;
     #endif
 }
 
