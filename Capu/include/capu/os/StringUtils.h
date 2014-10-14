@@ -45,8 +45,9 @@ namespace capu
          * @param buffer which contains the string
          * @param bufferSize size of the buffer
          * @param format the format of the string
+         * @return total number of characters written on success, negative number otherwise
          */
-        static void Sprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, ...);
+        static int32_t Sprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, ...);
 
         /**
          * Static method to write a C string according to the given format into the array pointed by buffer.
@@ -127,13 +128,14 @@ namespace capu
     }
 
     inline
-    void
+    int32_t
     StringUtils::Sprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, ...)
     {
         va_list argptr;
         va_start(argptr, format);
-        capu::os::arch::StringUtils::Vsprintf(buffer, bufferSize, format, argptr);
+        const int32_t result = capu::os::arch::StringUtils::Vsprintf(buffer, bufferSize, format, argptr);
         va_end(argptr);
+        return result;
     }
 
     inline

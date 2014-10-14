@@ -116,6 +116,18 @@ TEST(StringUtils, VsprintfReturnsLengthOfCharactersWritten)
     EXPECT_LE(0, VsprintfTest::Vsprintf(string1, 20, ""));
 }
 
+TEST(StringUtils, SprintfReturnsLengthOfCharactersWritten)
+{
+    capu::char_t string1[20];
+    EXPECT_EQ(5, capu::StringUtils::Sprintf(string1, 20, "%d", 12345));
+    EXPECT_LE(4, capu::StringUtils::Sprintf(string1, 20, "%f", 3.14f));
+    EXPECT_LE(7, capu::StringUtils::Sprintf(string1, 20, "%f", 3.14789f));
+    EXPECT_LE(5+1+4, capu::StringUtils::Sprintf(string1, 20, "%d %f", 12345, 3.14f));
+
+    EXPECT_LE(0, capu::StringUtils::Sprintf(string1, 20, "%s", ""));
+    EXPECT_LE(0, capu::StringUtils::Sprintf(string1, 20, ""));
+}
+
 TEST(StringUtils, LastIndexOf)
 {
     EXPECT_EQ(5, capu::StringUtils::LastIndexOf("012345", '5'));
