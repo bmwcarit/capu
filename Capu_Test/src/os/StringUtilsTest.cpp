@@ -78,7 +78,7 @@ public:
         capu::int32_t length = 0;
         va_list args;
         va_start(args, format);
-        length = capu::StringUtils::Vscprintf("This is a test! %d", args);
+        length = capu::StringUtils::Vscprintf(format, args);
         va_end(args);
         return length;
     }
