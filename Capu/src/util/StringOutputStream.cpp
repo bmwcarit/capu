@@ -24,7 +24,7 @@ namespace capu
 
 
     StringOutputStream::StringOutputStream()
-        : mBuffer(16)
+        : mBuffer(16, 0)
         , mSize(0)
         , mFloatingPointType(NORMAL)
     {
