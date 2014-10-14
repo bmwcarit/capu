@@ -131,7 +131,6 @@ namespace capu
     const char_t*
     StringOutputStream::c_str()
     {
-        flush();
         return mBuffer.getRawData();
     }
 
@@ -250,7 +249,11 @@ namespace capu
     StringOutputStream::write(const void* data, const uint32_t size)
     {
         requestSize(size + 1); // Terminating 0
-        Memory::Copy(mBuffer.getRawData() + mSize, data, size);
+        char_t* base = mBuffer.getRawData();
+        char_t* writePos = base + mSize;
+        char_t* nullPos = writePos + size;
+        Memory::Copy(writePos, data, size);
+        *nullPos = '\0';
         mSize += size;
         return *this;
     }

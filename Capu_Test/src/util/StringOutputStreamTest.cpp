@@ -198,4 +198,11 @@ namespace capu
         EXPECT_STREQ("Exactly 16 chars", outputStream.c_str());
         EXPECT_EQ(16U, outputStream.length());
     }
+
+    TEST_F(StringOutputStreamTest, C_StrIsNullTerminatedForConstStreams)
+    {
+        outputStream << "a";
+        const StringOutputStream& constStream = outputStream;
+        EXPECT_STREQ("a", constStream.c_str());
+    }
 }
