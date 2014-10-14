@@ -55,8 +55,9 @@ namespace capu
          * @param bufferSize size of the buffer
          * @param format the format of the string
          * @param values arguments for the format
+         * @return total number of characters written on success, negative number otherwise
          */
-        static void Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values);
+        static int32_t Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values);
 
         /**
          * Static method to count the bytes according to the given format
@@ -136,10 +137,10 @@ namespace capu
     }
 
     inline
-    void
+    int32_t
     StringUtils::Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values)
     {
-        capu::os::arch::StringUtils::Vsprintf(buffer, bufferSize, format, values);
+        return capu::os::arch::StringUtils::Vsprintf(buffer, bufferSize, format, values);
     }
 
     inline

@@ -30,7 +30,7 @@ namespace capu
         public:
             static void Strncpy(char_t* dst, const uint_t dstSize, const char_t* src);
             static void Sprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, ...);
-            static void Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values);
+            static int32_t Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values);
             static int32_t Vscprintf(const char_t* format, va_list values);
             static uint_t Strlen(const char_t* str);
             static int_t Strcmp(const char_t* str1, const char_t* str2);
@@ -68,10 +68,10 @@ namespace capu
         }
 
         inline
-        void
+        int32_t
         StringUtils::Vsprintf(char_t* buffer, uint_t bufferSize, const char_t* format, va_list values)
         {
-            vsnprintf(buffer, bufferSize, format, values);
+            return vsnprintf(buffer, bufferSize, format, values);
         }
 
         inline

@@ -90,6 +90,32 @@ TEST(StringUtils, Vscprintf)
     EXPECT_EQ(21, length);
 }
 
+class VsprintfTest
+{
+public:
+    static capu::int32_t Vsprintf(capu::char_t* buffer, capu::int32_t buffersize, const capu::char_t* format, ...)
+    {
+        capu::int32_t length = 0;
+        va_list args;
+        va_start(args, format);
+        length = capu::StringUtils::Vsprintf(buffer, buffersize, format, args);
+        va_end(args);
+        return length;
+    }
+};
+
+TEST(StringUtils, VsprintfReturnsLengthOfCharactersWritten)
+{
+    capu::char_t string1[20];
+    EXPECT_EQ(5, VsprintfTest::Vsprintf(string1, 20, "%d", 12345));
+    EXPECT_LE(4, VsprintfTest::Vsprintf(string1, 20, "%f", 3.14f));
+    EXPECT_LE(7, VsprintfTest::Vsprintf(string1, 20, "%f", 3.14789f));
+    EXPECT_LE(5 + 1 + 4, VsprintfTest::Vsprintf(string1, 20, "%d %f", 12345, 3.14f));
+
+    EXPECT_LE(0, VsprintfTest::Vsprintf(string1, 20, "%s", ""));
+    EXPECT_LE(0, VsprintfTest::Vsprintf(string1, 20, ""));
+}
+
 TEST(StringUtils, LastIndexOf)
 {
     EXPECT_EQ(5, capu::StringUtils::LastIndexOf("012345", '5'));
