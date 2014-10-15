@@ -148,6 +148,15 @@ namespace capu
         EXPECT_EQ(1337u, delegate());
     }
 
+    TEST_F(DelegateTest, DelegateNonStaticMemberFunctionConst)
+    {
+        MockSimpleClass simpleClass;
+        Delegate<uint32_t> delegate = Delegate<uint32_t>::Create<SimpleClass, &MockSimpleClass::doNonStaticStuffWOParam>(simpleClass);
+        const Delegate<uint32_t>& constRefToDelegate = delegate;
+
+        EXPECT_EQ(1337u, constRefToDelegate());
+    }
+
     TEST_F(DelegateTest, DelegateNonStaticMemberFuncionWithTwoParametersAndReturnValue)
     {
         MockSimpleClass simpleClass;
@@ -163,6 +172,16 @@ namespace capu
 
         EXPECT_CALL(simpleClass, doVirtualStuff(5));
         delegate(5);
+    }
+
+    TEST_F(DelegateTest, DelegateVirtualMethodConst)
+    {
+        MockSimpleClass simpleClass;
+        Delegate<void, uint32_t> delegate = Delegate<void, uint32_t>::Create<SimpleClass, &SimpleClass::doVirtualStuff>(simpleClass);
+        const Delegate<void, uint32_t>& constRefToDelegate = delegate;
+
+        EXPECT_CALL(simpleClass, doVirtualStuff(5));
+        constRefToDelegate(5);
     }
 
     TEST_F(DelegateTest, DelegatePureVirtualMethod)
