@@ -108,6 +108,15 @@ namespace capu
         EXPECT_EQ(11U, outputStream.length());
     }
 
+    TEST_F(StringOutputStreamTest, WriteChar)
+    {
+        char c = 'T';
+        outputStream << c;
+        outputStream.flush();
+        EXPECT_STREQ("T", outputStream.c_str());
+        EXPECT_EQ(1U, outputStream.length());
+    }
+
     TEST_F(StringOutputStreamTest, WriteUInt16)
     {
         outputStream << static_cast<uint16_t>(4711);

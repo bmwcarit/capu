@@ -53,6 +53,7 @@ namespace capu
         virtual StringOutputStream& operator<<(const String& value);
         virtual StringOutputStream& operator<<(const bool_t  value);
         virtual StringOutputStream& operator<<(const char_t* value);
+        virtual StringOutputStream& operator<<(const char_t value);
         virtual StringOutputStream& operator<<(const uint16_t value);
         virtual StringOutputStream& operator<<(const Guid& value);
 
@@ -226,6 +227,14 @@ namespace capu
     {
         const uint_t length = ConstString(value).length();
         return write(value, static_cast<uint32_t>(length));
+    }
+
+    inline
+    StringOutputStream&
+    StringOutputStream::operator<<(const char_t value)
+    {
+        const uint32_t sizeOfOneCharacter = 1u;
+        return write(&value, sizeOfOneCharacter);
     }
 
     inline
