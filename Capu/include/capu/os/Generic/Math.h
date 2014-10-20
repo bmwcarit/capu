@@ -79,7 +79,7 @@ namespace capu
         double_t
         Math::Ceil(double_t val)
         {
-            return ceil(val);
+            return std::ceil(val);
         }
 
         inline
@@ -93,21 +93,21 @@ namespace capu
         double_t
         Math::Floor(double_t val)
         {
-            return floor(val);
+            return std::floor(val);
         }
 
         inline
         float_t
         Math::Abs(float_t val)
         {
-            return fabs(val);
+            return std::fabs(val);
         }
 
         inline
         double_t
         Math::Abs(double_t val)
         {
-            return abs(val);
+            return std::abs(val);
         }
 
         inline
@@ -128,7 +128,7 @@ namespace capu
         double_t
         Math::Sqrt(double_t val)
         {
-            return sqrt(val);
+            return std::sqrt(val);
         }
 
         inline
@@ -163,14 +163,14 @@ namespace capu
         double_t
         Math::Pow(double_t val, double_t exponent)
         {
-            return pow(val, exponent);
+            return std::pow(val, exponent);
         }
 
         inline
         double_t
         Math::Cos(double_t val)
         {
-            return cos(val);
+            return std::cos(val);
         }
 
         inline
@@ -184,7 +184,7 @@ namespace capu
         double_t
         Math::Sin(double_t val)
         {
-            return sin(val);
+            return std::sin(val);
         }
 
         inline
@@ -198,7 +198,7 @@ namespace capu
         double_t
         Math::Tan(double_t val)
         {
-            return tan(val);
+            return std::tan(val);
         }
 
         inline
@@ -212,7 +212,7 @@ namespace capu
         double_t
         Math::ArcCos(double_t val)
         {
-            return acos(val);
+            return std::acos(val);
         }
 
         inline
@@ -226,7 +226,7 @@ namespace capu
         double_t
         Math::ArcSin(double_t val)
         {
-            return asin(val);
+            return std::asin(val);
         }
 
         inline
@@ -240,7 +240,7 @@ namespace capu
         double_t
         Math::ArcTan(double_t val)
         {
-            return atan(val);
+            return std::atan(val);
         }
 
         inline
@@ -298,7 +298,7 @@ namespace capu
             double_t
             Math::Exp(double_t val)
         {
-            return exp(val);
+            return std::exp(val);
         }
     }
 }
