@@ -19,6 +19,7 @@
 
 
 #include <cmath>
+#include <cstdlib>
 
 namespace capu
 {
@@ -114,7 +115,7 @@ namespace capu
         int_t
         Math::Abs(int_t val)
         {
-            return abs(val);
+            return std::abs(val);
         }
 
         inline
