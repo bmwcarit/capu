@@ -212,7 +212,7 @@ namespace capu
     Array<T>::Array(const T other[], uint_t size)
         : mSize(size), mInternalArray(size)
     {
-        Memory::CopyObject(mInternalArray, other, size);
+        Memory::CopyObject(mInternalArray.getRawData(), other, size);
     }
 
 

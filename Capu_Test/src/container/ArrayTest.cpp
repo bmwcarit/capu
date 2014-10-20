@@ -110,6 +110,12 @@ TEST(Array, Constructor)
     delete myArray;
 }
 
+TEST(Array, ConstructorFromArray)
+{
+    capu::uint8_t nativeArray[8];
+    capu::Array<capu::uint8_t> constructedFromNativeArray(nativeArray, 8);
+}
+
 TEST(Array, SetAndGetValues)
 {
     capu::Array<capu::uint32_t> myArray(10);
