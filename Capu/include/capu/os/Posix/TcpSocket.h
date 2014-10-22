@@ -129,7 +129,7 @@ namespace capu
                 return CAPU_SOCKET_ESOCKET;
             }
 
-            int32_t res = ::recv(mSocket, buffer, length, 0);
+            const int32_t res = ::recv(mSocket, buffer, length, 0);
 
             if (res == -1)
             {

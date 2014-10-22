@@ -231,12 +231,12 @@ namespace capu
                 return CAPU_SOCKET_ESOCKET;
             }
 
-            int32_t result = recv(mSocket, buffer, length, 0);
+            const int32_t result = recv(mSocket, buffer, length, 0);
             if (result == SOCKET_ERROR)
             {
                 numBytes = 0;
-                result = WSAGetLastError();
-                if (result == WSAETIMEDOUT)
+                const int32_t error = WSAGetLastError();
+                if (error == WSAETIMEDOUT)
                 {
                     return CAPU_ETIMEOUT;
                 }
