@@ -196,8 +196,6 @@ namespace capu
          */
         inline const capu::os::SocketDescription& getSocketDescription() const;
         
-        private:
-            capu::Mutex m_mutex;
     };
 
     inline
@@ -222,9 +220,7 @@ namespace capu
     status_t
     TcpSocket::send(const char_t* buffer, int32_t length, int32_t& sentBytes)
     {
-        m_mutex.lock();
         status_t result = capu::os::arch::TcpSocket::send(buffer, length, sentBytes);
-        m_mutex.unlock();
         return result;
 
     }
@@ -233,9 +229,7 @@ namespace capu
     status_t
     TcpSocket::receive(char_t* buffer, int32_t length, int32_t& numBytes)
     {
-        m_mutex.lock();
         status_t result = capu::os::arch::TcpSocket::receive(buffer, length, numBytes);
-        m_mutex.unlock();
         return result;
     }
 
