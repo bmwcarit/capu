@@ -513,12 +513,4 @@ TEST(File, GetParentFile4)
     EXPECT_FALSE(success);
 }
 
-TEST(File, GetParentFile5)
-{
-    capu::bool_t success;
-    capu::File temp("d:");
-    capu::File temp0 = temp.getParentFile(success);
-    EXPECT_FALSE(success);
-}
-
 #endif
