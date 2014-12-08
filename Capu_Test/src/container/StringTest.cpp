@@ -576,3 +576,22 @@ TEST(String, StartsWith)
     EXPECT_FALSE(str.startsWith("c++"));
 
 }
+
+TEST(String, EndsWith)
+{
+    capu::String str("hello c++ world.");
+
+    EXPECT_TRUE(str.endsWith("."));
+    EXPECT_TRUE(str.endsWith("world."));
+    EXPECT_TRUE(str.endsWith("hello c++ world."));
+    EXPECT_FALSE(str.endsWith("c++"));
+
+    capu::String path("D:");
+    EXPECT_FALSE(path.endsWith("\\"));
+
+    capu::String path2("D:\\dir1\\dir2");
+    EXPECT_FALSE(path2.endsWith("\\"));
+
+    capu::String path3("D:\\dir1\\dir2\\");
+    EXPECT_TRUE(path3.endsWith("\\"));
+}

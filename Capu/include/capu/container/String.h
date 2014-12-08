@@ -185,7 +185,14 @@ namespace capu
          * @return true if String starts with other string. False otherwise
          */
         bool_t startsWith(const String& other) const;
-        
+
+        /**
+         * Checks if the String ends with the given string
+         * @param other string to check
+         * @return true if String ends with other string. False otherwise
+         */
+        bool_t endsWith(const String& other) const;
+
         /**
          * Return the index of the last occurence of the given character within the string
          * @param ch The character whos last index is requested
@@ -568,6 +575,21 @@ namespace capu
     String::startsWith(const String& other) const
     {
         return find(other, 0) == 0;
+    }
+
+    inline
+    bool_t
+    String::endsWith(const String& other) const
+    {
+        bool_t result = false;
+        uint_t ownLen = getLength();
+        uint_t otherLen = other.getLength();
+        if (otherLen <= ownLen)
+        {
+            int_t offset = static_cast<int_t>(ownLen) - static_cast<int_t>(otherLen);
+            result = (-1 != find(other, offset));
+        }
+        return result;
     }
 
 }
