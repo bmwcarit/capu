@@ -87,10 +87,14 @@ namespace capu
         inline
         String File::removeTrailingBackslash(String path)
         {
-            Array<char_t> buffer(path.getLength() + 1);
-            StringUtils::Strncpy(buffer.getRawData(), buffer.size(), path.c_str());
-            PathRemoveBackslashA(buffer.getRawData());
-            return String(buffer.getRawData());
+            if (path.endsWith("\\") || path.endsWith("/"))
+            {
+                if (!path.endsWith(":\\") && !path.endsWith(":/"))
+                {
+                    path.truncate(path.getLength() - 1);
+                }
+            }
+            return path;
         }
 
         inline

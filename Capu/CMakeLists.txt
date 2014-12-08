@@ -62,6 +62,5 @@ ACME_MODULE(
                             IP4
                             Res
                             DynamicLibrary
-                            Shlwapi
                             psapi
 )
