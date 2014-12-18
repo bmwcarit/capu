@@ -34,7 +34,7 @@ namespace capu
 
         inline Random::Random()
         {
-            srand(static_cast<uint32_t>(Time::GetMilliseconds()));
+            srand(static_cast<uint32_t>(Time::GetMicroseconds()));
         }
 
         inline uint8_t Random::nextUInt8()
