@@ -186,10 +186,10 @@ namespace capu
                 flags = "r";
                 break;
             case WRITE_NEW:
-                flags = "r+";
+                flags = "w";
                 break;
             case READ_WRITE_EXISTING:
-                flags = "w";
+                flags = "r+";
                 break;
             case READ_WRITE_OVERWRITE_OLD:
                 flags = "w+";
