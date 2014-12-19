@@ -68,6 +68,18 @@ namespace capu
          */
         ELogLevel getLogLevel() const;
 
+        /**
+         * Set the general purpose pointer
+         * @param dataPtr pointer to the data being stored
+         */
+        void setData(void* dataPtr);
+
+        /**
+         * Get the general purpose pointer
+         * @return the data pointer
+         */
+        void* getData() const;
+
     private:
 
         /**
@@ -89,6 +101,11 @@ namespace capu
          * Private assignment operator prevents misuse
          */
         LogContext operator=(const LogContext lc);
+
+        /**
+         * General purpose data
+         */
+        void* m_data;
     };
 
     inline
@@ -122,6 +139,20 @@ namespace capu
     LogContext::isEnabled() const
     {
         return m_enabled;
+    }
+
+    inline
+    void
+    LogContext::setData(void* dataPtr)
+    {
+        m_data = dataPtr;
+    }
+
+    inline
+    void*
+    LogContext::getData() const
+    {
+        return m_data;
     }
 }
 
