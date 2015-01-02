@@ -44,6 +44,7 @@ namespace capu
         inline
         Semaphore::Semaphore(uint32_t initialPermits)
         {
+            UNUSED(initialPermits);
             mTask = mach_task_self();
             semaphore_create(mTask, &mSemaphore, SYNC_POLICY_FIFO, 0);
         }
