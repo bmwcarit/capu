@@ -52,3 +52,34 @@ ACME2_PROJECT(
                                 ./DynamicTestLibrary
                                 ./Capu_Test
 )
+
+#==============================================================================
+# generate and install PkgConfig file
+#==============================================================================
+
+CONFIGURE_FILE(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/Capu.pc.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/Capu.pc"
+    @ONLY
+)
+INSTALL(
+    FILES       ${CMAKE_CURRENT_BINARY_DIR}/Capu.pc
+    DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/pkgconfig
+)
+ACME_INFO("G Capu.pc")
+
+
+#==============================================================================
+# generate and install CMake Find Module file
+#==============================================================================
+
+CONFIGURE_FILE(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/FindCapu.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/FindCapu.cmake"
+    @ONLY
+)
+INSTALL(
+    FILES       ${CMAKE_CURRENT_BINARY_DIR}/FindCapu.cmake
+    DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
+)
+ACME_INFO("G FindCapu.cmake")
