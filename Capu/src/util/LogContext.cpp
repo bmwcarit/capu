@@ -6,6 +6,7 @@ namespace capu
         : m_contextName(name)
         , m_enabled(true)
         , m_logLevel(LL_ERROR)
+        , m_data(0)
     {
 
     }
