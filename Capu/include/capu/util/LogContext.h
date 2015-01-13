@@ -72,13 +72,13 @@ namespace capu
          * Set the general purpose pointer
          * @param dataPtr pointer to the data being stored
          */
-        void setData(void* dataPtr);
+        void setUserData(void* dataPtr);
 
         /**
          * Get the general purpose pointer
          * @return the data pointer
          */
-        void* getData() const;
+        void* getUserData() const;
 
     private:
 
@@ -143,14 +143,14 @@ namespace capu
 
     inline
     void
-    LogContext::setData(void* dataPtr)
+    LogContext::setUserData(void* dataPtr)
     {
         m_data = dataPtr;
     }
 
     inline
     void*
-    LogContext::getData() const
+    LogContext::getUserData() const
     {
         return m_data;
     }
