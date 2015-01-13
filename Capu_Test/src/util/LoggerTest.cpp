@@ -294,4 +294,12 @@ namespace capu
 
         logWithDefaultLogger();
     }
+
+    TEST(LogContextTest, SetAndGetUserData)
+    {
+        LogContext context("LogContext name");
+        void* someUserData = (void*)0x123;
+        context.setUserData(someUserData);
+        EXPECT_EQ(someUserData, context.getUserData());
+    }
 }
