@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,15 +55,6 @@ MACRO(ACME2_PROJECT)
 
     OPTION(${PROJECT_NAME}_BUILD_TESTS "build test for project '${PROJECT_NAME}'" OFF)
 
-    # create build target, that build only modules of "${PROJECT_NAME}" and dependencies
-    IF(NOT TARGET build_${PROJECT_NAME})
-        ADD_CUSTOM_TARGET(build_${PROJECT_NAME})
-        IF(NOT "${SUPER_PROJECT_NAME}" STREQUAL "Project")
-            ACME_WARNING("ADD_DEPENDENCIES(build_${SUPER_PROJECT_NAME} build_${PROJECT_NAME})")
-            ADD_DEPENDENCIES(build_${SUPER_PROJECT_NAME} build_${PROJECT_NAME})
-        ENDIF()
-    ENDIF()
-
     SET(LAST_STATE "ON")
     FOREACH(CONTENT ${PROJECT_CONTENT})
         IF(("${CONTENT}" STREQUAL "ON") OR ("${CONTENT}" STREQUAL "OFF") OR ("${CONTENT}" STREQUAL "AUTO"))
@@ -87,6 +78,11 @@ MACRO(ACME2_PROJECT)
                 ADD_SUBDIRECTORY(${CONTENT})
             ENDIF()
         ENDIF()
+    ENDFOREACH()
+
+    # install project documentation
+    FOREACH(DOC ${PROJECT_FILES_DOCUMENTATION})
+        INSTALL(FILES ${DOC} DESTINATION ${PROJECT_INSTALL_DOCUMENTATION})
     ENDFOREACH()
 
     INCLUDE(${ACME2_BASE_DIR}/internal/create_package.cmake)
@@ -155,13 +151,11 @@ MACRO(ACME_MODULE)
         # build module
         INCLUDE(${ACME2_BASE_DIR}/internal/module_template.cmake)
 
-        # add this module to build target "build_${PROJECT_NAME}"
         IF (TARGET ${ACME_NAME})
-            ADD_DEPENDENCIES(build_${PROJECT_NAME} ${ACME_NAME})
+            ACME_CALL_PLUGIN_HOOK(on_target_created)
+            ACME_CALL_PLUGIN_HOOK(on_${ACME_TYPE}_created)
         ENDIF()
 
-        ACME_CALL_PLUGIN_HOOK(on_target_created)
-        ACME_CALL_PLUGIN_HOOK(on_${ACME_TYPE}_created)
     ENDIF()
 
 ENDMACRO(ACME_MODULE)

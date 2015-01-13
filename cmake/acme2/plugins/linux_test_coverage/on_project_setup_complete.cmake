@@ -18,7 +18,7 @@
 
 FUNCTION(ADD_TESTCOVERAGE_TARGETS)
 IF (NOT TARGET CreateTestCoverage)
-    ADD_CUSTOM_COMMAND(OUTPUT DeleteCoverageDirectory
+	ADD_CUSTOM_COMMAND(OUTPUT DeleteCoverageDirectory
         COMMAND rm
             ARGS -rf CodeCoverage
             WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
@@ -81,12 +81,13 @@ IF (NOT TARGET CreateTestCoverage)
     ADD_CUSTOM_COMMAND(OUTPUT FilterCoverageResults
         COMMAND lcov
             ARGS -r combined.info ${CMAKE_SOURCE_DIR}/external/*.*
-                 -r combined.info /usr/*.*
-                 -r combined.info */test/*
+		 -r combined.info /usr/*.*
+		 -r combined.info */test/*
+		 -r combined.info ${ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_LCOV_ADDITIONAL}
                  ${ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_LCOV}
-                 -o combinedFiltered.info
+		 -o combinedFiltered.info
                  -q
-                 -base-directory ${CMAKE_SOURCE_DIR} --no-external
+                 --base-directory ${CMAKE_SOURCE_DIR} --no-external
             WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
             COMMENT "Filtering coverage results"
             DEPENDS AddZerosToResult
@@ -103,6 +104,37 @@ IF (NOT TARGET CreateTestCoverage)
             DEPENDS FilterCoverageResults
         )
 
+    ADD_CUSTOM_COMMAND(OUTPUT DownloadGcovr
+        COMMAND wget
+            ARGS http://dl.bmw-carit.de/mirror/gcovr-3.1
+            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
+            COMMENT "Downloading gcovr"
+            DEPENDS RunTests
+        )
+
+    ADD_CUSTOM_COMMAND(OUTPUT MakeGcovrExecutable
+         COMMAND chmod
+             ARGS a+x gcovr-3.1
+             WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
+             COMMENT "Making gcovr executable"
+             DEPENDS DownloadGcovr
+          )
+
+    ADD_CUSTOM_COMMAND(OUTPUT GenerateXML
+        COMMAND CodeCoverage/gcovr-3.1
+                ARGS -x;-r ..;-e '.*/external/';-e '.*/*_Test/';${ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_GCOV}
+                     > coverage.xml
+            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+            COMMENT "Creating coverage xml"
+            DEPENDS MakeGcovrExecutable
+        )
+
+    ADD_CUSTOM_TARGET(CreateTestCoverageXml
+        DEPENDS
+            GenerateXML
+        COMMENT "Creating TestCoverage"
+        )
+
     ADD_CUSTOM_TARGET(CreateTestCoverage
         DEPENDS
             GenerateHTML
@@ -112,9 +144,9 @@ ENDIF()
 ENDFUNCTION(ADD_TESTCOVERAGE_TARGETS)
 
 IF("${TARGET_OS}" STREQUAL "Linux") # only on linux because of gcov/lcov
-    IF(NOT LCOV_FOUND)
-        FIND_PROGRAM(LCOV_PATH lcov)
-    ENDIF()
-    ADD_TESTCOVERAGE_TARGETS()
+	IF(NOT LCOV_FOUND)
+		FIND_PROGRAM(LCOV_PATH lcov)
+	ENDIF()
+	ADD_TESTCOVERAGE_TARGETS()
 ENDIF()
 

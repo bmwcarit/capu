@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,8 +21,10 @@ SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND ${CMAKE_CTEST_COMMAND};--target te
 
 SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_LCOV -r combined.info */gtest/* -r combined.info */gmock/* CACHE STRING     "")
 
+SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_GCOV ;-e '.*/gtest/';-e '.*/gmock/' CACHE STRING     "")
+
 IF("${TARGET_OS}" STREQUAL "Linux")
-    IF(NOT LCOV_FOUND)
-        FIND_PROGRAM(LCOV_PATH lcov)
-    ENDIF()
+	IF(NOT LCOV_FOUND)
+		FIND_PROGRAM(LCOV_PATH lcov)
+	ENDIF()
 ENDIF()

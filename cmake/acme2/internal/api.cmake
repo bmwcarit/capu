@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +47,9 @@ SET(ACME2_API
     DEPENDENCIES_HEADER
     DEPENDENCIES_UNIT_TEST
 
+    # install module: boolean
+    ENABLE_INSTALL
+
     # install paths
     INSTALL_HEADER
     INSTALL_BINARY
@@ -54,6 +57,7 @@ SET(ACME2_API
     INSTALL_SHARED_LIB
     INSTALL_PLUGIN
     INSTALL_RESOURCE
+    INSTALL_DOCUMENTATION
     INSTALL_CMAKEFINDMODULE
     INSTALL_PKGCONFIG
     

@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,6 +41,7 @@ SET(TARGET_CONTENT_SOURCE
 SET(TARGET_CONTENT
     ${TARGET_CONTENT_HEADER}
     ${TARGET_CONTENT_SOURCE}
+    ${ACME_FILES_RESOURCE}
 )
 
 IF (TARGET ${ACME_NAME})
@@ -54,18 +55,19 @@ IF(NOT "${TARGET_CONTENT}" STREQUAL "")
     IF("${ACME_TYPE}" STREQUAL "TEST")
     #==============================================================================================
 
-        # Add tests that do not start with NETWORK to a test target
         ADD_TEST(
-            NAME ${ACME_NAME}
+            NAME ${ACME_NAME}_UNITTESTS
             COMMAND ${CMAKE_COMMAND} -E chdir "$<TARGET_FILE_DIR:${ACME_NAME}>"
-                    ./${ACME_NAME} --gtest_output=xml:TestResult_${ACME_NAME}.xml)
+                    ./${ACME_NAME} --gtest_output=xml:TestResult_${ACME_NAME}.xml
+		)
+
     ENDIF()
 
     #==============================================================================================
     IF("${ACME_TYPE}" STREQUAL "STATIC_LIBRARY")
     #==============================================================================================
         ADD_LIBRARY(${ACME_NAME} STATIC ${TARGET_CONTENT})
-        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "")
+        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "" AND "${ACME_ENABLE_INSTALL}")
             INSTALL(TARGETS ${ACME_NAME} DESTINATION ${ACME_INSTALL_STATIC_LIB} COMPONENT "${ACME_PACKAGE_NAME}-devel")
         ENDIF()
 
@@ -73,7 +75,7 @@ IF(NOT "${TARGET_CONTENT}" STREQUAL "")
     ELSEIF("${ACME_TYPE}" STREQUAL "BINARY")
     #==============================================================================================
         ADD_EXECUTABLE(${ACME_NAME} ${TARGET_CONTENT})
-        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "")
+        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "" AND ${ACME_ENABLE_INSTALL})
             INSTALL(TARGETS ${ACME_NAME} DESTINATION ${ACME_INSTALL_BINARY} COMPONENT "${ACME_PACKAGE_NAME}")
         ENDIF()
 
@@ -81,7 +83,7 @@ IF(NOT "${TARGET_CONTENT}" STREQUAL "")
     ELSEIF("${ACME_TYPE}" STREQUAL "TEST")
     #==============================================================================================
         ADD_EXECUTABLE(${ACME_NAME} ${TARGET_CONTENT})
-        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "")
+        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "" AND ${ACME_ENABLE_INSTALL})
             INSTALL(TARGETS ${ACME_NAME} DESTINATION ${ACME_INSTALL_BINARY} COMPONENT "${ACME_PACKAGE_NAME}-test")
         ENDIF()
 
@@ -89,7 +91,7 @@ IF(NOT "${TARGET_CONTENT}" STREQUAL "")
     ELSEIF("${ACME_TYPE}" STREQUAL "SHARED_LIBRARY")
     #==============================================================================================
         ADD_LIBRARY(${ACME_NAME} SHARED ${TARGET_CONTENT})
-        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "")
+        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "" AND ${ACME_ENABLE_INSTALL})
             INSTALL(TARGETS ${ACME_NAME} DESTINATION ${ACME_INSTALL_SHARED_LIB} COMPONENT "${ACME_PACKAGE_NAME}")
         ENDIF()
 
@@ -97,7 +99,7 @@ IF(NOT "${TARGET_CONTENT}" STREQUAL "")
     ELSEIF("${ACME_TYPE}" STREQUAL "PLUGIN")
     #==============================================================================================
         ADD_LIBRARY(${ACME_NAME} MODULE ${TARGET_CONTENT})
-        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "")
+        IF(NOT "${TARGET_CONTENT_SOURCE}" STREQUAL "" AND ${ACME_ENABLE_INSTALL})
             INSTALL(TARGETS ${ACME_NAME} DESTINATION ${ACME_INSTALL_PLUGIN} COMPONENT "${ACME_PACKAGE_NAME}")
         ENDIF()
 
@@ -136,7 +138,10 @@ IF(DEFINED ACME_FILES_PUBLIC_HEADER)
         FILE(GLOB INCLUDE_BASE_FULL_PATH "${INCLUDE_BASE}")
         FOREACH(PUBLIC_HEADER ${ACME_FILES_PUBLIC_HEADER})
             STRING(REGEX REPLACE "${INCLUDE_BASE_FULL_PATH}/(.*)/[^/]*$" "include/\\1" PUBLIC_HEADER_INSTALL_PATH ${PUBLIC_HEADER})
-            IF (NOT "${PUBLIC_HEADER_INSTALL_PATH}" STREQUAL "${PUBLIC_HEADER}")
+            IF (${ACME_ENABLE_INSTALL})
+                IF ("${PUBLIC_HEADER_INSTALL_PATH}" STREQUAL "${PUBLIC_HEADER}")
+                    SET(PUBLIC_HEADER_INSTALL_PATH "include") #TODO: remove this hard coded "include"
+                ENDIF()
                 INSTALL(FILES ${PUBLIC_HEADER} DESTINATION ${PUBLIC_HEADER_INSTALL_PATH} COMPONENT "${ACME_PACKAGE_NAME}-devel")
             ENDIF()
         ENDFOREACH()
@@ -146,7 +151,9 @@ ENDIF()
 #==============================================================================================
 IF(DEFINED ACME_FILES_RESOURCE)
 #==============================================================================================
-    INSTALL(FILES ${ACME_FILES_RESOURCE} DESTINATION ${ACME_INSTALL_RESOURCE} COMPONENT "${ACME_PACKAGE_NAME}")
+    IF(${ACME_ENABLE_INSTALL})
+        INSTALL(FILES ${ACME_FILES_RESOURCE} DESTINATION ${ACME_INSTALL_RESOURCE} COMPONENT "${ACME_PACKAGE_NAME}")
+    ENDIF()
 
     # make sure res folder exists, neccessary evil
     ADD_CUSTOM_COMMAND(

@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +25,11 @@ FOREACH(PROPERTY ${ACME2_API})
     SET(PROJECT_${PROPERTY} "")
 ENDFOREACH()
 
-# default values are in DEFAULT_<value>
-INCLUDE(${ACME2_BASE_DIR}/internal/init_default_settings.cmake)
-
 # values provided by ACME_PROJECT call are in PROJECT_<value>
 ARGUMENT_SPLITTER("${PROJECT_SETTINGS}" "${ACME2_API}" PROJECT_)
+
+# default values are in DEFAULT_<value>
+INCLUDE(${ACME2_BASE_DIR}/internal/init_default_settings.cmake)
 
 # apply project settings or use default values,
 # if property was was not provided

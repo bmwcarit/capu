@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +19,13 @@
 
 GET_TARGET_PROPERTY(current_debug_flags ${ACME_NAME} COMPILE_DEFINITIONS)
 IF(current_debug_flags STREQUAL "current_debug_flags-NOTFOUND")
-    SET(current_debug_flags "")
+		SET(current_debug_flags "")
 ELSE()
-    SET(current_debug_flags "${current_debug_flags} ")
+		SET(current_debug_flags "${current_debug_flags} ")
 ENDIF()
 SET(current_debug_flags "${current_debug_flags} -fprofile-arcs -ftest-coverage" )
 SET_TARGET_PROPERTIES(${ACME_NAME} PROPERTIES COMPILE_FLAGS "${current_debug_flags}")
+
+GET_TARGET_PROPERTY(acme_type           ${ACME_NAME} ACME_TYPE)
 
 TARGET_LINK_LIBRARIES(${ACME_NAME} gcov)

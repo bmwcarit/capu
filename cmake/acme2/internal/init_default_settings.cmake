@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,9 @@ SET(ACME2_DEFAULT_VALUES
     # dependencies
     DEPENDENCIES            
     DEPENDENCIES_HEADER     
+    
+    # install module: boolean
+    ENABLE_INSTALL          ON
 
     # install paths
     INSTALL_HEADER          include
@@ -52,6 +55,7 @@ SET(ACME2_DEFAULT_VALUES
     INSTALL_SHARED_LIB      lib
     INSTALL_PLUGIN          bin
     INSTALL_RESOURCE        bin/res
+    INSTALL_DOCUMENTATION   share/doc/${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
     INSTALL_CMAKEFINDMODULE lib/cmake
     INSTALL_PKGCONFIG       lib/pkgconfig
 

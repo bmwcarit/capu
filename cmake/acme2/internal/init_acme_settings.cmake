@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,12 +35,4 @@ GET_ALL_FILES(ACME_FILES_RESOURCE        "${MODULE_FILES_RESOURCE}")
 
 FILE(GLOB ACME_INCLUDE_BASE ${MODULE_INCLUDE_BASE})
 
-# extract folder name from path
-STRING(REPLACE "${CMAKE_SOURCE_DIR}/" "" relative_path "${CMAKE_CURRENT_SOURCE_DIR}")
-STRING(REGEX REPLACE "/.*$" "" PROJECT_PACKAGE_NAME "${relative_path}")
-
-IF ("${PROJECT_PACKAGE_NAME}" STREQUAL "")
-    SET(ACME_PACKAGE_NAME "${PROJECT_NAME}")
-ELSE()
-    SET(ACME_PACKAGE_NAME "${PROJECT_PACKAGE_NAME}")
-ENDIF()
+SET(ACME_PACKAGE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")

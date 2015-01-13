@@ -1,6 +1,6 @@
 ############################################################################
 #
-# Copyright 2014 BMW Car IT GmbH
+# Copyright (C) 2014 BMW Car IT GmbH
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,10 @@
 #
 ############################################################################
 
+
+#==========================================================================
 # configure project groups in Visual Studio
+#==========================================================================
 
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -31,32 +34,21 @@ IF (NOT "${relative_path}" STREQUAL "")
     ENDIF()
 ENDIF()
 
-#==============================================================================================
-IF(DEFINED ACME_FILES_SOURCE)
-#==============================================================================================
-    SOURCE_GROUP(Source FILES ${ACME_FILES_SOURCE})
-ENDIF()
+#==========================================================================
+# configure project internal structure
+#==========================================================================
 
-#==============================================================================================
-IF(DEFINED ACME_FILES_GENERATED)
-#==============================================================================================
-    SOURCE_GROUP(Generated FILES ${ACME_FILES_GENERATED})
-ENDIF()
+SET(all_files
+    ${ACME_FILES_SOURCE}
+    ${ACME_FILES_GENERATED}
+    ${ACME_FILES_PUBLIC_HEADER}
+    ${ACME_FILES_PRIVATE_HEADER}
+    ${ACME_FILES_RESOURCE}
+)
 
-#==============================================================================================
-IF(DEFINED ACME_FILES_PUBLIC_HEADER)
-#==============================================================================================
-    SOURCE_GROUP(Public_Header FILES ${ACME_FILES_PUBLIC_HEADER})
-ENDIF()
-
-#==============================================================================================
-IF(DEFINED ACME_FILES_PRIVATE_HEADER)
-#==============================================================================================
-    SOURCE_GROUP(Private_Header FILES ${ACME_FILES_PRIVATE_HEADER})
-ENDIF()
-
-#==============================================================================================
-IF(DEFINED ACME_FILES_RESOURCE)
-#==============================================================================================
-    SOURCE_GROUP(Resources FILES ${ACME_FILES_RESOURCE})
-ENDIF()
+FOREACH(file_iter ${all_files})
+    STRING(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" tmp1 "${file_iter}")
+    STRING(REGEX REPLACE "/[^/]*$" "" tmp2 "${tmp1}")
+    STRING(REPLACE "/" "\\" module_internal_path "${tmp2}")
+    SOURCE_GROUP(${module_internal_path} FILES ${file_iter})
+ENDFOREACH()
