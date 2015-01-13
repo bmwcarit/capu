@@ -33,6 +33,10 @@ namespace capu
          * Get the current time in milliseconds since 01.01.1970.
          */
         static uint64_t GetMilliseconds();
+         /**
+         * Get a microseconds counter
+         * CAUTION: This is not guaranteed to represent a specific absolute time, only use this for relative timing!
+         */
         static uint64_t GetMicroseconds();
     };
 
