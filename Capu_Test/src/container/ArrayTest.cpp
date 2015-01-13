@@ -19,6 +19,7 @@
 #include "capu/Error.h"
 #include "capu/Config.h"
 #include "capu/util/Swap.h"
+#include "capu/container/String.h"
 
 class ComplexCopyable
 {
@@ -551,4 +552,49 @@ TEST(Array, Compare)
     capu::Array<capu::uint32_t> array3(2u);
 
     EXPECT_FALSE(array2 == array3);
+}
+
+TEST(Array, CompareComplexType)
+{
+    capu::Array<capu::String> array1(2u);
+    capu::Array<capu::String> array2(2u);
+
+    array1[0] = "test";
+    array1[1] = "something";
+
+    array2[0] = "test";
+    array2[1] = "test";
+
+    EXPECT_FALSE(array1 == array2);
+
+    array2[1] = "something";
+
+    EXPECT_TRUE(array1 == array2);
+
+    capu::Array<capu::String> array3(3u);
+
+    EXPECT_FALSE(array2 == array3);
+}
+
+TEST(Array, TruncatedEquals)
+{
+    capu::Array<capu::uint32_t> array1(3u);
+    capu::Array<capu::uint32_t> array2(3u);
+
+    array1[0] = 1;
+    array1[1] = 2;
+    array1[2] = 3;
+
+    array2[0] = 1;
+    array2[1] = 3;
+    array2[2] = 4;
+
+    EXPECT_FALSE(array1.truncatedEquals(array2, 2));
+
+    array2[1] = 2;
+
+    EXPECT_TRUE(array1.truncatedEquals(array2, 2));
+
+    //case that passed number of elements to compare is bigger than size of array
+    EXPECT_FALSE(array1.truncatedEquals(array2, 4));
 }

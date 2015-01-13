@@ -498,11 +498,11 @@ namespace capu
     bool_t 
     Vector<T>::operator==(const Vector<T>& other) const
     {
-        if(size() == other.size())
+        if (size() != other.size())
         {
-            return 0 == Memory::Compare(m_start.m_current, other.m_start.m_current, sizeof(T) * size());
+            return false;
         }
-        return false;
+        return m_data.truncatedEquals(other.m_data, size());
     }
 
 }

@@ -137,6 +137,14 @@ namespace capu
         bool_t operator==(const Array<T>& other) const;
 
         /**
+         * Compares first x elements of the array with other array
+         * @param other array to compare with
+         * @param numberElements the first <numberElements> elements to be compared
+         * @return true if elements are equal, false otherwise
+         */
+        bool_t truncatedEquals(const Array<T>& other, uint_t numberElements) const;
+
+        /**
          * Sets the raw data of the array to the given value
          * @param value the byte value for all array elements
          */
@@ -394,15 +402,55 @@ namespace capu
         mSize = size;
     }
 
+    template<typename T, int TYPE>
+    struct EqualsHelper
+    {
+        static bool_t equals(const Array<T>& mine, const Array<T>& other, uint_t size)
+        {
+            uint_t i = 0;
+            //comparing individual elements
+            while ((i < size) && (mine[i] == other[i]))
+            {
+                i++;
+            }
+
+            if (i == size)
+            {
+                return true;
+            }
+            return false;
+        }
+    };
+
+    template<typename T>
+    struct EqualsHelper<T, CAPU_TYPE_PRIMITIVE>
+    {
+        static bool_t equals(const Array<T>& mine, const Array<T>& other, uint_t size)
+        {
+            //for primitive types memory compare can be used
+            return 0 == Memory::Compare(mine.getRawData(), other.getRawData(), sizeof(T) * size);
+        }
+    };
+
     template<typename T>
     bool_t 
     Array<T>::operator==(const Array<T>& other) const
     {
-        if(mSize == other.mSize)
+        if (mSize != other.mSize)
         {
-            return 0 == Memory::Compare(mInternalArray.getRawData(), other.mInternalArray.getRawData(), sizeof(T) * mSize);
+            return false;
         }
-        return false;
+        return EqualsHelper<T, Type<T>::Identifier>::equals(*this, other, mSize);
+    }
+
+    template<typename T>
+    bool_t Array<T>::truncatedEquals(const Array<T>& other, uint_t numberElements) const
+    {
+        if ((numberElements > mSize) || (numberElements > other.mSize))
+        {
+            return false;
+        }
+        return EqualsHelper<T, Type<T>::Identifier>::equals(*this, other, numberElements);
     }
 
 }

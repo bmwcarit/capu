@@ -15,6 +15,7 @@
  */
 
 #include <container/VectorTest.h>
+#include "capu/container/String.h"
 
 namespace capu
 {
@@ -600,5 +601,25 @@ namespace capu
 
         EXPECT_FALSE(vector3 == vector2);
     
+    }
+
+    TEST_F(VectorTest, CompareComplexType)
+    {
+        Vector<String> vector1;
+        Vector<String> vector2;
+        Vector<String> vector3;
+
+        vector1.push_back("test");
+        vector2.push_back("something");
+
+        EXPECT_FALSE(vector1 == vector2);
+
+        vector2.clear();
+        vector2.push_back("test");
+
+        EXPECT_TRUE(vector1 ==  vector2);
+
+        EXPECT_FALSE(vector3 == vector2);
+
     }
 }
