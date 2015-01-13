@@ -16,6 +16,7 @@
 
 #include "container/HashTest.h"
 #include "capu/util/Guid.h"
+#include "capu/container/Hash.h"
 
 namespace capu
 {
@@ -38,7 +39,21 @@ namespace capu
     TEST_F(HashTest, HashInt32)
     {
         int32_t intVal = 42;
-        EXPECT_EQ(10u, CapuDefaultHashFunction::Digest(intVal, 4));
+        uint32_t expected32bitHash = 10u;
+        EXPECT_EQ(expected32bitHash, CapuDefaultHashFunction<32>::Digest(intVal, 4));
+
+        uint64_t expected64bitHash = 8u;
+        EXPECT_EQ(expected64bitHash, CapuDefaultHashFunction<64>::Digest(intVal, 4));
+    }
+
+    TEST_F(HashTest, HashInt64)
+    {
+        int64_t intVal = 858918934591ll;
+        uint32_t expected32bitHash = 11u;
+        EXPECT_EQ(expected32bitHash, CapuDefaultHashFunction<32>::Digest(intVal, 4));
+
+        uint64_t expected64bitHash = 13u;
+        EXPECT_EQ(expected64bitHash, CapuDefaultHashFunction<64>::Digest(intVal, 4));
     }
 
     enum Someenum
@@ -52,7 +67,7 @@ namespace capu
         Someenum val = MEMBER0;
 
         // we assume that we hash the enum identically to a primitive (int) with the same value
-        EXPECT_EQ(CapuDefaultHashFunction::Digest(static_cast<uint_t>(MEMBER0), 4), CapuDefaultHashFunction::Digest(val, 4));
+        EXPECT_EQ(CapuDefaultHashFunction<>::Digest(static_cast<uint_t>(MEMBER0), 4), CapuDefaultHashFunction<>::Digest(val, 4));
     }
 
     TEST_F(HashTest, HashGuid)
@@ -61,7 +76,39 @@ namespace capu
         guid.toString(); // change internal state
         Guid guid2(guid);
 
-        EXPECT_EQ(CapuDefaultHashFunction::Digest(guid, 4), CapuDefaultHashFunction::Digest(guid2, 4));
+        EXPECT_EQ(CapuDefaultHashFunction<>::Digest(guid, 4), CapuDefaultHashFunction<>::Digest(guid2, 4));
+    }
+
+    TEST_F(HashTest, requestOneBitHashValue)
+    {
+        char_t dataToHash[128];
+
+        uint64_t hashValue = HashCalculator<uint64_t>::Hash(dataToHash, 128, 1);
+        uint64_t zeroMap = 0xffffffffffffffffull << 1;
+        uint64_t shouldBeZero = zeroMap & hashValue;
+        EXPECT_EQ(0u, shouldBeZero);
+    }
+
+    TEST_F(HashTest, request32BitHashValueIn64BitType)
+    {
+        char_t dataToHash[128];
+
+        uint64_t hashValue = HashCalculator<uint64_t>::Hash(dataToHash, 128, 32);
+        uint64_t zeroMap = 0xffffffffffffffffull << 32;
+        uint64_t shouldBeZero = zeroMap & hashValue;
+        EXPECT_EQ(0u, shouldBeZero);
+        EXPECT_NE(0u, hashValue);
+    }
+
+    TEST_F(HashTest, request63BitHashValue)
+    {
+        char_t dataToHash[128];
+
+        uint64_t hashValue = HashCalculator<uint64_t>::Hash(dataToHash, 128, 63);
+        uint64_t zeroMap = 0xffffffffffffffffull << 63;
+        uint64_t shouldBeZero = zeroMap & hashValue;
+        EXPECT_EQ(0u, shouldBeZero);
+        EXPECT_NE(0u, hashValue);
     }
 }
 

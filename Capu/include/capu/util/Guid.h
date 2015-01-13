@@ -313,7 +313,7 @@ namespace capu
      * Specialization of Hash in order to calculate the Hash differently for strings
      */
     template<>
-    struct Hasher<capu::Guid, CAPU_TYPE_CLASS>
+    struct Hasher<capu::Guid, CAPU_TYPE_CLASS, uint_t>
     {
         static uint_t Hash(const Guid& key, const uint8_t bitsize)
         {

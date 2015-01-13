@@ -36,7 +36,7 @@ namespace capu
     /**
      * Table object container where keys are found and retrieved via hashs.
      */
-    template <class Key, class T, class C = Comparator, class H = CapuDefaultHashFunction>
+    template <class Key, class T, class C = Comparator, class H = CapuDefaultHashFunction<sizeof(uint_t)*8> >
     class HashTable
     {
     public:

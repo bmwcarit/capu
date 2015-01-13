@@ -19,6 +19,7 @@
 
 #include "capu/Config.h"
 #include "capu/util/Traits.h"
+#include "capu/os/Debug.h"
 
 namespace capu
 {
@@ -38,9 +39,9 @@ namespace capu
     template<>
     struct Resizer<uint32_t>
     {
-        static uint_t Resize(const uint_t hashValue, const uint8_t bitcount)
+        static uint32_t Resize(const uint32_t hashValue, const uint8_t bitcount)
         {
-            return bitcount == sizeof(uint_t) * 8 ? hashValue : hashValue & ((1 << bitcount) - 1);
+            return bitcount == 32 ? hashValue : hashValue & ((static_cast<uint32_t>(1) << bitcount) - 1);
         }
     };
 
@@ -50,21 +51,9 @@ namespace capu
     template<>
     struct Resizer<uint64_t>
     {
-        static uint_t Resize(const uint_t hashValue, const uint8_t bitcount)
+        static uint64_t Resize(const uint64_t hashValue, const uint8_t bitcount)
         {
-            return bitcount == sizeof(uint_t) * 8 ? hashValue : ((hashValue >> bitcount) ^ hashValue) & ((static_cast<uint_t>(1) << (bitcount)) - 1);
-        }
-    };
-
-    /**
-     * Resizer for FNV Hash with value pointer values
-     */
-    template<>
-    struct Resizer<void*>
-    {
-        static uint_t Resize(const uint_t hashValue, const uint8_t bitcount)
-        {
-            return bitcount == sizeof(uint_t) * 8 ? hashValue : ((hashValue >> bitcount) ^ hashValue) & ((static_cast<uint_t>(1) << (bitcount)) - 1);
+            return bitcount == 64 ? hashValue : ((hashValue >> bitcount) ^ hashValue) & ((static_cast<uint64_t>(1) << (bitcount)) - 1);
         }
     };
 
@@ -330,65 +319,65 @@ namespace capu
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(uint32_t      key, uint8_t bitcount)
+        static uint32_t Hash(uint32_t      key, uint8_t bitcount)
         {
-            return Resizer<uint32_t>::Resize(static_cast<uint_t>(HashFunction<uint32_t>::Hash(key)), bitcount);
+            return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(int32_t       key, uint8_t bitcount)
+        static uint32_t Hash(int32_t       key, uint8_t bitcount)
         {
-            return Resizer<uint32_t>::Resize(static_cast<uint_t>(HashFunction<uint32_t>::Hash(key)), bitcount);
+            return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(float_t       key, uint8_t bitcount)
+        static uint32_t Hash(float_t       key, uint8_t bitcount)
         {
-            return Resizer<uint32_t>::Resize(static_cast<uint_t>(HashFunction<uint32_t>::Hash(key)), bitcount);
+            return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(double_t      key, uint8_t bitcount)
+        static uint32_t Hash(double_t      key, uint8_t bitcount)
         {
-            return Resizer<uint32_t>::Resize(static_cast<uint_t>(HashFunction<uint32_t>::Hash(key)), bitcount);
+            return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(uint64_t      key, uint8_t bitcount)
+        static uint32_t Hash(uint64_t      key, uint8_t bitcount)
         {
-            return Resizer<uint64_t>::Resize(static_cast<uint_t>(HashFunction<uint32_t>::Hash(key)), bitcount);    // Use 64 bit resizer
+            return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(int64_t       key, uint8_t bitcount)
+        static uint32_t Hash(int64_t       key, uint8_t bitcount)
         {
-            return Resizer<uint64_t>::Resize(static_cast<uint_t>(HashFunction<uint32_t>::Hash(key)), bitcount);    // Use 64 bit resizer
+            return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(const char_t* key, uint8_t bitcount)
+        static uint32_t Hash(const char_t* key, uint8_t bitcount)
         {
-            return Resizer<uint64_t>::Resize(static_cast<uint_t>(HashFunction<uint32_t>::Hash(key)), bitcount);    // Use 64 bit resizer
+            return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(const void* key, const uint_t len, const uint8_t bitcount)
+        static uint32_t Hash(const void* key, const uint_t len, const uint8_t bitcount)
         {
-            return Resizer<uint64_t>::Resize(static_cast<uint_t>(HashFunction<uint32_t>::Hash(key, len)), bitcount);
+            return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key, len), bitcount);
         }
     };
 
@@ -399,105 +388,137 @@ namespace capu
     struct HashCalculator<uint64_t>
     {
         /**
+        * Hash the given key using the given bitcount
+        */
+        static uint64_t Hash(const uint32_t key, uint8_t bitcount)
+        {
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash((uint64_t)key), bitcount);
+        }
+
+        /**
+        * Hash the given key using the given bitcount
+        */
+        static uint64_t Hash(const int32_t  key, uint8_t bitcount)
+        {
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash((int64_t)key), bitcount);
+        }
+        /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(const uint64_t key, uint8_t bitcount)
+        static uint64_t Hash(const uint64_t key, uint8_t bitcount)
         {
-            return Resizer<uint32_t>::Resize(static_cast<uint_t>(HashFunction<uint64_t>::Hash(key)), bitcount);
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(const int64_t  key, uint8_t bitcount)
+        static uint64_t Hash(const int64_t  key, uint8_t bitcount)
         {
-            return Resizer<uint32_t>::Resize(static_cast<uint_t>(HashFunction<uint64_t>::Hash(key)), bitcount);
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(const float_t  key, uint8_t bitcount)
+        static uint64_t Hash(const float_t  key, uint8_t bitcount)
         {
-            return Resizer<uint32_t>::Resize(static_cast<uint_t>(HashFunction<uint64_t>::Hash(key)), bitcount);
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(const double_t key, uint8_t bitcount)
+        static uint64_t Hash(const double_t key, uint8_t bitcount)
         {
-            return Resizer<uint32_t>::Resize(static_cast<uint_t>(HashFunction<uint64_t>::Hash(key)), bitcount);
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(key), bitcount);
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(const char_t*  key, uint8_t bitcount)
+        static uint64_t Hash(const char_t*  key, uint8_t bitcount)
         {
-            return Resizer<uint64_t>::Resize(static_cast<uint_t>(HashFunction<uint64_t>::Hash(key)), bitcount);    // Use 64 bit resizer
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(key), bitcount);    // Use 64 bit resizer
         }
 
         /**
          * Hash the given key using the given bitcount
          */
-        static uint_t Hash(const void* key, const uint_t len, const uint8_t bitcount)
+        static uint64_t Hash(const void* key, const uint_t len, const uint8_t bitcount)
         {
-            return Resizer<uint64_t>::Resize(static_cast<uint_t>(HashFunction<uint64_t>::Hash(key, len)), bitcount);
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(key, len), bitcount);
         }
     };
 
     /**************************************************************************************/
     /*********************************** Hash class ***************************************/
     /**************************************************************************************/
-    template<typename T, int TYPE>
+    template<typename T, int TYPE, typename INTRESULTTYPE>
     struct Hasher
     {
-        static uint_t Hash(const T& key, const uint8_t bitsize)
+        static INTRESULTTYPE Hash(const T& key, const uint8_t bitsize)
         {
             // default hasher
-            return HashCalculator<uint_t>::Hash(&key, sizeof(T), bitsize);
+            return HashCalculator<INTRESULTTYPE>::Hash(&key, sizeof(T), bitsize);
         }
     };
 
-    template<typename T>
-    struct Hasher<T, CAPU_TYPE_PRIMITIVE>
+    template<typename T, typename INTRESULTTYPE>
+    struct Hasher<T, CAPU_TYPE_PRIMITIVE, INTRESULTTYPE>
     {
-        static uint_t Hash(const T key, const uint8_t bitsize)
+        static INTRESULTTYPE Hash(const T key, const uint8_t bitsize)
         {
             // hasher for primitives
-            return HashCalculator<uint_t>::Hash(static_cast<uint_t>(key), bitsize);
+            return HashCalculator<INTRESULTTYPE>::Hash(key, bitsize);
         }
     };
 
-    template<typename T>
-    struct Hasher<T, CAPU_TYPE_ENUM>
+    template<typename T, typename INTRESULTTYPE>
+    struct Hasher<T, CAPU_TYPE_ENUM, INTRESULTTYPE>
     {
-        static uint_t Hash(const T key, const uint8_t bitsize)
+        static INTRESULTTYPE Hash(const T key, const uint8_t bitsize)
         {
             // hasher for enums is the primitive hasher
-            return Hasher<T, CAPU_TYPE_PRIMITIVE>::Hash(key, bitsize);
+            return Hasher<T, CAPU_TYPE_PRIMITIVE, INTRESULTTYPE>::Hash(key, bitsize);
         }
     };
 
-    template<typename T>
-    struct Hasher<T, CAPU_TYPE_POINTER>
+    template<typename T, typename INTRESULTTYPE>
+    struct Hasher<T, CAPU_TYPE_POINTER, INTRESULTTYPE>
     {
-        static uint_t Hash(const T key, const uint8_t bitsize)
+        static INTRESULTTYPE Hash(const T key, const uint8_t bitsize)
         {
             // shortcut: a pointer is already a hash, we need only the resizer
-            return Resizer<void*>::Resize(reinterpret_cast<uint_t>(key), bitsize);
+            return Resizer<INTRESULTTYPE>::Resize(reinterpret_cast<uint_t>(key), bitsize);
         }
     };
 
 
+    template<int_t INTSIZE = (sizeof(uint_t)* 8)>
     struct CapuDefaultHashFunction
     {
-        // digest method with default bitsize
+    };
+
+    template<>
+    struct CapuDefaultHashFunction<32>
+    {
         template<typename T>
-        static uint_t Digest(const T& key, const uint8_t bitsize = sizeof(uint_t) * 8)
+        static uint32_t Digest(const T& key, const uint8_t bitsize = sizeof(uint_t)* 8)
         {
-            return Hasher<T, Type<T>::Identifier>::Hash(key, bitsize);
+            Debug::Assert(bitsize <= 32);
+            return Hasher<T, Type<T>::Identifier, uint32_t>::Hash(key, bitsize);
+        }
+    };
+
+    template<>
+    struct CapuDefaultHashFunction<64>
+    {
+        template<typename T>
+        static uint64_t Digest(const T& key, const uint8_t bitsize = sizeof(uint_t)* 8)
+        {
+            Debug::Assert(bitsize <= 64);
+            return Hasher<T, Type<T>::Identifier, uint64_t>::Hash(key, bitsize);
         }
     };
 }

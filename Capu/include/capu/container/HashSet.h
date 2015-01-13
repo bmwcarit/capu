@@ -25,7 +25,7 @@ namespace capu
     /**
      * Unordered set of objects with fast lookup and retrieval.
      */
-    template <class T, class C = Comparator, class H = CapuDefaultHashFunction>
+    template <class T, class C = Comparator, class H = CapuDefaultHashFunction<sizeof(uint_t)*8> >
     class HashSet
     {
     private:
