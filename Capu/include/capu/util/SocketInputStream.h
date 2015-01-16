@@ -28,7 +28,7 @@ namespace capu
 
     inline
     uint64_t 
-    ntohll(uint64_t & value)
+    _ntohll(uint64_t & value)
     {
         int_t checkNumber = 42;
         if(*(char_t*)&checkNumber == 42)
@@ -201,7 +201,7 @@ namespace capu
     IInputStream& SocketInputStream::operator>>(uint64_t& value)
     {
         read(reinterpret_cast<char_t*>(&value), sizeof(uint64_t));
-        value = ntohll(value);
+        value = _ntohll(value);
         return *this;
     }
 
