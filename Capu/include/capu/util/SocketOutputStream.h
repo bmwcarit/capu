@@ -25,7 +25,7 @@
 
 namespace capu
 {
-    uint64_t htonll(const uint64_t value);
+    uint64_t _htonll(const uint64_t value);
 
     /* The SocketOutputStream writes data to a given socket*/
     template<uint16_t SNDBUFSIZE = 1450>
@@ -213,7 +213,7 @@ namespace capu
     IOutputStream&
     SocketOutputStream<SNDBUFSIZE>::operator<<( const int64_t value)
     {
-        const int64_t networkOrder = htonll(value);
+        const int64_t networkOrder = _htonll(value);
         return write(&networkOrder, sizeof(int64_t));
     }
     
@@ -381,7 +381,7 @@ namespace capu
 
     inline
     uint64_t 
-    htonll(const uint64_t value)
+    _htonll(const uint64_t value)
     {
         int64_t checkNumber = 42;
         if(*(char_t*)&checkNumber == 42)
