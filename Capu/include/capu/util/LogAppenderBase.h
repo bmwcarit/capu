@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 BMW Car IT GmbH
+ * Copyright (C) 2015 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,51 +14,55 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_ILOGAPPENDER_H
-#define CAPU_ILOGAPPENDER_H
+#ifndef CAPU_LOGAPPENDERBASE_H
+#define CAPU_LOGAPPENDERBASE_H
 
-#include "capu/util/LogLevel.h"
+#include "capu/util/ILogAppender.h"
+#include "capu/util/LogMessage.h"
 
 namespace capu
 {
-    class LogMessage;
-
-    /**
-     * Base class for LogAppenders. Can be used to implement additional appenders
-     */
-    class ILogAppender
+    class LogAppenderBase : public ILogAppender
     {
     public:
 
         /**
-         * Logs the given message
-         * @param logMessage to log
+         * Default Constructor using log level LL_ALL
          */
-        virtual void log(const LogMessage& logMessage) = 0;
+        LogAppenderBase()
+        {
+            setLogLevel(LL_ALL);
+        }
+
+        /**
+         * Logs a message after LogAppenderBase has performed a log level comparison
+         */
+        virtual void logMessage(const LogMessage& message) = 0;
+
+        /**
+         * Logs the current message and performs a log level check
+         */
+        virtual void log(const LogMessage& message);
 
         /**
          * Query for the log level of the appender
          * @returns the log level
          */
-        virtual ELogLevel getLogLevel() = 0;
+        virtual ELogLevel getLogLevel();
 
         /**
          * Set the log level for the appender
          * @param level the log level to set the appender to
          */
-        virtual void setLogLevel(ELogLevel level) = 0;
-
-        virtual ~ILogAppender(){}
-
-    protected:
+        virtual void setLogLevel(ELogLevel level);
 
         /**
-         * Log level of the appender
+         * virtual destructor
          */
-        ELogLevel m_logLevel;
+        virtual ~LogAppenderBase();
     };
 
 }
 
 
-#endif // CAPU_ILOGAPPENDER_H
+#endif // CAPU_LOGAPPENDERBASE_H

@@ -36,12 +36,12 @@ namespace capu
     TEST_F(AsynchronousLoggerTest, LogWithDefaultLogger)
     {
         testing::InSequence seq;
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }

@@ -9,7 +9,7 @@ namespace capu
     {
     }
 
-    void ConsoleLogAppender::log(const LogMessage& logMessage)
+    void ConsoleLogAppender::logMessage(const LogMessage& logMessage)
     {
         m_logMutex.lock();
 

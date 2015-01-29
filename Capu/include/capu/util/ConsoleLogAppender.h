@@ -17,7 +17,7 @@
 #ifndef CAPU_CONSOLELOGAPPENDER_H
 #define CAPU_CONSOLELOGAPPENDER_H
 
-#include "capu/util/ILogAppender.h"
+#include "capu/util/LogAppenderBase.h"
 #include "capu/util/LogMessage.h"
 #include "capu/os/Mutex.h"
 
@@ -27,15 +27,15 @@ namespace capu
     /**
      * Logs messages directly to console
      */
-    class ConsoleLogAppender: public ILogAppender
+    class ConsoleLogAppender: public capu::LogAppenderBase
     {
     public:
 
         /**
          * @name log implementation of ConsoleLogAppender
-         * @see ILogAppender
+         * @see LogAppenderBase
          */
-        virtual void log(const LogMessage& logMessage);
+        virtual void logMessage(const LogMessage& logMessage);
 
         virtual ~ConsoleLogAppender();
     private:

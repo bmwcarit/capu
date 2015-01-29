@@ -45,12 +45,12 @@ namespace capu
     TEST_F(LoggerTest, LogWithDefaultLogger)
     {
         testing::InSequence seq;
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -62,12 +62,12 @@ namespace capu
         localLogger.setLogLevel(LL_ALL);
 
         testing::InSequence seq;
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithLocalLogger(localLogger);
     }
@@ -76,7 +76,7 @@ namespace capu
     {
         Logger::SetLogLevel(LL_FATAL);
 
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
 
@@ -87,8 +87,8 @@ namespace capu
         Logger::SetLogLevel(LL_ERROR);
 
         testing::InSequence seq;
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -98,9 +98,9 @@ namespace capu
         Logger::SetLogLevel(LL_WARN);
 
         testing::InSequence seq;
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -110,10 +110,10 @@ namespace capu
         Logger::SetLogLevel(LL_INFO);
 
         testing::InSequence seq;
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -123,11 +123,11 @@ namespace capu
         Logger::SetLogLevel(LL_DEBUG);
 
         testing::InSequence seq;
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -137,12 +137,12 @@ namespace capu
         Logger::SetLogLevel(LL_TRACE);
 
         testing::InSequence seq;
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -153,10 +153,10 @@ namespace capu
             CAPU_CONTEXT.setEnabled(false);
 
             testing::InSequence seq;
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
             logWithDefaultLogger();
         }
@@ -166,10 +166,10 @@ namespace capu
             CAPU_CONTEXT.setEnabled(true);
             
             testing::InSequence seq;
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
             logWithDefaultLogger();
         }
@@ -178,8 +178,8 @@ namespace capu
             CAPU_CONTEXT.setEnabled(false);
 
             testing::InSequence seq;
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
             logWithDefaultLogger();
         }
@@ -196,8 +196,8 @@ namespace capu
             Logger::SetEnabled(false, "capu");
 
             testing::InSequence seq;
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
             logWithDefaultLogger();
         }
@@ -206,10 +206,10 @@ namespace capu
             Logger::SetEnabled(true, "capu.Logger");
 
             testing::InSequence seq;
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
             logWithDefaultLogger();
         }
@@ -218,7 +218,7 @@ namespace capu
             Logger::SetEnabled(false, "Hello.Capu");
             Logger::SetLogLevel(LL_INFO);
 
-            EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+            EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
 
             logWithDefaultLogger();
         }
@@ -230,19 +230,19 @@ namespace capu
 
         Logger::AddAppender(appender2);
 
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -251,12 +251,12 @@ namespace capu
     {
         Logger::AddAppender(appender);
 
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -267,30 +267,30 @@ namespace capu
 
         Logger::AddAppender(appender2);
 
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender2, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender2, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
 
         Logger::RemoveAppender(appender2);
 
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
-        EXPECT_CALL(appender, log(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_TRACE)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_DEBUG)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_INFO)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_WARN)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_ERROR)));
+        EXPECT_CALL(appender, logMessage(testing::Property(&LogMessage::getLogLevel, LL_FATAL)));
 
         logWithDefaultLogger();
     }
@@ -301,5 +301,13 @@ namespace capu
         void* someUserData = (void*)0x123;
         context.setUserData(someUserData);
         EXPECT_EQ(someUserData, context.getUserData());
+    }
+
+    TEST(LogAppenderTest,SetAndGetLogLevel)
+    {
+        ConsoleLogAppender consoleAppender;
+        ELogLevel ll = capu::LL_ALL;
+        consoleAppender.setLogLevel(ll);
+        EXPECT_EQ(ll,consoleAppender.getLogLevel());
     }
 }

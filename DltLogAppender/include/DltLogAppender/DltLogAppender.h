@@ -17,7 +17,7 @@
 #ifndef CAPU_DLTLOGAPPENDER_H
 #define CAPU_DLTLOGAPPENDER_H
 
-#include "capu/util/ILogAppender.h"
+#include "capu/util/LogAppenderBase.h"
 #include "capu/util/LogMessage.h"
 #include "capu/os/Mutex.h"
 
@@ -31,7 +31,7 @@ namespace capu
     /**
      * Logs messages via dlt
      */
-    class DltLogAppender: public capu::ILogAppender
+    class DltLogAppender: public capu::LogAppenderBase
     {
     public:
 
@@ -47,9 +47,9 @@ namespace capu
 
         /**
          * @param message log message passed to dlt adapter
-         * @see ILogAppender
+         * @see LogAppenderBase
          */
-        virtual void log(const capu::LogMessage& message);
+        virtual void logMessage(const capu::LogMessage& message);
 
     private:
 

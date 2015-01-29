@@ -20,16 +20,16 @@
 
 #include "gmock/gmock.h"
 #include <capu/container/Hash.h>
-#include "capu/util/ILogAppender.h"
+#include "capu/util/LogAppenderBase.h"
 #include "capu/util/Logger.h"
 
 namespace capu
 {
-    class MockLogAppender: public ILogAppender
+    class MockLogAppender: public LogAppenderBase
     {
     public:
         virtual ~MockLogAppender(){}
-        MOCK_METHOD1(log, void(const LogMessage& logMessage));
+        MOCK_METHOD1(logMessage, void(const LogMessage& logMessage));
     };
 
     class LoggerTest : public testing::Test

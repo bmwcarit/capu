@@ -14,27 +14,30 @@
  * limitations under the License.
  */
 
-#include "DltLogAppender/DltLogAppender.h"
+
+#include "capu/util/LogAppenderBase.h"
 
 namespace capu
 {
-    DltLogAppender::DltLogAppender()
-    : m_dltAdapter(capu::DltAdapter::getDltAdapter())
+    LogAppenderBase::~LogAppenderBase()
     {
-
     }
 
-    DltLogAppender::~DltLogAppender()
+    void LogAppenderBase::log(const LogMessage& message)
     {
-
+        if(message.getLogLevel() >= m_logLevel)
+        {
+            logMessage(message);
+        }
     }
 
-    void DltLogAppender::logMessage(const capu::LogMessage& message)
+    void LogAppenderBase::setLogLevel(ELogLevel logLevel)
     {
-        m_logMutex.lock();
+        m_logLevel = logLevel;
+    }
 
-        m_dltAdapter->logMessage(message);
-
-        m_logMutex.unlock();
+    ELogLevel LogAppenderBase::getLogLevel()
+    {
+        return m_logLevel;
     }
 }
