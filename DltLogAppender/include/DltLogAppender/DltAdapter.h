@@ -26,6 +26,22 @@
 
 namespace capu
 {
+    enum DltError
+    {
+        DLT_ERROR_NO_ERROR = 0x0,
+        DLT_ERROR_CONTEXT_INVALID,
+        DLT_ERROR_MISSING_DLT_CONTEXT,
+        DLT_ERROR_INIT,
+        DLT_ERROR_DEINIT,
+        DLT_ERROR_USER_LOG,
+        DLT_ERROR_REGISTER_APPLICATION_FAILED,
+        DLT_ERROR_REGISTER_CONTEXT_FAILED,
+        DLT_ERROR_UNREGISTER_CONTEXT_FAILED,
+        DLT_ERROR_UNREGISTER_APPLICATION_FAILED,
+        DLT_ERROR_INJECTION_CALLBACK_FAILURE,
+        DLT_ERROR_FILETRANSFER_FAILURE
+    };
+
     class DltContextPointer
     {
     public:
@@ -136,6 +152,18 @@ namespace capu
             return m_dltInitialized;
         }
 
+        /**
+         * Get the error status of the DltAdapter
+         * DLT_ERROR_NO_ERROR indicates that no error occured
+         * @returns enum with error code and clears the current error
+         */
+        DltError getDltStatus()
+        {
+            DltError cur = m_dltError;
+            m_dltError = DLT_ERROR_NO_ERROR;
+            return cur;
+        }
+
     private:
 
         /**
@@ -167,8 +195,6 @@ namespace capu
          */
         String m_appDesc;
 
-    protected:
-
         /*
          * Singleton DltAdapter instance
          */
@@ -186,6 +212,11 @@ namespace capu
          * values, in which case this variable stays false
          */
         bool_t m_dltInitialized;
+
+        /**
+         * Internal flag to track errors
+         */
+        DltError m_dltError;
     };
 }
 #endif // RAMSES_DLTADAPTER_H
