@@ -28,6 +28,7 @@ SET(CMAKE_MODULE_PATH
 )
 
 FIND_PACKAGE(ACME2)
+FIND_PACKAGE(automotive-dlt)
 
 # custom setup for integrating gtest & gmock
 set(gtest_force_shared_crt true CACHE BOOL "Must be enabled for linking our unit tests" FORCE)
@@ -60,6 +61,7 @@ ACME2_PROJECT(
                                 ON ./DynamicTestLibrary
                                 ON ./Capu_Test
                                 AUTO ./DltLogAppender
+                                AUTO ./DltLogAppender_Test
 )
 
 #==============================================================================
@@ -96,7 +98,6 @@ ACME_INFO("G FindCapu.cmake")
 #==============================================================================
 # generate and install DltLogAppenderBuildConfig header
 #==============================================================================
-FIND_PACKAGE(automotive-dlt)
 CONFIGURE_FILE(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/DltLogAppenderBuildConfig.h.in"
     "${CMAKE_BINARY_DIR}/BuildConfig/DltLogAppenderBuildConfig.h"
