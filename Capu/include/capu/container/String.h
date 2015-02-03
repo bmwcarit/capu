@@ -565,6 +565,10 @@ namespace capu
         }
         else
         {
+            if (length == 0)
+            {
+                return String("");
+            }
             // calculate end position and cut out substring
             return String(*this, start, start + length - 1);
         }

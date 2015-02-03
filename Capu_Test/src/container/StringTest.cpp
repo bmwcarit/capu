@@ -560,9 +560,13 @@ TEST(String, GetSubstring)
     capu::String substr6 = str1.substr(2, 0);
     EXPECT_STREQ("", substr6.c_str());
 
-    // start is exactly end of string
-    capu::String substr7 = str1.substr(str1.getLength(), 4);
+    // startPos and length is 0
+    capu::String substr7 = str1.substr(0, 0);
     EXPECT_STREQ("", substr7.c_str());
+
+    // start is exactly end of string
+    capu::String substr8 = str1.substr(str1.getLength(), 4);
+    EXPECT_STREQ("", substr8.c_str());
 }
 
 TEST(String, StartsWith)
