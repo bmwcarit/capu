@@ -599,3 +599,35 @@ TEST(String, EndsWith)
     capu::String path3("D:\\dir1\\dir2\\");
     EXPECT_TRUE(path3.endsWith("\\"));
 }
+
+TEST(String, ReplaceNoOccurence)
+{
+    capu::String str("hello c++ world.");
+    capu::String result = str.replace("java", "c++");
+
+    EXPECT_STREQ("hello c++ world.", result.c_str());
+}
+
+TEST(String, ReplaceSingleOccurence)
+{
+    capu::String str("hello c++ world.");
+    capu::String result = str.replace("c++", "java");
+
+    EXPECT_STREQ("hello java world.", result.c_str());
+}
+
+TEST(String, ReplaceMultipleOccurence)
+{
+    capu::String str("hello c++ world. hello java world.");
+    capu::String result = str.replace("hello", "bye");
+
+    EXPECT_STREQ("bye c++ world. bye java world.", result.c_str());
+}
+
+TEST(String, ReplaceOccurenceWithOffset)
+{
+    capu::String str("hello c++ world. hello java world.");
+    capu::String result = str.replace("hello", "bye", 15);
+
+    EXPECT_STREQ("hello c++ world. bye java world.", result.c_str());
+}

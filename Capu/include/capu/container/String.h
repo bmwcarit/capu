@@ -242,6 +242,15 @@ namespace capu
          */
         String substr(uint_t start, int_t length) const;
 
+        /**
+         * Replaces a substring within the string with a substitutionary string, starting at a given character position.
+         * @param search the substring to be replaced
+         * @param replace the substring, which is to be put in place for the search substring
+         * @param offset the start character position for starting the replacement.
+         * @return string The string with replaced search substring.
+         */
+        String replace(const String& search, const String& replace, const int_t offset = 0) const;
+
     private:
         void initData(const capu::char_t* data);
         void initFromGivenData(const char_t* data, const uint_t end, const uint_t start, uint_t size);
@@ -594,6 +603,23 @@ namespace capu
             result = (-1 != find(other, offset));
         }
         return result;
+    }
+
+    inline
+        String
+        String::replace(const String& search, const String& replace, const int_t offset) const
+    {
+        String result = substr(0, offset);
+        const int_t searchLen = search.getLength();
+        int_t nextPos;
+        int_t lastPos = offset;
+        while ((nextPos = find(search, lastPos)) > -1)
+        {
+            result = result + substr(lastPos, nextPos - lastPos);
+            result = result + replace;
+            lastPos = nextPos + searchLen;
+        }
+        return result + substr(lastPos, -1);
     }
 
 }
