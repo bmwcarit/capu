@@ -143,7 +143,7 @@ public:
         if (m_send)
         {
             capu::uint32_t sendValue = 42;
-            capu::int32_t sendBytes;
+            capu::int32_t sendBytes = -1;
             m_clientSocket.send(reinterpret_cast<capu::char_t*>(&sendValue), sizeof(sendValue), sendBytes);
             EXPECT_EQ(static_cast<capu::int32_t>(sizeof(sendValue)), sendBytes);
         }
