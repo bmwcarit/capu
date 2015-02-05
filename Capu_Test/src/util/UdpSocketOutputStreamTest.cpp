@@ -81,7 +81,7 @@ namespace capu
         {
             uint64_t tmp;
             receiveFromSocket(reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
-            value = ntohll(tmp);
+            value = _ntohll(tmp);
             return *this;
         }
 

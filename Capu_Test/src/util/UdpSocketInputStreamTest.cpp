@@ -58,7 +58,7 @@ namespace capu
         typedef int64_t VALUE_TYPE;
         static void Send(const capu::uint16_t port, UdpSocket& socket, const int64_t& data)
         {
-            int64_t tmp = htonll(data);
+            int64_t tmp = _htonll(data);
             SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(int64_t));
         }
     };
@@ -68,7 +68,7 @@ namespace capu
         typedef uint64_t VALUE_TYPE;
         static void Send(const capu::uint16_t port, UdpSocket& socket, const uint64_t& data)
         {
-            int64_t tmp = htonll(data);
+            int64_t tmp = _htonll(data);
             SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
         }
     };

@@ -63,7 +63,7 @@ namespace capu
         typedef uint64_t VALUE_TYPE;
         static void Send(TcpSocket& socket, const uint64_t& data)
         {
-            uint64_t tmp = htonll(data);
+            uint64_t tmp = _htonll(data);
             SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
         }
     };
@@ -73,7 +73,7 @@ namespace capu
         typedef int64_t VALUE_TYPE;
         static void Send(TcpSocket& socket, const int64_t& data)
         {
-            uint64_t tmp = htonll(static_cast<int64_t>(data));
+            uint64_t tmp = _htonll(static_cast<int64_t>(data));
             SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(int64_t));
         }
     };
