@@ -120,3 +120,36 @@ TEST(FileUtilsTest, ReadWriteAllText)
     temp.remove();
     EXPECT_FALSE(temp.exists());
 }
+
+TEST(FileUtilsTest, GetCurrentWorkingDirectory)
+{
+    capu::File cwd = capu::FileUtils::getCurrentWorkingDirectory();
+
+    EXPECT_STRNE(cwd.getPath().c_str(), "");
+    EXPECT_TRUE(cwd.exists());
+
+    capu::File secondCwd = capu::FileUtils::getCurrentWorkingDirectory();
+    EXPECT_STREQ(cwd.getPath().c_str(), secondCwd.getPath().c_str());
+}
+
+TEST(FileUtilsTest, SetCurrentWorkingDirectory)
+{
+    capu::File oldCwd = capu::FileUtils::getCurrentWorkingDirectory();
+
+    capu::File newCwd("..");
+    EXPECT_EQ(capu::CAPU_OK, capu::FileUtils::setCurrentWorkingDirectory(newCwd));
+
+    newCwd = capu::FileUtils::getCurrentWorkingDirectory();
+    EXPECT_STRNE(oldCwd.getPath().c_str(), newCwd.getPath().c_str());
+
+    EXPECT_TRUE(oldCwd.getPath().startsWith(newCwd.getPath()));
+
+    capu::bool_t status = false;
+    EXPECT_EQ(newCwd.getPath(), oldCwd.getParentFile(status).getPath());
+    EXPECT_TRUE(status);
+
+    EXPECT_EQ(capu::CAPU_OK, capu::FileUtils::setCurrentWorkingDirectory(oldCwd));
+
+    capu::File newOldCwd = capu::FileUtils::getCurrentWorkingDirectory();
+    EXPECT_STREQ(oldCwd.getPath().c_str(), newOldCwd.getPath().c_str());
+}

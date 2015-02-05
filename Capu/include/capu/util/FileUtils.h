@@ -20,6 +20,8 @@
 #include "capu/os/File.h"
 #include "capu/util/FileTraverser.h"
 
+#include CAPU_PLATFORM_INCLUDE(FileUtils)
+
 namespace capu
 {
     /**
@@ -78,6 +80,19 @@ namespace capu
         * @return The return value.
         */
         static status_t writeAllText(File& file, const String& content);
+
+        /**
+        * Retrieves the current working directory for the calling process
+        * @return File object with current working directory
+        */
+        static File getCurrentWorkingDirectory();
+
+        /**
+        * Sets the current working directory for the process
+        * @param directory the new working directory
+        * @return CAPU_OK if working directory changed, CAPU_ERROR otherwise
+        */
+        static status_t setCurrentWorkingDirectory(const File& directory);
     };
 
     inline status_t FileUtils::removeDirectory(File& directory)
@@ -189,6 +204,16 @@ namespace capu
         file.flush();
         file.close();
         return CAPU_OK;
+    }
+
+    inline File FileUtils::getCurrentWorkingDirectory()
+    {
+        return capu::os::arch::FileUtils::getCurrentWorkingDirectory();
+    }
+
+    inline status_t FileUtils::setCurrentWorkingDirectory(const File& directory)
+    {
+        return capu::os::arch::FileUtils::setCurrentWorkingDirectory(directory);
     }
 }
 
