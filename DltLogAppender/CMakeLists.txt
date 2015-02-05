@@ -16,6 +16,7 @@
 
 #determine if log_level_ptr in DltContext can be used
 #is available in dlt >= 2.10
+FIND_PACKAGE(automotive-dlt)
 IF(automotive-dlt_FOUND)
 
 IF(${automotive-dlt_VERSION} STREQUAL  2.11.1)

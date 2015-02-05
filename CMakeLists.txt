@@ -90,3 +90,15 @@ INSTALL(
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
 )
 ACME_INFO("G FindCapu.cmake")
+
+#==============================================================================
+# generate and install DltLogAppenderBuildConfig header
+#==============================================================================
+FIND_PACKAGE(automotive-dlt)
+CONFIGURE_FILE(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/DltLogAppenderBuildConfig.h.in"
+    "${CMAKE_BINARY_DIR}/BuildConfig/DltLogAppenderBuildConfig.h"
+    @ONLY
+)
+
+ACME_INFO("G DltLogAppenderBuildConfig.h")

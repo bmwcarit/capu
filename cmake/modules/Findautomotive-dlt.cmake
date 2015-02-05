@@ -1,4 +1,4 @@
-SET(automotive-dlt_FOUND FALSE)
+SET(automotive-dlt_FOUND 0)
 
 # use package config to resolve dependencies,
 
