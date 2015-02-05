@@ -48,7 +48,7 @@ ACME2_PROJECT(
     #==========================================================================
     # documentation files, will be installed and packaged
     #==========================================================================
-    FILES_DOCUMENTATION         README.txt
+    FILES_DOCUMENTATION         README.mdown
                                 LICENSE.txt
 
     #==========================================================================
