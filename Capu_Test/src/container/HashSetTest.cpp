@@ -278,6 +278,49 @@ TEST(HashSet, performanceRemove)
     }
 }
 
+TEST(HashSet, iteratorPointsToNextElementAfterDeletion)
+{
+    capu::HashSet<capu::uint32_t> set;
 
+    set.put(1);
+    set.put(2);
+    set.put(3);
+
+    // point to middle element
+    capu::HashSet<capu::uint32_t>::Iterator i1 = set.begin();
+    capu::HashSet<capu::uint32_t>::Iterator i2 = set.begin(); ++i2;
+    capu::HashSet<capu::uint32_t>::Iterator i3 = set.begin(); ++i3; ++i3;
+
+    // all iterators point to different elements
+    // no assumption which value each iterator points to, because no order is defined
+    ASSERT_NE(*i1, *i2);
+    ASSERT_NE(*i2, *i3);
+    ASSERT_NE(*i1, *i3);
+
+    set.removeAt(i2);
+
+    // i2 now points at next element -> i3
+    EXPECT_EQ(i2, i3);
+
+    set.removeAt(i1);
+    EXPECT_EQ(i1, i3);
+}
+
+TEST(HashSet, canRemoveElementsDuringCycle)
+{
+    capu::HashSet<capu::uint32_t> set;
+
+    set.put(1);
+    set.put(2);
+    set.put(3);
+
+    capu::HashSet<capu::uint32_t>::Iterator iter = set.begin();
+    while (iter != set.end())
+    {
+        set.removeAt(iter);
+    }
+
+    EXPECT_EQ(0u, set.count());
+}
 
 
