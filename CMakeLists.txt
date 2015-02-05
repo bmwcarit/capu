@@ -54,9 +54,10 @@ ACME2_PROJECT(
     #==========================================================================
     # project content
     #==========================================================================
-    CONTENT                     ./Capu
-                                ./DynamicTestLibrary
-                                ./Capu_Test
+    CONTENT                     ON ./Capu
+                                ON ./DynamicTestLibrary
+                                ON ./Capu_Test
+                                AUTO ./DltLogAppender
 )
 
 #==============================================================================
