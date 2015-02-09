@@ -33,4 +33,4 @@ namespace capu
     }
 }
 
-#endif
+#endif // CAPU_IPHONEOS_ARMV7_MUTEX_H

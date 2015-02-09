@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_V7_FILEUTILS_H
-#define CAPU_IPHONEOS_ARM_V7_FILEUTILS_H
+#ifndef CAPU_IPHONEOS_ARMV7_V7_FILEUTILS_H
+#define CAPU_IPHONEOS_ARMV7_V7_FILEUTILS_H
 
 #include <capu/os/iPhoneOS/FileUtils.h>
 
@@ -34,5 +34,5 @@ namespace capu
         }
     }
 }
-#endif // CAPU_IPHONEOS_ARM_V7_FILEUTILS_H
+#endif // CAPU_IPHONEOS_ARMV7_V7_FILEUTILS_H
 

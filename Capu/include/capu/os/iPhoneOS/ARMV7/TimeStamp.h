@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 BMW Car IT GmbH
+ * Copyright (C) 2014 jambit GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_V7_TIMESTAMP_H
-#define CAPU_IPHONEOS_ARM_V7_TIMESTAMP_H
+#ifndef CAPU_IPHONEOS_ARMV7_TIMESTAMP_H
+#define CAPU_IPHONEOS_ARMV7_TIMESTAMP_H
 
 #include <capu/os/iPhoneOS/TimeStamp.h>
 
@@ -26,11 +26,11 @@ namespace capu
         namespace arch
         {
 
-            class TimeStamp : public os::TimeStamp
+            class TimeStamp : public capu::iphoneos::TimeStamp
             {
             };
         }
     }
 }
 
-#endif // CAPU_LINUX_ARM_V7L_MUTEX_H
+#endif // CAPU_IPHONEOS_ARMV7_TIMESTAMP_H

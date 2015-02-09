@@ -45,4 +45,4 @@ namespace capu
         }
     }
 }
-#endif
+#endif // CAPU_IPHONESIMULATOROS_X86_32_FILESYSTEMITERATOR_H

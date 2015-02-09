@@ -48,6 +48,7 @@ namespace capu
                 using capu::iphoneos::TcpSocket::getKeepAlive;
                 using capu::iphoneos::TcpSocket::getTimeout;
                 using capu::iphoneos::TcpSocket::getRemoteAddress;
+                using capu::iphoneos::TcpSocket::getSocketDescription;
             };
 
             inline
