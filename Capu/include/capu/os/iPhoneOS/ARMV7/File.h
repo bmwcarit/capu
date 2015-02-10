@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_FILE_H
-#define CAPU_IPHONEOS_ARM_FILE_H
+#ifndef CAPU_IPHONEOS_ARMV7_FILE_H
+#define CAPU_IPHONEOS_ARMV7_FILE_H
 
 #include <capu/os/iPhoneOS/File.h>
 

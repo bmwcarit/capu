@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_THREAD_H
-#define CAPU_IPHONEOS_ARM_THREAD_H
+#ifndef CAPU_IPHONEOS_ARMV7_NUMERIC_LIMITS_H
+#define CAPU_IPHONEOS_ARMV7_NUMERIC_LIMITS_H
 
-#include <capu/os/iPhoneOS/Thread.h>
+#include <capu/os/iPhoneOS/NumericLimits.h>
 
 namespace capu
 {
@@ -25,19 +25,14 @@ namespace capu
     {
         namespace arch
         {
-            class Thread: private capu::iphoneos::Thread
+            class NumericLimits: private capu::iphoneos::NumericLimits
             {
             public:
-                using capu::iphoneos::Thread::start;
-                using capu::iphoneos::Thread::join;
-                using capu::iphoneos::Thread::cancel;
-                using capu::iphoneos::Thread::resetCancel;
-                using capu::iphoneos::Thread::getState;
-                using capu::iphoneos::Thread::Sleep;
-                using capu::iphoneos::Thread::CurrentThreadId;
+                using capu::iphoneos::NumericLimits::Max;
+                using capu::iphoneos::NumericLimits::Min;
             };
         }
     }
 }
 
-#endif // CAPU_IPHONEOS_ARM_THREAD_H
+#endif // CAPU_IPHONEOS_ARMV7_NUMERIC_LIMITS_H

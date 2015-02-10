@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 jambit GmbH
+ * Copyright (C) 2014 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_ATOMICOPERATION_H
-#define CAPU_IPHONEOS_ARM_ATOMICOPERATION_H
+#ifndef CAPU_IPHONEOS_ARMV7_V7_FILEUTILS_H
+#define CAPU_IPHONEOS_ARMV7_V7_FILEUTILS_H
 
-#include <capu/os/iPhoneOS/AtomicOperation.h>
+#include <capu/os/iPhoneOS/FileUtils.h>
 
 namespace capu
 {
@@ -25,15 +25,14 @@ namespace capu
     {
         namespace arch
         {
-            class AtomicOperation: private capu::iphoneos::AtomicOperation
+            class FileUtils: private capu::os::FileUtils
             {
             public:
-                using capu::iphoneos::AtomicOperation::AtomicAdd;
-                using capu::iphoneos::AtomicOperation::AtomicSub;
-                using capu::iphoneos::AtomicOperation::AtomicInc;
-                using capu::iphoneos::AtomicOperation::AtomicDec;
+                using capu::os::FileUtils::getCurrentWorkingDirectory;
+                using capu::os::FileUtils::setCurrentWorkingDirectory;
             };
         }
     }
 }
-#endif //CAPU_IPHONEOS_ARM_ATOMICOPERATION_H
+#endif // CAPU_IPHONEOS_ARMV7_V7_FILEUTILS_H
+

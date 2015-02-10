@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_TCP_SOCKET_H
-#define CAPU_IPHONEOS_ARM_TCP_SOCKET_H
+#ifndef CAPU_IPHONEOS_ARMV7_TCP_SOCKET_H
+#define CAPU_IPHONEOS_ARMV7_TCP_SOCKET_H
 
 #include <capu/os/iPhoneOS/TcpSocket.h>
 
@@ -66,4 +66,4 @@ namespace capu
         }
     }
 }
-#endif // CAPU_IPHONEOS_ARM_TCP_SOCKET_H
+#endif // CAPU_IPHONEOS_ARMV7_TCP_SOCKET_H

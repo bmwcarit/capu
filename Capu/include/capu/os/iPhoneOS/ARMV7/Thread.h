@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2014 jambit GmbH
  *
@@ -15,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_MUTEX_H
-#define CAPU_IPHONEOS_ARM_MUTEX_H
+#ifndef CAPU_IPHONEOS_ARMV7_THREAD_H
+#define CAPU_IPHONEOS_ARMV7_THREAD_H
 
-#include <capu/os/iPhoneOS/Mutex.h>
+#include <capu/os/iPhoneOS/Thread.h>
 
 namespace capu
 {
@@ -26,11 +25,19 @@ namespace capu
     {
         namespace arch
         {
-            class Mutex: public capu::iphoneos::Mutex
+            class Thread: private capu::iphoneos::Thread
             {
+            public:
+                using capu::iphoneos::Thread::start;
+                using capu::iphoneos::Thread::join;
+                using capu::iphoneos::Thread::cancel;
+                using capu::iphoneos::Thread::resetCancel;
+                using capu::iphoneos::Thread::getState;
+                using capu::iphoneos::Thread::Sleep;
+                using capu::iphoneos::Thread::CurrentThreadId;
             };
         }
     }
 }
 
-#endif
+#endif // CAPU_IPHONEOS_ARMV7_THREAD_H

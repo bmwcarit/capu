@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_SEMAPHORE_H
-#define CAPU_IPHONEOS_ARM_SEMAPHORE_H
+#ifndef CAPU_IPHONEOS_ARMV7_ATOMICOPERATION_H
+#define CAPU_IPHONEOS_ARMV7_ATOMICOPERATION_H
 
-#include <capu/os/iPhoneOS/Semaphore.h>
+#include <capu/os/iPhoneOS/AtomicOperation.h>
 
 namespace capu
 {
@@ -25,22 +25,15 @@ namespace capu
     {
         namespace arch
         {
-            class Semaphore: private capu::iphoneos::Semaphore
+            class AtomicOperation: private capu::iphoneos::AtomicOperation
             {
             public:
-                Semaphore(uint32_t initialPermits);
-                using capu::iphoneos::Semaphore::aquire;
-                using capu::iphoneos::Semaphore::tryAquire;
-                using capu::iphoneos::Semaphore::release;
+                using capu::iphoneos::AtomicOperation::AtomicAdd;
+                using capu::iphoneos::AtomicOperation::AtomicSub;
+                using capu::iphoneos::AtomicOperation::AtomicInc;
+                using capu::iphoneos::AtomicOperation::AtomicDec;
             };
-
-            inline
-            Semaphore::Semaphore(uint32_t initialPermits)
-                : capu::iphoneos::Semaphore::Semaphore(initialPermits)
-            {
-            }
         }
     }
 }
-
-#endif // CAPU_IPHONEOS_ARM_SEMAPHORE_H
+#endif //CAPU_IPHONEOS_ARMV7_ATOMICOPERATION_H

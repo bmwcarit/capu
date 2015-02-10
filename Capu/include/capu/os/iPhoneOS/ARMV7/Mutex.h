@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2014 jambit GmbH
  *
@@ -14,11 +15,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_TIME_H
-#define CAPU_IPHONEOS_ARM_TIME_H
+#ifndef CAPU_IPHONEOS_ARMV7_MUTEX_H
+#define CAPU_IPHONEOS_ARMV7_MUTEX_H
 
-
-#include <capu/os/iPhoneOS/Time.h>
+#include <capu/os/iPhoneOS/Mutex.h>
 
 namespace capu
 {
@@ -26,13 +26,11 @@ namespace capu
     {
         namespace arch
         {
-            class Time : private capu::iphoneos::Time
+            class Mutex: public capu::iphoneos::Mutex
             {
-            public:
-                using capu::iphoneos::Time::GetMilliseconds;
-                using capu::iphoneos::Time::GetMicroseconds;
             };
         }
     }
 }
-#endif // CAPU_IPHONEOS_ARM_TIME_H
+
+#endif // CAPU_IPHONEOS_ARMV7_MUTEX_H

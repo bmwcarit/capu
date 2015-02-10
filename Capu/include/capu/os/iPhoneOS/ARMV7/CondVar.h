@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_TCPSERVERSOCKET_H
-#define CAPU_IPHONEOS_ARM_TCPSERVERSOCKET_H
+#ifndef CAPU_IPHONEOS_ARMV7_CONDVAR_H
+#define CAPU_IPHONEOS_ARMV7_CONDVAR_H
 
-
-#include <capu/os/iPhoneOS/TcpServerSocket.h>
+#include <capu/os/iPhoneOS/CondVar.h>
 
 namespace capu
 {
@@ -26,17 +25,15 @@ namespace capu
     {
         namespace arch
         {
-            class TcpServerSocket: private capu::iphoneos::TcpServerSocket
+            class CondVar: private capu::iphoneos::CondVar
             {
             public:
-                using capu::iphoneos::TcpServerSocket::accept;
-                using capu::iphoneos::TcpServerSocket::close;
-                using capu::iphoneos::TcpServerSocket::bind;
-                using capu::iphoneos::TcpServerSocket::listen;
-                using capu::iphoneos::TcpServerSocket::port;
-                using capu::iphoneos::TcpServerSocket::getSocketDescription;
+                using capu::iphoneos::CondVar::signal;
+                using capu::iphoneos::CondVar::wait;
+                using capu::iphoneos::CondVar::broadcast;
             };
         }
     }
 }
-#endif // CAPU_IPHONEOS_ARM_TCPSERVERSOCKET_H
+
+#endif // CAPU_IPHONEOS_ARMV7_CONDVAR_H

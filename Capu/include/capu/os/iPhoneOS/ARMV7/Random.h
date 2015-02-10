@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_DYNAMICLIBRARY_H
-#define CAPU_IPHONEOS_ARM_DYNAMICLIBRARY_H
+#ifndef CAPU_IPHONEOS_ARMV7_RANDOM_H
+#define CAPU_IPHONEOS_ARMV7_RANDOM_H
 
-#include <capu/os/iPhoneOS/DynamicLibrary.h>
+#include <capu/os/iPhoneOS/Random.h>
 
 namespace capu
 {
@@ -25,23 +25,15 @@ namespace capu
     {
         namespace arch
         {
-            class DynamicLibrary: private capu::iphoneos::DynamicLibrary
+            class Random: private capu::iphoneos::Random
             {
             public:
-                DynamicLibrary(String path);
-                using capu::iphoneos::DynamicLibrary::load;
-                using capu::iphoneos::DynamicLibrary::unload;
-                using capu::iphoneos::DynamicLibrary::loadSymbol;
-                using capu::iphoneos::DynamicLibrary::getPath;
+                using capu::iphoneos::Random::nextUInt8;
+                using capu::iphoneos::Random::nextUInt16;
+                using capu::iphoneos::Random::nextUInt32;
             };
-
-            inline
-            DynamicLibrary::DynamicLibrary(String path)
-                : capu::iphoneos::DynamicLibrary(path)
-            {
-            }
         }
     }
 }
 
-#endif // CAPU_IPHONEOS_ARM_DYNAMICLIBRARY_H
+#endif // CAPU_IPHONEOS_ARMV7_RANDOM_H

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_NUMERIC_LIMITS_H
-#define CAPU_IPHONEOS_ARM_NUMERIC_LIMITS_H
+#ifndef CAPU_IPHONEOS_ARMV7_CONSOLE_H
+#define CAPU_IPHONEOS_ARMV7_CONSOLE_H
 
-#include <capu/os/iPhoneOS/NumericLimits.h>
+#include <capu/os/iPhoneOS/Console.h>
 
 namespace capu
 {
@@ -25,14 +25,15 @@ namespace capu
     {
         namespace arch
         {
-            class NumericLimits: private capu::iphoneos::NumericLimits
+            class Console: private capu::iphoneos::Console
             {
             public:
-                using capu::iphoneos::NumericLimits::Max;
-                using capu::iphoneos::NumericLimits::Min;
+                using capu::iphoneos::Console::IsInputAvailable;
+                using capu::iphoneos::Console::Print;
+                using capu::iphoneos::Console::ReadChar;
             };
         }
     }
 }
 
-#endif // CAPU_IPHONEOS_ARM_NUMERIC_LIMITS_H
+#endif // CAPU_IPHONEOS_ARMV7_CONSOLE_H

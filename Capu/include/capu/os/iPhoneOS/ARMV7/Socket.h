@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_SOCKET_H
-#define CAPU_IPHONEOS_ARM_SOCKET_H
+#ifndef CAPU_IPHONEOS_ARMV7_SOCKET_H
+#define CAPU_IPHONEOS_ARMV7_SOCKET_H
 
 #include <capu/os/Posix/Socket.h>
 
-#endif // CAPU_IPHONEOS_ARM_SOCKET_H
+#endif // CAPU_IPHONEOS_ARMV7_SOCKET_H

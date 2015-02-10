@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_CONSOLE_H
-#define CAPU_IPHONEOS_ARM_CONSOLE_H
+#ifndef CAPU_IPHONEOS_ARMV7_MEMORY_H
+#define CAPU_IPHONEOS_ARMV7_MEMORY_H
 
-#include <capu/os/iPhoneOS/Console.h>
+#include <capu/os/iPhoneOS/Memory.h>
 
 namespace capu
 {
@@ -25,15 +25,19 @@ namespace capu
     {
         namespace arch
         {
-            class Console: private capu::iphoneos::Console
+            class Memory: private capu::iphoneos::Memory
             {
             public:
-                using capu::iphoneos::Console::IsInputAvailable;
-                using capu::iphoneos::Console::Print;
-                using capu::iphoneos::Console::ReadChar;
+                using capu::iphoneos::Memory::Copy;
+                using capu::iphoneos::Memory::CopyObject;
+                using capu::iphoneos::Memory::Compare;
+                using capu::iphoneos::Memory::Move;
+                using capu::iphoneos::Memory::MoveObject;
+                using capu::iphoneos::Memory::Set;
+                using capu::iphoneos::Memory::CurrentMemoryUsage;
             };
         }
     }
 }
 
-#endif // CAPU_IPHONEOS_ARM_CONSOLE_H
+#endif // CAPU_IPHONEOS_ARMV7_MEMORY_H

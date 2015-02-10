@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_RANDOM_H
-#define CAPU_IPHONEOS_ARM_RANDOM_H
+#ifndef CAPU_IPHONEOS_ARMV7_TIMESTAMP_H
+#define CAPU_IPHONEOS_ARMV7_TIMESTAMP_H
 
-#include <capu/os/iPhoneOS/Random.h>
+#include <capu/os/iPhoneOS/TimeStamp.h>
 
 namespace capu
 {
@@ -25,15 +25,12 @@ namespace capu
     {
         namespace arch
         {
-            class Random: private capu::iphoneos::Random
+
+            class TimeStamp : public capu::iphoneos::TimeStamp
             {
-            public:
-                using capu::iphoneos::Random::nextUInt8;
-                using capu::iphoneos::Random::nextUInt16;
-                using capu::iphoneos::Random::nextUInt32;
             };
         }
     }
 }
 
-#endif // CAPU_IPHONEOS_ARM_RANDOM_H
+#endif // CAPU_IPHONEOS_ARMV7_TIMESTAMP_H

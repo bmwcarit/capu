@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_FILESYSTEMITERATOR_H
-#define CAPU_IPHONEOS_ARM_FILESYSTEMITERATOR_H
+#ifndef CAPU_IPHONEOS_ARMV7_FILESYSTEMITERATOR_H
+#define CAPU_IPHONEOS_ARMV7_FILESYSTEMITERATOR_H
 
 #include <capu/os/iPhoneOS/FileSystemIterator.h>
 

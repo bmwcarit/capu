@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_MEMORY_H
-#define CAPU_IPHONEOS_ARM_MEMORY_H
+#ifndef CAPU_IPHONEOS_ARMV7_DYNAMICLIBRARY_H
+#define CAPU_IPHONEOS_ARMV7_DYNAMICLIBRARY_H
 
-#include <capu/os/iPhoneOS/Memory.h>
+#include <capu/os/iPhoneOS/DynamicLibrary.h>
 
 namespace capu
 {
@@ -25,19 +25,23 @@ namespace capu
     {
         namespace arch
         {
-            class Memory: private capu::iphoneos::Memory
+            class DynamicLibrary: private capu::iphoneos::DynamicLibrary
             {
             public:
-                using capu::iphoneos::Memory::Copy;
-                using capu::iphoneos::Memory::CopyObject;
-                using capu::iphoneos::Memory::Compare;
-                using capu::iphoneos::Memory::Move;
-                using capu::iphoneos::Memory::MoveObject;
-                using capu::iphoneos::Memory::Set;
-                using capu::iphoneos::Memory::CurrentMemoryUsage;
+                DynamicLibrary(String path);
+                using capu::iphoneos::DynamicLibrary::load;
+                using capu::iphoneos::DynamicLibrary::unload;
+                using capu::iphoneos::DynamicLibrary::loadSymbol;
+                using capu::iphoneos::DynamicLibrary::getPath;
             };
+
+            inline
+            DynamicLibrary::DynamicLibrary(String path)
+                : capu::iphoneos::DynamicLibrary(path)
+            {
+            }
         }
     }
 }
 
-#endif // CAPU_IPHONEOS_ARM_MEMORY_H
+#endif // CAPU_IPHONEOS_ARMV7_DYNAMICLIBRARY_H

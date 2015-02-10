@@ -65,4 +65,4 @@ namespace capu
         }
     }
 }
-#endif
+#endif // CAPU_IPHONESIMULATOROS_X86_32_FILE_H

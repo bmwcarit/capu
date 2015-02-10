@@ -53,4 +53,4 @@ namespace capu
     }
 }
 
-#endif
+#endif // CAPU_IPHONEOS_ARM64_MATH_H

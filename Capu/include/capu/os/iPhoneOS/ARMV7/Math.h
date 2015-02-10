@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_MATH_H
-#define CAPU_IPHONEOS_ARM_MATH_H
+#ifndef CAPU_IPHONEOS_ARMV7_MATH_H
+#define CAPU_IPHONEOS_ARMV7_MATH_H
 
 #include <capu/os/iPhoneOS/Math.h>
 
@@ -53,4 +53,4 @@ namespace capu
     }
 }
 
-#endif
+#endif // CAPU_IPHONEOS_ARMV7_MATH_H

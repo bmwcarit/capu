@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_DEBUG_H
-#define CAPU_IPHONEOS_ARM_DEBUG_H
+#ifndef CAPU_IPHONEOS_ARMV7_TIME_H
+#define CAPU_IPHONEOS_ARMV7_TIME_H
 
-#include <capu/os/iPhoneOS/Debug.h>
+
+#include <capu/os/iPhoneOS/Time.h>
 
 namespace capu
 {
@@ -25,14 +26,13 @@ namespace capu
     {
         namespace arch
         {
-            class Debug: private capu::iphoneos::Debug
+            class Time : private capu::iphoneos::Time
             {
             public:
-                using capu::iphoneos::Debug::Assert;
+                using capu::iphoneos::Time::GetMilliseconds;
+                using capu::iphoneos::Time::GetMicroseconds;
             };
         }
     }
 }
-
-
-#endif // CAPU_IPHONEOS_ARM_DEBUG_H
+#endif // CAPU_IPHONEOS_ARMV7_TIME_H

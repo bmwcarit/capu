@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_IPHONEOS_ARM_STRINGUTILS_H
-#define CAPU_IPHONEOS_ARM_STRINGUTILS_H
+#ifndef CAPU_IPHONEOS_ARMV7_STRINGUTILS_H
+#define CAPU_IPHONEOS_ARMV7_STRINGUTILS_H
 
 #include <capu/os/iPhoneOS/StringUtils.h>
 
@@ -41,4 +41,4 @@ namespace capu
         }
     }
 }
-#endif // CAPU_IPHONEOS_ARM_STRINGUTILS_H
+#endif // CAPU_IPHONEOS_ARMV7_STRINGUTILS_H

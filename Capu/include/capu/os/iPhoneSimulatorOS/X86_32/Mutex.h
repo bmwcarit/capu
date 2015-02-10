@@ -33,4 +33,4 @@ namespace capu
     }
 }
 
-#endif
+#endif // CAPU_IPHONESIMULATOROS_X86_32_MUTEX_H
