@@ -404,6 +404,38 @@ TEST(String, NotEquals2)
     EXPECT_FALSE(str2 != str3);
 }
 
+TEST(String, SmallerGreater1)
+{
+    capu::String str1("Hello1");
+    capu::String str2("Hello2");
+    EXPECT_TRUE(str1 < str2);
+    EXPECT_TRUE(str2 > str1);
+}
+
+TEST(String, SmallerGreater2)
+{
+    capu::String str1("Hello Long");
+    capu::String str2("Hello Longer");
+    EXPECT_TRUE(str1 < str2);
+    EXPECT_TRUE(str2 > str1);
+}
+
+TEST(String, SmallerGreater3)
+{
+    capu::String str1("Hello Test");
+    capu::String str2("Hello Test");
+    EXPECT_FALSE(str1 < str2);
+    EXPECT_FALSE(str2 > str1);
+}
+
+TEST(String, SmallerGreater4)
+{
+    capu::String str1;
+    capu::String str2;
+    EXPECT_FALSE(str1 < str2);
+    EXPECT_FALSE(str2 > str1);
+}
+
 TEST(String, FindChar)
 {
     capu::String str1;

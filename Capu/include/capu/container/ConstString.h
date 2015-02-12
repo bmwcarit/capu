@@ -73,6 +73,20 @@ namespace capu
         bool_t operator==(const ConstString& other) const;
 
         /**
+         * Compares two ConstStrings
+         * @param other string to compare with
+         * @return true if this string is less than the other string, false otherwise
+         */
+        bool_t operator<(const ConstString& other) const;
+
+        /**
+         * Compares two ConstStrings
+         * @param other string to compare with
+         * @return true if this string is greater than the other string, false otherwise
+         */
+        bool_t operator>(const ConstString& other) const;
+
+        /**
          * Return if this string does not equals other
          * @return true if this ConsTring does not equal other string, false otherwise
          */
@@ -180,6 +194,18 @@ namespace capu
     ConstString::operator!=(const ConstString& other) const
     {
         return !operator==(other);
+    }
+
+    inline
+    bool_t ConstString::operator<(const ConstString& other) const
+    {
+        return StringUtils::Strcmp(m_data, other.m_data) < 0;
+    }
+
+    inline
+    bool_t ConstString::operator>(const ConstString& other) const
+    {
+        return StringUtils::Strcmp(m_data, other.m_data) > 0;
     }
 
     inline

@@ -133,6 +133,16 @@ namespace capu
         bool_t operator!=(const String& other) const;
 
         /**
+         * Return if this string is smaller than another
+         */
+        bool_t operator<(const String& other) const;
+
+        /**
+         * Return if this string is greater than another
+         */
+        bool_t operator>(const String& other) const;
+
+        /**
          * Access operator to access a special character
          * @param index of the character to access
          * @return character at the given index
@@ -410,7 +420,50 @@ namespace capu
 
     inline bool_t String::operator==(const String& other) const
     {
-        return ConstString(c_str()) == ConstString(other.c_str());
+        static char_t null(0);
+        const char_t* str1 = m_data.getRawData();
+        if (!str1)
+        {
+            str1 = &null;
+        }
+        const char_t* str2 = other.m_data.getRawData();
+        if (!str2)
+        {
+            str2 = &null;
+        }
+        return StringUtils::Strcmp(str1, str2) == 0;
+    }
+
+    inline bool_t String::operator<(const String& other) const
+    {
+        static char_t null(0);
+        const char_t* str1 = m_data.getRawData();
+        if (!str1)
+        {
+            str1 = &null;
+        }
+        const char_t* str2 = other.m_data.getRawData();
+        if (!str2)
+        {
+            str2 = &null;
+        }
+        return StringUtils::Strcmp(str1, str2) < 0;
+    }
+
+    inline bool_t String::operator>(const String& other) const
+    {
+        static char_t null(0);
+        const char_t* str1 = m_data.getRawData();
+        if (!str1)
+        {
+            str1 = &null;
+        }
+        const char_t* str2 = other.m_data.getRawData();
+        if (!str2)
+        {
+            str2 = &null;
+        }
+        return StringUtils::Strcmp(str1, str2) > 0;
     }
 
     inline void String::operator+=(const char_t* other)

@@ -78,6 +78,31 @@ namespace capu
         EXPECT_TRUE(string1 != string2);
     }
 
+
+    TEST_F(ConstStringTest, SmallerGreater1)
+    {
+        ConstString str1("Hello1");
+        ConstString str2("Hello2");
+        EXPECT_TRUE(str1 < str2);
+        EXPECT_TRUE(str2 > str1);
+    }
+
+    TEST_F(ConstStringTest, SmallerGreater2)
+    {
+        ConstString str1("Hello Long");
+        ConstString str2("Hello Longer");
+        EXPECT_TRUE(str1 < str2);
+        EXPECT_TRUE(str2 > str1);
+    }
+
+    TEST_F(ConstStringTest, SmallerGreater3)
+    {
+        ConstString str1("Hello Test");
+        ConstString str2("Hello Test");
+        EXPECT_FALSE(str1 < str2);
+        EXPECT_FALSE(str2 > str1);
+    }
+
     TEST_F(ConstStringTest, AssignmentOperator)
     {
         ConstString string1 = "Hello";
