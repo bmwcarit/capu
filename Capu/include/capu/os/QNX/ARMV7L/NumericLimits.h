@@ -18,7 +18,7 @@
 #define CAPU_QNX_ARMV7L_NUMERIC_LIMITS_H
 
 #include <float.h>
-#include <capu/os/Linux/NumericLimits.h>
+#include <capu/os/QNX/NumericLimits.h>
 
 namespace capu
 {
