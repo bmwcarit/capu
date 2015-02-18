@@ -31,13 +31,13 @@
 #define UNUSED(x) {(void)(x);}
 
 #define capu_foreach(IteratableType, Iteratable, Iter)\
-    IteratableType::Iterator Iter = Iteratable.begin();\
-    const IteratableType::Iterator end = Iteratable.end();\
+    IteratableType::Iterator Iter = (Iteratable).begin();\
+    const IteratableType::Iterator end = (Iteratable).end();\
     for(; Iter != end; ++Iter)
 
 #define capu_const_foreach(IteratableType, Iteratable, Iter)\
-    IteratableType::ConstIterator Iter = Iteratable.begin(); \
-    const IteratableType::ConstIterator end = Iteratable.end(); \
+    IteratableType::ConstIterator Iter = (Iteratable).begin(); \
+    const IteratableType::ConstIterator end = (Iteratable).end(); \
 for (; Iter != end; ++Iter)
 
 namespace capu
