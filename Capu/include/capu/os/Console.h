@@ -64,6 +64,11 @@ namespace capu
         static bool_t IsInputAvailable();
 
         static char_t ReadChar();
+
+        /**
+         * Flush the contents of stdout and stderr.
+         */
+        static void Flush();
     };
 
     inline
@@ -98,6 +103,13 @@ namespace capu
         va_start(argptr, format);
         capu::os::arch::Console::Print(color, format, argptr);
         va_end(argptr);
+    }
+
+    inline
+    void
+    Console::Flush()
+    {
+        capu::os::arch::Console::Flush();
     }
 }
 

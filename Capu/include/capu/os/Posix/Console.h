@@ -35,7 +35,7 @@ namespace capu
             static void Print(uint32_t color, const char_t* format, va_list values);
             static char_t ReadChar();
             static const char_t* Colors[];
-
+            static void Flush();
         };
 
         inline
@@ -102,6 +102,14 @@ namespace capu
 			}
 
             return FD_ISSET(STDIN_FILENO, &fds) != 0;
+        }
+
+        inline
+        void
+        Console::Flush()
+        {
+            fflush(stdout);
+            fflush(stderr);
         }
 
     }

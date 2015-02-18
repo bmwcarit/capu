@@ -31,6 +31,7 @@ namespace capu
             static void Print(const char_t* format, va_list values);
             static void Print(uint32_t color, const char_t* format, va_list values);
             static char_t ReadChar();
+            static void Flush();
 
         private:
 
@@ -73,6 +74,13 @@ namespace capu
         {
             char_t c = static_cast<char_t>(_getch());
             return c;
+        }
+
+        inline
+        void Console::Flush()
+        {
+            fflush(stdout);
+            fflush(stderr);
         }
 
     }

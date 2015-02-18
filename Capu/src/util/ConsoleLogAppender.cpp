@@ -38,6 +38,7 @@ namespace capu
 
         Console::Print(Console::AQUA, logMessage.getContext().getContextName().c_str());
         Console::Print(" | %s\n", logMessage.getLogMessage());
+        Console::Flush();
         m_logMutex.unlock();
     }
 }
