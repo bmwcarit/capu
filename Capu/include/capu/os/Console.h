@@ -63,12 +63,24 @@ namespace capu
          */
         static bool_t IsInputAvailable();
 
+        /**
+         * Reads a single char from stdin
+         * @return read character or -1 on error/interruption
+         */
         static char_t ReadChar();
 
         /**
          * Flush the contents of stdout and stderr.
          */
         static void Flush();
+
+        /**
+         * Interrupts a currently blocking console read (call to Console::ReadChar)
+         * Calling InterruptReadChar before or after a completed ReadChar will have no effect.
+         * Only if another call is currently in the blocking read, that will abort and give back -1.
+         * Calling InterruptReadChar from other threads than ReadChar is safe.
+         */
+        static void InterruptReadChar();
     };
 
     inline
@@ -83,6 +95,13 @@ namespace capu
     Console::ReadChar()
     {
         return capu::os::arch::Console::ReadChar();
+    }
+
+    inline
+    void
+    Console::InterruptReadChar()
+    {
+        capu::os::arch::Console::InterruptReadChar();
     }
 
     inline

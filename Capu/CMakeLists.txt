@@ -75,4 +75,5 @@ ACME_MODULE(
                             Res
                             DynamicLibrary
                             psapi
+                            Pipe
 )

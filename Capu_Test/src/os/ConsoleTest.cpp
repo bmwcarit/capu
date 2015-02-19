@@ -15,6 +15,8 @@
  */
 
 #include "ConsoleTest.h"
+#include "capu/util/Runnable.h"
+#include "capu/os/Thread.h"
 
 namespace capu
 {
@@ -45,10 +47,37 @@ namespace capu
 
     // Disabled tests can be forcefully enabled from commandline to test this
     TEST_F(ConsoleTest, DISABLED_ReadChar)
-	{
-		char_t readChar = Console::ReadChar();
-		Console::Print("I have read: %c",readChar);
-	}
+    {
+        char_t readChar = Console::ReadChar();
+        Console::Print("I have read: %c\n",readChar);
+        readChar = Console::ReadChar();
+        Console::Print("I have read: %c\n", readChar);
+        readChar = Console::ReadChar();
+        Console::Print("I have read: %c\n", readChar);
+        readChar = Console::ReadChar();
+        Console::Print("I have read: %c\n", readChar);
+        readChar = Console::ReadChar();
+        Console::Print("I have read: %c\n", readChar);
+    }
+
+    class CallInteruptAfter1Second : public Runnable
+    {
+    public:
+        virtual void run()
+        {
+            Thread::Sleep(1000);
+            Console::InterruptReadChar();
+        }
+    };
+
+    TEST_F(ConsoleTest, ReadChar_Interupt)
+    {
+        CallInteruptAfter1Second interupter;
+        Thread t;
+        t.start(interupter);
+        char_t readChar = Console::ReadChar();
+        EXPECT_EQ(-1, readChar);
+    }
 
 }
 

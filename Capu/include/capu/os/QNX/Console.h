@@ -31,6 +31,7 @@ namespace capu
             using capu::posix::Console::Print;
             using capu::posix::Console::ReadChar;
             using capu::posix::Console::Flush;
+            using capu::posix::Console::InterruptReadChar;
         };
 
     }

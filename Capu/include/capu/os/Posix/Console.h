@@ -19,6 +19,9 @@
 
 #include <stdio.h>
 #include <capu/os/Memory.h>
+#include <capu/os/Mutex.h>
+#include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <stdarg.h>
 #include <termios.h>
@@ -36,6 +39,15 @@ namespace capu
             static char_t ReadChar();
             static const char_t* Colors[];
             static void Flush();
+            static void InterruptReadChar();
+        private:
+            static int32_t GetReadEndOfPipe();
+            static int32_t GetWriteEndOfPipe();
+            static void SetReadEndOfPipe(int32_t descriptor);
+            static void SetWriteEndOfPipe(int32_t descriptor);
+
+            static int32_t pipeDescriptorsForInterruption[2];
+            static Mutex interruptMutex;
         };
 
         inline
@@ -58,7 +70,7 @@ namespace capu
         char_t
         Console::ReadChar()
         {
-            char buffer = 0;
+            char_t buffer = 0;
             struct termios oldTerminalSettings, temporaryWithoutEcho;
 
             // save previous settings
@@ -72,15 +84,86 @@ namespace capu
 
             // use new settings
             tcsetattr(fileno(stdin), TCSANOW, &temporaryWithoutEcho);
+            ssize_t bytesRead = 0;
+            interruptMutex.lock();
+            int32_t ret = ::pipe(pipeDescriptorsForInterruption);
+            interruptMutex.unlock();
+            if(0 == ret)
+            {
+                const int32_t stdinHandle = fileno(stdin);
 
-            // read the wanted char
-            ssize_t nReadSize = read(fileno(stdin), &buffer, 1);
-            UNUSED(nReadSize);
+                fd_set fdset;
+                FD_ZERO(&fdset);
+                FD_SET(GetReadEndOfPipe(), &fdset); // read end of pipe;
+                FD_SET(stdinHandle, &fdset);
+                int32_t highestFileDesciptor = GetReadEndOfPipe();
+                if (stdinHandle > highestFileDesciptor)
+                {
+                    highestFileDesciptor = stdinHandle;
+                }
+                const int_t result = select(highestFileDesciptor + 1, &fdset, NULL, NULL, NULL);
 
-            // revert temporary console settings
+                if (result > 0)
+                {
+                    if (FD_ISSET(stdinHandle, &fdset))
+                    {
+                        bytesRead = read(stdinHandle, &buffer, 1);
+                        if (bytesRead <= 0)
+                        {
+                            buffer = -1;
+                        }
+                    }
+                    if (FD_ISSET(GetReadEndOfPipe(), &fdset))
+                    {
+                        buffer = -1;
+                    }
+                }
+                interruptMutex.lock();
+                close(GetReadEndOfPipe());
+                close(GetWriteEndOfPipe());
+                SetReadEndOfPipe(-1);
+                SetWriteEndOfPipe(-1);
+                interruptMutex.unlock();
+            }
+
             tcsetattr(fileno(stdin), TCSANOW, &oldTerminalSettings);
-
             return buffer;
+        }
+
+        inline
+        int32_t Console::GetReadEndOfPipe()
+        {
+            return pipeDescriptorsForInterruption[0];
+        }
+
+        inline int32_t Console::GetWriteEndOfPipe()
+        {
+            return pipeDescriptorsForInterruption[1];
+        }
+
+        inline
+        void Console::SetReadEndOfPipe(int32_t descriptor)
+        {
+            pipeDescriptorsForInterruption[0] = descriptor;
+        }
+
+        inline
+        void Console::SetWriteEndOfPipe(int32_t descriptor)
+        {
+            pipeDescriptorsForInterruption[1] = descriptor;
+        }
+
+        inline
+        void
+        Console::InterruptReadChar()
+        {
+             interruptMutex.lock();
+             const int32_t writeEndOfPipe = GetWriteEndOfPipe();
+             if (writeEndOfPipe != -1)
+             {
+                 ::write(writeEndOfPipe,"#",1u);
+             }
+             interruptMutex.unlock();
         }
 
         inline
@@ -96,10 +179,10 @@ namespace capu
             tv.tv_usec = 0;
 
             int ret = select(STDIN_FILENO + 1, &fds, 0, 0, &tv);
-			if (-1 == ret)
-			{
-				return false;
-			}
+            if (-1 == ret)
+            {
+                return false;
+            }
 
             return FD_ISSET(STDIN_FILENO, &fds) != 0;
         }

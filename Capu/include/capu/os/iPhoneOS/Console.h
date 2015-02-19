@@ -30,6 +30,7 @@ namespace capu
             using capu::os::Console::Print;
             using capu::os::Console::ReadChar;
             using capu::os::Console::Flush;
+            using capu::os::Console::InterruptReadChar;
         };
     }
 }

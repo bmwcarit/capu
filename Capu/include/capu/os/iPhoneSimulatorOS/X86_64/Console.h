@@ -32,6 +32,7 @@ namespace capu
                 using capu::iphoneos::Console::Print;
                 using capu::iphoneos::Console::ReadChar;
                 using capu::iphoneos::Console::Flush;
+                using capu::iphoneos::Console::InterruptReadChar;
             };
         }
     }
