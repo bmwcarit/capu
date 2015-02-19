@@ -42,7 +42,7 @@ namespace capu
          *
          * The runnable can (should) test this flag periodically in its run method.
          */
-        void cancel()
+        virtual void cancel()
         {
             mCancel = true;
         }
