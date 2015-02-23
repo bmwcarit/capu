@@ -32,15 +32,15 @@ namespace capu
             static bool_t IsInputAvailable();
             static void Print(const char_t* format, va_list values);
             static void Print(uint32_t color, const char_t* format, va_list values);
-            static char_t ReadChar();
+            static status_t ReadChar(char_t& buffer);
             static void Flush();
             static void InterruptReadChar();
 
         private:
-            static char_t ReadOneCharacter(HANDLE fileHandle);
-            static bool_t IsKeyboardEventAvailable(HANDLE);
+            static void InitializeInterruptEvent();
+            static status_t ReadOneCharacter(HANDLE fileHandle, char_t& buffer);
             static void SetEventHandle(HANDLE eventHandle);
-            static HANDLE GetEventHandle();
+            static HANDLE GetInterruptEventHandle();
 
             static HANDLE m_event;
             static const uint8_t Colors[];
@@ -56,8 +56,8 @@ namespace capu
             {
                 case FILE_TYPE_CHAR:
                 {
-            return _kbhit() != 0;
-        }
+                    return _kbhit() != 0;
+                }
                 case FILE_TYPE_DISK:
                 case FILE_TYPE_PIPE:
                 {
@@ -92,13 +92,13 @@ namespace capu
         }
 
         inline
-        char_t Console::ReadChar()
+        status_t Console::ReadChar(char_t& buffer)
         {
             const HANDLE fileHandle = GetStdHandle(STD_INPUT_HANDLE);
             interruptMutex.lock();
-            HANDLE eventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
-            SetEventHandle(eventHandle);
+            InitializeInterruptEvent();
             interruptMutex.unlock();
+
             DWORD previousConsoleMode;
 
             const DWORD inputType = GetFileType(fileHandle);
@@ -108,41 +108,88 @@ namespace capu
                 SetConsoleMode(fileHandle, previousConsoleMode & ~(ENABLE_LINE_INPUT | ENABLE_MOUSE_INPUT));
             };
 
-            HANDLE ObjectVector[2];
-            ObjectVector[0] = (fileHandle);
-            ObjectVector[1] = (eventHandle);
-            DWORD nObjects = static_cast<DWORD>(2);
-            char_t buffer = -1;
-            bool_t interrupted = false;
-            while (buffer == -1 && !interrupted)
+            const int_t STDIN_INDEX = 0;
+            const int_t INTERRUPT_EVENT_INDEX = 1;
+
+            HANDLE handles[2];
+            handles[STDIN_INDEX] = fileHandle;
+            handles[INTERRUPT_EVENT_INDEX] = GetInterruptEventHandle();
+            const DWORD numberOfObjectsToWaitOn = 2;
+
+            status_t status = CAPU_OK;
+            bool_t haveReadCharacter = false;
+            while (CAPU_OK == status && !haveReadCharacter)
             {
-                DWORD ret = WaitForMultipleObjects(nObjects, &ObjectVector[0], 0, INFINITE);
-                if (ret == WAIT_OBJECT_0 + 1)
+                const DWORD ret = WaitForMultipleObjects(numberOfObjectsToWaitOn, handles, false, INFINITE);
+                if (ret == WAIT_OBJECT_0 + INTERRUPT_EVENT_INDEX)
                 {
-                    // interrupted
-                    interrupted = true;
+                    status = CAPU_INTERRUPTED;
                 }
-                else if (ret == WAIT_OBJECT_0 + 0)
+                else if (ret == WAIT_OBJECT_0 + STDIN_INDEX)
                 {
                     if (inputType == FILE_TYPE_CHAR)
                     {
-                        bool_t shouldRead = IsKeyboardEventAvailable(fileHandle);
-                        if (shouldRead)
+                        const uint32_t numberOfInputEventsToRead = 1u;
+                        DWORD numberOfReadEvents = 0;
+                        INPUT_RECORD inputRecord;
+                        ZeroMemory(&inputRecord, sizeof(INPUT_RECORD));
+                        const BOOL peekStatus = PeekConsoleInput(fileHandle, &inputRecord, numberOfInputEventsToRead, &numberOfReadEvents);
+                        if (peekStatus)
                         {
-                            buffer = ReadOneCharacter(fileHandle);
+                            if (numberOfReadEvents > 0)
+                            {
+                                if (inputRecord.EventType == KEY_EVENT && inputRecord.Event.KeyEvent.bKeyDown)
+                                {
+                                    // next available event is keyboard event
+                                    status = ReadOneCharacter(fileHandle, buffer);
+                                    if (CAPU_OK == status)
+                                    {
+                                        haveReadCharacter = true;
+                                    }
+                                }
+                                else
+                                {
+                                    // prune non keyboard event
+                                    ReadConsoleInput(fileHandle, &inputRecord, numberOfInputEventsToRead, &numberOfReadEvents);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            const DWORD error = GetLastError();
+                            if (ERROR_INVALID_HANDLE == error)
+                            {
+                                status = CAPU_EOF;
+                            }
+                            else
+                            {
+                                status = CAPU_ERROR;
+                            }
                         }
                     }
                     else if (inputType == FILE_TYPE_PIPE || inputType == FILE_TYPE_DISK)
                     {
-                        buffer = ReadOneCharacter(fileHandle);
+                        status = ReadOneCharacter(fileHandle, buffer);
+                        if (CAPU_OK == status)
+                        {
+                            haveReadCharacter = true;
+                        }
+                    }
+                }
+                else if (ret == WAIT_FAILED)
+                {
+                    const DWORD error = GetLastError();
+                    if (ERROR_INVALID_HANDLE == error)
+                    {
+                        status = CAPU_EOF;
+                    }
+                    else
+                    {
+                        status = CAPU_ERROR;
                     }
                 }
             }
-            interruptMutex.lock();
-            CloseHandle(eventHandle);
-            SetEventHandle(INVALID_HANDLE_VALUE);
-            interruptMutex.unlock();
-            return buffer;
+            return status;
         }
 
         inline
@@ -156,11 +203,8 @@ namespace capu
         void Console::InterruptReadChar()
         {
             interruptMutex.lock();
-            HANDLE eventHandle = GetEventHandle();
-            if (eventHandle != INVALID_HANDLE_VALUE)
-            {
-                SetEvent(eventHandle);
-            }
+            InitializeInterruptEvent();
+            SetEvent(GetInterruptEventHandle());
             interruptMutex.unlock();
         }
     }

@@ -47,7 +47,8 @@ namespace capu
         CAPU_ENOT_EXIST = 13,
         CAPU_ENOT_SUPPORTED = 14,
         CAPU_EIO = 15,
-        CAPU_EOF = 16
+        CAPU_EOF = 16,
+        CAPU_INTERRUPTED = 17
     };
 }
 #endif //CAPU_ERROR_H

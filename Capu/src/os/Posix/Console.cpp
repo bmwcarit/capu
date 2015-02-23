@@ -13,7 +13,7 @@ namespace capu
             "\e[1;36m", // AQUA
         };
 
-        int32_t Console::pipeDescriptorsForInterruption[2];
+        int32_t Console::pipeDescriptorsForInterruption[2] = {-1,-1};
         Mutex Console::interruptMutex;
     }
 }

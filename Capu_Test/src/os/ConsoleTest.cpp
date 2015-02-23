@@ -39,7 +39,6 @@ namespace capu
     }
 
     // Console must be tested manually
-
     TEST_F(ConsoleTest, DISABLED_CheckForInput)
     {
         EXPECT_FALSE(Console::IsInputAvailable());
@@ -48,16 +47,31 @@ namespace capu
     // Disabled tests can be forcefully enabled from commandline to test this
     TEST_F(ConsoleTest, DISABLED_ReadChar)
     {
-        char_t readChar = Console::ReadChar();
+        char_t readChar = '\0';
+        status_t status = Console::ReadChar(readChar);
         Console::Print("I have read: %c\n",readChar);
-        readChar = Console::ReadChar();
+        EXPECT_EQ(CAPU_OK, status);
+        status = Console::ReadChar(readChar);
         Console::Print("I have read: %c\n", readChar);
-        readChar = Console::ReadChar();
+        EXPECT_EQ(CAPU_OK, status);
+        status = Console::ReadChar(readChar);
         Console::Print("I have read: %c\n", readChar);
-        readChar = Console::ReadChar();
+        EXPECT_EQ(CAPU_OK, status);
+        status = Console::ReadChar(readChar);
         Console::Print("I have read: %c\n", readChar);
-        readChar = Console::ReadChar();
+        EXPECT_EQ(CAPU_OK, status);
+        status = Console::ReadChar(readChar);
         Console::Print("I have read: %c\n", readChar);
+        EXPECT_EQ(CAPU_OK, status);
+    }
+
+    // Disabled tests can be forcefully enabled from commandline to test this
+    TEST_F(ConsoleTest, DISABLED_ReadCharFromPreviouslyClosedStdin)
+    {
+            fclose(stdin);
+            char_t buffer;
+            status_t status = Console::ReadChar(buffer);
+            EXPECT_NE(CAPU_OK, status);
     }
 
     class CallInteruptAfter1Second : public Runnable
@@ -70,13 +84,15 @@ namespace capu
         }
     };
 
-    TEST_F(ConsoleTest, ReadChar_Interupt)
+    // Disabled tests can be forcefully enabled from commandline to test this
+    TEST_F(ConsoleTest, DISABLED_ReadChar_Interupt)
     {
         CallInteruptAfter1Second interupter;
         Thread t;
         t.start(interupter);
-        char_t readChar = Console::ReadChar();
-        EXPECT_EQ(-1, readChar);
+        char_t buffer;
+        status_t status = Console::ReadChar(buffer);
+        EXPECT_EQ(CAPU_INTERRUPTED, status);
     }
 
 }

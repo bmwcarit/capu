@@ -65,9 +65,13 @@ namespace capu
 
         /**
          * Reads a single char from stdin
-         * @return read character or -1 on error/interruption
+         * @param buffer on success a character is read into provided variable
+         * @return CAPU_OK on success,
+         *         CAPU_INTERRUPT on interrupt,
+         *         CAPU_EOF if stdin is closed,
+         *         CAPU_ERROR when other errors ocurred
          */
-        static char_t ReadChar();
+        static status_t ReadChar(char_t& buffer);
 
         /**
          * Flush the contents of stdout and stderr.
@@ -75,9 +79,10 @@ namespace capu
         static void Flush();
 
         /**
-         * Interrupts a currently blocking console read (call to Console::ReadChar)
-         * Calling InterruptReadChar before or after a completed ReadChar will have no effect.
-         * Only if another call is currently in the blocking read, that will abort and give back -1.
+         * Interrupts a console read (call to Console::ReadChar)
+         *
+         * Calling InterruptReadChar before ReadChar will cause the next call to ReadChar not to block.
+         * If another call is currently in the blocking read, that will abort and give back -1.
          * Calling InterruptReadChar from other threads than ReadChar is safe.
          */
         static void InterruptReadChar();
@@ -91,10 +96,10 @@ namespace capu
     }
 
     inline
-    char_t
-    Console::ReadChar()
+    status_t
+    Console::ReadChar(char_t& buffer)
     {
-        return capu::os::arch::Console::ReadChar();
+        return capu::os::arch::Console::ReadChar(buffer);
     }
 
     inline

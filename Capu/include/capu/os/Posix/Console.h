@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <termios.h>
+#include <errno.h>
 
 namespace capu
 {
@@ -36,7 +37,7 @@ namespace capu
             static bool_t IsInputAvailable();
             static void Print(const char_t* format, va_list values);
             static void Print(uint32_t color, const char_t* format, va_list values);
-            static char_t ReadChar();
+            static status_t ReadChar(char_t& buffer);
             static const char_t* Colors[];
             static void Flush();
             static void InterruptReadChar();
@@ -45,10 +46,23 @@ namespace capu
             static int32_t GetWriteEndOfPipe();
             static void SetReadEndOfPipe(int32_t descriptor);
             static void SetWriteEndOfPipe(int32_t descriptor);
+            static int32_t initializePipe();
 
             static int32_t pipeDescriptorsForInterruption[2];
             static Mutex interruptMutex;
         };
+
+        inline
+        int32_t Console::initializePipe()
+        {
+            const int32_t writeEndOfPipe = GetWriteEndOfPipe();
+            if (writeEndOfPipe == -1)
+            {
+                int32_t ret = ::pipe(pipeDescriptorsForInterruption);
+                return ret;
+            }
+            return 0;
+        }
 
         inline
         void
@@ -67,14 +81,22 @@ namespace capu
         }
 
         inline
-        char_t
-        Console::ReadChar()
+        status_t Console::ReadChar(char_t& buffer)
         {
-            char_t buffer = 0;
             struct termios oldTerminalSettings, temporaryWithoutEcho;
 
             // save previous settings
-            tcgetattr(fileno(stdin), &oldTerminalSettings);
+            if (0 != tcgetattr(fileno(stdin), &oldTerminalSettings))
+            {
+                if (errno == EBADF)
+                {
+                    return CAPU_EOF;
+                }
+                else
+                {
+                    return CAPU_ERROR;
+                }
+            }
 
             // create new settings on top of previous settings
             Memory::Copy(&temporaryWithoutEcho, &oldTerminalSettings, sizeof(struct termios));
@@ -86,48 +108,71 @@ namespace capu
             tcsetattr(fileno(stdin), TCSANOW, &temporaryWithoutEcho);
             ssize_t bytesRead = 0;
             interruptMutex.lock();
-            int32_t ret = ::pipe(pipeDescriptorsForInterruption);
+            const int32_t ret = initializePipe();
             interruptMutex.unlock();
+            status_t status = CAPU_OK;
             if(0 == ret)
             {
                 const int32_t stdinHandle = fileno(stdin);
-
-                fd_set fdset;
-                FD_ZERO(&fdset);
-                FD_SET(GetReadEndOfPipe(), &fdset); // read end of pipe;
-                FD_SET(stdinHandle, &fdset);
-                int32_t highestFileDesciptor = GetReadEndOfPipe();
-                if (stdinHandle > highestFileDesciptor)
+                if (-1 == stdinHandle)
                 {
-                    highestFileDesciptor = stdinHandle;
+                    return CAPU_ERROR;
                 }
-                const int_t result = select(highestFileDesciptor + 1, &fdset, NULL, NULL, NULL);
-
-                if (result > 0)
-                {
-                    if (FD_ISSET(stdinHandle, &fdset))
+                bool_t hasReadCharacter = false;
+                while (status == CAPU_OK && !hasReadCharacter) {
+                    fd_set fdset;
+                    FD_ZERO(&fdset);
+                    FD_SET(GetReadEndOfPipe(), &fdset); // read end of pipe;
+                    FD_SET(stdinHandle, &fdset);
+                    int32_t highestFileDesciptor = GetReadEndOfPipe();
+                    if (stdinHandle > highestFileDesciptor)
                     {
-                        bytesRead = read(stdinHandle, &buffer, 1);
-                        if (bytesRead <= 0)
+                        highestFileDesciptor = stdinHandle;
+                    }
+                    const int_t result = select(highestFileDesciptor + 1, &fdset, NULL, NULL, NULL);
+                    if (result > 0)
+                    {
+                        if (FD_ISSET(stdinHandle, &fdset))
                         {
-                            buffer = -1;
+                            char_t readBuffer;
+                            bytesRead = read(stdinHandle, &readBuffer, 1);
+                            if (bytesRead <= 0)
+                            {
+                                status = CAPU_ERROR;
+                            }
+                            else
+                            {
+                                buffer = readBuffer;
+                                hasReadCharacter = true;
+                            }
+                        }
+                        if (FD_ISSET(GetReadEndOfPipe(), &fdset))
+                        {
+                            // explicit user interrupt
+                            status = CAPU_INTERRUPTED;
+                            char_t readBuffer;
+                            const int32_t readStatus = read(GetReadEndOfPipe(), &readBuffer, 1);
+                            UNUSED(readStatus);
                         }
                     }
-                    if (FD_ISSET(GetReadEndOfPipe(), &fdset))
+                    else
                     {
-                        buffer = -1;
+                        status = CAPU_ERROR;
+                        if (-1 == result && errno == EINTR)
+                        {
+                            // read another time, if it was only a signal interrupt
+                            status = CAPU_OK;
+                        }
                     }
-                }
-                interruptMutex.lock();
-                close(GetReadEndOfPipe());
-                close(GetWriteEndOfPipe());
-                SetReadEndOfPipe(-1);
-                SetWriteEndOfPipe(-1);
-                interruptMutex.unlock();
+                };
+            }
+            else
+            {
+                status = CAPU_ERROR;
             }
 
             tcsetattr(fileno(stdin), TCSANOW, &oldTerminalSettings);
-            return buffer;
+            return status;
         }
 
         inline
@@ -157,13 +202,15 @@ namespace capu
         void
         Console::InterruptReadChar()
         {
-             interruptMutex.lock();
-             const int32_t writeEndOfPipe = GetWriteEndOfPipe();
-             if (writeEndOfPipe != -1)
-             {
-                 ::write(writeEndOfPipe,"#",1u);
-             }
-             interruptMutex.unlock();
+            interruptMutex.lock();
+            const int32_t ret = initializePipe();
+            if (0 == ret)
+            {
+                const int32_t writeEndOfPipe = GetWriteEndOfPipe();
+                ssize_t result = ::write(writeEndOfPipe,"#",1u);
+                UNUSED(result);
+            }
+            interruptMutex.unlock();
         }
 
         inline
