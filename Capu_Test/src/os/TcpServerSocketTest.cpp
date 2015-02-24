@@ -20,17 +20,6 @@
 #include "capu/os/Time.h"
 #include "capu/os/Math.h"
 
-class RandomPort
-{
-public:
-    /**
-     * Gets a Random Port between 1024 and 10024
-     */
-    static capu::uint16_t get()
-    {
-        return (rand() % 10000) + 20000; // 0-1023 = Well Known, 1024-49151 = User, 49152 - 65535 = Dynamic
-    }
-};
 
 TEST(TcpServerSocket, CloseTest)
 {
@@ -44,25 +33,18 @@ TEST(TcpServerSocket, CloseTest)
 
 TEST(TcpServerSocket, BindTest)
 {
-    capu::uint16_t port = RandomPort::get();
     capu::TcpServerSocket* socket = new capu::TcpServerSocket();
     //try to bind on port 0
     EXPECT_EQ(capu::CAPU_OK, socket->bind(0, "0.0.0.0"));
 
     //call bind twice
-    EXPECT_EQ(capu::CAPU_ERROR, socket->bind(port, "127.0.0.1"));
+    EXPECT_EQ(capu::CAPU_ERROR, socket->bind(0, "127.0.0.1"));
 
-    delete socket;
-    capu::uint16_t port2 = RandomPort::get() + 10000;
-    socket = new capu::TcpServerSocket();
-    //try to bind 5 digit port
-    EXPECT_EQ(capu::CAPU_OK, socket->bind(port2, "0.0.0.0"));
-    EXPECT_EQ(capu::CAPU_OK, socket->close());
     delete socket;
 
     socket = new capu::TcpServerSocket();
     //expect true if address is wrong
-    EXPECT_EQ(capu::CAPU_SOCKET_EADDR, socket->bind(port, "0.0.0.600"));
+    EXPECT_EQ(capu::CAPU_SOCKET_EADDR, socket->bind(0, "0.0.0.600"));
     EXPECT_EQ(capu::CAPU_OK, socket->close());
     //deallocate socket
     delete socket;
@@ -70,26 +52,24 @@ TEST(TcpServerSocket, BindTest)
 
 TEST(TcpServerSocket, ListenTest)
 {
-    capu::uint16_t port = RandomPort::get();
     capu::TcpServerSocket* socket = new capu::TcpServerSocket();
 
     //try to start listening on a unbound socket
     EXPECT_EQ(capu::CAPU_EINVAL, socket->listen(3));
 
     //faulty bind and listen
-    EXPECT_EQ(capu::CAPU_SOCKET_EADDR, socket->bind(port, "0.0.0.2564"));
+    EXPECT_EQ(capu::CAPU_SOCKET_EADDR, socket->bind(0, "0.0.0.2564"));
     EXPECT_EQ(capu::CAPU_EINVAL, socket->listen(3));
     //bind and listen in a correct way
-    EXPECT_EQ(capu::CAPU_OK, socket->bind(port, "0.0.0.0"));
+    EXPECT_EQ(capu::CAPU_OK, socket->bind(0, "0.0.0.0"));
     EXPECT_EQ(capu::CAPU_OK, socket->listen(3));
     delete socket;
 }
 
 TEST(TcpServerSocket, AcceptTimeoutTest)
 {
-    capu::uint16_t port = RandomPort::get();
     capu::TcpServerSocket socket;
-    EXPECT_EQ(capu::CAPU_OK, socket.bind(port, "0.0.0.0"));
+    EXPECT_EQ(capu::CAPU_OK, socket.bind(0, "0.0.0.0"));
     EXPECT_EQ(capu::CAPU_OK, socket.listen(3));
     capu::uint32_t timeout = 1500;
     capu::uint64_t start = capu::Time::GetMilliseconds();
@@ -97,7 +77,7 @@ TEST(TcpServerSocket, AcceptTimeoutTest)
     capu::uint64_t dur = capu::Time::GetMilliseconds() - start;
 
     capu::uint64_t diff = dur - timeout;
-    EXPECT_GE(100, capu::Math::Abs(static_cast<capu::int_t>(diff)));
+    EXPECT_GE(1000, capu::Math::Abs(static_cast<capu::int_t>(diff)));
 }
 
 TEST(TcpServerSocket, FreePortTest)

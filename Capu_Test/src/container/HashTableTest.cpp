@@ -363,7 +363,8 @@ TEST_F(HashTableTest, operator_subscript_assign)
 
     /* Objects */
     MyStruct structKey;
-    structKey.a =  1;
+    capu::Memory::Set(&structKey, 0, sizeof(structKey)); // make valgrind happy
+    structKey.a = 1;
     MyStruct structValue;
     structValue.a = 13;
     MyStruct structReturn;

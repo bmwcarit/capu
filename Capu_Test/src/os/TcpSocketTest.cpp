@@ -265,6 +265,7 @@ public:
 
         testCloseSocketOnASocketWherePreviousSendTimedOut(status);
 
+        delete[] data;
     }
 };
 
@@ -612,7 +613,7 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
 
     delete socket;
     delete serverSocket;
-    delete remoteIP;
+    delete[] remoteIP;
 }
 
 TEST(SocketAndTcpServerSocket, CommunicationTest)

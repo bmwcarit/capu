@@ -196,7 +196,7 @@ namespace capu
 
         EXPECT_STREQ("Another test string", buffer);
 
-        delete buffer;
+        delete[] buffer;
     }
 
     TEST_F(BinaryOutputStreamTest, InsertString)
@@ -214,7 +214,7 @@ namespace capu
 
         EXPECT_STREQ("Hello World with a lot of characters", buffer);
 
-        delete buffer;
+        delete[] buffer;
     }
 }
 

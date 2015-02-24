@@ -91,7 +91,7 @@ namespace capu
 
     TEST_F(HashTest, request32BitHashValueIn64BitType)
     {
-        char_t dataToHash[128];
+        char_t dataToHash[128] = {1};
 
         uint64_t hashValue = HashCalculator<uint64_t>::Hash(dataToHash, 128, 32);
         uint64_t zeroMap = 0xffffffffffffffffull << 32;
@@ -102,7 +102,7 @@ namespace capu
 
     TEST_F(HashTest, request63BitHashValue)
     {
-        char_t dataToHash[128];
+        char_t dataToHash[128] = {1};
 
         uint64_t hashValue = HashCalculator<uint64_t>::Hash(dataToHash, 128, 63);
         uint64_t zeroMap = 0xffffffffffffffffull << 63;
