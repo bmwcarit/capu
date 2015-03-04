@@ -92,10 +92,6 @@ namespace capu
                 {
                     return CAPU_EOF;
                 }
-                else
-                {
-                    return CAPU_ERROR;
-                }
             }
 
             // create new settings on top of previous settings
