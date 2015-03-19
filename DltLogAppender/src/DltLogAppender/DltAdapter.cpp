@@ -101,7 +101,9 @@ namespace capu
             return;
         }
 
-        DltLogLevelType ll=DLT_LOG_DEFAULT;
+        //DLT_LOG_OFF indicates that message is not logged
+        //DLT_LOG_DEFAULT is unused here
+        DltLogLevelType ll=DLT_LOG_OFF;
         switch(msg.getLogLevel())
         {
             case LL_TRACE:
@@ -124,8 +126,13 @@ namespace capu
                 ll = DLT_LOG_FATAL;
                 break;
             default:
-                //default level is already set
+                //LL_OFF remains -> DLT_LOG_OFF is already set above
                 break;
+        }
+
+        if(ll == DLT_LOG_OFF)
+        {
+            return; // no need to continue
         }
 
         if(dltContext)
