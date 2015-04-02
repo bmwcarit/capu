@@ -3,7 +3,7 @@
 find_package(PkgConfig QUIET)
 
 IF(PKG_CONFIG_FOUND)
-    pkg_check_modules(automotive-dlt automotive-dlt)
+    pkg_check_modules(automotive-dlt automotive-dlt QUIET)
     IF(${automotive-dlt_FOUND})
         SET(automotive-dlt_BUILD_CONFIG 1)
     ELSE()
