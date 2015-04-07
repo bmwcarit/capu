@@ -79,6 +79,20 @@ INSTALL(
 )
 ACME_INFO("G Capu.pc")
 
+#==============================================================================
+# generate and install CMake Version file
+#==============================================================================
+
+CONFIGURE_FILE(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/CapuConfigVersion.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/CapuConfigVersion.cmake"
+    @ONLY
+)
+INSTALL(
+    FILES       ${CMAKE_CURRENT_BINARY_DIR}/CapuConfigVersion.cmake
+    DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
+)
+ACME_INFO("G CapuBuildConfig.cmake")
 
 #==============================================================================
 # generate and install CMake Find Module file
