@@ -335,7 +335,7 @@ namespace capu
     inline String::String(const char_t* data, const uint_t start, const uint_t end)
         : m_data(0), m_size(0)
     {
-        initFromGivenData(data, start, end, StringUtils::Strlen(data));
+        initFromGivenData(data, start, end, StringUtils::Strnlen(data, end + 1));
     }
 
     inline String::String(const String& other)
