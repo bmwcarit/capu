@@ -345,6 +345,15 @@ TEST(String, TestSubStringCTor6)
     EXPECT_EQ(5u, str.getLength());
 }
 
+TEST(String, TestSubStringCTorWithoutNullTermintor)
+{
+    const char someData[] = { '1', '2', '3', '4' };
+    capu::String str(someData, 0, 2);
+
+    EXPECT_EQ(3u, str.getLength());
+    EXPECT_STREQ("123", str.c_str());
+}
+
 TEST(String, AccessOperator)
 {
     capu::String str("abc");

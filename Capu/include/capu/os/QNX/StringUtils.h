@@ -17,6 +17,25 @@
 #ifndef CAPU_QNX_STRINGUTILS_H
 #define CAPU_QNX_STRINGUTILS_H
 
+#include <stddef.h>
+
+inline
+size_t strnlen(const char* str, size_t maxlen)
+{
+    if (str == 0)
+    {
+        return 0;
+    }
+
+    size_t currentPosition = 0;
+    while( (currentPosition < maxlen) && (str[currentPosition] != '\0') )
+    {
+        ++currentPosition;
+    }
+    // currentPosition is now either the first null terminator or maxlen
+    return currentPosition;
+}
+
 #include <capu/os/Posix/StringUtils.h>
 
 namespace capu
@@ -27,6 +46,7 @@ namespace capu
         {
         public:
             using capu::posix::StringUtils::Strncpy;
+            using capu::posix::StringUtils::Strnlen;
             using capu::posix::StringUtils::Sprintf;
             using capu::posix::StringUtils::Vsprintf;
             using capu::posix::StringUtils::Vscprintf;

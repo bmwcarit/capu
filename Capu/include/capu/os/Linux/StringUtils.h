@@ -27,6 +27,7 @@ namespace capu
         {
         public:
             using capu::posix::StringUtils::Strncpy;
+            using capu::posix::StringUtils::Strnlen;
             using capu::posix::StringUtils::Sprintf;
             using capu::posix::StringUtils::Vsprintf;
             using capu::posix::StringUtils::Vscprintf;

@@ -76,6 +76,14 @@ namespace capu
         static uint_t Strlen(const char_t* str);
 
         /**
+        * Static method to return the length of the given String
+        * @param str the string
+        * @param maxlen maximum number of characters to search for null terminator
+        * @return length of the string
+        */
+        static uint_t Strnlen(const char_t* str, uint_t maxlen);
+
+        /**
          * Static method to compare two C strings.
          * @param str1 first string
          * @param str2 second string
@@ -157,6 +165,13 @@ namespace capu
     StringUtils::Strlen(const char_t* str)
     {
         return capu::os::arch::StringUtils::Strlen(str);
+    }
+
+    inline
+    uint_t
+    StringUtils::Strnlen(const char_t* str, uint_t maxlen)
+    {
+        return capu::os::arch::StringUtils::Strnlen(str, maxlen);
     }
 
     inline

@@ -61,6 +61,24 @@ TEST(StringUtils, Strlen2)
     EXPECT_EQ(static_cast<capu::uint_t>(0),  capu::StringUtils::Strlen(0));
 }
 
+TEST(StringUtils, Strnlen_n_smaller_than_length)
+{
+    capu::char_t string1[5] = "abcd";
+    EXPECT_EQ(2u, capu::StringUtils::Strnlen(string1,2));
+}
+
+TEST(StringUtils, Strnlen_n_larger_than_length)
+{
+    capu::char_t string1[5] = "abcd";
+    EXPECT_EQ(4u, capu::StringUtils::Strnlen(string1, 123));
+}
+
+TEST(StringUtils, Strnlen_emptyString)
+{
+    capu::char_t string1[1] = "";
+    EXPECT_EQ(0u, capu::StringUtils::Strnlen(string1, 123));
+}
+
 TEST(StringUtils, Sprintf)
 {
     capu::char_t string1[20];

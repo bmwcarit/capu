@@ -30,6 +30,7 @@ namespace capu
         {
         public:
             static void Strncpy(char_t* dst, const uint_t dstSize, const char_t* src);
+            static uint_t Strnlen(const char_t* dst, uint_t maxlen);
             static int32_t Sprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, ...);
             static int32_t Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values);
             static int32_t Vscprintf(const char_t* format, va_list values);
@@ -58,6 +59,17 @@ namespace capu
                 return 0;
             }
             return strlen(str);
+        }
+
+        inline
+        uint_t
+        StringUtils::Strnlen(const char_t* str, uint_t maxlen)
+        {
+            if (str == 0)
+            {
+                return 0;
+            }
+            return strnlen_s(str, maxlen);
         }
 
         inline

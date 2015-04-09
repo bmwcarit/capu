@@ -29,6 +29,7 @@ namespace capu
             {
             public:
                 using capu::iphoneos::StringUtils::Strncpy;
+                using capu::iphoneos::StringUtils::Strnlen;
                 using capu::iphoneos::StringUtils::Sprintf;
                 using capu::iphoneos::StringUtils::Vsprintf;
                 using capu::iphoneos::StringUtils::Vscprintf;
