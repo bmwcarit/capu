@@ -133,12 +133,12 @@ namespace capu
         bool_t operator!=(const String& other) const;
 
         /**
-         * Return if this string is smaller than another
+         * Return if this string is lexicographically ordered before other
          */
         bool_t operator<(const String& other) const;
 
         /**
-         * Return if this string is greater than another
+         * Return if this string is lexicographically ordered after other
          */
         bool_t operator>(const String& other) const;
 
