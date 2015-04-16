@@ -120,54 +120,12 @@ namespace capu
             bool_t haveReadCharacter = false;
             while (CAPU_OK == status && !haveReadCharacter)
             {
-                const DWORD ret = WaitForMultipleObjects(numberOfObjectsToWaitOn, handles, false, INFINITE);
-                if (ret == WAIT_OBJECT_0 + INTERRUPT_EVENT_INDEX)
+                if (inputType == FILE_TYPE_PIPE)
                 {
-                    status = CAPU_INTERRUPTED;
-                }
-                else if (ret == WAIT_OBJECT_0 + STDIN_INDEX)
-                {
-                    if (inputType == FILE_TYPE_CHAR)
-                    {
-                        const uint32_t numberOfInputEventsToRead = 1u;
-                        DWORD numberOfReadEvents = 0;
-                        INPUT_RECORD inputRecord;
-                        ZeroMemory(&inputRecord, sizeof(INPUT_RECORD));
-                        const BOOL peekStatus = PeekConsoleInput(fileHandle, &inputRecord, numberOfInputEventsToRead, &numberOfReadEvents);
-                        if (peekStatus)
-                        {
-                            if (numberOfReadEvents > 0)
-                            {
-                                if (inputRecord.EventType == KEY_EVENT && inputRecord.Event.KeyEvent.bKeyDown)
-                                {
-                                    // next available event is keyboard event
-                                    status = ReadOneCharacter(fileHandle, buffer);
-                                    if (CAPU_OK == status)
-                                    {
-                                        haveReadCharacter = true;
-                                    }
-                                }
-                                else
-                                {
-                                    // prune non keyboard event
-                                    ReadConsoleInput(fileHandle, &inputRecord, numberOfInputEventsToRead, &numberOfReadEvents);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            const DWORD error = GetLastError();
-                            if (ERROR_INVALID_HANDLE == error)
-                            {
-                                status = CAPU_EOF;
-                            }
-                            else
-                            {
-                                status = CAPU_ERROR;
-                            }
-                        }
-                    }
-                    else if (inputType == FILE_TYPE_PIPE || inputType == FILE_TYPE_DISK)
+                    // pipe is not handleable by WaitForMultipleObjects, must be handled separately
+                    DWORD bytesAvailable = 0;
+                    DWORD peekStat = PeekNamedPipe(fileHandle, NULL, 0, NULL, &bytesAvailable, NULL);
+                    if (peekStat != 0 && bytesAvailable > 0)
                     {
                         status = ReadOneCharacter(fileHandle, buffer);
                         if (CAPU_OK == status)
@@ -175,17 +133,84 @@ namespace capu
                             haveReadCharacter = true;
                         }
                     }
-                }
-                else if (ret == WAIT_FAILED)
-                {
-                    const DWORD error = GetLastError();
-                    if (ERROR_INVALID_HANDLE == error)
-                    {
-                        status = CAPU_EOF;
-                    }
                     else
                     {
-                        status = CAPU_ERROR;
+                        const DWORD ret = WaitForSingleObject(GetInterruptEventHandle(), 500);
+                        if (ret == WAIT_OBJECT_0)
+                        {
+                            status = CAPU_INTERRUPTED;
+                        }
+                    }
+                }
+                else
+                {
+                    const DWORD ret = WaitForMultipleObjects(numberOfObjectsToWaitOn, handles, false, INFINITE);
+                    if (ret == WAIT_OBJECT_0 + INTERRUPT_EVENT_INDEX)
+                    {
+                        status = CAPU_INTERRUPTED;
+                    }
+                    else if (ret == WAIT_OBJECT_0 + STDIN_INDEX)
+                    {
+                        if (inputType == FILE_TYPE_CHAR)
+                        {
+                            const uint32_t numberOfInputEventsToRead = 1u;
+                            DWORD numberOfReadEvents = 0;
+                            INPUT_RECORD inputRecord;
+                            ZeroMemory(&inputRecord, sizeof(INPUT_RECORD));
+                            const BOOL peekStatus = PeekConsoleInput(fileHandle, &inputRecord, numberOfInputEventsToRead, &numberOfReadEvents);
+                            if (peekStatus)
+                            {
+                                if (numberOfReadEvents > 0)
+                                {
+                                    if (inputRecord.EventType == KEY_EVENT && inputRecord.Event.KeyEvent.bKeyDown)
+                                    {
+                                        // next available event is keyboard event
+                                        status = ReadOneCharacter(fileHandle, buffer);
+                                        if (CAPU_OK == status)
+                                        {
+                                            haveReadCharacter = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // prune non keyboard event
+                                        ReadConsoleInput(fileHandle, &inputRecord, numberOfInputEventsToRead, &numberOfReadEvents);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                const DWORD error = GetLastError();
+                                if (ERROR_INVALID_HANDLE == error)
+                                {
+                                    status = CAPU_EOF;
+                                }
+                                else
+                                {
+                                    status = CAPU_ERROR;
+                                }
+                            }
+                        }
+                        else if (inputType == FILE_TYPE_DISK)
+                        {
+                            status = ReadOneCharacter(fileHandle, buffer);
+                            if (CAPU_OK == status)
+                            {
+                                haveReadCharacter = true;
+                            }
+                        }
+                    }
+                    else if (ret == WAIT_FAILED)
+                    {
+                        const DWORD error = GetLastError();
+                        if (ERROR_INVALID_HANDLE == error)
+                        {
+                            status = CAPU_EOF;
+                        }
+                        else
+                        {
+                            status = CAPU_ERROR;
+                        }
                     }
                 }
             }
