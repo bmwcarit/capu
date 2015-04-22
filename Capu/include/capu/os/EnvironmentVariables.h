@@ -23,7 +23,7 @@
 #include "capu/container/HashTable.h"
 
 #ifndef environ
-extern char** environ;
+extern "C" char** environ;
 #endif
 
 namespace capu

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include <gtest/gtest.h>
 #include "capu/os/EnvironmentVariables.h"
+#include <gtest/gtest.h>
 
 TEST(EnvironmentVariables, getAllTest)
 {
