@@ -32,13 +32,11 @@
 
 #define capu_foreach(IteratableType, Iteratable, Iter)\
     IteratableType::Iterator Iter = (Iteratable).begin();\
-    const IteratableType::Iterator end = (Iteratable).end();\
-    for(; Iter != end; ++Iter)
+    for(const IteratableType::Iterator end = (Iteratable).end(); Iter != end; ++Iter)
 
 #define capu_const_foreach(IteratableType, Iteratable, Iter)\
     IteratableType::ConstIterator Iter = (Iteratable).begin(); \
-    const IteratableType::ConstIterator end = (Iteratable).end(); \
-for (; Iter != end; ++Iter)
+    for (const IteratableType::ConstIterator end = (Iteratable).end(); Iter != end; ++Iter)
 
 namespace capu
 {
