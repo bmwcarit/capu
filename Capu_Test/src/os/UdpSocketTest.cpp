@@ -325,13 +325,14 @@ TEST(UdpSocketAndUdpServerSocket, BroadcastTest)
 {
     capu::UdpSocket socket;
     socket.bind(0, 0);
+    capu::uint16_t port = socket.getSocketAddrInfo().port;  // send broadcast to self
 
-    EXPECT_EQ(capu::CAPU_ERROR, socket.send("test",4,"255.255.255.255",RandomPort::get())); // check for standard behaviour
+    EXPECT_EQ(capu::CAPU_ERROR, socket.send("test", 4, "255.255.255.255", port)); // check for standard behaviour
 
     EXPECT_EQ(capu::CAPU_OK, socket.allowBroadcast(true));
-    EXPECT_EQ(capu::CAPU_OK, socket.send("test",4,"255.255.255.255",RandomPort::get())); // check for behaviour after enable
+    EXPECT_EQ(capu::CAPU_OK, socket.send("test", 4, "255.255.255.255", port)); // check for behaviour after enable
 
     EXPECT_EQ(capu::CAPU_OK, socket.allowBroadcast(false));
-    EXPECT_EQ(capu::CAPU_ERROR, socket.send("test",4,"255.255.255.255",RandomPort::get())); // check for behaviour after disable
+    EXPECT_EQ(capu::CAPU_ERROR, socket.send("test", 4, "255.255.255.255", port)); // check for behaviour after disable
 }
 
