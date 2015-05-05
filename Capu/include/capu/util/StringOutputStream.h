@@ -98,6 +98,13 @@ namespace capu
 
         void setFloatingPointType(FloatingPointType type);
 
+        /**
+        * Sets the number of decimal digits (right of decimal separator) that are written
+        * to stream for float_t values. If > 45, the value is limited to 45.
+        * @param number of decimal digits
+        */
+        void setDecimalDigits(uint32_t digits);
+
     protected:
     private:
 
@@ -112,6 +119,8 @@ namespace capu
         uint32_t      mSize;
 
         FloatingPointType mFloatingPointType;
+
+        uint32_t mDecimalDigits;
 
         /**
          * Resizes the internal buffer to minSize
@@ -154,15 +163,26 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const float_t value)
     {
-        // Maximum float value has 47 digits. +1 for termination 0
-        char_t buffer[48];
+        /* Maximum length float value
+           biggest/smallest: ~ +/-1e38
+           closest to zero:  ~ 1e-38
+
+           required maximum buffer length
+           - 1 sign
+           - 38 digits left of .
+           - 1 for .
+           - 38 digits right of dot + maximum 7 more relevant digits
+           - 1 for terminating \0
+           => 1+38+1+38+7+1 = 86
+        */
+        char_t buffer[86];
         switch(mFloatingPointType)
         {
         case NORMAL:
-            StringUtils::Sprintf(buffer, sizeof(buffer), "%.6f", value);
+            StringUtils::Sprintf(buffer, sizeof(buffer), "%.*f", mDecimalDigits, value);
             break;
         case FIXED:
-            StringUtils::Sprintf(buffer, 48, "%.4f", value);
+            StringUtils::Sprintf(buffer, sizeof(buffer), "%.4f", value);
             break;
         }
 
@@ -288,6 +308,20 @@ namespace capu
     StringOutputStream::setFloatingPointType(FloatingPointType type)
     {
         mFloatingPointType = type;
+    }
+
+    inline
+    void StringOutputStream::setDecimalDigits(uint32_t digits)
+    {
+        if (digits > 45)
+        {
+            // limit to maximum useful range for IEEE-754 single precision floats
+            mDecimalDigits = 45;
+        }
+        else
+        {
+            mDecimalDigits = digits;
+        }
     }
 
     inline

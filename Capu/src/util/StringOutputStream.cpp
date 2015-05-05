@@ -27,8 +27,8 @@ namespace capu
         : mBuffer(16, 0)
         , mSize(0)
         , mFloatingPointType(NORMAL)
+        , mDecimalDigits(6)
     {
-
     }
 
     void
