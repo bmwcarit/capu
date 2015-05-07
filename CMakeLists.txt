@@ -37,7 +37,7 @@ ACME2_PROJECT(
     #==========================================================================
     NAME                        Capu
     VERSION_MAJOR               0
-    VERSION_MINOR               18
+    VERSION_MINOR               19
     VERSION_PATCH               0
     DESCRIPTION                 "Collections and Platform Utils"
     EMAIL                       "martin.veith@bmw-carit.de"
