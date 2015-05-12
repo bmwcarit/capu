@@ -78,12 +78,14 @@
 #define UNUSED(x) {(void)(x);}
 
 #define capu_foreach(IteratableType, Iteratable, Iter)\
-    IteratableType::Iterator Iter = (Iteratable).begin();\
-    for(const IteratableType::Iterator end = (Iteratable).end(); Iter != end; ++Iter)
+    for(IteratableType::Iterator Iter = (Iteratable).begin(), \
+        _##Iter##_end = (Iteratable).end(); \
+        Iter != _##Iter##_end; ++Iter)
 
 #define capu_const_foreach(IteratableType, Iteratable, Iter)\
-    IteratableType::ConstIterator Iter = (Iteratable).begin(); \
-    for (const IteratableType::ConstIterator end = (Iteratable).end(); Iter != end; ++Iter)
+    for (IteratableType::ConstIterator Iter = (Iteratable).begin(), \
+         _##Iter##_end = (Iteratable).end(); \
+         Iter != _##Iter##_end; ++Iter)
 
 namespace capu
 {
