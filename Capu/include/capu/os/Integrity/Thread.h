@@ -27,6 +27,7 @@ namespace capu
         {
 
         public:
+            Thread();
             using capu::posix::Thread::start;
             using capu::posix::Thread::join;
             using capu::posix::Thread::cancel;
@@ -35,6 +36,14 @@ namespace capu
             using capu::posix::Thread::Sleep;
             static uint_t CurrentThreadId();
         };
+
+        inline
+        Thread::Thread()
+        {
+            pthread_attr_init(&mAttr);
+
+            pthread_attr_setthreadname(&mAttr, "Capu Integrity Thread");
+        }
 
         inline
         uint_t

@@ -37,7 +37,7 @@ namespace capu
             using capu::generic::Thread::resetCancel;
             using capu::generic::Thread::getState;
 
-        private:
+        protected:
             pthread_t mThread;
             pthread_attr_t mAttr;
 
