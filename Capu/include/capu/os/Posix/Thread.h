@@ -73,6 +73,7 @@ namespace capu
             }
             tr->thread->setState(TS_TERMINATED);
             pthread_exit(NULL);
+            return NULL;
         }
 
         inline
