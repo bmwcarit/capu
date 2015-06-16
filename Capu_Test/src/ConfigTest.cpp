@@ -38,6 +38,8 @@ namespace capu
 
 #if defined (OS_WINDOWS)
         EXPECT_EQ(8u, sizeof(time_t));
+#elif defined (OS_INTEGRITY)
+        EXPECT_EQ(8u, sizeof(time_t));
 #elif defined (ARCH_X86_32)
         EXPECT_EQ(4u, sizeof(time_t));
 #elif defined (ARCH_X86_64)
