@@ -19,6 +19,8 @@
 
 #include <capu/os/Posix/Thread.h>
 
+#define CAPU_DEFAULT_INTEGRITY_THREAD_STACK_SIZE_IN_BYTES 0x1000
+
 namespace capu
 {
     namespace os
@@ -41,6 +43,11 @@ namespace capu
         Thread::Thread()
         {
             pthread_attr_init(&mAttr);
+
+            if (pthread_attr_setstacksize(&mAttr, CAPU_DEFAULT_INTEGRITY_THREAD_STACK_SIZE_IN_BYTES) == -1)
+            {
+                printf("Error while setting stack size for Integrity thread\n");
+            }
 
             pthread_attr_setthreadname(&mAttr, "Capu Integrity Thread");
         }
