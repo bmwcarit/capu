@@ -50,6 +50,8 @@ namespace capu
             }
 
             pthread_attr_setthreadname(&mAttr, "Capu Integrity Thread");
+            pthread_t currentThreadId;
+            PosixEnableCurrentTask(&currentThreadId);
         }
 
         inline
