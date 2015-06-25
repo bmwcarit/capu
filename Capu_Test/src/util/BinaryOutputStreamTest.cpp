@@ -164,14 +164,17 @@ namespace capu
     TEST_F(BinaryOutputStreamTest, InsertMultipleData)
     {
         BinaryOutputStream outStream;
-
-        outStream << 5 << true << 7.0f;
+        const char* testString = "abcdefgh";
+        outStream << 5 << testString << 7.0f;
 
         const char_t* data = outStream.getData();
         EXPECT_EQ(5, *reinterpret_cast<const int32_t*>(data));
         data += sizeof(int32_t);
-        EXPECT_EQ(true, *reinterpret_cast<const bool_t*>(data));
-        data += sizeof(bool_t);
+        const uint32_t len = *reinterpret_cast<const uint32_t*>(data);
+        EXPECT_EQ(len, strlen(testString));
+        data += sizeof(int32_t);
+        EXPECT_STREQ(testString, data);
+        data += strlen(testString) * sizeof(char);
         EXPECT_EQ(7.0f, *reinterpret_cast<const float_t*>(data));
     }
 
