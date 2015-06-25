@@ -119,14 +119,14 @@ namespace capu
             /** The lower bound element is the smallest element, with a greater or equal key than the given key.
              *  The complexity is O(log(n)).
              *  @param key The key for comparison.
-             *  @return Iterator to the found element. */
+             *  @return Iterator to the found element or Map::end() if none found. */
             Iterator lower_bound(const Key& key);
 
             /// Returns the upper bound element from the map with respect to a given key.
             /** The upper bound element is the smallest element, with a greater key than the given key.
              *  The complexity is O(log(n)).
              *  @param key The key for comparison.
-             *  @return Iterator to the found element. */
+             *  @return Iterator to the found element or Map::end() if none found. */
             Iterator upper_bound(const Key& key);
 
             /// Iterator class for elements in the map.
@@ -151,8 +151,8 @@ namespace capu
 
                 /// Sets the current position to the previous element.
                 /** Points to Map::end(), when there is no previous element.
-                 *  When the iterator stays on Map::end() before it will remain staying
-                 *  on Map::end().
+                 *  When the iterator points to Map::end() before this operation,
+                 *  it is unchanged.
                  *  @return The iterator itself. */
                 Iterator& operator--();
 

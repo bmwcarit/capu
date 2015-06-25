@@ -409,7 +409,6 @@ namespace capu
 
     TEST_F(MapTest, lower_bound)
     {
-        /// Test for the lower_bound function
         m_map1[16] = 0;
         m_map1[2] = 1;
         m_map1[12] = 2;
@@ -444,7 +443,6 @@ namespace capu
 
     TEST_F(MapTest, upper_bound)
     {
-        /// Test for the upper_bound function
         m_map1[16] = 0;
         m_map1[2] = 1;
         m_map1[12] = 2;
