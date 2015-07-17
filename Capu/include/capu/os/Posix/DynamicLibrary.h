@@ -62,7 +62,7 @@ namespace capu
                 return CAPU_ERROR;
             }
 
-            mHandle = dlopen(mPath.c_str(), RTLD_LAZY);
+            mHandle = dlopen(mPath.c_str(), RTLD_LAZY | RTLD_LOCAL);
             if (mHandle == 0)
             {
                 if (access(mPath.c_str(), F_OK) == -1)
