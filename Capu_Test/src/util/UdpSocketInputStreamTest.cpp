@@ -122,8 +122,8 @@ namespace capu
 
     struct UdpFloatTestSender: public TestUdpSocketSender
     {
-        typedef float_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const float_t& data)
+        typedef float VALUE_TYPE;
+        static void Send(const capu::uint16_t port, UdpSocket& socket, const float& data)
         {
             const int32_t tmp = htonl(*reinterpret_cast<const int32_t*>(&data));
             SendToSocket(port, socket, reinterpret_cast<const char_t*>(&tmp), sizeof(int32_t));
@@ -175,7 +175,7 @@ namespace capu
     class TestUdpMultipleSender: public Runnable
     {
     public:
-        TestUdpMultipleSender(const uint16_t port, const int32_t intValue, const String& stringValue, const float_t floatValue, const bool boolValue)
+        TestUdpMultipleSender(const uint16_t port, const int32_t intValue, const String& stringValue, const float floatValue, const bool boolValue)
             : mIntValue(intValue)
             , mStringValue(stringValue)
             , mFloatValue(floatValue)
@@ -195,7 +195,7 @@ namespace capu
             
             union
             {
-                float_t floatVal;
+                float floatVal;
                 int32_t int32Val;
             } int32Convert;
 
@@ -221,7 +221,7 @@ namespace capu
     private:
         int32_t mIntValue;
         String  mStringValue;
-        float_t mFloatValue;
+        float mFloatValue;
         bool  mBoolValue;
         uint16_t mPort;
     };
@@ -341,7 +341,7 @@ namespace capu
 
         int32_t intResult;
         String  stringResult;
-        float_t floatResult;
+        float floatResult;
         bool  boolResult;
 
         inStream >> intResult >> stringResult >> floatResult >> boolResult;

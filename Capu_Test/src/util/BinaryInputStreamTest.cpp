@@ -134,8 +134,8 @@ namespace capu
     TEST_F(BinaryInputStreamTest, ReadFloatValue)
     {
         char buffer[4];
-        float_t value = 0.002f;
-        Memory::Copy(buffer, &value, sizeof(float_t));
+        float value = 0.002f;
+        Memory::Copy(buffer, &value, sizeof(float));
 
         BinaryInputStream inStream(buffer);
 
@@ -148,7 +148,7 @@ namespace capu
     {
         char buffer[1024];
         int32_t intVal = 5;
-        float_t floatVal = 4.3f;
+        float floatVal = 4.3f;
         String stringVal = "Hello World";
         uint32_t strlen = static_cast<uint32_t>(stringVal.getLength());
         bool boolVal = true;
@@ -157,8 +157,8 @@ namespace capu
 
         Memory::Copy(buffer, &intVal, sizeof(int32_t));
         offset += sizeof(int32_t);
-        Memory::Copy(buffer + offset, &floatVal, sizeof(float_t));
-        offset += sizeof(float_t);
+        Memory::Copy(buffer + offset, &floatVal, sizeof(float));
+        offset += sizeof(float);
         Memory::Copy(buffer + offset, &strlen, sizeof(uint32_t));
         offset += sizeof(uint32_t);
         Memory::Copy(buffer + offset , stringVal.c_str(), stringVal.getLength() + 1);

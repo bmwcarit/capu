@@ -28,50 +28,50 @@ namespace capu
         class Math
         {
         public:
-            static const float_t PI_f;
+            static const float PI_f;
             static const double_t PI_d;
 
-            static const float_t LN2_f;
+            static const float LN2_f;
             static const double_t LN2_d;
 
-            static float_t  Ceil(float_t val);
+            static float  Ceil(float val);
             static double_t Ceil(double_t val);
-            static float_t  Floor(float_t val);
+            static float  Floor(float val);
             static double_t Floor(double_t val);
-            static float_t  Abs(float_t val);
+            static float  Abs(float val);
             static double_t Abs(double_t val);
             static int_t    Abs(int_t val);
-            static float_t  Sqrt(float_t val);
+            static float  Sqrt(float val);
             static double_t Sqrt(double_t val);
-            static float_t  Pow2(float_t val);
+            static float  Pow2(float val);
             static double_t Pow2(double_t val);
-            static float_t  Pow(float_t val, float_t exponent);
+            static float  Pow(float val, float exponent);
             static double_t Pow(double_t val, double_t exponent);
-            static float_t  Cos(float_t val);
+            static float  Cos(float val);
             static double_t Cos(double_t val);
-            static float_t  Sin(float_t val);
+            static float  Sin(float val);
             static double_t Sin(double_t val);
-            static float_t  Tan(float_t val);
+            static float  Tan(float val);
             static double_t Tan(double_t val);
-            static float_t  ArcCos(float_t val);
+            static float  ArcCos(float val);
             static double_t ArcCos(double_t val);
-            static float_t  ArcSin(float_t val);
+            static float  ArcSin(float val);
             static double_t ArcSin(double_t val);
-            static float_t  ArcTan(float_t val);
+            static float  ArcTan(float val);
             static double_t ArcTan(double_t val);
-            static float_t  Rad2Deg(float_t val);
+            static float  Rad2Deg(float val);
             static double_t Rad2Deg(double_t val);
-            static float_t  Deg2Rad(float_t val);
+            static float  Deg2Rad(float val);
             static double_t Deg2Rad(double_t val);
-            static float_t  Log2(float_t val);
+            static float  Log2(float val);
             static double_t Log2(double_t val);
-            static float_t  Exp(float_t val);
+            static float  Exp(float val);
             static double_t Exp(double_t val);
         };
 
         inline
-        float_t
-        Math::Ceil(float_t val)
+        float
+        Math::Ceil(float val)
         {
             return ceilf(val);
         }
@@ -84,8 +84,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Floor(float_t val)
+        float
+        Math::Floor(float val)
         {
             return floorf(val);
         }
@@ -98,8 +98,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Abs(float_t val)
+        float
+        Math::Abs(float val)
         {
             return std::fabs(val);
         }
@@ -119,8 +119,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Sqrt(float_t val)
+        float
+        Math::Sqrt(float val)
         {
             return sqrtf(val);
         }
@@ -133,8 +133,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Pow2(float_t val)
+        float
+        Math::Pow2(float val)
         {
             return val * val;
         }
@@ -147,15 +147,15 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Cos(float_t val)
+        float
+        Math::Cos(float val)
         {
             return cosf(val);
         }
 
         inline
-        float_t
-        Math::Pow(float_t val, float_t exponent)
+        float
+        Math::Pow(float val, float exponent)
         {
             return powf(val, exponent);
         }
@@ -175,8 +175,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Sin(float_t val)
+        float
+        Math::Sin(float val)
         {
             return sinf(val);
         }
@@ -189,8 +189,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Tan(float_t val)
+        float
+        Math::Tan(float val)
         {
             return tanf(val);
         }
@@ -203,8 +203,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::ArcCos(float_t val)
+        float
+        Math::ArcCos(float val)
         {
             return acosf(val);
         }
@@ -217,8 +217,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::ArcSin(float_t val)
+        float
+        Math::ArcSin(float val)
         {
             return asinf(val);
         }
@@ -231,8 +231,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::ArcTan(float_t val)
+        float
+        Math::ArcTan(float val)
         {
             return atanf(val);
         }
@@ -245,8 +245,8 @@ namespace capu
         }
 
         inline
-        float_t
-		Math::Rad2Deg(float_t val)
+        float
+		Math::Rad2Deg(float val)
         {
             return val * (180.f / PI_f);
         }
@@ -259,8 +259,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Deg2Rad(float_t val)
+        float
+        Math::Deg2Rad(float val)
         {
             return val * (PI_f / 180.f);
         }
@@ -273,8 +273,8 @@ namespace capu
         }
 
         inline
-        float_t
-        Math::Log2(float_t val)
+        float
+        Math::Log2(float val)
         {
             return logf(val) / Math::LN2_f;
 
@@ -288,8 +288,8 @@ namespace capu
         }
 
         inline
-            float_t
-            Math::Exp(float_t val)
+            float
+            Math::Exp(float val)
         {
             return expf(val);
 

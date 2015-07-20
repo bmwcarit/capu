@@ -40,7 +40,7 @@ namespace capu
          * Write a float into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const float_t value);
+        IOutputStream& operator<<(const float value);
 
         /**
          * Write an integer into the stream
@@ -188,9 +188,9 @@ namespace capu
 
     inline
     IOutputStream&
-    BinaryOutputStream::operator<<(const float_t value)
+    BinaryOutputStream::operator<<(const float value)
     {
-        return write(&value, sizeof(float_t));
+        return write(&value, sizeof(float));
     }
 
     inline

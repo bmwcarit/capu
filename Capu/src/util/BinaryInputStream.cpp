@@ -77,9 +77,9 @@ namespace capu
         return *this;
     }
 
-    IInputStream& BinaryInputStream::operator>>(float_t& value)
+    IInputStream& BinaryInputStream::operator>>(float& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(float_t));
+        read(reinterpret_cast<char_t*>(&value), sizeof(float));
         return *this;
     }
 

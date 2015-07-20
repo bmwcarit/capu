@@ -340,7 +340,7 @@ namespace capu
     struct TestStruct
     {
         uint32_t value1;
-        float_t  value2;
+        float  value2;
     };
 
     TEST_F(VectorTest, Object)

@@ -105,7 +105,7 @@ namespace capu
          * Write a float to the stream
          * @param value Value to write to the stream
          */
-        IOutputStream& operator<<(const float_t value);
+        IOutputStream& operator<<(const float value);
 
         /**
          * Write a character to the stream
@@ -287,12 +287,12 @@ namespace capu
     template<uint16_t SNDBUFSIZE>
     inline
     IOutputStream&
-    SocketOutputStream<SNDBUFSIZE>::operator<<(const float_t value)
+    SocketOutputStream<SNDBUFSIZE>::operator<<(const float value)
     {
         // we assume that a float is 4 bytes long (=uint32_t)
         union
         {
-            float_t floatVal;
+            float floatVal;
             uint32_t uint32Val;
         } uint32Convert;
 

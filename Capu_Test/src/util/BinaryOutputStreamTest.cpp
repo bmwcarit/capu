@@ -136,11 +136,11 @@ namespace capu
         outStream << 5.0f << 6.0f << 7.0f;
 
         const char_t* data = outStream.getData();
-        EXPECT_EQ(5.0f, *reinterpret_cast<const float_t*>(data));
+        EXPECT_EQ(5.0f, *reinterpret_cast<const float*>(data));
         data += sizeof(int32_t);
-        EXPECT_EQ(6.0f, *reinterpret_cast<const float_t*>(data));
+        EXPECT_EQ(6.0f, *reinterpret_cast<const float*>(data));
         data += sizeof(int32_t);
-        EXPECT_EQ(7.0f, *reinterpret_cast<const float_t*>(data));
+        EXPECT_EQ(7.0f, *reinterpret_cast<const float*>(data));
     }
 
     TEST_F(BinaryOutputStreamTest, InsertGuid)
@@ -175,7 +175,7 @@ namespace capu
         data += sizeof(int32_t);
         EXPECT_STREQ(testString, data);
         data += strlen(testString) * sizeof(char);
-        EXPECT_EQ(7.0f, *reinterpret_cast<const float_t*>(data));
+        EXPECT_EQ(7.0f, *reinterpret_cast<const float*>(data));
     }
 
     TEST_F(BinaryOutputStreamTest, ClearStream)

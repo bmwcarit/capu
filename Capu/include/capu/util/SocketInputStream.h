@@ -125,7 +125,7 @@ namespace capu
          * Read a float from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(float_t& value);
+        IInputStream& operator>>(float& value);
 
         /**
          * Read a Guid from the stream
@@ -223,12 +223,12 @@ namespace capu
 
     inline
     IInputStream&
-    SocketInputStream::operator>>(float_t& value)
+    SocketInputStream::operator>>(float& value)
     {
         union
         {
             uint32_t intValue;
-            float_t  floatValue;
+            float  floatValue;
         } floatConvert;
 
         operator>>(floatConvert.intValue);

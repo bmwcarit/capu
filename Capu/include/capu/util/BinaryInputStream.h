@@ -79,7 +79,7 @@ namespace capu
          * Read a float from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(float_t& value);
+        IInputStream& operator>>(float& value);
 
         /**
          * Read a uint16_t from the stream

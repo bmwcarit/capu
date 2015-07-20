@@ -36,11 +36,11 @@ namespace capu
         virtual ~IOutputStream();
 
         /**
-         * Operator for writing float_t values to a stream
+         * Operator for writing float values to a stream
          * @param value the value which will be written to the stream
          * @return a reference to the IOutputStream for further processing of data
          */
-        virtual IOutputStream& operator<<(const float_t value) = 0;
+        virtual IOutputStream& operator<<(const float value) = 0;
 
         /**
          * Operator for writing int32_t values to a stream

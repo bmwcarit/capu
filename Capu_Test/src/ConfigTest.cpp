@@ -30,7 +30,7 @@ namespace capu
         EXPECT_EQ(8u, sizeof(int64_t));
         EXPECT_EQ(4u, sizeof(uint32_t));
         EXPECT_EQ(8u, sizeof(uint64_t));
-        EXPECT_EQ(4u, sizeof(float_t));
+        EXPECT_EQ(4u, sizeof(float));
         EXPECT_EQ(8u, sizeof(double_t));
         EXPECT_EQ(1u, sizeof(bool));
         EXPECT_EQ(1u, sizeof(char_t));

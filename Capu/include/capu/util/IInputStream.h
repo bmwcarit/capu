@@ -78,11 +78,11 @@ namespace capu
         virtual IInputStream& operator>>(bool&  value) = 0;
 
         /**
-         * Reads a float_t value from the stream
+         * Reads a float value from the stream
          * @param value the destination of the read value
          * @return a reference to the input stream for further processing
          */
-        virtual IInputStream& operator>>(float_t& value) = 0;
+        virtual IInputStream& operator>>(float& value) = 0;
 
         /**
          * Reads a uint16_t value from the stream

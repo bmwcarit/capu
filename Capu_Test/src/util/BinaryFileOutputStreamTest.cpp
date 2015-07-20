@@ -69,14 +69,14 @@ namespace capu
 
         EXPECT_EQ(10, int32Convert.int32Val);
 
-        EXPECT_EQ(capu::CAPU_OK, mFile.read(buffer, sizeof(capu::float_t), numBytes));
-        EXPECT_EQ(sizeof(capu::float_t), numBytes);
+        EXPECT_EQ(capu::CAPU_OK, mFile.read(buffer, sizeof(float), numBytes));
+        EXPECT_EQ(sizeof(float), numBytes);
         
 
         union
         {
           capu::char_t charVal[4];
-          capu::float_t floatVal;
+          float floatVal;
         } floatConvert;
 
         floatConvert.charVal[0] = buffer[0];

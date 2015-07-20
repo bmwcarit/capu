@@ -49,7 +49,6 @@ namespace capu
     typedef signed long long int int64_t;
     typedef unsigned int uint32_t;
     typedef unsigned long long int uint64_t;
-    typedef float   float_t;
     typedef double  double_t;
     typedef char    char_t;
     typedef ::time_t time_t;

@@ -45,7 +45,7 @@ namespace capu
          * @see  IOutputStream
          * @{
          */
-        virtual StringOutputStream& operator<<(const float_t value);
+        virtual StringOutputStream& operator<<(const float value);
         virtual StringOutputStream& operator<<(const int32_t value);
         virtual StringOutputStream& operator<<(const uint32_t value);
         virtual StringOutputStream& operator<<(const int64_t value);
@@ -100,7 +100,7 @@ namespace capu
 
         /**
         * Sets the number of decimal digits (right of decimal separator) that are written
-        * to stream for float_t values. If > 45, the value is limited to 45.
+        * to stream for float values. If > 45, the value is limited to 45.
         * @param number of decimal digits
         */
         void setDecimalDigits(uint32_t digits);
@@ -161,7 +161,7 @@ namespace capu
 
     inline
     StringOutputStream&
-    StringOutputStream::operator<<(const float_t value)
+    StringOutputStream::operator<<(const float value)
     {
         /* Maximum length float value
            biggest/smallest: ~ +/-1e38

@@ -160,16 +160,16 @@ namespace capu
 
         template<>
         inline
-        capu::float_t
-        NumericLimits::Min<capu::float_t>()
+        float
+        NumericLimits::Min<float>()
         {
             return FLT_MIN;
         }
 
         template<>
         inline
-        capu::float_t
-        NumericLimits::Max<capu::float_t>()
+        float
+        NumericLimits::Max<float>()
         {
             return FLT_MAX;
         }

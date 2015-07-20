@@ -120,7 +120,7 @@ TEST(Traits, TestPrimitiveTypes)
     capu::int8_t   sometype7 = 42;
     capu::char_t   sometype8 = 42;
     capu::uchar_t  sometype9 = 42;
-    capu::float_t  sometype10 = 42.f;
+    float  sometype10 = 42.f;
     capu::double_t sometype11 = 42.0;
     bool   sometype12 = true;
 

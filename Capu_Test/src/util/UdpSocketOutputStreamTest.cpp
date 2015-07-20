@@ -56,7 +56,7 @@ namespace capu
             }
         }
 
-        IInputStream& operator>>(float_t& value)
+        IInputStream& operator>>(float& value)
         {
             return operator>>(reinterpret_cast<int32_t&>(value));
         }
@@ -257,7 +257,7 @@ namespace capu
 
     TEST_F(UdpSocketOutputStreamTest, SendFloatData)
     {
-        EXPECT_EQ(Math::PI_f, UdpSocketOutputStreamTestExecutor<float_t>::Execute(Math::PI_f));
+        EXPECT_EQ(Math::PI_f, UdpSocketOutputStreamTestExecutor<float>::Execute(Math::PI_f));
     }
 
     TEST_F(UdpSocketOutputStreamTest, SendStringData)

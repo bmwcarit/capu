@@ -34,7 +34,7 @@ TEST(Math, abs2)
 
 TEST(Math, abs3)
 {
-    capu::float_t val = 7;
+    float val = 7;
     EXPECT_EQ(7, capu::Math::Abs(val));
     val = -7;
     EXPECT_EQ(7, capu::Math::Abs(val));
@@ -42,7 +42,7 @@ TEST(Math, abs3)
 
 TEST(Math, PI)
 {
-    capu::float_t  val = capu::Math::PI_f;
+    float  val = capu::Math::PI_f;
     capu::double_t val2 = capu::Math::PI_d;
     EXPECT_TRUE(val > 3);
     EXPECT_TRUE(val2 > 3);
@@ -101,7 +101,7 @@ TEST(Math, Pow)
 TEST(Math, Cos)
 {
     capu::double_t pid = capu::Math::PI_d;
-    capu::float_t pif = capu::Math::PI_f;
+    float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(-1.0f, capu::Math::Cos(pif));
     EXPECT_DOUBLE_EQ(-1.0, capu::Math::Cos(pid));
@@ -110,7 +110,7 @@ TEST(Math, Cos)
 TEST(Math, Sin)
 {
     capu::double_t pid = capu::Math::PI_d;
-    capu::float_t pif = capu::Math::PI_f;
+    float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(1.0f, capu::Math::Sin(pif/2.0f));
     EXPECT_DOUBLE_EQ(1.0, capu::Math::Sin(pid/2.0));
@@ -119,7 +119,7 @@ TEST(Math, Sin)
 TEST(Math, Tan)
 {
     capu::double_t pid = capu::Math::PI_d;
-    capu::float_t pif = capu::Math::PI_f;
+    float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(1.0f, capu::Math::Tan(pif/4.0f));
     EXPECT_DOUBLE_EQ(1.0, capu::Math::Tan(pid/4.0));
@@ -128,7 +128,7 @@ TEST(Math, Tan)
 TEST(Math, ArcCos)
 {
     capu::double_t pid = capu::Math::PI_d;
-    capu::float_t pif = capu::Math::PI_f;
+    float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(pif, capu::Math::ArcCos(-1.0f));
     EXPECT_DOUBLE_EQ(pid, capu::Math::ArcCos(-1.0));
@@ -137,7 +137,7 @@ TEST(Math, ArcCos)
 TEST(Math, ArcSin)
 {
     capu::double_t pid = capu::Math::PI_d;
-    capu::float_t pif = capu::Math::PI_f;
+    float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(pif/2.0f, capu::Math::ArcSin(1.0f));
     EXPECT_DOUBLE_EQ(pid/2.0, capu::Math::ArcSin(1.0));
@@ -146,7 +146,7 @@ TEST(Math, ArcSin)
 TEST(Math, ArcTan)
 {
     capu::double_t pid = capu::Math::PI_d;
-    capu::float_t pif = capu::Math::PI_f;
+    float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(pif/4.0f, capu::Math::ArcTan(1.0f));
     EXPECT_DOUBLE_EQ(pid/4.0, capu::Math::ArcTan(1.0));
