@@ -75,7 +75,7 @@ namespace capu
     {
         enum { Value = CAPU_TYPE_PRIMITIVE   };
     };
-    template<> struct is_CAPU_PRIMITIVE<double_t>
+    template<> struct is_CAPU_PRIMITIVE<double>
     {
         enum { Value = CAPU_TYPE_PRIMITIVE   };
     };

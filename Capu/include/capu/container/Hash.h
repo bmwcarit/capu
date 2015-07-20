@@ -121,7 +121,7 @@ namespace capu
          * @param key The key to hash
          * @return the computed hash value
          */
-        static uint32_t Hash(const double_t key)
+        static uint32_t Hash(const double key)
         {
             return Hash(static_cast<int64_t>(key));
         }
@@ -254,7 +254,7 @@ namespace capu
          * @param key The key to hash
          * @return the computed hash value
          */
-        static uint64_t Hash(const double_t key)
+        static uint64_t Hash(const double key)
         {
             return Hash(static_cast<int64_t>(key));
         }
@@ -343,7 +343,7 @@ namespace capu
         /**
          * Hash the given key using the given bitcount
          */
-        static uint32_t Hash(double_t      key, uint8_t bitcount)
+        static uint32_t Hash(double      key, uint8_t bitcount)
         {
             return Resizer<uint32_t>::Resize(HashFunction<uint32_t>::Hash(key), bitcount);
         }
@@ -429,7 +429,7 @@ namespace capu
         /**
          * Hash the given key using the given bitcount
          */
-        static uint64_t Hash(const double_t key, uint8_t bitcount)
+        static uint64_t Hash(const double key, uint8_t bitcount)
         {
             return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(key), bitcount);
         }

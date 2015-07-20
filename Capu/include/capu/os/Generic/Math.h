@@ -29,44 +29,44 @@ namespace capu
         {
         public:
             static const float PI_f;
-            static const double_t PI_d;
+            static const double PI_d;
 
             static const float LN2_f;
-            static const double_t LN2_d;
+            static const double LN2_d;
 
             static float  Ceil(float val);
-            static double_t Ceil(double_t val);
+            static double Ceil(double val);
             static float  Floor(float val);
-            static double_t Floor(double_t val);
+            static double Floor(double val);
             static float  Abs(float val);
-            static double_t Abs(double_t val);
+            static double Abs(double val);
             static int_t    Abs(int_t val);
             static float  Sqrt(float val);
-            static double_t Sqrt(double_t val);
+            static double Sqrt(double val);
             static float  Pow2(float val);
-            static double_t Pow2(double_t val);
+            static double Pow2(double val);
             static float  Pow(float val, float exponent);
-            static double_t Pow(double_t val, double_t exponent);
+            static double Pow(double val, double exponent);
             static float  Cos(float val);
-            static double_t Cos(double_t val);
+            static double Cos(double val);
             static float  Sin(float val);
-            static double_t Sin(double_t val);
+            static double Sin(double val);
             static float  Tan(float val);
-            static double_t Tan(double_t val);
+            static double Tan(double val);
             static float  ArcCos(float val);
-            static double_t ArcCos(double_t val);
+            static double ArcCos(double val);
             static float  ArcSin(float val);
-            static double_t ArcSin(double_t val);
+            static double ArcSin(double val);
             static float  ArcTan(float val);
-            static double_t ArcTan(double_t val);
+            static double ArcTan(double val);
             static float  Rad2Deg(float val);
-            static double_t Rad2Deg(double_t val);
+            static double Rad2Deg(double val);
             static float  Deg2Rad(float val);
-            static double_t Deg2Rad(double_t val);
+            static double Deg2Rad(double val);
             static float  Log2(float val);
-            static double_t Log2(double_t val);
+            static double Log2(double val);
             static float  Exp(float val);
-            static double_t Exp(double_t val);
+            static double Exp(double val);
         };
 
         inline
@@ -77,8 +77,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Ceil(double_t val)
+        double
+        Math::Ceil(double val)
         {
             return std::ceil(val);
         }
@@ -91,8 +91,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Floor(double_t val)
+        double
+        Math::Floor(double val)
         {
             return std::floor(val);
         }
@@ -105,8 +105,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Abs(double_t val)
+        double
+        Math::Abs(double val)
         {
             return std::abs(val);
         }
@@ -126,8 +126,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Sqrt(double_t val)
+        double
+        Math::Sqrt(double val)
         {
             return std::sqrt(val);
         }
@@ -140,8 +140,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Pow2(double_t val)
+        double
+        Math::Pow2(double val)
         {
             return val * val;
         }
@@ -161,15 +161,15 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Pow(double_t val, double_t exponent)
+        double
+        Math::Pow(double val, double exponent)
         {
             return std::pow(val, exponent);
         }
 
         inline
-        double_t
-        Math::Cos(double_t val)
+        double
+        Math::Cos(double val)
         {
             return std::cos(val);
         }
@@ -182,8 +182,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Sin(double_t val)
+        double
+        Math::Sin(double val)
         {
             return std::sin(val);
         }
@@ -196,8 +196,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Tan(double_t val)
+        double
+        Math::Tan(double val)
         {
             return std::tan(val);
         }
@@ -210,8 +210,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::ArcCos(double_t val)
+        double
+        Math::ArcCos(double val)
         {
             return std::acos(val);
         }
@@ -224,8 +224,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::ArcSin(double_t val)
+        double
+        Math::ArcSin(double val)
         {
             return std::asin(val);
         }
@@ -238,8 +238,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::ArcTan(double_t val)
+        double
+        Math::ArcTan(double val)
         {
             return std::atan(val);
         }
@@ -252,8 +252,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Rad2Deg(double_t val)
+        double
+        Math::Rad2Deg(double val)
         {
             return val * (180.0 / PI_d);
         }
@@ -266,8 +266,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Deg2Rad(double_t val)
+        double
+        Math::Deg2Rad(double val)
         {
             return val * (PI_d / 180.0);
         }
@@ -281,8 +281,8 @@ namespace capu
         }
 
         inline
-        double_t
-        Math::Log2(double_t val)
+        double
+        Math::Log2(double val)
         {
             return log(val) / Math::LN2_d;
         }
@@ -296,8 +296,8 @@ namespace capu
         }
 
         inline
-            double_t
-            Math::Exp(double_t val)
+            double
+            Math::Exp(double val)
         {
             return std::exp(val);
         }

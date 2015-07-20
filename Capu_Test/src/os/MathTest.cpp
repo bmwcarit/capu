@@ -26,7 +26,7 @@ TEST(Math, abs1)
 
 TEST(Math, abs2)
 {
-    capu::double_t val = 6;
+    double val = 6;
     EXPECT_EQ(6, capu::Math::Abs(val));
     val = -6;
     EXPECT_EQ(6, capu::Math::Abs(val));
@@ -43,7 +43,7 @@ TEST(Math, abs3)
 TEST(Math, PI)
 {
     float  val = capu::Math::PI_f;
-    capu::double_t val2 = capu::Math::PI_d;
+    double val2 = capu::Math::PI_d;
     EXPECT_TRUE(val > 3);
     EXPECT_TRUE(val2 > 3);
 }
@@ -100,7 +100,7 @@ TEST(Math, Pow)
 
 TEST(Math, Cos)
 {
-    capu::double_t pid = capu::Math::PI_d;
+    double pid = capu::Math::PI_d;
     float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(-1.0f, capu::Math::Cos(pif));
@@ -109,7 +109,7 @@ TEST(Math, Cos)
 
 TEST(Math, Sin)
 {
-    capu::double_t pid = capu::Math::PI_d;
+    double pid = capu::Math::PI_d;
     float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(1.0f, capu::Math::Sin(pif/2.0f));
@@ -118,7 +118,7 @@ TEST(Math, Sin)
 
 TEST(Math, Tan)
 {
-    capu::double_t pid = capu::Math::PI_d;
+    double pid = capu::Math::PI_d;
     float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(1.0f, capu::Math::Tan(pif/4.0f));
@@ -127,7 +127,7 @@ TEST(Math, Tan)
 
 TEST(Math, ArcCos)
 {
-    capu::double_t pid = capu::Math::PI_d;
+    double pid = capu::Math::PI_d;
     float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(pif, capu::Math::ArcCos(-1.0f));
@@ -136,7 +136,7 @@ TEST(Math, ArcCos)
 
 TEST(Math, ArcSin)
 {
-    capu::double_t pid = capu::Math::PI_d;
+    double pid = capu::Math::PI_d;
     float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(pif/2.0f, capu::Math::ArcSin(1.0f));
@@ -145,7 +145,7 @@ TEST(Math, ArcSin)
 
 TEST(Math, ArcTan)
 {
-    capu::double_t pid = capu::Math::PI_d;
+    double pid = capu::Math::PI_d;
     float pif = capu::Math::PI_f;
 
     EXPECT_FLOAT_EQ(pif/4.0f, capu::Math::ArcTan(1.0f));
