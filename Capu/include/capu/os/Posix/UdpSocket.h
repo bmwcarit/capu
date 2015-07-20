@@ -30,10 +30,10 @@ namespace capu
         public:
             UdpSocket();
             ~UdpSocket();
-            status_t bind(const uint16_t port, const char_t* addr = NULL);
-            status_t send(const char_t* buffer, const int32_t length, const SocketAddrInfo& receiverAddr);
-            status_t send(const char_t* buffer, const int32_t length, const char_t* receiverAddr, const uint16_t receiverPort);
-            status_t receive(char_t* buffer, const int32_t length, int32_t& numBytes, SocketAddrInfo* sender);
+            status_t bind(const uint16_t port, const char* addr = NULL);
+            status_t send(const char* buffer, const int32_t length, const SocketAddrInfo& receiverAddr);
+            status_t send(const char* buffer, const int32_t length, const char* receiverAddr, const uint16_t receiverPort);
+            status_t receive(char* buffer, const int32_t length, int32_t& numBytes, SocketAddrInfo* sender);
             status_t close();
             status_t setBufferSize(const int32_t bufferSize);
             status_t setTimeout(const int32_t timeout);
@@ -127,7 +127,7 @@ namespace capu
             socklen_t len = sizeof(sin);
             if (getsockname(mSocket, (struct sockaddr*)&sin, &len) != -1)
             {
-                char_t str[INET_ADDRSTRLEN];
+                char str[INET_ADDRSTRLEN];
                 inet_ntop(AF_INET, &(sin.sin_addr.s_addr), str, INET_ADDRSTRLEN);
                 mAddrInfo.addr = str;
                 mAddrInfo.port = ntohs(sin.sin_port);
@@ -147,7 +147,7 @@ namespace capu
 
         inline
         status_t
-        UdpSocket::send(const char_t* buffer, const int32_t length, const char_t* receiverAddr, const uint16_t receiverPort)
+        UdpSocket::send(const char* buffer, const int32_t length, const char* receiverAddr, const uint16_t receiverPort)
         {
             if ((buffer == NULL) || (length < 0))
             {
@@ -179,14 +179,14 @@ namespace capu
 
         inline
         status_t
-        UdpSocket::send(const char_t* buffer, const int32_t length, const SocketAddrInfo& receiverAddr)
+        UdpSocket::send(const char* buffer, const int32_t length, const SocketAddrInfo& receiverAddr)
         {
             return send(buffer, length, receiverAddr.addr.c_str(), receiverAddr.port);
         }
 
         inline
         status_t
-        UdpSocket::receive(char_t* buffer, const int32_t length, int32_t& numBytes, SocketAddrInfo* sender)
+        UdpSocket::receive(char* buffer, const int32_t length, int32_t& numBytes, SocketAddrInfo* sender)
         {
             if ((buffer == NULL) || (length < 0))
             {

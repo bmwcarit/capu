@@ -39,9 +39,9 @@ namespace capu
         String  stringVal = "Dies ist ein Text";
         uint32_t strlen = static_cast<uint32_t>(stringVal.getLength());
 
-        mFile.write(reinterpret_cast<char_t*>(&intVal), sizeof(capu::int32_t));
-        mFile.write(reinterpret_cast<char_t*>(&floatVal), sizeof(float));
-        mFile.write(reinterpret_cast<char_t*>(&strlen), sizeof(uint32_t));
+        mFile.write(reinterpret_cast<char*>(&intVal), sizeof(capu::int32_t));
+        mFile.write(reinterpret_cast<char*>(&floatVal), sizeof(float));
+        mFile.write(reinterpret_cast<char*>(&strlen), sizeof(uint32_t));
         mFile.write(stringVal.c_str(), stringVal.getLength());
 
         mFile.close();
@@ -90,7 +90,7 @@ namespace capu
         capu::File file("some/non/existing/path");
         capu::BinaryFileInputStream inputStream(file);
 
-        char_t data;
+        char data;
         int size = 1;
 
         inputStream.read(&data, size);

@@ -31,7 +31,7 @@ namespace capu
     _ntohll(uint64_t & value)
     {
         int_t checkNumber = 42;
-        if(*(char_t*)&checkNumber == 42)
+        if(*(char*)&checkNumber == 42)
         {
             // Little endian
             const uint64_t lowbits  = (uint64_t)(ntohl(value & 0xFFFFFFFF)) << 32LL;
@@ -139,7 +139,7 @@ namespace capu
          * @param data Pointer to store data read
          * @param size Number of bytes to read
          */
-        virtual IInputStream& read(char_t* data, const uint32_t size) = 0;
+        virtual IInputStream& read(char* data, const uint32_t size) = 0;
 
         /**
          * Returns the current state of the SocketInputStream
@@ -182,7 +182,7 @@ namespace capu
     IInputStream&
     SocketInputStream::operator>>(int32_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(int32_t));
+        read(reinterpret_cast<char*>(&value), sizeof(int32_t));
         value = ntohl(value);
         return *this;
     }
@@ -200,7 +200,7 @@ namespace capu
     inline
     IInputStream& SocketInputStream::operator>>(uint64_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(uint64_t));
+        read(reinterpret_cast<char*>(&value), sizeof(uint64_t));
         value = _ntohll(value);
         return *this;
     }
@@ -218,7 +218,7 @@ namespace capu
     IInputStream&
     SocketInputStream::operator>>(bool& value)
     {
-        return read(reinterpret_cast<char_t*>(&value), sizeof(bool));
+        return read(reinterpret_cast<char*>(&value), sizeof(bool));
     }
 
     inline
@@ -241,7 +241,7 @@ namespace capu
     IInputStream&
     SocketInputStream::operator>>(uint16_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(uint16_t));
+        read(reinterpret_cast<char*>(&value), sizeof(uint16_t));
         value = ntohs(value);
         return *this;
     }
@@ -260,7 +260,7 @@ namespace capu
     IInputStream&
     SocketInputStream::operator>>(uint8_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(uint8_t));
+        read(reinterpret_cast<char*>(&value), sizeof(uint8_t));
         return *this;
     }
 
@@ -279,7 +279,7 @@ namespace capu
     SocketInputStream::operator>>(Guid& value)
     {
         generic_uuid_t fromStream;
-        read(reinterpret_cast<char_t*>(&fromStream), sizeof(generic_uuid_t));
+        read(reinterpret_cast<char*>(&fromStream), sizeof(generic_uuid_t));
         value = fromStream;
         return *this;
     }

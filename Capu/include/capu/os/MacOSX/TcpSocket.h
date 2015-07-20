@@ -29,7 +29,7 @@ namespace capu
             TcpSocket();
             TcpSocket(const SocketDescription& socketDescription);
 
-            status_t connect(const char_t* dest_addr, uint16_t port);
+            status_t connect(const char* dest_addr, uint16_t port);
 
             using capu::posix::TcpSocket::send;
             using capu::posix::TcpSocket::receive;
@@ -66,7 +66,7 @@ namespace capu
 
         inline
         status_t
-        TcpSocket::connect(const char_t* dest_addr, uint16_t port)
+        TcpSocket::connect(const char* dest_addr, uint16_t port)
         {
             if ((dest_addr == NULL) || (port == 0))
             {

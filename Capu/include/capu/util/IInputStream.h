@@ -104,7 +104,7 @@ namespace capu
          * @param size the size of the data to read
          * @return a reference to the input stream for further processing
          */
-        virtual IInputStream& read(char_t* data, const uint32_t size) = 0;
+        virtual IInputStream& read(char* data, const uint32_t size) = 0;
 
         /**
          * Returns the current state of the stream. This can be used to

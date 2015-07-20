@@ -59,7 +59,7 @@ namespace capu
             struct tm timeInfo;
             errno_t errorcode = localtime_s(&timeInfo, &mTime);
             //convert it to standard ascii representation
-            char_t asciiTimeInfo[32];
+            char asciiTimeInfo[32];
             errorcode = asctime_s(asciiTimeInfo,32, &timeInfo);
             if (asciiTimeInfo == NULL) {
                 //in case conversion fails

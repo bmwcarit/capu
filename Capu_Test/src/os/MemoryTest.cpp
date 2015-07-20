@@ -20,9 +20,9 @@
 
 TEST(Memory, compare)
 {
-    capu::char_t string1[30] = "This is a String";
-    capu::char_t string2[30] = "This is a String";
-    capu::char_t string3[30] = "This is another String";
+    char string1[30] = "This is a String";
+    char string2[30] = "This is a String";
+    char string3[30] = "This is another String";
 
     EXPECT_EQ(0, capu::Memory::Compare(string1, string2, 30));
     EXPECT_FALSE(0 == capu::Memory::Compare(string2, string3, 30));
@@ -31,7 +31,7 @@ TEST(Memory, compare)
 
 TEST(Memory, set)
 {
-    capu::char_t string[] = "Hello World";
+    char string[] = "Hello World";
     capu::Memory::Set(string, 'm', 5);
     EXPECT_EQ(0, capu::Memory::Compare("mmmmm World", string, strlen(string)));
     
@@ -41,8 +41,8 @@ TEST(Memory, set)
 
 TEST(Memory, copy)
 {
-    capu::char_t string1[30] = "This is a String";
-    capu::char_t string2[30];
+    char string1[30] = "This is a String";
+    char string2[30];
     capu::Memory::Copy(string2, string1, strlen(string1) + 1);
     EXPECT_EQ(0, capu::Memory::Compare(string1, string2, strlen(string1)));
 
@@ -58,9 +58,9 @@ TEST(Memory, copy)
 
 TEST(Memory, move)
 {
-    capu::char_t string1[35] = "This is a boring String";
+    char string1[35] = "This is a boring String";
     capu::Memory::Move(string1 + 17, string1 + 10, 13);
-    capu::char_t string2[35] = "This is a boring boring String";
+    char string2[35] = "This is a boring boring String";
     EXPECT_EQ(0, capu::Memory::Compare(string2, string1, 35));
 
     capu::Memory::Move(string1 + 17, string1 + 10, 0);
@@ -220,7 +220,7 @@ TEST(Memory, moveOjectWithClassTypeOverlapBackward)
 TEST(Memory, usedMemoryTest)
 {
     capu::uint_t memUsage = capu::Memory::CurrentMemoryUsage();
-    capu::char_t* someMem = new capu::char_t[1000000];
+    char* someMem = new char[1000000];
     capu::uint_t memUsageAfter = capu::Memory::CurrentMemoryUsage();
     EXPECT_GE(memUsageAfter, memUsage);
     delete[] someMem;

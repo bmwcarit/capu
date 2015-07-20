@@ -86,10 +86,10 @@ public:
         capu::int32_t i = 5;
         capu::int32_t sendData;
         //send data
-        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((capu::char_t*) &i, sizeof(capu::int32_t), sendData));
+        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(capu::int32_t), sendData));
 
         //receive
-        capu::status_t res = cli_socket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes);
+        capu::status_t res = cli_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes);
         EXPECT_EQ(capu::CAPU_OK, res);
 
         //CHECK VALUE
@@ -143,10 +143,10 @@ public:
 
         capu::int32_t sentBytes;
         //send data
-        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((capu::char_t*) &i, sizeof(capu::int32_t), sentBytes));
+        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(capu::int32_t), sentBytes));
 
         //receive
-        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes));
+        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes));
 
         //client has received timeout, server can close socket
         mutex.lock();
@@ -179,7 +179,7 @@ private:
     {
 
         //try to send again on broken socket
-        capu::char_t data = 5;
+        char data = 5;
         capu::int32_t sentBytes = 0;
         capu::status_t currentErrorOnSend = cli_socket.send(&data, sizeof(capu::int32_t), sentBytes);
         if (previousErrorOnSend == capu::CAPU_ERROR)
@@ -237,7 +237,7 @@ public:
         const capu::uint32_t dataSize = 1024 * 1024 / 8;
         capu::uint32_t messageCount = 100;
 
-        capu::char_t* data = new capu::char_t[dataSize];
+        char* data = new char[dataSize];
 
         capu::Memory::Set(data, 0x00000000, dataSize);
 
@@ -306,7 +306,7 @@ public:
         //receive data
         capu::status_t result = capu::CAPU_ERROR;
 
-        result = new_socket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes);
+        result = new_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes);
         EXPECT_EQ(capu::CAPU_OK, result);
         //CHECK VALUE
         EXPECT_EQ(5, communication_variable);
@@ -316,7 +316,7 @@ public:
 
         capu::int32_t sentBytes;
         //send it back
-        EXPECT_EQ(capu::CAPU_OK, new_socket->send((capu::char_t*) &communication_variable, sizeof(capu::int32_t), sentBytes));
+        EXPECT_EQ(capu::CAPU_OK, new_socket->send((char*) &communication_variable, sizeof(capu::int32_t), sentBytes));
 
         //wait with close until client has received data
         mutex.lock();
@@ -370,7 +370,7 @@ public:
         capu::TcpSocket* new_socket = socket->accept();
         capu::status_t result = capu::CAPU_ERROR;
 
-        result = new_socket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes);
+        result = new_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes);
         EXPECT_EQ(capu::CAPU_OK, result);
         //CHECK VALUE
         EXPECT_EQ(5, communication_variable);
@@ -478,7 +478,7 @@ public:
         capu::TcpSocket* new_socket = mSocket.accept();
         capu::status_t result = capu::CAPU_ERROR;
 
-        result = new_socket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes);
+        result = new_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes);
         EXPECT_EQ(capu::CAPU_OK, result);
         //CHECK VALUE
         EXPECT_EQ(5, communication_variable);
@@ -524,9 +524,9 @@ TEST(TcpSocket, UnconnectedSocketCloseReceiveAndSendTest)
     EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->close());
     //try to send data via closed socket
     capu::int32_t sentBytes;
-    EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->send((capu::char_t*) "asda", 4, sentBytes));
+    EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->send((char*) "asda", 4, sentBytes));
     //try to receive data from closed socket
-    EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->receive((capu::char_t*) &i, 4, numBytes));
+    EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->receive((char*) &i, 4, numBytes));
     //Deallocation of socket
     delete socket;
 }
@@ -545,7 +545,7 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
     capu::int32_t int_tmp = 0;
     capu::uint16_t short_tmp = 0;
     bool boolmp = false;
-    capu::char_t* remoteIP = 0;
+    char* remoteIP = 0;
 
     //CHECK THE PROPERTIES ARE CORRECTLY SET
     EXPECT_EQ(capu::CAPU_OK, socket->getBufferSize(int_tmp));
@@ -651,7 +651,7 @@ TEST(SocketAndTcpServerSocket, ReconnectTest)
     {
         server_thread.start(server);
         socket.connect("127.0.0.1", port);
-        socket.send((capu::char_t*)&buffer, sizeof(capu::int32_t), sentBytes);
+        socket.send((char*)&buffer, sizeof(capu::int32_t), sentBytes);
         server_thread.join();
     }
 
@@ -723,7 +723,7 @@ public:
     void run()
     {
         capu::TcpSocket* client = server.accept();
-        capu::char_t buffer[1000];
+        char buffer[1000];
         receivedRetVal = client->receive(buffer, sizeof(buffer), receivedLength);
         delete client;
     }

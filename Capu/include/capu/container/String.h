@@ -38,21 +38,21 @@ namespace capu
          * Create a string from some characters
          * @param data Pointer to characters
          */
-        String(const char_t* data);
+        String(const char* data);
 
         /**
          * Create a string from some characters but not starting from the front
          * @param data Pointer to the characters to copy from
          * @param start Position within characters to start copying from
          */
-        String(const char_t* data, uint_t start);
+        String(const char* data, uint_t start);
         /**
          * Create a string from some characters, only taking some from the middle
          * @param data Pointer to character
          * @param start Position within characters to start copying from
          * @param end Position within characters to stop copying
          */
-        String(const char_t* data, const uint_t start, const uint_t end);
+        String(const char* data, const uint_t start, const uint_t end);
 
         /**
          * Create a string from some other strnig, only taking some from the middle
@@ -67,7 +67,7 @@ namespace capu
          * @param initialSize for the string
          * @param character to initialize string
          */
-        String(uint_t initialSize, char_t character);
+        String(uint_t initialSize, char character);
 
 
         /**
@@ -83,7 +83,7 @@ namespace capu
         /**
          * Return the string as characters
          */
-        const char_t* c_str() const;
+        const char* c_str() const;
 
         /**
          * Assign a string by copying from another
@@ -93,24 +93,24 @@ namespace capu
         /**
          * Assign a string by copying from some characters
          */
-        String& operator=(const char_t* other);
+        String& operator=(const char* other);
 
         /**
          * Assign a char to the string
          */
-        String& operator=(char_t other);
+        String& operator=(char other);
 
         /**
          * Adds the given character string to the string
          * @param character string to add
          */
-        void operator+=(const char_t* other);
+        void operator+=(const char* other);
 
         /**
          * Adds the given character to the string
          * @param character string to add
          */
-        void operator+=(char_t other);
+        void operator+=(char other);
 
         /**
          * Add two strings together and return the concatenated string
@@ -120,7 +120,7 @@ namespace capu
         /**
          * Concatenate a c-style string and return the result
          */
-        String operator+(const char_t* rOperand) const;
+        String operator+(const char* rOperand) const;
 
         /**
          * Return if this string equals another
@@ -148,8 +148,8 @@ namespace capu
          * @return character at the given index
          * @{
          */
-        char_t& operator[](uint_t index);
-        const char_t& operator[](uint_t index) const;
+        char& operator[](uint_t index);
+        const char& operator[](uint_t index) const;
         /**
          * @}
          */
@@ -166,7 +166,7 @@ namespace capu
          * @param other The characters to append
          * @return Reference to this string
          */
-        String& append(const char_t* other);
+        String& append(const char* other);
 
         /**
          * Return the length of the string
@@ -179,7 +179,7 @@ namespace capu
          * @param offset The index from where the search for the character has to be started (default 0).
          * @return The index of the found char or -1 if the char was not found.
          */
-        int_t find(const char_t ch, const uint_t offset = 0) const;
+        int_t find(const char ch, const uint_t offset = 0) const;
 
         /**
          * Return the first index of the given substring within the string
@@ -207,7 +207,7 @@ namespace capu
          * Return the index of the last occurence of the given character within the string
          * @param ch The character whos last index is requested
          */
-        int_t rfind(const char_t ch) const;
+        int_t rfind(const char ch) const;
 
         /**
          * Convert the string to UPPER CASE
@@ -262,10 +262,10 @@ namespace capu
         String replace(const String& search, const String& replace, const int_t offset = 0) const;
 
     private:
-        void initData(const capu::char_t* data);
-        void initFromGivenData(const char_t* data, const uint_t end, const uint_t start, uint_t size);
+        void initData(const char* data);
+        void initFromGivenData(const char* data, const uint_t end, const uint_t start, uint_t size);
 
-        Array<char_t> m_data;
+        Array<char> m_data;
         uint_t m_size;
     };
 
@@ -302,7 +302,7 @@ namespace capu
     {
     }
 
-    inline String::String(uint_t initialSize, char_t character)
+    inline String::String(uint_t initialSize, char character)
         : m_data(initialSize + 1)
         , m_size(initialSize)
     {
@@ -310,18 +310,18 @@ namespace capu
         m_data[initialSize] = '\0';
     }
 
-    inline String::String(const char_t* other)
+    inline String::String(const char* other)
         : m_data(0), m_size(0)
     {
         initData(other);
     }
 
-    inline String::String(const char_t* data, uint_t start)
+    inline String::String(const char* data, uint_t start)
         : m_data(0), m_size(0)
     {
         if (data)
         {
-            const char_t* startdata = &data[start];
+            const char* startdata = &data[start];
             initData(startdata);
         }
     }
@@ -332,7 +332,7 @@ namespace capu
         initFromGivenData(other.c_str(), start, end, other.m_size);
     }
 
-    inline String::String(const char_t* data, const uint_t start, const uint_t end)
+    inline String::String(const char* data, const uint_t start, const uint_t end)
         : m_data(0), m_size(0)
     {
         initFromGivenData(data, start, end, StringUtils::Strnlen(data, end + 1));
@@ -343,7 +343,7 @@ namespace capu
     {
     }
 
-    inline void String::initFromGivenData(const char_t* data, const uint_t start, const uint_t end, uint_t size)
+    inline void String::initFromGivenData(const char* data, const uint_t start, const uint_t end, uint_t size)
     {
         // no data
         if (!data)
@@ -371,10 +371,10 @@ namespace capu
         }
 
         // do the work
-        const char_t* startdata = &data[start];
+        const char* startdata = &data[start];
         m_size = theend - start + 1;
 
-        Array<char_t> tmpArray(m_size + 1); // with ending \0
+        Array<char> tmpArray(m_size + 1); // with ending \0
         capu::swap(m_data, tmpArray);
 
         StringUtils::Strncpy(m_data.getRawData(), m_data.size(), startdata);
@@ -394,7 +394,7 @@ namespace capu
         return *this;
     }
 
-    inline String& String::operator=(const char_t* other)
+    inline String& String::operator=(const char* other)
     {
         initData(other);
         return *this;
@@ -406,13 +406,13 @@ namespace capu
         return result.append(rOperand);
     }
 
-    inline String String::operator+(const char_t* rOperand) const
+    inline String String::operator+(const char* rOperand) const
     {
         String result(c_str());
         return result.append(rOperand);
     }
 
-    inline String operator+(const char_t* lOperand, const String& rOperand)
+    inline String operator+(const char* lOperand, const String& rOperand)
     {
         String result(lOperand);
         return result.append(rOperand.c_str());
@@ -420,13 +420,13 @@ namespace capu
 
     inline bool String::operator==(const String& other) const
     {
-        static char_t null(0);
-        const char_t* str1 = m_data.getRawData();
+        static char null(0);
+        const char* str1 = m_data.getRawData();
         if (!str1)
         {
             str1 = &null;
         }
-        const char_t* str2 = other.m_data.getRawData();
+        const char* str2 = other.m_data.getRawData();
         if (!str2)
         {
             str2 = &null;
@@ -436,13 +436,13 @@ namespace capu
 
     inline bool String::operator<(const String& other) const
     {
-        static char_t null(0);
-        const char_t* str1 = m_data.getRawData();
+        static char null(0);
+        const char* str1 = m_data.getRawData();
         if (!str1)
         {
             str1 = &null;
         }
-        const char_t* str2 = other.m_data.getRawData();
+        const char* str2 = other.m_data.getRawData();
         if (!str2)
         {
             str2 = &null;
@@ -452,13 +452,13 @@ namespace capu
 
     inline bool String::operator>(const String& other) const
     {
-        static char_t null(0);
-        const char_t* str1 = m_data.getRawData();
+        static char null(0);
+        const char* str1 = m_data.getRawData();
         if (!str1)
         {
             str1 = &null;
         }
-        const char_t* str2 = other.m_data.getRawData();
+        const char* str2 = other.m_data.getRawData();
         if (!str2)
         {
             str2 = &null;
@@ -466,20 +466,20 @@ namespace capu
         return StringUtils::Strcmp(str1, str2) > 0;
     }
 
-    inline void String::operator+=(const char_t* other)
+    inline void String::operator+=(const char* other)
     {
         append(other);
     }
 
-    inline String& String::operator=(char_t other)
+    inline String& String::operator=(char other)
     {
-        char_t tmp[2] = {other, '\0'};
+        char tmp[2] = {other, '\0'};
         return operator=(tmp);
     }
 
-    inline void String::operator+=(char_t other)
+    inline void String::operator+=(char other)
     {
-        char_t tmp[2] = {other, '\0'};
+        char tmp[2] = {other, '\0'};
         operator+=(tmp);
     }
 
@@ -488,12 +488,12 @@ namespace capu
         return !operator==(other);
     }
 
-    inline char_t& String::operator[](uint_t index)
+    inline char& String::operator[](uint_t index)
     {
         return m_data[index];
     }
 
-    inline const char_t& String::operator[](uint_t index) const
+    inline const char& String::operator[](uint_t index) const
     {
         return m_data[index];
     }
@@ -528,7 +528,7 @@ namespace capu
         }
     }
 
-    inline String& String::append(const char_t* other)
+    inline String& String::append(const char* other)
     {
         if (other && *other)
         {
@@ -537,7 +537,7 @@ namespace capu
                 uint_t mylen = StringUtils::Strlen(m_data.getRawData());
                 uint_t otherlen = StringUtils::Strlen(other) + 1;
 
-                Array<char_t> newData(mylen + otherlen);
+                Array<char> newData(mylen + otherlen);
 
                 StringUtils::Strncpy(newData.getRawData(), mylen + 1, m_data.getRawData());
                 StringUtils::Strncpy(&newData.getRawData()[mylen], otherlen, other);
@@ -553,18 +553,18 @@ namespace capu
         return *this;
     }
 
-    inline const char_t* String::c_str() const
+    inline const char* String::c_str() const
     {
         return m_data.size() > 0 ? m_data.getRawData() : "";
     }
 
-    inline void String::initData(const capu::char_t* data)
+    inline void String::initData(const char* data)
     {
         if (data)
         {
             uint_t len = StringUtils::Strlen(data) + 1;
 
-            Array<char_t> tmpArray(len);
+            Array<char> tmpArray(len);
             capu::swap(m_data, tmpArray);
 
             StringUtils::Strncpy(m_data.getRawData(), len, data);
@@ -572,7 +572,7 @@ namespace capu
         }
         else
         {
-            m_data = Array<char_t>(0);
+            m_data = Array<char>(0);
             m_size = 0;
         }
     }
@@ -582,7 +582,7 @@ namespace capu
         return m_size;
     }
 
-    inline int_t String::find(const char_t ch, const uint_t offset) const
+    inline int_t String::find(const char ch, const uint_t offset) const
     {
         return ConstString(c_str()).find(ch, offset);
     }
@@ -592,7 +592,7 @@ namespace capu
         return ConstString(c_str()).find(ConstString(substr.c_str()), offset);
     }
 
-    inline int_t String::rfind(const char_t ch) const
+    inline int_t String::rfind(const char ch) const
     {
         return ConstString(c_str()).rfind(ch);
     }

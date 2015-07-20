@@ -50,7 +50,7 @@ namespace capu
     {
         EXPECT_EQ(capu::CAPU_OK, mFile.open(READ_EXISTING_BINARY));
 
-        capu::char_t buffer[64];
+        char buffer[64];
         capu::uint_t numBytes = 0;
 
         EXPECT_EQ(capu::CAPU_OK, mFile.read(buffer, sizeof(capu::int32_t), numBytes));
@@ -58,7 +58,7 @@ namespace capu
 
         union
         {
-           capu::char_t charVal[4];
+           char charVal[4];
            capu::int32_t int32Val;
         }int32Convert;
 
@@ -75,7 +75,7 @@ namespace capu
 
         union
         {
-          capu::char_t charVal[4];
+          char charVal[4];
           float floatVal;
         } floatConvert;
 
@@ -87,9 +87,9 @@ namespace capu
         EXPECT_EQ(20.0f, floatConvert.floatVal);
 
         EXPECT_EQ(CAPU_OK, mFile.read(buffer, sizeof(uint32_t), numBytes));
-        EXPECT_EQ(CAPU_OK, mFile.read(buffer, sizeof(capu::char_t) * mTestString.getLength(), numBytes));
+        EXPECT_EQ(CAPU_OK, mFile.read(buffer, sizeof(char) * mTestString.getLength(), numBytes));
         buffer[mTestString.getLength()] = 0;
-        EXPECT_EQ(sizeof(capu::char_t) * mTestString.getLength(), numBytes);
+        EXPECT_EQ(sizeof(char) * mTestString.getLength(), numBytes);
         EXPECT_STREQ("Dies ist ein Text", buffer);
     }
 
@@ -98,7 +98,7 @@ namespace capu
         capu::File file("some/non/existing/path");
         capu::BinaryFileOutputStream outputStream(file);
 
-        char_t data = '1';
+        char data = '1';
         int size = 1;
 
         outputStream.write(&data, size);

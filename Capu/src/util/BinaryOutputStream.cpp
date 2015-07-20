@@ -57,7 +57,7 @@ namespace capu
             mCapacity *= 2;
         }
 
-        Array<char_t> newBuffer(mCapacity);
+        Array<char> newBuffer(mCapacity);
         Memory::Copy(newBuffer.getRawData(), mBuffer.getRawData(), mSize);
         swap(mBuffer, newBuffer);
     }

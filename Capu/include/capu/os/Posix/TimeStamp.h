@@ -59,7 +59,7 @@ namespace capu
             struct tm *timeInfo;
             timeInfo = localtime(&mTime);
             //convert it to standard ascii representation
-            char_t * asciiTimeInfo = asctime(timeInfo);
+            char * asciiTimeInfo = asctime(timeInfo);
             if (asciiTimeInfo == NULL) {
                 //in case conversion fails
                 return CAPU_ERROR;

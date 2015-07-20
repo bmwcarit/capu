@@ -33,7 +33,7 @@ namespace capu
         EXPECT_EQ(4u, sizeof(float));
         EXPECT_EQ(8u, sizeof(double));
         EXPECT_EQ(1u, sizeof(bool));
-        EXPECT_EQ(1u, sizeof(char_t));
+        EXPECT_EQ(1u, sizeof(char));
         EXPECT_EQ(1u, sizeof(uchar_t));
 
 #if defined (OS_WINDOWS)

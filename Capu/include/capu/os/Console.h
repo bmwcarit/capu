@@ -47,7 +47,7 @@ namespace capu
          * @param format of the message (like printf)
          * @param parameters for the format (like prints)
          */
-        static void Print(const char_t* format, ...);
+        static void Print(const char* format, ...);
 
         /**
         * Prints a message on the console with the given color
@@ -55,7 +55,7 @@ namespace capu
         * @param format of the message (like printf)
         * @param parameters for the format (like prints)
         */
-        static void Print(ConsoleColor color, const char_t* format, ...);
+        static void Print(ConsoleColor color, const char* format, ...);
 
         /**
          * Checks whether there is input on stdin available or not
@@ -71,7 +71,7 @@ namespace capu
          *         CAPU_EOF if stdin is closed,
          *         CAPU_ERROR when other errors ocurred
          */
-        static status_t ReadChar(char_t& buffer);
+        static status_t ReadChar(char& buffer);
 
         /**
          * Flush the contents of stdout and stderr.
@@ -97,7 +97,7 @@ namespace capu
 
     inline
     status_t
-    Console::ReadChar(char_t& buffer)
+    Console::ReadChar(char& buffer)
     {
         return capu::os::arch::Console::ReadChar(buffer);
     }
@@ -111,7 +111,7 @@ namespace capu
 
     inline
     void
-    Console::Print(const char_t* format, ...)
+    Console::Print(const char* format, ...)
     {
         va_list argptr;
         va_start(argptr, format);
@@ -121,7 +121,7 @@ namespace capu
 
     inline
     void 
-    Console::Print(ConsoleColor color, const char_t* format, ...)
+    Console::Print(ConsoleColor color, const char* format, ...)
     {
         va_list argptr;
         va_start(argptr, format);

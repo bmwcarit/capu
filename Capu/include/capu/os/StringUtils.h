@@ -37,7 +37,7 @@ namespace capu
          * @param dstSize number of chars to be copied
          * @param src source buffer
          */
-        static void Strncpy(char_t* dst, const uint_t dstSize, const char_t* src);
+        static void Strncpy(char* dst, const uint_t dstSize, const char* src);
 
         /**
          * Static method to write a C string according to the given format into the array pointed by buffer.
@@ -47,7 +47,7 @@ namespace capu
          * @param format the format of the string
          * @return total number of characters written on success, negative number otherwise
          */
-        static int32_t Sprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, ...);
+        static int32_t Sprintf(char* buffer, const uint_t bufferSize, const char* format, ...);
 
         /**
          * Static method to write a C string according to the given format into the array pointed by buffer.
@@ -58,7 +58,7 @@ namespace capu
          * @param values arguments for the format
          * @return total number of characters written on success, negative number otherwise
          */
-        static int32_t Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values);
+        static int32_t Vsprintf(char* buffer, const uint_t bufferSize, const char* format, va_list values);
 
         /**
          * Static method to count the bytes according to the given format
@@ -66,14 +66,14 @@ namespace capu
          * @param format the format of the string
          * @param values arguments for the format
          */
-        static int32_t Vscprintf(const char_t* format, va_list values);
+        static int32_t Vscprintf(const char* format, va_list values);
 
         /**
          * Static method to return the length of the given String
          * @param str the string
          * @return length of the string
          */
-        static uint_t Strlen(const char_t* str);
+        static uint_t Strlen(const char* str);
 
         /**
         * Static method to return the length of the given String
@@ -81,7 +81,7 @@ namespace capu
         * @param maxlen maximum number of characters to search for null terminator
         * @return length of the string
         */
-        static uint_t Strnlen(const char_t* str, uint_t maxlen);
+        static uint_t Strnlen(const char* str, uint_t maxlen);
 
         /**
          * Static method to compare two C strings.
@@ -91,7 +91,7 @@ namespace capu
          *         > 0 if the first character which does not match has a greater value in str1
          *         < 0 otherwise
          */
-        static int_t Strcmp(const char_t* str1, const char_t* str2);
+        static int_t Strcmp(const char* str1, const char* str2);
 
         /**
          * Calculates the last index of a given character.
@@ -99,7 +99,7 @@ namespace capu
          * @param ch the search char.
          * @return The last index of the specified char or -1 if the char was not found.
          */
-        static int_t LastIndexOf(const char_t* str, const char_t ch);
+        static int_t LastIndexOf(const char* str, const char ch);
 
         /**
          * Calculates the first index of a given character.
@@ -108,7 +108,7 @@ namespace capu
          * @param offset the index from where the search for the character has to be started (default 0).
          * @return The first index of the specified char or -1 if the char was not found.
          */
-        static int_t IndexOf(const char_t* str, const char_t ch, const uint_t offset = 0);
+        static int_t IndexOf(const char* str, const char ch, const uint_t offset = 0);
 
         /**
          * Calculates the first index of a given string
@@ -117,7 +117,7 @@ namespace capu
          * @param offset The index from where the search for the 2nd string has to be started in the 1st string (default 0).
          * @return the first index of the specified string or -1 if the char was not found
          */
-        static int_t IndexOf(const char_t* str, const char_t* str2, const uint_t offset = 0);
+        static int_t IndexOf(const char* str, const char* str2, const uint_t offset = 0);
 
         /**
          * Checks if the given testString starts with the given prefix.
@@ -125,19 +125,19 @@ namespace capu
          * @param prefix The prefix.
          * @return True if the testString starts with the given prefix.
          */
-        static bool StartsWith(const char_t* str, const char_t* prefix);
+        static bool StartsWith(const char* str, const char* prefix);
     };
 
     inline
     void
-    StringUtils::Strncpy(char_t* dst, const uint_t dstSize, const char_t* src)
+    StringUtils::Strncpy(char* dst, const uint_t dstSize, const char* src)
     {
         capu::os::arch::StringUtils::Strncpy(dst, dstSize, src);
     }
 
     inline
     int32_t
-    StringUtils::Sprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, ...)
+    StringUtils::Sprintf(char* buffer, const uint_t bufferSize, const char* format, ...)
     {
         va_list argptr;
         va_start(argptr, format);
@@ -148,49 +148,49 @@ namespace capu
 
     inline
     int32_t
-    StringUtils::Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values)
+    StringUtils::Vsprintf(char* buffer, const uint_t bufferSize, const char* format, va_list values)
     {
         return capu::os::arch::StringUtils::Vsprintf(buffer, bufferSize, format, values);
     }
 
     inline
     int32_t
-    StringUtils::Vscprintf(const char_t* format, va_list values)
+    StringUtils::Vscprintf(const char* format, va_list values)
     {
         return capu::os::arch::StringUtils::Vscprintf(format, values);
     }
 
     inline
     uint_t
-    StringUtils::Strlen(const char_t* str)
+    StringUtils::Strlen(const char* str)
     {
         return capu::os::arch::StringUtils::Strlen(str);
     }
 
     inline
     uint_t
-    StringUtils::Strnlen(const char_t* str, uint_t maxlen)
+    StringUtils::Strnlen(const char* str, uint_t maxlen)
     {
         return capu::os::arch::StringUtils::Strnlen(str, maxlen);
     }
 
     inline
     int_t
-    StringUtils::Strcmp(const char_t* str1, const char_t* str2)
+    StringUtils::Strcmp(const char* str1, const char* str2)
     {
         return capu::os::arch::StringUtils::Strcmp(str1, str2);
     }
 
     inline
     int_t
-    StringUtils::LastIndexOf(const char_t* str, const char_t ch)
+    StringUtils::LastIndexOf(const char* str, const char ch)
     {
         return capu::os::arch::StringUtils::LastIndexOf(str, ch);
     }
 
     inline
     int_t
-    StringUtils::IndexOf(const char_t* str, const char_t ch, const uint_t offset)
+    StringUtils::IndexOf(const char* str, const char ch, const uint_t offset)
     {
         if (Strlen(str) >= offset)
         {
@@ -204,14 +204,14 @@ namespace capu
 
     inline
     bool
-    StringUtils::StartsWith(const char_t* str, const char_t* prefix)
+    StringUtils::StartsWith(const char* str, const char* prefix)
     {
         return capu::os::arch::StringUtils::StartsWith(str, prefix);
     }
 
     inline
     int_t
-    StringUtils::IndexOf(const char_t* str, const char_t* str2, const uint_t offset)
+    StringUtils::IndexOf(const char* str, const char* str2, const uint_t offset)
     {
         if (Strlen(str) >= offset)
         {

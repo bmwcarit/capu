@@ -108,7 +108,7 @@ namespace capu
         String value = "Hello World";
         uint32_t strlen = static_cast<uint32_t>(value.getLength());
 
-        Memory::Copy(buffer, reinterpret_cast<char_t*>(&strlen), sizeof(uint32_t));
+        Memory::Copy(buffer, reinterpret_cast<char*>(&strlen), sizeof(uint32_t));
         Memory::Copy(buffer + sizeof(uint32_t), value.c_str(), value.getLength() + 1);
 
         BinaryInputStream inStream(buffer);

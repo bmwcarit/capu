@@ -47,7 +47,7 @@ namespace capu
     // Disabled tests can be forcefully enabled from commandline to test this
     TEST_F(ConsoleTest, DISABLED_ReadChar)
     {
-        char_t readChar = '\0';
+        char readChar = '\0';
         status_t status = Console::ReadChar(readChar);
         Console::Print("I have read: %c\n",readChar);
         EXPECT_EQ(CAPU_OK, status);
@@ -69,7 +69,7 @@ namespace capu
     TEST_F(ConsoleTest, DISABLED_ReadCharFromPreviouslyClosedStdin)
     {
             fclose(stdin);
-            char_t buffer;
+            char buffer;
             status_t status = Console::ReadChar(buffer);
             EXPECT_NE(CAPU_OK, status);
     }
@@ -90,7 +90,7 @@ namespace capu
         CallInteruptAfter1Second interupter;
         Thread t;
         t.start(interupter);
-        char_t buffer;
+        char buffer;
         status_t status = Console::ReadChar(buffer);
         EXPECT_EQ(CAPU_INTERRUPTED, status);
     }

@@ -82,7 +82,7 @@ namespace capu
          * Write a char into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const char_t* value);
+        IOutputStream& operator<<(const char* value);
 
         /**
          * Write a uint16_t into the stream
@@ -107,7 +107,7 @@ namespace capu
          * Returns a pointer to the raw data
          * @return a pointer to the raw data
          */
-        const char_t* getData() const;
+        const char* getData() const;
 
         /**
          * Returns the current size in bytes of the stream
@@ -140,7 +140,7 @@ namespace capu
         /**
          * Point to the internal stream data
          */
-        Array<char_t> mBuffer;
+        Array<char> mBuffer;
 
         /**
          * The current size of the stream
@@ -166,7 +166,7 @@ namespace capu
     };
 
     inline
-    const char_t*
+    const char*
     BinaryOutputStream::getData() const
     {
         return mBuffer.getRawData();
@@ -245,7 +245,7 @@ namespace capu
 
     inline
     IOutputStream&
-    BinaryOutputStream::operator<<(const char_t* value)
+    BinaryOutputStream::operator<<(const char* value)
     {
         const uint32_t len = static_cast<uint32_t>(StringUtils::Strlen(value));
         operator<<(len); // first write length of string
@@ -256,7 +256,7 @@ namespace capu
     IOutputStream&
     BinaryOutputStream::operator<<(const bool value)
     {
-        return write(reinterpret_cast<const char_t*>(&value), sizeof(bool));
+        return write(reinterpret_cast<const char*>(&value), sizeof(bool));
     }
 
     inline

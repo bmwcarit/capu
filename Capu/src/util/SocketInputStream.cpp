@@ -26,7 +26,7 @@ namespace capu
         uint32_t strLen = 0;
 
         operator>>(strLen);
-        Array<char_t> buffer(strLen + 1);
+        Array<char> buffer(strLen + 1);
 
         read(buffer.getRawData(), strLen);
         buffer[strLen] = 0;

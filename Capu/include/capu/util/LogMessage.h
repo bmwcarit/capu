@@ -50,10 +50,10 @@ namespace capu
         StringOutputStream& getStream();
 
         /**
-         * Returns a const char_t pointer to the message
-         * @return a const char_t pointer to the message
+         * Returns a const char pointer to the message
+         * @return a const char pointer to the message
          */
-        const char_t* getLogMessage() const;
+        const char* getLogMessage() const;
 
         /**
          * Returns the context of the message

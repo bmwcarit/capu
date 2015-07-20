@@ -44,7 +44,7 @@ namespace capu
          *         CAPU_EINVAL if the port is equal to 0
          *         CAPU_SOCKET_ESOCKET if the socket has not been created successfully
          */
-        status_t bind(const uint16_t port, const char_t* address = NULL);
+        status_t bind(const uint16_t port, const char* address = NULL);
 
         /**
          * Send the messages
@@ -57,7 +57,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket has not been created successfully
          *         CAPU_ERROR otherwise
          */
-        status_t send(const char_t* buffer, const int32_t length, const SocketAddrInfo& receiverAddr);
+        status_t send(const char* buffer, const int32_t length, const SocketAddrInfo& receiverAddr);
 
         /**
          * Send the messages
@@ -71,7 +71,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket has not been created successfully
          *         CAPU_ERROR otherwise
          */
-        status_t send(const char_t* buffer, const int32_t length, const char_t* receiverAddr, const uint16_t receiverPort);
+        status_t send(const char* buffer, const int32_t length, const char* receiverAddr, const uint16_t receiverPort);
 
         /**
          * Receive message
@@ -84,7 +84,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket has not been created successfully
          *         CAPU_ERROR otherwise
          */
-        status_t receive(char_t* buffer, const int32_t length, int32_t& numBytes, SocketAddrInfo* sender);
+        status_t receive(char* buffer, const int32_t length, int32_t& numBytes, SocketAddrInfo* sender);
 
         /**
          * close the socket
@@ -155,28 +155,28 @@ namespace capu
 
     inline
     status_t
-    UdpSocket::bind(const uint16_t port, const char_t* addr)
+    UdpSocket::bind(const uint16_t port, const char* addr)
     {
         return capu::os::arch::UdpSocket::bind(port, addr);
     }
 
     inline
     status_t
-    UdpSocket::send(const char_t* buffer, const int32_t length, const SocketAddrInfo& receiverAddr)
+    UdpSocket::send(const char* buffer, const int32_t length, const SocketAddrInfo& receiverAddr)
     {
         return capu::os::arch::UdpSocket::send(buffer, length, receiverAddr);
     }
 
     inline
     status_t
-    UdpSocket::send(const char_t* buffer, const int32_t length, const char_t* receiverAddr, const uint16_t receiverPort)
+    UdpSocket::send(const char* buffer, const int32_t length, const char* receiverAddr, const uint16_t receiverPort)
     {
         return capu::os::arch::UdpSocket::send(buffer, length, receiverAddr, receiverPort);
     }
 
     inline
     status_t
-    UdpSocket::receive(char_t* buffer, const int32_t length, int32_t& numBytes, SocketAddrInfo* sender)
+    UdpSocket::receive(char* buffer, const int32_t length, int32_t& numBytes, SocketAddrInfo* sender)
     {
         return capu::os::arch::UdpSocket::receive(buffer, length, numBytes, sender);
     }

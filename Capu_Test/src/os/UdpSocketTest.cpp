@@ -51,7 +51,7 @@ public:
 
         capu::int32_t i = 5;
         //try to connect to ipv6
-        //EXPECT_EQ(capu::CAPU_SOCKET_EADDR, clientSocket->send((capu::char_t*) &i, sizeof(capu::int32_t), "::1", port) );
+        //EXPECT_EQ(capu::CAPU_SOCKET_EADDR, clientSocket->send((char*) &i, sizeof(capu::int32_t), "::1", port) );
 
         //wait for other side to start up
         mutex2.lock();
@@ -62,12 +62,12 @@ public:
         cond2 = false;
         mutex2.unlock();
         //send data
-        EXPECT_EQ(capu::CAPU_OK, clientSocket->send((capu::char_t*) &i, sizeof(capu::int32_t), "127.0.0.1", port));
+        EXPECT_EQ(capu::CAPU_OK, clientSocket->send((char*) &i, sizeof(capu::int32_t), "127.0.0.1", port));
 
         //receive
         capu::status_t result = capu::CAPU_ERROR;
 
-        result = clientSocket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes, 0);
+        result = clientSocket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes, 0);
         EXPECT_EQ(capu::CAPU_OK, result);
 
         //check value
@@ -112,10 +112,10 @@ public:
         mutex2.unlock();
 
         //send data
-        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((capu::char_t*) &i, sizeof(capu::int32_t), "127.0.0.1", port));
+        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(capu::int32_t), "127.0.0.1", port));
 
         //receive
-        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes, 0));
+        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes, 0));
 
         mutex2.lock();
         cond2 = true;
@@ -155,7 +155,7 @@ public:
         cond2 = true;
         cv2.signal();
         mutex2.unlock();
-        result = serverSocket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes, &remoteSocket);
+        result = serverSocket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes, &remoteSocket);
         EXPECT_EQ(capu::CAPU_OK, result);
 
         EXPECT_STREQ("127.0.0.1", remoteSocket.addr.c_str());
@@ -167,7 +167,7 @@ public:
         communication_variable++;
 
         //send it back
-        EXPECT_EQ(capu::CAPU_OK, serverSocket->send((capu::char_t*) &communication_variable, sizeof(capu::int32_t), remoteSocket));
+        EXPECT_EQ(capu::CAPU_OK, serverSocket->send((char*) &communication_variable, sizeof(capu::int32_t), remoteSocket));
 
         mutex2.lock();
         while (!cond2)
@@ -207,7 +207,7 @@ public:
         cond2 = true;
         cv2.signal();
         mutex2.unlock();
-        result = serverSocket->receive((capu::char_t*) &communication_variable, sizeof(capu::int32_t), numBytes, NULL);
+        result = serverSocket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes, NULL);
         EXPECT_EQ(capu::CAPU_OK, result);
 
         //check value
@@ -236,9 +236,9 @@ TEST(UdpSocket, CloseReceiveAndSendTest)
     capu::int32_t numBytes = 0;
     EXPECT_EQ(capu::CAPU_OK, socket->close());
     //try to send data via closed socket
-    EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->send((capu::char_t*) "asda", 4, "127.0.0.1", port));
+    EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->send((char*) "asda", 4, "127.0.0.1", port));
     //try to receive data from closed socket
-    EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->receive((capu::char_t*) &i, 4, numBytes, NULL));
+    EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->receive((char*) &i, 4, numBytes, NULL));
     //Deallocation of socket
     delete socket;
 }

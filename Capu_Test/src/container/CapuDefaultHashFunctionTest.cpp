@@ -36,13 +36,13 @@ namespace capu
         capu::int16_t        sometype5 = 42;
         capu::uint8_t        sometype6 = 42;
         capu::int8_t         sometype7 = 42;
-        capu::char_t         sometype8 = 42;
+        char         sometype8 = 42;
         capu::uchar_t        sometype9 = 42;
         float        sometype10 = 42.f;
         double       sometype11 = 42.0;
         bool         sometype12 = true;
-        capu::char_t         sometype13[] = "HashTest";
-        const capu::char_t*  sometype14 = "HashTest2";
+        char         sometype13[] = "HashTest";
+        const char*  sometype14 = "HashTest2";
 
         SomeClass clazz;
         SomeClass clazz2;

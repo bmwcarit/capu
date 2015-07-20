@@ -20,7 +20,7 @@
 
 namespace capu
 {
-    BinaryInputStream::BinaryInputStream(const char_t* buffer)
+    BinaryInputStream::BinaryInputStream(const char* buffer)
         : mBuffer(buffer)
         , mCurrent(mBuffer)
         , mState(CAPU_OK)
@@ -33,25 +33,25 @@ namespace capu
 
     IInputStream& BinaryInputStream::operator>>(int32_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(int32_t));
+        read(reinterpret_cast<char*>(&value), sizeof(int32_t));
         return *this;
     }
 
     IInputStream& BinaryInputStream::operator>>(uint32_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(uint32_t));
+        read(reinterpret_cast<char*>(&value), sizeof(uint32_t));
         return *this;
     }
 
     IInputStream& BinaryInputStream::operator>>(uint64_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(uint64_t));
+        read(reinterpret_cast<char*>(&value), sizeof(uint64_t));
         return *this;
     }
 
     IInputStream& BinaryInputStream::operator>>(int64_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(int64_t));
+        read(reinterpret_cast<char*>(&value), sizeof(int64_t));
         return *this;
     }
 
@@ -60,7 +60,7 @@ namespace capu
         uint32_t length = 0;
         operator>>(length); // first read the length of the string
 
-        char_t* buffer = new char_t[length + 1];
+        char* buffer = new char[length + 1];
 
         read(buffer, length);
         buffer[length] = 0; // terminate string
@@ -73,31 +73,31 @@ namespace capu
 
     IInputStream& BinaryInputStream::operator>>(bool& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(bool));
+        read(reinterpret_cast<char*>(&value), sizeof(bool));
         return *this;
     }
 
     IInputStream& BinaryInputStream::operator>>(float& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(float));
+        read(reinterpret_cast<char*>(&value), sizeof(float));
         return *this;
     }
 
     IInputStream& BinaryInputStream::operator>>(uint16_t& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(uint16_t));
+        read(reinterpret_cast<char*>(&value), sizeof(uint16_t));
         return *this;
     }
 
     IInputStream& BinaryInputStream::operator>>(Guid& value)
     {
         generic_uuid_t fromStream;
-        read(reinterpret_cast<char_t*>(&fromStream), sizeof(generic_uuid_t));
+        read(reinterpret_cast<char*>(&fromStream), sizeof(generic_uuid_t));
         value = fromStream;
         return *this;
     }
 
-    IInputStream& BinaryInputStream::read(char_t* buffer, const uint32_t size)
+    IInputStream& BinaryInputStream::read(char* buffer, const uint32_t size)
     {
         Memory::Copy(buffer, mCurrent, size);
         mCurrent += size;

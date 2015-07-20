@@ -59,7 +59,7 @@ namespace capu
 
         outStream << static_cast<uint16_t>(5) << static_cast<uint16_t>(6) << static_cast<uint16_t>(7);
 
-        const char_t* data = outStream.getData();
+        const char* data = outStream.getData();
         EXPECT_EQ(5, *reinterpret_cast<const uint16_t*>(data));
         data += sizeof(uint16_t);
         EXPECT_EQ(6, *reinterpret_cast<const uint16_t*>(data));
@@ -74,7 +74,7 @@ namespace capu
 
         outStream << 5 << 6 << 7;
 
-        const char_t* data = outStream.getData();
+        const char* data = outStream.getData();
         EXPECT_EQ(5, *reinterpret_cast<const int32_t*>(data));
         data += sizeof(int32_t);
         EXPECT_EQ(6, *reinterpret_cast<const int32_t*>(data));
@@ -87,7 +87,7 @@ namespace capu
         BinaryOutputStream outStream;
         outStream << 0u << 5u << 6u << 7u << NumericLimits::Max<uint32_t>();
 
-        const char_t* data = outStream.getData();
+        const char* data = outStream.getData();
         EXPECT_EQ(0u, *reinterpret_cast<const uint32_t*>(data));
         data += sizeof(uint32_t);
         EXPECT_EQ(5u, *reinterpret_cast<const uint32_t*>(data));
@@ -105,7 +105,7 @@ namespace capu
 
         outStream << (int64_t)5 << (int64_t)6 << (int64_t)7;
 
-        const char_t* data = outStream.getData();
+        const char* data = outStream.getData();
         EXPECT_EQ((int64_t)5, *reinterpret_cast<const int64_t*>(data));
         data += sizeof(int64_t);
         EXPECT_EQ((int64_t)6, *reinterpret_cast<const int64_t*>(data));
@@ -118,7 +118,7 @@ namespace capu
         BinaryOutputStream outStream;
         outStream << (uint64_t)0u << (uint64_t)5u << (uint64_t)6u << (uint64_t)7u << NumericLimits::Max<uint64_t>();
 
-        const char_t* data = outStream.getData();
+        const char* data = outStream.getData();
         EXPECT_EQ((uint64_t)0u, *reinterpret_cast<const uint64_t*>(data));
         data += sizeof(uint64_t);
         EXPECT_EQ((uint64_t)5u, *reinterpret_cast<const uint64_t*>(data));
@@ -135,7 +135,7 @@ namespace capu
         BinaryOutputStream outStream;
         outStream << 5.0f << 6.0f << 7.0f;
 
-        const char_t* data = outStream.getData();
+        const char* data = outStream.getData();
         EXPECT_EQ(5.0f, *reinterpret_cast<const float*>(data));
         data += sizeof(int32_t);
         EXPECT_EQ(6.0f, *reinterpret_cast<const float*>(data));
@@ -150,7 +150,7 @@ namespace capu
         Guid guid2;
         outStream << guid1 << guid2;
 
-        const char_t* data = outStream.getData();
+        const char* data = outStream.getData();
 
         BinaryInputStream in(data);
         Guid fromStreamGuid1;
@@ -167,7 +167,7 @@ namespace capu
         const char* testString = "abcdefgh";
         outStream << 5 << testString << 7.0f;
 
-        const char_t* data = outStream.getData();
+        const char* data = outStream.getData();
         EXPECT_EQ(5, *reinterpret_cast<const int32_t*>(data));
         data += sizeof(int32_t);
         const uint32_t len = *reinterpret_cast<const uint32_t*>(data);
@@ -192,7 +192,7 @@ namespace capu
 
         const uint32_t strlen = *reinterpret_cast<const uint32_t*>(outStream.getData());
 
-        char_t* buffer = new char_t[strlen + 1];
+        char* buffer = new char[strlen + 1];
 
         capu::Memory::Copy(buffer, outStream.getData() + sizeof(uint32_t), strlen);
         buffer[strlen] = 0;
@@ -210,7 +210,7 @@ namespace capu
 
         const uint32_t strlen = *reinterpret_cast<const uint32_t*>(outStream.getData());
 
-        char_t* buffer = new char_t[strlen + 1];
+        char* buffer = new char[strlen + 1];
 
         capu::Memory::Copy(buffer, outStream.getData() + sizeof(uint32_t), strlen);
         buffer[strlen] = 0;

@@ -30,17 +30,17 @@ namespace capu
     {
     public:
         /**
-         * Constructs a string from a const char_t pointer
+         * Constructs a string from a const char pointer
          * @param str which points to a const char
          */
-        ConstString(const char_t* str);
+        ConstString(const char* str);
 
         /**
          * Create a string from some characters but not starting from the front
          * @param data Pointer to the characters
          * @param start Position within characters to start
          */
-        ConstString(const char_t* data, const uint_t start);
+        ConstString(const char* data, const uint_t start);
 
         /**
          * Creates a ConstString from another ConstString
@@ -49,10 +49,10 @@ namespace capu
         ConstString(const ConstString& other);
 
         /**
-         * Returns the internal const char_t pointer
-         * @return the internal const char_t pointer
+         * Returns the internal const char pointer
+         * @return the internal const char pointer
          */
-        const char_t* c_str() const;
+        const char* c_str() const;
 
         /**
          * Returns the length of the string
@@ -61,9 +61,9 @@ namespace capu
         uint_t length() const;
 
         /**
-         * Converts a ConstString to a const char_t pointer
+         * Converts a ConstString to a const char pointer
          */
-        operator const char_t* () const;
+        operator const char* () const;
 
         /**
          * Compares two ConstStrings
@@ -105,7 +105,7 @@ namespace capu
          * @param offset The index from where the search for the character has to be started (default 0).
          * @return The index of the found char or -1 if the char was not found.
          */
-        int_t find(const char_t ch, const uint_t offset = 0) const;
+        int_t find(const char ch, const uint_t offset = 0) const;
 
         /**
          * Return the first index of the given substring within the ConstString
@@ -119,14 +119,14 @@ namespace capu
          * Return the index of the last occurence of the given character within the ConstString
          * @param ch The character whos last index is requested
          */
-        int_t rfind(const char_t ch) const;
+        int_t rfind(const char ch) const;
 
     protected:
     private:
         /**
-         * Internal const char_t* to work with
+         * Internal const char* to work with
          */
-        const char_t* m_data;
+        const char* m_data;
 
         /**
          * The length of the string
@@ -136,7 +136,7 @@ namespace capu
     };
 
     inline
-    ConstString::ConstString(const char_t* str)
+    ConstString::ConstString(const char* str)
         : m_data(str)
         , m_length(StringUtils::Strlen(m_data))
     {
@@ -150,20 +150,20 @@ namespace capu
     }
 
     inline
-    ConstString::ConstString(const char_t* data, const uint_t start)
+    ConstString::ConstString(const char* data, const uint_t start)
         : m_data(0)
         , m_length(0)
     {
         if (0 != data)
         {
-            const char_t* startdata = &data[start];
+            const char* startdata = &data[start];
             m_data = startdata;
             m_length = StringUtils::Strlen(startdata);
         }
     }
 
     inline
-    const char_t*
+    const char*
     ConstString::c_str() const
     {
         return m_data;
@@ -177,7 +177,7 @@ namespace capu
     }
 
     inline
-    ConstString::operator const char_t* () const
+    ConstString::operator const char* () const
     {
         return c_str();
     }
@@ -219,7 +219,7 @@ namespace capu
 
     inline
     int_t
-    ConstString::find(const char_t ch, const uint_t offset) const
+    ConstString::find(const char ch, const uint_t offset) const
     {
         return StringUtils::IndexOf(c_str(), ch, offset);
     }
@@ -233,7 +233,7 @@ namespace capu
 
     inline
     int_t
-    ConstString::rfind(const char_t ch) const
+    ConstString::rfind(const char ch) const
     {
         return StringUtils::LastIndexOf(c_str(), ch);
     }

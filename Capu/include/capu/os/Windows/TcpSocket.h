@@ -34,10 +34,10 @@ namespace capu
             TcpSocket(const SocketDescription& socketDescription);
             ~TcpSocket();
 
-            status_t send(const char_t* buffer, int32_t length, int32_t& sentBytes);
-            status_t receive(char_t* buffer, int32_t length, int32_t& numBytes);
+            status_t send(const char* buffer, int32_t length, int32_t& sentBytes);
+            status_t receive(char* buffer, int32_t length, int32_t& numBytes);
             status_t close();
-            status_t connect(const char_t* dest_addr, uint16_t port);
+            status_t connect(const char* dest_addr, uint16_t port);
 
             status_t setTimeout(int32_t timeout);
             status_t getTimeout(int32_t& timeout);
@@ -135,7 +135,7 @@ namespace capu
 
 
         inline
-        status_t TcpSocket::connect(const char_t* dest_addr, uint16_t port)
+        status_t TcpSocket::connect(const char* dest_addr, uint16_t port)
         {
             status_t status = initializeSocket();
             if (status != CAPU_OK)
@@ -181,7 +181,7 @@ namespace capu
             close();
         }
 
-        inline status_t TcpSocket::send(const char_t* buffer, int32_t length, int32_t& sentBytes)
+        inline status_t TcpSocket::send(const char* buffer, int32_t length, int32_t& sentBytes)
         {
             if ((buffer == NULL) || (length < 0))
             {
@@ -219,7 +219,7 @@ namespace capu
             return CAPU_OK;
         }
 
-        inline status_t TcpSocket::receive(char_t* buffer, int32_t length, int32_t& numBytes)
+        inline status_t TcpSocket::receive(char* buffer, int32_t length, int32_t& numBytes)
         {
             if ((buffer == NULL) || (length < 0))
             {
@@ -295,11 +295,11 @@ namespace capu
                 return CAPU_SOCKET_ESOCKET;
             }
 
-            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (char_t*)&mTimeout, sizeof(mTimeout)) <= CAPU_SOCKET_ERROR)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&mTimeout, sizeof(mTimeout)) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
-            if (setsockopt(mSocket, SOL_SOCKET, SO_SNDTIMEO, (char_t*)&mTimeout, sizeof(mTimeout)) <= CAPU_SOCKET_ERROR)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_SNDTIMEO, (char*)&mTimeout, sizeof(mTimeout)) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
@@ -320,7 +320,7 @@ namespace capu
             struct timeval soTimeout;
             socklen_t len = sizeof(soTimeout);
 
-            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (char_t*)&soTimeout, &len) <= CAPU_SOCKET_ERROR)
+            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&soTimeout, &len) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }

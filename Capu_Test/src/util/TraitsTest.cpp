@@ -67,10 +67,10 @@ union SomeUnion
 
 union SomeUnionWithEnumSize
 {
-    capu::char_t data[sizeof(SomeEnum)];
+    char data[sizeof(SomeEnum)];
     struct
     {
-        capu::char_t data2[sizeof(SomeEnum)];
+        char data2[sizeof(SomeEnum)];
     };
 };
 
@@ -83,7 +83,7 @@ TEST(Traits, TestTypeIdentifier)
     EXPECT_EQ(CAPU_TYPE_PRIMITIVE, capu::Type<capu::int16_t>::Identifier);
     EXPECT_EQ(CAPU_TYPE_PRIMITIVE, capu::Type<capu::uint8_t>::Identifier);
     EXPECT_EQ(CAPU_TYPE_PRIMITIVE, capu::Type<capu::int8_t>::Identifier);
-    EXPECT_EQ(CAPU_TYPE_PRIMITIVE, capu::Type<capu::char_t>::Identifier);
+    EXPECT_EQ(CAPU_TYPE_PRIMITIVE, capu::Type<char>::Identifier);
     EXPECT_EQ(CAPU_TYPE_PRIMITIVE, capu::Type<capu::uchar_t>::Identifier);
 
     EXPECT_EQ(CAPU_TYPE_POINTER, capu::Type<void*>::Identifier);
@@ -118,7 +118,7 @@ TEST(Traits, TestPrimitiveTypes)
     capu::int16_t  sometype5 = 42;
     capu::uint8_t  sometype6 = 42;
     capu::int8_t   sometype7 = 42;
-    capu::char_t   sometype8 = 42;
+    char   sometype8 = 42;
     capu::uchar_t  sometype9 = 42;
     float  sometype10 = 42.f;
     double sometype11 = 42.0;

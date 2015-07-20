@@ -4,7 +4,7 @@ namespace capu
 {
     namespace posix
     {
-        const char_t* Console::Colors[] = {
+        const char* Console::Colors[] = {
             "\e[1;31m", //RED
             "\e[1;34m", // BLUE
             "\e[1;32m", // GREEN

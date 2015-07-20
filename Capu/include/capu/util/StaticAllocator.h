@@ -44,7 +44,7 @@ namespace capu
     private:
         struct MemoryEntry
         {
-            char_t       element[sizeof(T)];
+            char       element[sizeof(T)];
             MemoryEntry* nextFreeEntry;
 
             MemoryEntry()

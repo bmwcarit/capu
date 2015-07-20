@@ -30,7 +30,7 @@ namespace capu
 {
     struct TestTcpSocketSender
     {
-        static void SendToSocket(TcpSocket& socket, const char_t* data, const uint32_t size)
+        static void SendToSocket(TcpSocket& socket, const char* data, const uint32_t size)
         {
             int32_t numBytes;
             socket.send(data, size, numBytes);
@@ -43,7 +43,7 @@ namespace capu
         static void Send(TcpSocket& socket, const int32_t& data)
         {
             int32_t tmp = htonl(data);
-            SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(int32_t));
+            SendToSocket(socket, reinterpret_cast<char*>(&tmp), sizeof(int32_t));
         }
     };
 
@@ -53,7 +53,7 @@ namespace capu
         static void Send(TcpSocket& socket, const uint32_t& data)
         {
             int32_t tmp = htonl(data);
-            SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint32_t));
+            SendToSocket(socket, reinterpret_cast<char*>(&tmp), sizeof(uint32_t));
         }
     };
 
@@ -64,7 +64,7 @@ namespace capu
         static void Send(TcpSocket& socket, const uint64_t& data)
         {
             uint64_t tmp = _htonll(data);
-            SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
+            SendToSocket(socket, reinterpret_cast<char*>(&tmp), sizeof(uint64_t));
         }
     };
 
@@ -74,7 +74,7 @@ namespace capu
         static void Send(TcpSocket& socket, const int64_t& data)
         {
             uint64_t tmp = _htonll(static_cast<int64_t>(data));
-            SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(int64_t));
+            SendToSocket(socket, reinterpret_cast<char*>(&tmp), sizeof(int64_t));
         }
     };
 
@@ -84,7 +84,7 @@ namespace capu
         static void Send(TcpSocket& socket, const uint16_t& data)
         {
             uint16_t tmp = htons(data);
-            SendToSocket(socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint16_t));
+            SendToSocket(socket, reinterpret_cast<char*>(&tmp), sizeof(uint16_t));
         }
     };
 
@@ -93,7 +93,7 @@ namespace capu
         typedef bool VALUE_TYPE;
         static void Send(TcpSocket& socket, const bool& data)
         {
-            SendToSocket(socket, reinterpret_cast<const char_t*>(&data), sizeof(bool));
+            SendToSocket(socket, reinterpret_cast<const char*>(&data), sizeof(bool));
         }
     };
 
@@ -103,7 +103,7 @@ namespace capu
         static void Send(TcpSocket& socket, const float& data)
         {
             const int32_t tmp = htonl(*reinterpret_cast<const int32_t*>(&data));
-            SendToSocket(socket, reinterpret_cast<const char_t*>(&tmp), sizeof(int32_t));
+            SendToSocket(socket, reinterpret_cast<const char*>(&tmp), sizeof(int32_t));
         }
     };
 
@@ -114,7 +114,7 @@ namespace capu
         {
             int32_t strLen = static_cast<uint32_t>(data.getLength() + 1);
             int32_t strNetLent  = htonl(strLen);
-            SendToSocket(socket, reinterpret_cast<char_t*>(&strNetLent), sizeof(int32_t));
+            SendToSocket(socket, reinterpret_cast<char*>(&strNetLent), sizeof(int32_t));
             SendToSocket(socket, data.c_str(), strLen);
         }
     };
@@ -124,7 +124,7 @@ namespace capu
         typedef Guid VALUE_TYPE;
         static void Send(TcpSocket& socket, const Guid& data)
         {
-            SendToSocket(socket, reinterpret_cast<const char_t*>(&(data.getGuidData())), sizeof(generic_uuid_t));
+            SendToSocket(socket, reinterpret_cast<const char*>(&(data.getGuidData())), sizeof(generic_uuid_t));
         }
     };
 

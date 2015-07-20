@@ -30,15 +30,15 @@ namespace capu
         {
         public:
             static bool IsInputAvailable();
-            static void Print(const char_t* format, va_list values);
-            static void Print(uint32_t color, const char_t* format, va_list values);
-            static status_t ReadChar(char_t& buffer);
+            static void Print(const char* format, va_list values);
+            static void Print(uint32_t color, const char* format, va_list values);
+            static status_t ReadChar(char& buffer);
             static void Flush();
             static void InterruptReadChar();
 
         private:
             static void InitializeInterruptEvent();
-            static status_t ReadOneCharacter(HANDLE fileHandle, char_t& buffer);
+            static status_t ReadOneCharacter(HANDLE fileHandle, char& buffer);
             static void SetEventHandle(HANDLE eventHandle);
             static HANDLE GetInterruptEventHandle();
 
@@ -70,13 +70,13 @@ namespace capu
         }
 
         inline
-        void Console::Print(const char_t* format, va_list values)
+        void Console::Print(const char* format, va_list values)
         {
             vprintf(format, values);
         }
 
         inline
-        void Console::Print(uint32_t color,  const char_t* format, va_list values)
+        void Console::Print(uint32_t color,  const char* format, va_list values)
         {
             uint8_t colorCode = Colors[color];
 
@@ -92,7 +92,7 @@ namespace capu
         }
 
         inline
-        status_t Console::ReadChar(char_t& buffer)
+        status_t Console::ReadChar(char& buffer)
         {
             const HANDLE fileHandle = GetStdHandle(STD_INPUT_HANDLE);
             interruptMutex.lock();

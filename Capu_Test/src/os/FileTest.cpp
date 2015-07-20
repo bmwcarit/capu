@@ -62,7 +62,7 @@ TEST(File, ReadableFileCanBeOpened)
 
 TEST(File, WriteTest)
 {
-    capu::char_t buf1[15] = "This is a test";
+    char buf1[15] = "This is a test";
     capu::status_t status;
 
     capu::File* f1 = new capu::File("test.txt");
@@ -86,8 +86,8 @@ TEST(File, WriteTest)
 
 TEST(File, WriteSubstring)
 {
-    capu::char_t bufWrite[40] = "This is a substring. This is a postfix.";
-    capu::char_t bufRead[21];
+    char bufWrite[40] = "This is a substring. This is a postfix.";
+    char bufRead[21];
     capu::uint_t substringSize = 20;
     capu::status_t status;
 
@@ -113,7 +113,7 @@ TEST(File, WriteSubstring)
     EXPECT_EQ(substringSize, read);
 
     //extract substring
-    capu::char_t subString[21];
+    char subString[21];
     capu::StringUtils::Strncpy(subString, sizeof(subString), bufWrite);
 
     EXPECT_STREQ(subString, bufRead);
@@ -125,8 +125,8 @@ TEST(File, WriteSubstring)
 
 TEST(File, CantWriteToFileOpenedReadOnly)
 {
-    capu::char_t buf1[20] = "This is a test";
-    capu::char_t buf2[20];
+    char buf1[20] = "This is a test";
+    char buf2[20];
 
     capu::status_t status;
 
@@ -152,8 +152,8 @@ TEST(File, CantWriteToFileOpenedReadOnly)
 
 TEST(File, ReadTest)
 {
-    capu::char_t buf1[20] = "This is a test";
-    capu::char_t buf2[20];
+    char buf1[20] = "This is a test";
+    char buf2[20];
 
     capu::status_t status;
     capu::uint_t read = 0;
@@ -214,8 +214,8 @@ TEST(File, ReadTest)
 
 TEST(File, ReadWriteBinaryTest)
 {
-    capu::char_t buf1[5];
-    capu::char_t buf2[5];
+    char buf1[5];
+    char buf2[5];
     buf1[0] = 4;
     buf1[1] = 2;
     buf1[2] = 6;
@@ -395,7 +395,7 @@ TEST(File, TestGetPath)
 
 TEST(File, TestGetFileSize)
 {
-    capu::char_t buf1[15] = "This is a test";
+    char buf1[15] = "This is a test";
     capu::status_t status;
     // make a file with a size>0
     capu::File file("sizetest.txt");

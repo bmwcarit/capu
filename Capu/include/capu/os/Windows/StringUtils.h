@@ -29,30 +29,30 @@ namespace capu
         class StringUtils
         {
         public:
-            static void Strncpy(char_t* dst, const uint_t dstSize, const char_t* src);
-            static uint_t Strnlen(const char_t* dst, uint_t maxlen);
-            static int32_t Sprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, ...);
-            static int32_t Vsprintf(char_t* buffer, const uint_t bufferSize, const char_t* format, va_list values);
-            static int32_t Vscprintf(const char_t* format, va_list values);
-            static uint_t Strlen(const char_t* str);
-            static int_t Strcmp(const char_t* str1, const char_t* str2);
-            static int_t LastIndexOf(const char_t* str, const char_t ch);
-            static int_t IndexOf(const char_t* str, const char_t ch, const uint_t offset = 0);
-            static int_t IndexOf(const char_t* str, const char_t* str2, const uint_t offset = 0);
-            static bool StartsWith(const char_t* str, const char_t* prefix);
+            static void Strncpy(char* dst, const uint_t dstSize, const char* src);
+            static uint_t Strnlen(const char* dst, uint_t maxlen);
+            static int32_t Sprintf(char* buffer, const uint_t bufferSize, const char* format, ...);
+            static int32_t Vsprintf(char* buffer, const uint_t bufferSize, const char* format, va_list values);
+            static int32_t Vscprintf(const char* format, va_list values);
+            static uint_t Strlen(const char* str);
+            static int_t Strcmp(const char* str1, const char* str2);
+            static int_t LastIndexOf(const char* str, const char ch);
+            static int_t IndexOf(const char* str, const char ch, const uint_t offset = 0);
+            static int_t IndexOf(const char* str, const char* str2, const uint_t offset = 0);
+            static bool StartsWith(const char* str, const char* prefix);
         private:
         };
 
         inline
         void
-        StringUtils::Strncpy(char_t* dst, uint_t dstSize, const char_t* src)
+        StringUtils::Strncpy(char* dst, uint_t dstSize, const char* src)
         {
             strncpy_s(dst, dstSize, src, _TRUNCATE);
         }
 
         inline
         uint_t
-        StringUtils::Strlen(const char_t* str)
+        StringUtils::Strlen(const char* str)
         {
             if (str == 0)
             {
@@ -63,7 +63,7 @@ namespace capu
 
         inline
         uint_t
-        StringUtils::Strnlen(const char_t* str, uint_t maxlen)
+        StringUtils::Strnlen(const char* str, uint_t maxlen)
         {
             if (str == 0)
             {
@@ -74,28 +74,28 @@ namespace capu
 
         inline
         int_t
-        StringUtils::Strcmp(const char_t* str1, const char_t* str2)
+        StringUtils::Strcmp(const char* str1, const char* str2)
         {
             return strcmp(str1, str2);
         }
 
         inline
         int32_t
-        StringUtils::Vsprintf(char_t* buffer, uint_t bufferSize, const char_t* format, va_list values)
+        StringUtils::Vsprintf(char* buffer, uint_t bufferSize, const char* format, va_list values)
         {
             return vsprintf_s(buffer, bufferSize, format, values);
         }
 
         inline
         int32_t
-        StringUtils::Vscprintf(const char_t* format, va_list values)
+        StringUtils::Vscprintf(const char* format, va_list values)
         {
             return _vscprintf(format, values);
         }
 
         inline
         int32_t
-        StringUtils::Sprintf(char_t* buffer, uint_t bufferSize, const char_t* format, ...)
+        StringUtils::Sprintf(char* buffer, uint_t bufferSize, const char* format, ...)
         {
             va_list argptr;
             va_start(argptr, format);
@@ -106,31 +106,31 @@ namespace capu
 
         inline
         int_t
-        StringUtils::LastIndexOf(const char_t* str, const char_t ch)
+        StringUtils::LastIndexOf(const char* str, const char ch)
         {
             if (!str)
             {
                 return -1;
             }
-            const char_t* pos = strrchr(str, ch);
+            const char* pos = strrchr(str, ch);
             return pos ? pos - str : -1;
         }
 
         inline
         int_t
-        StringUtils::IndexOf(const char_t* str, const char_t ch, const uint_t offset)
+        StringUtils::IndexOf(const char* str, const char ch, const uint_t offset)
         {
             if (!str)
             {
                 return -1;
             }
-            const char_t* pos = strchr(str + offset, ch);
+            const char* pos = strchr(str + offset, ch);
             return pos ? pos - str : -1;
         }
 
         inline
         bool
-        StringUtils::StartsWith(const char_t* str, const char_t* prefix)
+        StringUtils::StartsWith(const char* str, const char* prefix)
         {
             if (!prefix || !str)
             {
@@ -141,9 +141,9 @@ namespace capu
 
         inline
         int_t
-        StringUtils::IndexOf(const char_t* str, const char_t* str2, const uint_t offset)
+        StringUtils::IndexOf(const char* str, const char* str2, const uint_t offset)
         {
-            const char_t* start = strstr(str + offset, str2);
+            const char* start = strstr(str + offset, str2);
             return start ? (start - str) : -1;
         }
     }

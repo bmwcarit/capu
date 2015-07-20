@@ -38,11 +38,11 @@ namespace capu
 
         TcpSocket& mSocket;
 
-        void receiveFromSocket(char_t* data, const uint32_t size)
+        void receiveFromSocket(char* data, const uint32_t size)
         {
             int32_t length = 0;
             uint32_t receivedBytes = 0;
-            char_t* buffer = static_cast<char_t*>(data);
+            char* buffer = static_cast<char*>(data);
             while (receivedBytes < size)
             {
                 status_t result = mSocket.receive(&buffer[receivedBytes], size - receivedBytes, length);
@@ -68,7 +68,7 @@ namespace capu
         IInputStream& operator>>(int32_t& value)
         {
             int32_t tmp;
-            receiveFromSocket(reinterpret_cast<char_t*>(&tmp), sizeof(int32_t));
+            receiveFromSocket(reinterpret_cast<char*>(&tmp), sizeof(int32_t));
             value = ntohl(tmp);
             return *this;
         }
@@ -85,7 +85,7 @@ namespace capu
         IInputStream& operator>>(uint64_t& value)
         {
             uint64_t tmp;
-            receiveFromSocket(reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
+            receiveFromSocket(reinterpret_cast<char*>(&tmp), sizeof(uint64_t));
             value = _ntohll(tmp);
             return *this;
         }
@@ -103,7 +103,7 @@ namespace capu
         {
             int32_t strLen = 0;
             operator>>(strLen);
-            char_t* buf = new char_t[strLen + 1];
+            char* buf = new char[strLen + 1];
             receiveFromSocket(buf, strLen);
             buf[strLen] = 0;
             value = buf;
@@ -113,13 +113,13 @@ namespace capu
 
         IInputStream& operator>>(bool& value)
         {
-            receiveFromSocket(reinterpret_cast<char_t*>(&value), sizeof(bool));
+            receiveFromSocket(reinterpret_cast<char*>(&value), sizeof(bool));
             return *this;
         }
 
         IInputStream& operator>>(uint16_t& value)
         {
-            receiveFromSocket(reinterpret_cast<char_t*>(&value), sizeof(uint16_t));
+            receiveFromSocket(reinterpret_cast<char*>(&value), sizeof(uint16_t));
             value = ntohs(value);
             return *this;
         }
@@ -127,12 +127,12 @@ namespace capu
         IInputStream& operator>>(Guid& value)
         {
             generic_uuid_t tmpValue;
-            read(reinterpret_cast<char_t*>(&tmpValue), sizeof(generic_uuid_t));
+            read(reinterpret_cast<char*>(&tmpValue), sizeof(generic_uuid_t));
             value = tmpValue;
             return *this;
         }
 
-        IInputStream& read(char_t* data, const uint32_t size)
+        IInputStream& read(char* data, const uint32_t size)
         {
             receiveFromSocket(data, size);
             return *this;

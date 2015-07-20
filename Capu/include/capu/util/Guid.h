@@ -205,7 +205,7 @@ namespace capu
 
     inline void Guid::createString() const
     {
-        char_t buffer[37];
+        char buffer[37];
         Memory::Set(buffer, 0, sizeof(buffer));
         StringUtils::Sprintf(buffer, 37, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
                              m_id.Data1,

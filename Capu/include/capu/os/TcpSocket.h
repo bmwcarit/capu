@@ -57,7 +57,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t send(const char_t* buffer, int32_t length, int32_t& sentBytes);
+        inline status_t send(const char* buffer, int32_t length, int32_t& sentBytes);
 
         /**
          * Receive message
@@ -69,7 +69,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t receive(char_t* buffer, int32_t length, int32_t& numBytes);
+        inline status_t receive(char* buffer, int32_t length, int32_t& numBytes);
 
         /**
          * close the socket
@@ -89,7 +89,7 @@ namespace capu
          *          CAPU_EINVAL if the dest_addr is NULL
          *          CAPU_SOCKET_ESOCKET if the socket is not created
          */
-        inline status_t connect(const char_t* dest_addr, uint16_t port);
+        inline status_t connect(const char* dest_addr, uint16_t port);
 
         /**
          * Sets the maximum socket buffer in bytes. The kernel doubles this value (to allow space for bookkeeping overhead)
@@ -186,7 +186,7 @@ namespace capu
          * @return CAPU_SOCKET_ESOCKET if the socket is not valid
          * @return CAPU_ERROR otherwise
          **/
-        inline status_t getRemoteAddress(char_t** address);
+        inline status_t getRemoteAddress(char** address);
 
         /**
          * Returns the internal socket descriptor. This can be different on 
@@ -218,7 +218,7 @@ namespace capu
 
     inline
     status_t
-    TcpSocket::send(const char_t* buffer, int32_t length, int32_t& sentBytes)
+    TcpSocket::send(const char* buffer, int32_t length, int32_t& sentBytes)
     {
         status_t result = capu::os::arch::TcpSocket::send(buffer, length, sentBytes);
         return result;
@@ -227,7 +227,7 @@ namespace capu
 
     inline
     status_t
-    TcpSocket::receive(char_t* buffer, int32_t length, int32_t& numBytes)
+    TcpSocket::receive(char* buffer, int32_t length, int32_t& numBytes)
     {
         status_t result = capu::os::arch::TcpSocket::receive(buffer, length, numBytes);
         return result;
@@ -242,7 +242,7 @@ namespace capu
 
     inline
     status_t
-    TcpSocket::connect(const char_t* dest_addr, uint16_t port)
+    TcpSocket::connect(const char* dest_addr, uint16_t port)
     {
         return capu::os::arch::TcpSocket::connect(dest_addr, port);
     }
@@ -319,7 +319,7 @@ namespace capu
 
     inline
     status_t
-    TcpSocket::getRemoteAddress(char_t** address)
+    TcpSocket::getRemoteAddress(char** address)
     {
         return capu::os::arch::TcpSocket::getRemoteAddress(address);
     }

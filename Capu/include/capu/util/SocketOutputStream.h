@@ -111,7 +111,7 @@ namespace capu
          * Write a character to the stream
          * @param value Value to write to the stream
          */
-        IOutputStream& operator<<(const char_t* value);
+        IOutputStream& operator<<(const char* value);
 
         /**
          * Write a byte to the stream
@@ -151,18 +151,18 @@ namespace capu
         void resetState();
 
     protected:
-        virtual status_t writeToSocket(const char_t* buffer, const uint32_t size, int32_t&  numBytes) = 0;
+        virtual status_t writeToSocket(const char* buffer, const uint32_t size, int32_t&  numBytes) = 0;
 
     private:
         /**
          * TcpSocket to write the data to.
          */
-        char_t   mBuffer[SNDBUFSIZE];
+        char   mBuffer[SNDBUFSIZE];
         uint16_t mBufferSize;
         status_t m_state;
 
         void writeToInternalBuffer(const void* data, const uint32_t size);
-        void internalSend(const char_t* data, const uint32_t size);
+        void internalSend(const char* data, const uint32_t size);
     };
 
     template<uint16_t SNDBUFSIZE>
@@ -238,7 +238,7 @@ namespace capu
     template<uint16_t SNDBUFSIZE>
     inline
     IOutputStream&
-    SocketOutputStream<SNDBUFSIZE>::operator<<(const char_t* value)
+    SocketOutputStream<SNDBUFSIZE>::operator<<(const char* value)
     {
         const int32_t length = static_cast<uint32_t>(StringUtils::Strlen(value));
         operator<<(length);
@@ -281,7 +281,7 @@ namespace capu
     IOutputStream&
     SocketOutputStream<SNDBUFSIZE>::operator<<(const bool value)
     {
-        return write(reinterpret_cast<const char_t*>(&value), sizeof(bool));
+        return write(reinterpret_cast<const char*>(&value), sizeof(bool));
     }
 
     template<uint16_t SNDBUFSIZE>
@@ -306,7 +306,7 @@ namespace capu
     IOutputStream&
     SocketOutputStream<SNDBUFSIZE>::operator<<(const void* value)
     {
-        return write(reinterpret_cast<const char_t*>(value), sizeof(void*));
+        return write(reinterpret_cast<const char*>(value), sizeof(void*));
     }
 
     template<uint16_t SNDBUFSIZE>
@@ -314,7 +314,7 @@ namespace capu
     IOutputStream&
     SocketOutputStream<SNDBUFSIZE>::operator<<(const Guid& value)
     {
-        return write(reinterpret_cast<const char_t*>(&value.getGuidData()), sizeof(generic_uuid_t));
+        return write(reinterpret_cast<const char*>(&value.getGuidData()), sizeof(generic_uuid_t));
     }
 
     template<uint16_t SNDBUFSIZE>
@@ -339,7 +339,7 @@ namespace capu
         else
         {
             flush();
-            internalSend(static_cast<const char_t*>(data), size);
+            internalSend(static_cast<const char*>(data), size);
         }
         return *this;
     }
@@ -357,7 +357,7 @@ namespace capu
     template<uint16_t SNDBUFSIZE>
     inline
     void
-    SocketOutputStream<SNDBUFSIZE>::internalSend(const char_t* data, const uint32_t size)
+    SocketOutputStream<SNDBUFSIZE>::internalSend(const char* data, const uint32_t size)
     {
         if (size == 0 || m_state != CAPU_OK)
         {
@@ -384,7 +384,7 @@ namespace capu
     _htonll(const uint64_t value)
     {
         int64_t checkNumber = 42;
-        if(*(char_t*)&checkNumber == 42)
+        if(*(char*)&checkNumber == 42)
         {
             // Little endian
             const uint64_t lowbits  = (uint64_t)(htonl(value & 0xFFFFFFFF)) << 32LL;

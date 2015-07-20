@@ -32,7 +32,7 @@ namespace capu
         SocketAddrInfo& getAddrInfo();
     protected:
 
-        status_t writeToSocket(const char_t* buffer, const uint32_t size, int32_t&  numBytes);
+        status_t writeToSocket(const char* buffer, const uint32_t size, int32_t&  numBytes);
 
     private:
         UdpSocket& m_socket;
@@ -57,7 +57,7 @@ namespace capu
     template<uint16_t SNDBUFSIZE>
     inline
     status_t
-    UdpSocketOutputStream<SNDBUFSIZE>::writeToSocket(const char_t* buffer, const uint32_t size, int32_t&  numBytes)
+    UdpSocketOutputStream<SNDBUFSIZE>::writeToSocket(const char* buffer, const uint32_t size, int32_t&  numBytes)
     {
         status_t status = m_socket.send(buffer, size, m_addrInfo);
         if (status == CAPU_OK)

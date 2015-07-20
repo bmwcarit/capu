@@ -24,7 +24,7 @@ namespace capu
     {
         if (CAPU_OK == m_fileState)
         {
-            m_file.write(reinterpret_cast<const char_t*>(data), size);
+            m_file.write(reinterpret_cast<const char*>(data), size);
         }
         return *this;
     }

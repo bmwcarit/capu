@@ -16,9 +16,9 @@ namespace capu
     HANDLE os::Console::m_event = INVALID_HANDLE_VALUE;
     os::Mutex os::Console::interruptMutex;
 
-    capu::status_t os::Console::ReadOneCharacter(HANDLE fileHandle, char_t& buffer)
+    capu::status_t os::Console::ReadOneCharacter(HANDLE fileHandle, char& buffer)
     {
-        char_t readBuffer;
+        char readBuffer;
         DWORD bytesRead = 0;
         const DWORD numberOfBytesToRead = 1;
         const BOOL ret = ReadFile(fileHandle, &readBuffer, numberOfBytesToRead, &bytesRead, NULL);

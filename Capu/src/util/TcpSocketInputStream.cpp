@@ -27,11 +27,11 @@ namespace capu
     {
     }
 
-    IInputStream& TcpSocketInputStream::read(char_t* data, const uint32_t size)
+    IInputStream& TcpSocketInputStream::read(char* data, const uint32_t size)
     {
         int32_t length = 0;
         uint32_t receivedBytes = 0;
-        char_t* buffer = static_cast<char_t*>(data);
+        char* buffer = static_cast<char*>(data);
         while (receivedBytes < size)
         {
             mState =  m_socket.receive(&buffer[receivedBytes], size - receivedBytes, length);

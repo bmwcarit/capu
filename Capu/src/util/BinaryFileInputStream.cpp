@@ -18,7 +18,7 @@
 
 namespace capu
 {
-    IInputStream& BinaryFileInputStream::read(char_t* data, const uint32_t size)
+    IInputStream& BinaryFileInputStream::read(char* data, const uint32_t size)
     {
         if (CAPU_OK == getState())
         {

@@ -32,7 +32,7 @@ namespace capu
 
             capu::TcpSocket* accept(capu::uint32_t timeoutMillis = 0);
             status_t close();
-            status_t bind(uint16_t port, const char_t* addr = NULL);
+            status_t bind(uint16_t port, const char* addr = NULL);
             status_t listen(uint8_t backlog);
             uint16_t port();
             const capu::os::SocketDescription& getSocketDescription() const;

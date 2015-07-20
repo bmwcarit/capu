@@ -62,7 +62,7 @@ namespace capu
          *         CAPU_EINVAL if the addr is NULL or port is equal to 0
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          */
-        status_t bind(uint16_t port, const char_t* address = NULL);
+        status_t bind(uint16_t port, const char* address = NULL);
 
         /**
          *
@@ -106,7 +106,7 @@ namespace capu
 
     inline
     status_t
-    TcpServerSocket::bind(uint16_t port, const char_t* addr)
+    TcpServerSocket::bind(uint16_t port, const char* addr)
     {
         return capu::os::arch::TcpServerSocket::bind(port, addr);
     }

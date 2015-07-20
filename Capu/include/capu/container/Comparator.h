@@ -41,7 +41,7 @@ namespace capu
         /**
          * Return result of string comparison.
          */
-        bool operator()(const char_t* x, const char_t* y) const
+        bool operator()(const char* x, const char* y) const
         {
             return (StringUtils::Strcmp(x, y) == 0);
         }
@@ -49,7 +49,7 @@ namespace capu
         /**
          * Return result of string comparison.
          */
-        bool operator()(char_t* x, char_t* y) const
+        bool operator()(char* x, char* y) const
         {
             return (StringUtils::Strcmp(x, y) == 0);
         }

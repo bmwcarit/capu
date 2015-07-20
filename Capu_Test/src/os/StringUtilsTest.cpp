@@ -20,25 +20,25 @@
 
 TEST(StringUtils, Strcmp)
 {
-    capu::char_t string1[] = "My String";
-    capu::char_t string2[] = "My String";
-    capu::char_t string3[] = "Another String";
+    char string1[] = "My String";
+    char string2[] = "My String";
+    char string3[] = "Another String";
     EXPECT_EQ(0, capu::StringUtils::Strcmp(string1, string2));
     EXPECT_TRUE(0 <= capu::StringUtils::Strcmp(string1, string3));
 }
 
 TEST(StringUtils, Strncpy)
 {
-    capu::char_t string1[20] = "My String";
-    capu::char_t string2[30];
+    char string1[20] = "My String";
+    char string2[30];
     capu::StringUtils::Strncpy(string2, sizeof(string2), string1);
     EXPECT_STREQ(string1, string2);
 }
 
 TEST(StringUtils, Strncpy2)
 {
-    capu::char_t string1[20] = "My String";
-    capu::char_t string2[20];
+    char string1[20] = "My String";
+    char string2[20];
     capu::Memory::Set(string2, 42, sizeof(string2));
     capu::StringUtils::Strncpy(string2, 4, string1);
     EXPECT_STREQ("My ", string2);
@@ -52,7 +52,7 @@ TEST(StringUtils, Strncpy2)
 
 TEST(StringUtils, Strlen1)
 {
-    capu::char_t string1[20] = "My String";
+    char string1[20] = "My String";
     EXPECT_EQ(9u, capu::StringUtils::Strlen(string1));
 }
 
@@ -63,25 +63,25 @@ TEST(StringUtils, Strlen2)
 
 TEST(StringUtils, Strnlen_n_smaller_than_length)
 {
-    capu::char_t string1[5] = "abcd";
+    char string1[5] = "abcd";
     EXPECT_EQ(2u, capu::StringUtils::Strnlen(string1,2));
 }
 
 TEST(StringUtils, Strnlen_n_larger_than_length)
 {
-    capu::char_t string1[5] = "abcd";
+    char string1[5] = "abcd";
     EXPECT_EQ(4u, capu::StringUtils::Strnlen(string1, 123));
 }
 
 TEST(StringUtils, Strnlen_emptyString)
 {
-    capu::char_t string1[1] = "";
+    char string1[1] = "";
     EXPECT_EQ(0u, capu::StringUtils::Strnlen(string1, 123));
 }
 
 TEST(StringUtils, Sprintf)
 {
-    capu::char_t string1[20];
+    char string1[20];
     capu::StringUtils::Sprintf(string1, 20, "%d", 12345);
     EXPECT_EQ(0, capu::StringUtils::Strcmp("12345", string1));
     capu::StringUtils::Sprintf(string1, 20, "%d %f", 12345, 12.45);
@@ -91,7 +91,7 @@ TEST(StringUtils, Sprintf)
 class VscprintfTest
 {
 public:
-    static capu::int32_t Vscprintf(const capu::char_t* format, ...)
+    static capu::int32_t Vscprintf(const char* format, ...)
     {
         capu::int32_t length = 0;
         va_list args;
@@ -111,7 +111,7 @@ TEST(StringUtils, Vscprintf)
 class VsprintfTest
 {
 public:
-    static capu::int32_t Vsprintf(capu::char_t* buffer, capu::int32_t buffersize, const capu::char_t* format, ...)
+    static capu::int32_t Vsprintf(char* buffer, capu::int32_t buffersize, const char* format, ...)
     {
         capu::int32_t length = 0;
         va_list args;
@@ -124,7 +124,7 @@ public:
 
 TEST(StringUtils, VsprintfReturnsLengthOfCharactersWritten)
 {
-    capu::char_t string1[20];
+    char string1[20];
     EXPECT_EQ(5, VsprintfTest::Vsprintf(string1, 20, "%d", 12345));
     EXPECT_LE(4, VsprintfTest::Vsprintf(string1, 20, "%f", 3.14f));
     EXPECT_LE(7, VsprintfTest::Vsprintf(string1, 20, "%f", 3.14789f));
@@ -136,7 +136,7 @@ TEST(StringUtils, VsprintfReturnsLengthOfCharactersWritten)
 
 TEST(StringUtils, SprintfReturnsLengthOfCharactersWritten)
 {
-    capu::char_t string1[20];
+    char string1[20];
     EXPECT_EQ(5, capu::StringUtils::Sprintf(string1, 20, "%d", 12345));
     EXPECT_LE(4, capu::StringUtils::Sprintf(string1, 20, "%f", 3.14f));
     EXPECT_LE(7, capu::StringUtils::Sprintf(string1, 20, "%f", 3.14789f));

@@ -85,11 +85,11 @@ namespace capu
         virtual IOutputStream& operator<<(const bool  value) = 0;
 
         /**
-         * Operator for writing char_t values to a stream
+         * Operator for writing char values to a stream
          * @param value the value which will be written to the stream
          * @return a reference to the IOutputStream for further processing of data
          */
-        virtual IOutputStream& operator<<(const char_t* value) = 0;
+        virtual IOutputStream& operator<<(const char* value) = 0;
 
         /**
          * Operator for writing uint16_t values to a stream

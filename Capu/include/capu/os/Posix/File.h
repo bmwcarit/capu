@@ -36,8 +36,8 @@ namespace capu
             status_t open(const FileMode& mode);
             bool isOpen();
             bool isEof();
-            status_t read(char_t* buffer, uint_t length, uint_t& numBytes);
-            status_t write(const char_t* buffer, uint_t length);
+            status_t read(char* buffer, uint_t length, uint_t& numBytes);
+            status_t write(const char* buffer, uint_t length);
             status_t flush();
             status_t close();
             status_t renameTo(const capu::String& newName);
@@ -179,7 +179,7 @@ namespace capu
         status_t File::open(const FileMode& mode)
         {
             // try to open file
-            const char_t* flags = "";
+            const char* flags = "";
             switch (mode)
             {
             case READ_ONLY:
@@ -339,7 +339,7 @@ namespace capu
             {
                 // path is .
                 // -> replace with current working directory for dirname to work correctly
-                char_t buffer[PATH_MAX];
+                char buffer[PATH_MAX];
                 success = getcwd(buffer, sizeof(buffer)) != NULL;
                 if (!success)
                 {
@@ -387,11 +387,11 @@ namespace capu
                 fclose(handleFrom);
                 return CAPU_ERROR;
             }
-            capu::char_t copybuffer[1024];
+            char copybuffer[1024];
             size_t bytesRead = 0;
-            while ((bytesRead = fread(copybuffer, sizeof(capu::char_t), sizeof(copybuffer), handleFrom)) > 0)
+            while ((bytesRead = fread(copybuffer, sizeof(char), sizeof(copybuffer), handleFrom)) > 0)
             {
-                if (fwrite(copybuffer, sizeof(capu::char_t), bytesRead, handleTo) != bytesRead)
+                if (fwrite(copybuffer, sizeof(char), bytesRead, handleTo) != bytesRead)
                 {
                     fclose(handleFrom);
                     fclose(handleTo);

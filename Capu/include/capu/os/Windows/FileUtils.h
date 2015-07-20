@@ -36,7 +36,7 @@ namespace capu
         capu::File FileUtils::getCurrentWorkingDirectory()
         {
             DWORD bufferSize = GetCurrentDirectory(0, NULL);
-            char_t* buffer = new char_t[bufferSize];
+            char* buffer = new char[bufferSize];
             buffer[0] = 0;
             GetCurrentDirectory(bufferSize, buffer);
             capu::File ret(buffer);

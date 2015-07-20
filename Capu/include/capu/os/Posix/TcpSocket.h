@@ -37,10 +37,10 @@ namespace capu
             TcpSocket(const capu::os::SocketDescription& socketDescription);
             ~TcpSocket();
 
-            status_t send(const char_t* buffer, int32_t length, int32_t& sentBytes);
-            status_t receive(char_t* buffer, int32_t length, int32_t& numBytes);
+            status_t send(const char* buffer, int32_t length, int32_t& sentBytes);
+            status_t receive(char* buffer, int32_t length, int32_t& numBytes);
             status_t close();
-            status_t connect(const char_t* dest_addr, uint16_t port);
+            status_t connect(const char* dest_addr, uint16_t port);
 
             status_t setTimeout(int32_t timeout);
             status_t getTimeout(int32_t& timeout);
@@ -89,7 +89,7 @@ namespace capu
 
         inline
         status_t
-        TcpSocket::send(const char_t* buffer, int32_t length, int32_t& sentBytes)
+        TcpSocket::send(const char* buffer, int32_t length, int32_t& sentBytes)
         {
 
             if ((buffer == NULL) || (length < 0))
@@ -118,7 +118,7 @@ namespace capu
 
         inline
         status_t
-        TcpSocket::receive(char_t* buffer, int32_t length, int32_t& numBytes)
+        TcpSocket::receive(char* buffer, int32_t length, int32_t& numBytes)
         {
             if ((buffer == NULL) || (length < 0))
             {
@@ -170,7 +170,7 @@ namespace capu
 
         inline
         status_t
-        TcpSocket::connect(const char_t* dest_addr, uint16_t port)
+        TcpSocket::connect(const char* dest_addr, uint16_t port)
         {
             if ((dest_addr == NULL) || (port == 0))
             {

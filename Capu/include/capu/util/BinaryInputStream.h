@@ -33,7 +33,7 @@ namespace capu
          * Constructor with a buffer to read from
          * @param input A pointer to the data to read from
          */
-        BinaryInputStream(const char_t* input);
+        BinaryInputStream(const char* input);
 
         ~BinaryInputStream();
 
@@ -98,7 +98,7 @@ namespace capu
          * @param data Pointer to which the bytes will be written
          * @param size Number of bytes to read
          */
-        IInputStream& read(char_t* data, const uint32_t size);
+        IInputStream& read(char* data, const uint32_t size);
 
         /**
          * @see IInputstream
@@ -119,12 +119,12 @@ namespace capu
         /**
          * Buffer for reading the data
          */
-        const char_t* mBuffer;
+        const char* mBuffer;
 
         /**
          * Pointer to the current position of the buffer
          */
-        const char_t* mCurrent;
+        const char* mCurrent;
 
         /**
          * The current state of the stream

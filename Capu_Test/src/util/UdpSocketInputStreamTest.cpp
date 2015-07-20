@@ -27,7 +27,7 @@ namespace capu
 {
     struct TestUdpSocketSender
     {
-        static void SendToSocket(const capu::uint16_t port, UdpSocket& socket, const char_t* data, const uint32_t size)
+        static void SendToSocket(const capu::uint16_t port, UdpSocket& socket, const char* data, const uint32_t size)
         {
             socket.send(data, size, "127.0.0.1", port);
         }
@@ -39,7 +39,7 @@ namespace capu
         static void Send(const capu::uint16_t port, UdpSocket& socket, const int32_t& data)
         {
             int32_t tmp = htonl(data);
-            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(int32_t));
+            SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(int32_t));
         }
     };
 
@@ -49,7 +49,7 @@ namespace capu
         static void Send(const capu::uint16_t port, UdpSocket& socket, const uint32_t& data)
         {
             int32_t tmp = htonl(data);
-            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint32_t));
+            SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(uint32_t));
         }
     };
 
@@ -59,7 +59,7 @@ namespace capu
         static void Send(const capu::uint16_t port, UdpSocket& socket, const int64_t& data)
         {
             int64_t tmp = _htonll(data);
-            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(int64_t));
+            SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(int64_t));
         }
     };
 
@@ -69,7 +69,7 @@ namespace capu
         static void Send(const capu::uint16_t port, UdpSocket& socket, const uint64_t& data)
         {
             int64_t tmp = _htonll(data);
-            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint64_t));
+            SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(uint64_t));
         }
     };
 
@@ -79,7 +79,7 @@ namespace capu
         static void Send(const capu::uint16_t port, UdpSocket& socket, const uint16_t& data)
         {
             uint16_t tmp = htons(data);
-            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(uint16_t));
+            SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(uint16_t));
         }
     };
 
@@ -89,7 +89,7 @@ namespace capu
         static void Send(const capu::uint16_t port, UdpSocket& socket, const int16_t& data)
         {
             int16_t tmp = htons(data);
-            SendToSocket(port, socket, reinterpret_cast<char_t*>(&tmp), sizeof(int16_t));
+            SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(int16_t));
         }
     };
 
@@ -98,7 +98,7 @@ namespace capu
         typedef int8_t VALUE_TYPE;
         static void Send(const capu::uint16_t port, UdpSocket& socket, const int8_t& data)
         {
-            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&data), sizeof(int8_t));
+            SendToSocket(port, socket, reinterpret_cast<const char*>(&data), sizeof(int8_t));
         }
     };
 
@@ -107,7 +107,7 @@ namespace capu
         typedef uint8_t VALUE_TYPE;
         static void Send(const capu::uint16_t port, UdpSocket& socket, const uint8_t& data)
         {
-            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&data), sizeof(uint8_t));
+            SendToSocket(port, socket, reinterpret_cast<const char*>(&data), sizeof(uint8_t));
         }
     };
 
@@ -116,7 +116,7 @@ namespace capu
         typedef bool VALUE_TYPE;
         static void Send(const capu::uint16_t port, UdpSocket& socket, const bool& data)
         {
-            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&data), sizeof(bool));
+            SendToSocket(port, socket, reinterpret_cast<const char*>(&data), sizeof(bool));
         }
     };
 
@@ -126,7 +126,7 @@ namespace capu
         static void Send(const capu::uint16_t port, UdpSocket& socket, const float& data)
         {
             const int32_t tmp = htonl(*reinterpret_cast<const int32_t*>(&data));
-            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&tmp), sizeof(int32_t));
+            SendToSocket(port, socket, reinterpret_cast<const char*>(&tmp), sizeof(int32_t));
         }
     };
 
@@ -137,7 +137,7 @@ namespace capu
         {
             int32_t strLen = static_cast<uint32_t>(data.getLength() + 1);
             int32_t strNetLent  = htonl(strLen);
-            SendToSocket(port, socket, reinterpret_cast<char_t*>(&strNetLent), sizeof(int32_t));
+            SendToSocket(port, socket, reinterpret_cast<char*>(&strNetLent), sizeof(int32_t));
             SendToSocket(port, socket, data.c_str(), strLen);
         }
     };
@@ -147,7 +147,7 @@ namespace capu
         typedef Guid VALUE_TYPE;
         static void Send(const capu::uint16_t port, UdpSocket& socket, const Guid& data)
         {
-            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&(data.getGuidData())), sizeof(generic_uuid_t));
+            SendToSocket(port, socket, reinterpret_cast<const char*>(&(data.getGuidData())), sizeof(generic_uuid_t));
         }
     };
 
@@ -188,9 +188,9 @@ namespace capu
         {
             UdpSocket socket;
 
-            char_t buffer[1450];
+            char buffer[1450];
 
-            char_t* pos = buffer;
+            char* pos = buffer;
             int32_t networkInt   =  htonl(mIntValue);
             
             union
@@ -205,15 +205,15 @@ namespace capu
             int32_t strLen       =  static_cast<int32_t>(mStringValue.getLength());
             int32_t netowrkStrlen = htonl(strLen);
 
-            Memory::Copy(pos, reinterpret_cast<char_t*>(&networkInt), sizeof(int32_t));
+            Memory::Copy(pos, reinterpret_cast<char*>(&networkInt), sizeof(int32_t));
             pos += sizeof(int32_t);
-            Memory::Copy(pos, reinterpret_cast<char_t*>(&netowrkStrlen), sizeof(int32_t));
+            Memory::Copy(pos, reinterpret_cast<char*>(&netowrkStrlen), sizeof(int32_t));
             pos += sizeof(int32_t);
             Memory::Copy(pos, mStringValue.c_str(), strLen);
             pos += strLen;
-            Memory::Copy(pos, reinterpret_cast<char_t*>(&networkFloat), sizeof(int32_t));
+            Memory::Copy(pos, reinterpret_cast<char*>(&networkFloat), sizeof(int32_t));
             pos += sizeof(int32_t);
-            Memory::Copy(pos, reinterpret_cast<char_t*>(&mBoolValue), sizeof(bool));
+            Memory::Copy(pos, reinterpret_cast<char*>(&mBoolValue), sizeof(bool));
             pos += sizeof(bool);
 
             socket.send(buffer, static_cast<int32_t>(pos - buffer), "127.0.0.1", mPort);

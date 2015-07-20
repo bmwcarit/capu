@@ -56,7 +56,7 @@ namespace capu
     inline EnvironmentVariables::EnvironmentVariables()
     {
         uint_t i = 0;
-        char_t* envvar = 0;
+        char* envvar = 0;
         do
         {
             // "environ" is a globally defined symbol which holds the current environment variables

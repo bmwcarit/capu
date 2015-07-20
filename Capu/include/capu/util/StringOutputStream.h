@@ -52,8 +52,8 @@ namespace capu
         virtual StringOutputStream& operator<<(const uint64_t value);
         virtual StringOutputStream& operator<<(const String& value);
         virtual StringOutputStream& operator<<(const bool  value);
-        virtual StringOutputStream& operator<<(const char_t* value);
-        virtual StringOutputStream& operator<<(const char_t value);
+        virtual StringOutputStream& operator<<(const char* value);
+        virtual StringOutputStream& operator<<(const char value);
         virtual StringOutputStream& operator<<(const uint16_t value);
         virtual StringOutputStream& operator<<(const Guid& value);
 
@@ -74,12 +74,12 @@ namespace capu
 
 
         /**
-         * Returns a const char_t pointer to the content of the stream
-         * @return the const char_t pointer to the content of the stream
+         * Returns a const char pointer to the content of the stream
+         * @return the const char pointer to the content of the stream
          * @{
          */
-        const char_t* c_str() const;
-        const char_t* c_str();
+        const char* c_str() const;
+        const char* c_str();
         /**
          * @}
          */
@@ -111,7 +111,7 @@ namespace capu
         /**
          * The internal buffer of the stream
          */
-        Array<char_t> mBuffer;
+        Array<char> mBuffer;
 
         /**
          * The current size of the internal string
@@ -138,14 +138,14 @@ namespace capu
     };
 
     inline
-    const char_t*
+    const char*
     StringOutputStream::c_str()
     {
         return mBuffer.getRawData();
     }
 
     inline
-    const char_t*
+    const char*
     StringOutputStream::c_str() const
     {
         return mBuffer.getRawData();
@@ -175,7 +175,7 @@ namespace capu
            - 1 for terminating \0
            => 1+38+1+38+7+1 = 86
         */
-        char_t buffer[86];
+        char buffer[86];
         switch(mFloatingPointType)
         {
         case NORMAL:
@@ -193,7 +193,7 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const int32_t value)
     {
-        char_t buffer[12];
+        char buffer[12];
         StringUtils::Sprintf(buffer, sizeof(buffer), "%d", value);
         return operator<<(buffer);
     }
@@ -202,7 +202,7 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const uint32_t value)
     {
-        char_t buffer[11];
+        char buffer[11];
         StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
         return operator<<(buffer);
     }
@@ -211,7 +211,7 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const int64_t value)
     {
-        char_t buffer[21];
+        char buffer[21];
         StringUtils::Sprintf(buffer, sizeof(buffer), "%lld", value);
         return operator<<(buffer);
     }
@@ -220,7 +220,7 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const uint64_t value)
     {
-        char_t buffer[21];
+        char buffer[21];
         StringUtils::Sprintf(buffer, sizeof(buffer), "%llu", value);
         return operator<<(buffer);
     }
@@ -236,14 +236,14 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const bool  value)
     {
-        char_t buffer[2];
+        char buffer[2];
         StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
         return operator<<(buffer);
     }
 
     inline
     StringOutputStream&
-    StringOutputStream::operator<<(const char_t* value)
+    StringOutputStream::operator<<(const char* value)
     {
         const uint_t length = ConstString(value).length();
         return write(value, static_cast<uint32_t>(length));
@@ -251,7 +251,7 @@ namespace capu
 
     inline
     StringOutputStream&
-    StringOutputStream::operator<<(const char_t value)
+    StringOutputStream::operator<<(const char value)
     {
         const uint32_t sizeOfOneCharacter = 1u;
         return write(&value, sizeOfOneCharacter);
@@ -261,7 +261,7 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const uint16_t value)
     {
-        char_t buffer[6];
+        char buffer[6];
         StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
         return operator<<(buffer);
     }
@@ -278,9 +278,9 @@ namespace capu
     StringOutputStream::write(const void* data, const uint32_t size)
     {
         requestSize(size + 1); // Terminating 0
-        char_t* base = mBuffer.getRawData();
-        char_t* writePos = base + mSize;
-        char_t* nullPos = writePos + size;
+        char* base = mBuffer.getRawData();
+        char* writePos = base + mSize;
+        char* nullPos = writePos + size;
         Memory::Copy(writePos, data, size);
         *nullPos = '\0';
         mSize += size;
@@ -334,8 +334,8 @@ namespace capu
     StringOutputStream&
     endl(StringOutputStream& outputStream)
     {
-        const char_t c = '\n';
-        outputStream.write(&c, sizeof(char_t));
+        const char c = '\n';
+        outputStream.write(&c, sizeof(char));
         outputStream.flush();
         return outputStream;
     }

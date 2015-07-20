@@ -35,10 +35,10 @@ namespace capu
         {
         public:
             static bool IsInputAvailable();
-            static void Print(const char_t* format, va_list values);
-            static void Print(uint32_t color, const char_t* format, va_list values);
-            static status_t ReadChar(char_t& buffer);
-            static const char_t* Colors[];
+            static void Print(const char* format, va_list values);
+            static void Print(uint32_t color, const char* format, va_list values);
+            static status_t ReadChar(char& buffer);
+            static const char* Colors[];
             static void Flush();
             static void InterruptReadChar();
         private:
@@ -66,14 +66,14 @@ namespace capu
 
         inline
         void
-        Console::Print(const char_t* format, va_list values)
+        Console::Print(const char* format, va_list values)
         {
             vprintf(format, values);
         }
 
         inline
         void
-        Console::Print(uint32_t color, const char_t* format, va_list values)
+        Console::Print(uint32_t color, const char* format, va_list values)
         {
             printf("%s", capu::posix::Console::Colors[color]);
             vprintf(format, values);
@@ -81,7 +81,7 @@ namespace capu
         }
 
         inline
-        status_t Console::ReadChar(char_t& buffer)
+        status_t Console::ReadChar(char& buffer)
         {
             struct termios oldTerminalSettings, temporaryWithoutEcho;
 
@@ -130,7 +130,7 @@ namespace capu
                     {
                         if (FD_ISSET(stdinHandle, &fdset))
                         {
-                            char_t readBuffer;
+                            char readBuffer;
                             bytesRead = read(stdinHandle, &readBuffer, 1);
                             if (bytesRead <= 0)
                             {
@@ -146,7 +146,7 @@ namespace capu
                         {
                             // explicit user interrupt
                             status = CAPU_INTERRUPTED;
-                            char_t readBuffer;
+                            char readBuffer;
                             const int32_t readStatus = read(GetReadEndOfPipe(), &readBuffer, 1);
                             UNUSED(readStatus);
                         }

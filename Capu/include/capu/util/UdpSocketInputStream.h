@@ -29,7 +29,7 @@ namespace capu
     public:
         UdpSocketInputStream(UdpSocket& socket);
 
-        IInputStream& read(char_t* data, const uint32_t size);
+        IInputStream& read(char* data, const uint32_t size);
 
         const SocketAddrInfo& getLastSenderInfo() const;
     protected:
@@ -38,10 +38,10 @@ namespace capu
         UdpSocket&     m_socket;
         SocketAddrInfo m_addrInfo;
         uint32_t       m_currentLeftDataSize;
-        char_t*        m_currentPosition;
-        char_t         m_receiveBuffer[RCVBUFSIZE];
+        char*        m_currentPosition;
+        char         m_receiveBuffer[RCVBUFSIZE];
 
-        void readDataFromInternalBuffer(char_t* data, const uint32_t size);
+        void readDataFromInternalBuffer(char* data, const uint32_t size);
     };
 
     template<uint16_t RCVBUFSIZE>
@@ -62,7 +62,7 @@ namespace capu
     }
 
     template<uint16_t RCVBUFSIZE>
-    IInputStream& UdpSocketInputStream<RCVBUFSIZE>::read(char_t* data, const uint32_t size)
+    IInputStream& UdpSocketInputStream<RCVBUFSIZE>::read(char* data, const uint32_t size)
     {
         if (size <= m_currentLeftDataSize)
         {
@@ -97,7 +97,7 @@ namespace capu
     template<uint16_t RCVBUFSIZE>
     inline
     void
-    UdpSocketInputStream<RCVBUFSIZE>::readDataFromInternalBuffer(char_t* data, const uint32_t size)
+    UdpSocketInputStream<RCVBUFSIZE>::readDataFromInternalBuffer(char* data, const uint32_t size)
     {
         Memory::Copy(data, m_currentPosition, size);
         m_currentPosition += size;

@@ -153,7 +153,7 @@ namespace capu
             return "";
         }
         capu::uint_t readBytes = 0;
-        capu::char_t* buffer = new capu::char_t[fileSize + 1];
+        char* buffer = new char[fileSize + 1];
         capu::Memory::Set(buffer, 0, fileSize + 1);
         file.open(capu::READ_ONLY);
         capu::uint_t totalBytes = 0;

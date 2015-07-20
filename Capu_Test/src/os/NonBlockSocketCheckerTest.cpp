@@ -81,7 +81,7 @@ public:
         {
             capu::uint32_t sendValue = 42;
             capu::int32_t sendBytes;
-            current->value->send(reinterpret_cast<capu::char_t*>(&sendValue), sizeof(sendValue), sendBytes);
+            current->value->send(reinterpret_cast<char*>(&sendValue), sizeof(sendValue), sendBytes);
         }
     }
 
@@ -93,7 +93,7 @@ public:
         capu::HashTable<capu::os::SocketDescription, capu::TcpSocket*>::Iterator entry = m_clientSockets.find(socketDescription);
         if (entry != m_clientSockets.end())
         {
-            EXPECT_EQ(capu::CAPU_OK, entry->value->receive(reinterpret_cast<capu::char_t*>(&data), sizeof(data), numbytes));
+            EXPECT_EQ(capu::CAPU_OK, entry->value->receive(reinterpret_cast<char*>(&data), sizeof(data), numbytes));
             if (numbytes != 0)
             {
                 EXPECT_EQ(42, data);
@@ -124,7 +124,7 @@ public:
         capu::int32_t data;
         capu::int32_t numbytes = 0;
 
-        EXPECT_EQ(capu::CAPU_OK, m_clientSocket.receive(reinterpret_cast<capu::char_t*>(&data), sizeof(data), numbytes));
+        EXPECT_EQ(capu::CAPU_OK, m_clientSocket.receive(reinterpret_cast<char*>(&data), sizeof(data), numbytes));
         if (numbytes!=0)
         {
             EXPECT_EQ(42, data);
@@ -147,7 +147,7 @@ public:
         {
             capu::uint32_t sendValue = 42;
             capu::int32_t sendBytes = -1;
-            m_clientSocket.send(reinterpret_cast<capu::char_t*>(&sendValue), sizeof(sendValue), sendBytes);
+            m_clientSocket.send(reinterpret_cast<char*>(&sendValue), sizeof(sendValue), sendBytes);
             EXPECT_EQ(static_cast<capu::int32_t>(sizeof(sendValue)), sendBytes);
         }
     }

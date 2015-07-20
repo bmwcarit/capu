@@ -37,14 +37,14 @@ namespace capu
             status_t getLingerOption(bool& isLinger, uint16_t& linger);
             status_t getNoDelay(bool& noDelay);
             status_t getKeepAlive(bool& keepAlive);
-            status_t getRemoteAddress(char_t** remoteAddress);
+            status_t getRemoteAddress(char** remoteAddress);
             const capu::os::SocketDescription& getSocketDescription() const;
 
         protected:
             TcpSocket();
 
             status_t setSocketParameters();
-            status_t getSocketAddr(const char_t* dest_addr, uint16_t port, struct sockaddr_in& socketAddressInfo);
+            status_t getSocketAddr(const char* dest_addr, uint16_t port, struct sockaddr_in& socketAddressInfo);
 
         private:
             int32_t mBufferSize;
@@ -96,14 +96,14 @@ namespace capu
         }
 
         inline
-            status_t TcpSocket::getSocketAddr(const char_t* dest_addr, uint16_t port, struct sockaddr_in& socketAddressInfo)
+            status_t TcpSocket::getSocketAddr(const char* dest_addr, uint16_t port, struct sockaddr_in& socketAddressInfo)
         {
             addrinfo *res = NULL;
             addrinfo hints;
-            capu::Memory::Set((char_t*)&hints, 0x00, sizeof(addrinfo));
+            capu::Memory::Set((char*)&hints, 0x00, sizeof(addrinfo));
             hints.ai_family = AF_INET;
 
-            if (0 != getaddrinfo((const char_t*)dest_addr, NULL, &hints, &res))
+            if (0 != getaddrinfo((const char*)dest_addr, NULL, &hints, &res))
             {
                 return CAPU_SOCKET_EADDR;
             }
@@ -112,10 +112,10 @@ namespace capu
             {
                 if (ptr->ai_family == AF_INET)
                 {
-                    capu::Memory::Set((char_t*)&socketAddressInfo, 0x00, sizeof(sockaddr_in));
+                    capu::Memory::Set((char*)&socketAddressInfo, 0x00, sizeof(sockaddr_in));
 
                     socketAddressInfo.sin_family = AF_INET;
-                    capu::Memory::Copy((char_t*)&(socketAddressInfo.sin_addr.s_addr), (char_t*)(ptr->ai_addr->sa_data) + 2, sizeof(in_addr));
+                    capu::Memory::Copy((char*)&(socketAddressInfo.sin_addr.s_addr), (char*)(ptr->ai_addr->sa_data) + 2, sizeof(in_addr));
                     socketAddressInfo.sin_port = htons(port);
 
                     freeaddrinfo(res);
@@ -127,7 +127,7 @@ namespace capu
             return CAPU_SOCKET_ERROR;
         }
 
-        inline status_t TcpSocket::getRemoteAddress(char_t** remoteAddress)
+        inline status_t TcpSocket::getRemoteAddress(char** remoteAddress)
         {
             if (mSocket == CAPU_INVALID_SOCKET)
             {
@@ -147,7 +147,7 @@ namespace capu
 
             if ( 0 != remoteAddress)
             {
-                char_t buffer[INET_ADDRSTRLEN] = { '\0' };
+                char buffer[INET_ADDRSTRLEN] = { '\0' };
                 const char *remoteIP = inet_ntop(AF_INET, &(client_address.sin_addr), buffer, INET_ADDRSTRLEN);
                 if (NULL == remoteIP)
                 {
@@ -155,7 +155,7 @@ namespace capu
                 }
 
                 uint_t stringLength = StringUtils::Strlen(remoteIP) + 1;
-                *remoteAddress = new char_t[stringLength];
+                *remoteAddress = new char[stringLength];
                 StringUtils::Strncpy(*remoteAddress, stringLength, remoteIP);
             }
             return CAPU_OK;
@@ -223,7 +223,7 @@ namespace capu
                 return CAPU_SOCKET_ESOCKET;
             }
 
-            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char_t*)&mBufferSize, sizeof(mBufferSize)) <= CAPU_SOCKET_ERROR)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char*)&mBufferSize, sizeof(mBufferSize)) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
@@ -245,7 +245,7 @@ namespace capu
             soLinger.l_onoff  = mIsLinger ? 1 : 0;
             soLinger.l_linger = mIsLinger ? mLinger : 0;
 
-            if (setsockopt(mSocket, SOL_SOCKET, SO_LINGER, (char_t*)&soLinger, sizeof(soLinger)) <= CAPU_SOCKET_ERROR)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_LINGER, (char*)&soLinger, sizeof(soLinger)) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
@@ -269,7 +269,7 @@ namespace capu
             {
                 opt = 0;
             }
-            if (setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (char_t*)&opt, sizeof(opt)) <= CAPU_SOCKET_ERROR)
+            if (setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&opt, sizeof(opt)) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
@@ -287,7 +287,7 @@ namespace capu
 
             int32_t opt = mKeepAlive ? 1 : 0;
 
-            if (setsockopt(mSocket, SOL_SOCKET, SO_KEEPALIVE, (char_t*)&opt, sizeof(opt)) <= CAPU_SOCKET_ERROR)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&opt, sizeof(opt)) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
@@ -303,7 +303,7 @@ namespace capu
             }
 
             socklen_t len = sizeof(bufferSize);
-            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char_t*)&bufferSize, &len) <= CAPU_SOCKET_ERROR)
+            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char*)&bufferSize, &len) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
@@ -323,7 +323,7 @@ namespace capu
             struct linger soLinger;
             socklen_t len = sizeof(soLinger);
 
-            if (getsockopt(mSocket, SOL_SOCKET, SO_LINGER, (char_t*)&soLinger, &len) <= CAPU_SOCKET_ERROR)
+            if (getsockopt(mSocket, SOL_SOCKET, SO_LINGER, (char*)&soLinger, &len) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
@@ -353,7 +353,7 @@ namespace capu
             int32_t opt = 0;
             socklen_t len = sizeof(opt);
 
-            if (getsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (char_t*)&opt, &len) <= CAPU_SOCKET_ERROR)
+            if (getsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&opt, &len) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }
@@ -381,7 +381,7 @@ namespace capu
             int32_t opt = 0;
             socklen_t len = sizeof(opt);
 
-            if (getsockopt(mSocket, SOL_SOCKET, SO_KEEPALIVE, (char_t*)&opt, &len) <= CAPU_SOCKET_ERROR)
+            if (getsockopt(mSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&opt, &len) <= CAPU_SOCKET_ERROR)
             {
                 return CAPU_ERROR;
             }

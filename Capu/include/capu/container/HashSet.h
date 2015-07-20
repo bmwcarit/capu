@@ -136,8 +136,8 @@ namespace capu
         /**
          * Iterator for hashsets
          */
-        typedef HashSetIterator< typename HashTable<T, char_t, C, H>::Iterator >        Iterator;
-        typedef HashSetIterator< typename HashTable<T, char_t, C, H>::ConstIterator >   ConstIterator;
+        typedef HashSetIterator< typename HashTable<T, char, C, H>::Iterator >        Iterator;
+        typedef HashSetIterator< typename HashTable<T, char, C, H>::ConstIterator >   ConstIterator;
 
         /**
          * Default Constructor
@@ -242,7 +242,7 @@ namespace capu
         ConstIterator end() const;
 
     private:
-        HashTable<T, char_t, C, H> m_table;
+        HashTable<T, char, C, H> m_table;
     };
 
     template <class T, class C, class H>

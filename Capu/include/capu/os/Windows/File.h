@@ -43,8 +43,8 @@ namespace capu
             status_t open(const FileMode& mode);
             bool isOpen();
             bool isEof();
-            status_t read(char_t* buffer, uint_t length, uint_t& numBytes);
-            status_t write(const char_t* buffer, uint_t length);
+            status_t read(char* buffer, uint_t length, uint_t& numBytes);
+            status_t write(const char* buffer, uint_t length);
             status_t flush();
             status_t close();
             status_t renameTo(const capu::String& newPath);
@@ -100,8 +100,8 @@ namespace capu
         inline
         String File::getParentPath(bool& success) const
         {
-            char_t buffer[1000]; // TODO
-            char_t* filePointer = 0;
+            char buffer[1000]; // TODO
+            char* filePointer = 0;
             int_t length = GetFullPathNameA(getPath().c_str(), sizeof(buffer), buffer, &filePointer);
             if (filePointer)
             {
@@ -203,7 +203,7 @@ namespace capu
         {
             errno_t error;
             // try to open file
-            const char_t* flags = "";
+            const char* flags = "";
             switch (mode)
             {
             case READ_ONLY:
@@ -255,7 +255,7 @@ namespace capu
 
         inline
         status_t
-        File::read(char_t* buffer, uint_t length, uint_t& numBytes)
+        File::read(char* buffer, uint_t length, uint_t& numBytes)
         {
             if (buffer == NULL)
             {
@@ -286,7 +286,7 @@ namespace capu
 
         inline
         status_t
-        File::write(const char_t* buffer, uint_t length)
+        File::write(const char* buffer, uint_t length)
         {
             if (buffer == NULL)
             {

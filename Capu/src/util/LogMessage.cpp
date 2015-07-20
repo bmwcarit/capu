@@ -18,7 +18,7 @@ namespace capu
 
     }
 
-    const char_t* LogMessage::getLogMessage() const
+    const char* LogMessage::getLogMessage() const
     {
         return m_outputStream.c_str();
     }
