@@ -50,7 +50,6 @@ namespace capu
     typedef unsigned int uint32_t;
     typedef unsigned long long int uint64_t;
     typedef char    char_t;
-    typedef ::time_t time_t;
 
     #if defined(ARCH_X86_64) || defined(ARCH_ARM64)
         typedef signed long long int int_t;
