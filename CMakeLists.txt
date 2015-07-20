@@ -25,6 +25,10 @@ SET(CMAKE_MODULE_PATH
 FIND_PACKAGE(ACME2)
 FIND_PACKAGE(automotive-dlt)
 
+IF(MSVC)
+    SET(ACME_ENABLE_PLUGIN_VISUAL_STUDIO_PDB true CACHE BOOL "ACME2 plugin for installing Visual Studio PDB(s)")
+ENDIF()
+
 # custom setup for integrating gtest & gmock
 set(gtest_force_shared_crt true CACHE BOOL "Must be enabled for linking our unit tests" FORCE)
 IF(Capu_BUILD_TESTS AND NOT TARGET gmock)
