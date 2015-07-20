@@ -17,7 +17,7 @@
 #ifndef CAPU_ERROR_H
 #define CAPU_ERROR_H
 
-#include "Config.h"
+#include "capu/Config.h"
 
 namespace capu
 {

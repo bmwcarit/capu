@@ -34,6 +34,9 @@ IF (TARGET_OS MATCHES "iPhoneSimulatorOS")
     SET(PLATFORM_SPECIFIC_PUBLIC_HEADER_FILES ${PLATFORM_SPECIFIC_PUBLIC_HEADER_FILES} include/capu/os/iPhoneOS/*.h)
 ENDIF()
 
+CONFIGURE_FILE(include/capu/Config.h.in ${PROJECT_BINARY_DIR}/capu/Config.h)
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 ACME_MODULE(
 
     #==========================================================================
@@ -52,6 +55,7 @@ ACME_MODULE(
                             include/capu/os/${TARGET_OS}/*.h
                             include/capu/os/${TARGET_OS}/${TARGET_ARCH}/*.h
                             include/capu/util/*.h
+                            ${PROJECT_BINARY_DIR}/capu/*.h
                             ${PLATFORM_SPECIFIC_PUBLIC_HEADER_FILES}
 
 
@@ -60,9 +64,12 @@ ACME_MODULE(
                             src/os/Generic/*.cpp
                             ${PLATFORM_SPECIFIC_SOURCE_FILES}
 
+    FILES_PRIVATE_HEADER    include/capu/Config.h.in
+
     FILES_DOCUMENTATION     doc/*
 
     INCLUDE_BASE            include
+                            ${PROJECT_BINARY_DIR}
 
     #==========================================================================
     # dependencies
