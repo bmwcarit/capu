@@ -36,7 +36,7 @@ public:
             return a;
         }
 
-        capu::bool_t operator== (const MyStruct& other) const
+        bool operator== (const MyStruct& other) const
         {
             return (a == other.a);
         }

@@ -33,17 +33,17 @@ namespace capu
 
             capu::File& operator*();
             capu::File* operator->();
-            bool_t next();
-            bool_t isValid();
+            bool next();
+            bool isValid();
 
             using generic::FileSystemIterator<DIR*>::setStepIntoSubdirectories;
         private:
 
-            bool_t oneLevelUp(dirent** direntry);
+            bool oneLevelUp(dirent** direntry);
 
             dirent* readEntry();
 
-            bool_t mValid;
+            bool mValid;
         };
 
         inline FileSystemIterator::FileSystemIterator(capu::File root)
@@ -77,7 +77,7 @@ namespace capu
             }
         }
 
-        inline bool_t FileSystemIterator::oneLevelUp(dirent** direntry)
+        inline bool FileSystemIterator::oneLevelUp(dirent** direntry)
         {
             if (mDirectoryStack.isEmpty())
             {
@@ -90,7 +90,7 @@ namespace capu
             closedir(dir);
 
             // correct reference directory
-            bool_t success;
+            bool success;
             mCurrentDirectory = mCurrentDirectory.getParentFile(success);
 
             // read upper directory
@@ -124,7 +124,7 @@ namespace capu
             return entry;
         }
 
-        inline bool_t FileSystemIterator::next()
+        inline bool FileSystemIterator::next()
         {
             if (!mValid || mDirectoryStack.isEmpty())
             {
@@ -169,7 +169,7 @@ namespace capu
             return mValid;
         }
 
-        inline bool_t FileSystemIterator::isValid()
+        inline bool FileSystemIterator::isValid()
         {
             return mValid;
         }

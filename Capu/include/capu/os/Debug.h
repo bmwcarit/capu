@@ -35,11 +35,11 @@ namespace capu
         /**
          * Assert that the given condition is true
          */
-        static void Assert(bool_t condition);
+        static void Assert(bool condition);
     };
 
     inline
-    void Debug::Assert(bool_t condition)
+    void Debug::Assert(bool condition)
     {
         capu::os::arch::Debug::Assert(condition);
     }

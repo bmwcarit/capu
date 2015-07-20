@@ -70,7 +70,7 @@ namespace capu
          * Check the stack is empty or not.
          * @return true if empty, false otherwise.
          */
-        bool_t isEmpty() const;
+        bool isEmpty() const;
 
         /**
          * Remove all elements from the stack.
@@ -107,7 +107,7 @@ namespace capu
     }
 
     template <typename T>
-    bool_t Stack<T>::isEmpty() const
+    bool Stack<T>::isEmpty() const
     {
         return List<T>::isEmpty();
     }

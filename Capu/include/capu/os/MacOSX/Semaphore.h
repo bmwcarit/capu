@@ -73,7 +73,7 @@ namespace capu
                 timeout.tv_sec = timeoutMillis / 1000;
                 timeout.tv_nsec = (timeoutMillis % 1000) * 1000000;
 
-                bool_t keepWaiting = true;
+                bool keepWaiting = true;
                 while (keepWaiting)
                 {
                     waitResult = semaphore_timedwait(mSemaphore, timeout);
@@ -110,7 +110,7 @@ namespace capu
         Semaphore::release(uint32_t permits)
         {
             uint32_t _permits = permits;
-            bool_t result  = true;
+            bool result  = true;
             while (_permits)
             {
                 result &= semaphore_signal(mSemaphore) == KERN_SUCCESS;

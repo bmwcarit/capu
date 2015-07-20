@@ -108,7 +108,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t setLingerOption(bool_t isLinger, uint16_t linger);
+        inline status_t setLingerOption(bool isLinger, uint16_t linger);
 
 
         /**
@@ -118,7 +118,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t setNoDelay(bool_t noDelay);
+        inline status_t setNoDelay(bool noDelay);
 
         /**
          * Set Keep Alive option
@@ -127,7 +127,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t setKeepAlive(bool_t keepAlive);
+        inline status_t setKeepAlive(bool keepAlive);
 
         /**
          * Set Timeout
@@ -153,7 +153,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t getLingerOption(bool_t& isLinger, uint16_t& linger);
+        inline status_t getLingerOption(bool& isLinger, uint16_t& linger);
 
         /**
          * Get no delay option
@@ -161,7 +161,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t getNoDelay(bool_t& noDelay);
+        inline status_t getNoDelay(bool& noDelay);
 
         /**
          * Get Keep Alive option
@@ -169,7 +169,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket is not created
          *         CAPU_ERROR otherwise
          */
-        inline status_t getKeepAlive(bool_t& keepAlive);
+        inline status_t getKeepAlive(bool& keepAlive);
 
 
         /**
@@ -256,21 +256,21 @@ namespace capu
 
     inline
     status_t
-    TcpSocket::setLingerOption(bool_t isLinger, uint16_t linger)
+    TcpSocket::setLingerOption(bool isLinger, uint16_t linger)
     {
         return capu::os::arch::TcpSocket::setLingerOption(isLinger, linger);
     }
 
     inline
     status_t
-    TcpSocket::setNoDelay(bool_t noDelay)
+    TcpSocket::setNoDelay(bool noDelay)
     {
         return capu::os::arch::TcpSocket::setNoDelay(noDelay);
     }
 
     inline
     status_t
-    TcpSocket::setKeepAlive(bool_t keepAlive)
+    TcpSocket::setKeepAlive(bool keepAlive)
     {
         return capu::os::arch::TcpSocket::setKeepAlive(keepAlive);
     }
@@ -291,21 +291,21 @@ namespace capu
 
     inline
     status_t
-    TcpSocket::getLingerOption(bool_t& isLinger, uint16_t& linger)
+    TcpSocket::getLingerOption(bool& isLinger, uint16_t& linger)
     {
         return capu::os::arch::TcpSocket::getLingerOption(isLinger, linger);
     }
 
     inline
     status_t
-    TcpSocket::getNoDelay(bool_t& noDelay)
+    TcpSocket::getNoDelay(bool& noDelay)
     {
         return capu::os::arch::TcpSocket::getNoDelay(noDelay);
     }
 
     inline
     status_t
-    TcpSocket::getKeepAlive(bool_t& keepAlive)
+    TcpSocket::getKeepAlive(bool& keepAlive)
     {
         return capu::os::arch::TcpSocket::getKeepAlive(keepAlive);
     }

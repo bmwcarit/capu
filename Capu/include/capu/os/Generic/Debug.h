@@ -27,12 +27,12 @@ namespace capu
         class Debug
         {
         public:
-            static void Assert(bool_t condition);
+            static void Assert(bool condition);
         };
 
         inline
         void
-        Debug::Assert(bool_t condition)
+        Debug::Assert(bool condition)
         {
             UNUSED(condition);
 #ifdef _DEBUG

@@ -99,7 +99,7 @@ namespace capu
          * Write a boolean to the stream
          * @param value Value to write to the stream
          */
-        IOutputStream& operator<<(const bool_t value);
+        IOutputStream& operator<<(const bool value);
 
         /**
          * Write a float to the stream
@@ -279,9 +279,9 @@ namespace capu
     template<uint16_t SNDBUFSIZE>
     inline
     IOutputStream&
-    SocketOutputStream<SNDBUFSIZE>::operator<<(const bool_t value)
+    SocketOutputStream<SNDBUFSIZE>::operator<<(const bool value)
     {
-        return write(reinterpret_cast<const char_t*>(&value), sizeof(bool_t));
+        return write(reinterpret_cast<const char_t*>(&value), sizeof(bool));
     }
 
     template<uint16_t SNDBUFSIZE>

@@ -37,7 +37,7 @@ namespace capu
             status_t close();
             status_t setBufferSize(const int32_t bufferSize);
             status_t setTimeout(const int32_t timeout);
-            status_t allowBroadcast(const bool_t broadcast);
+            status_t allowBroadcast(const bool broadcast);
             status_t getBufferSize(int32_t& bufferSize);
             status_t getTimeout(int32_t& timeout);
             const SocketAddrInfo& getSocketAddrInfo() const;
@@ -46,9 +46,9 @@ namespace capu
         private:
             SocketDescription mSocket;
             WSADATA mWsaData;
-            bool_t mIsBound;
+            bool mIsBound;
             SocketAddrInfo mAddrInfo;
-            bool_t mIsInitilized;
+            bool mIsInitilized;
 
             void initialize();
         };
@@ -331,7 +331,7 @@ namespace capu
 
         inline
         status_t
-        UdpSocket::allowBroadcast(const bool_t broadcast)
+        UdpSocket::allowBroadcast(const bool broadcast)
         {
             if (mSocket == INVALID_SOCKET)
             {

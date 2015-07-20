@@ -157,8 +157,8 @@ namespace capu
          * @param pattern for start of context
          * @{
          */
-        void setEnabled(bool_t enabled, const String& pattern);
-        static void SetEnabled(bool_t enabled, const String& pattern);
+        void setEnabled(bool enabled, const String& pattern);
+        static void SetEnabled(bool enabled, const String& pattern);
         /**
          * @}
          */
@@ -246,7 +246,7 @@ namespace capu
 
     inline
     void
-    Logger::SetEnabled(bool_t enabled, const String& pattern)
+    Logger::SetEnabled(bool enabled, const String& pattern)
     {
         if(0 != DefaultLogger)
         {

@@ -443,7 +443,7 @@ TEST(File, CreateAndRemoveDirectory)
 
 TEST(File, GetParentFile1)
 {
-    capu::bool_t success;
+    bool success;
     capu::File temp123("temp1/temp2/temp3");
 
     capu::File temp12 = temp123.getParentFile(success);
@@ -462,7 +462,7 @@ TEST(File, GetParentFile1)
 
 TEST(File, GetParentFile2)
 {
-    capu::bool_t success;
+    bool success;
     capu::File temp123("/temp1/temp2/temp3");
     capu::File temp12 = temp123.getParentFile(success);
     EXPECT_TRUE(success);
@@ -484,7 +484,7 @@ TEST(File, GetParentFile2)
 
 TEST(File, GetParentFile3)
 {
-    capu::bool_t success;
+    bool success;
     capu::File temp1234("d:/temp1\\temp2/temp3\\temp4");
     capu::File temp123 = temp1234.getParentFile(success);
     EXPECT_TRUE(success);
@@ -507,7 +507,7 @@ TEST(File, GetParentFile3)
 
 TEST(File, GetParentFile4)
 {
-    capu::bool_t success;
+    bool success;
     capu::File temp("d:/");
     capu::File temp0 = temp.getParentFile(success);
     EXPECT_FALSE(success);

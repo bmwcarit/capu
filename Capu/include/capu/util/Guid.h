@@ -74,19 +74,19 @@ namespace capu
          * Checks if this guid equals the given guid.
          * @return true if the guids are equal.
          */
-        bool_t equals(const Guid& other) const;
+        bool equals(const Guid& other) const;
 
         /**
          * Checks if this guid equals the given guid.
          * @return true if the guids are equal.
          */
-        bool_t operator==(const Guid& other) const;
+        bool operator==(const Guid& other) const;
 
         /**
          * Checks if the current guid is invalid which may be the case if it was parsed and the given string was no guid representation.
          * @return true if the guid is invalid.
          */
-        bool_t isInvalid() const;
+        bool isInvalid() const;
 
         /**
          * Assigns the given guid to this guid.
@@ -120,7 +120,7 @@ namespace capu
         void createNew();
         generic_uuid_t m_id;
         mutable String m_stringRepresentation;
-        mutable bool_t m_stringRepresentationIsInvalid;
+        mutable bool m_stringRepresentationIsInvalid;
         static Random& getRandom();
     };
 
@@ -161,7 +161,7 @@ namespace capu
         return singletonInstance;
     }
 
-    inline bool_t Guid::operator==(const Guid& other) const
+    inline bool Guid::operator==(const Guid& other) const
     {
         return equals(other);
     }
@@ -182,7 +182,7 @@ namespace capu
         return *this;
     }
 
-    inline bool_t Guid::isInvalid() const
+    inline bool Guid::isInvalid() const
     {
         generic_uuid_t emptyId;
         Memory::Set(&emptyId, 0, sizeof(generic_uuid_t));
@@ -198,7 +198,7 @@ namespace capu
         return m_stringRepresentation;
     }
 
-    inline bool_t Guid::equals(const Guid& second) const
+    inline bool Guid::equals(const Guid& second) const
     {
         return Memory::Compare(&m_id, &second.m_id, sizeof(generic_uuid_t)) == 0;
     }

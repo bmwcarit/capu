@@ -62,13 +62,13 @@ namespace capu
          *
          * @return TRUE if the runnable should exit, FALSE otherwise
          */
-        bool_t isCancelRequested()
+        bool isCancelRequested()
         {
             return mCancel;
         }
 
     private:
-        bool_t mCancel;
+        bool mCancel;
     };
 }
 

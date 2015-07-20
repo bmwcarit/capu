@@ -122,7 +122,7 @@ TEST(Traits, TestPrimitiveTypes)
     capu::uchar_t  sometype9 = 42;
     capu::float_t  sometype10 = 42.f;
     capu::double_t sometype11 = 42.0;
-    capu::bool_t   sometype12 = true;
+    bool   sometype12 = true;
 
     EXPECT_EQ(static_cast<capu::uint32_t>(CAPU_TYPE_PRIMITIVE), Tester::type(sometype1));
     EXPECT_EQ(static_cast<capu::uint32_t>(CAPU_TYPE_PRIMITIVE), Tester::type(sometype2));

@@ -32,19 +32,19 @@ namespace capu
 
             capu::File& operator*();
             capu::File* operator->();
-            bool_t next();
-            bool_t isValid();
+            bool next();
+            bool isValid();
 
             using generic::FileSystemIterator<HANDLE>::setStepIntoSubdirectories;
         private:
 
-            bool_t oneLevelUp(bool_t& found);
+            bool oneLevelUp(bool& found);
 
-            bool_t stepIntoDirectory(capu::File directory);
+            bool stepIntoDirectory(capu::File directory);
 
-            bool_t readEntry();
+            bool readEntry();
 
-            bool_t mValid;
+            bool mValid;
 
             WIN32_FIND_DATAA mFindFileData;
         };
@@ -66,7 +66,7 @@ namespace capu
             }
         }
 
-        inline bool_t FileSystemIterator::stepIntoDirectory(capu::File directory)
+        inline bool FileSystemIterator::stepIntoDirectory(capu::File directory)
         {
             String searchPattern(directory.getPath());
             searchPattern.append("/*.*");
@@ -103,7 +103,7 @@ namespace capu
             return mValid;
         }
 
-        inline bool_t FileSystemIterator::oneLevelUp(bool_t& found)
+        inline bool FileSystemIterator::oneLevelUp(bool& found)
         {
             if (mDirectoryStack.isEmpty())
             {
@@ -115,7 +115,7 @@ namespace capu
             mDirectoryStack.pop(&dir);
             FindClose(dir);
 
-            bool_t success;
+            bool success;
             mCurrentDirectory = mCurrentDirectory.getParentFile(success);
 
             // read upper directory
@@ -124,7 +124,7 @@ namespace capu
             return true;
         }
 
-        inline bool_t FileSystemIterator::readEntry()
+        inline bool FileSystemIterator::readEntry()
         {
             if (mDirectoryStack.isEmpty())
             {
@@ -132,7 +132,7 @@ namespace capu
                 return 0;
             }
 
-            bool_t found = false;
+            bool found = false;
             do
             {
                 HANDLE dir;
@@ -147,7 +147,7 @@ namespace capu
             return found;
         }
 
-        inline bool_t FileSystemIterator::next()
+        inline bool FileSystemIterator::next()
         {
             if (!mValid || mDirectoryStack.isEmpty())
             {
@@ -158,7 +158,7 @@ namespace capu
 
             // if current file is a directory and we should traverse
             // sub directories then first go into the directory
-            bool_t found;
+            bool found;
             if (mRecurseSubDirectories && mCurrentFile.isDirectory())
             {
                 found = stepIntoDirectory(mCurrentFile);
@@ -195,7 +195,7 @@ namespace capu
             return mValid;
         }
 
-        inline bool_t FileSystemIterator::isValid()
+        inline bool FileSystemIterator::isValid()
         {
             return mValid;
         }

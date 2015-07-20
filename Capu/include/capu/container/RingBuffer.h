@@ -39,11 +39,11 @@ namespace capu
             friend class RingBuffer<T>;
             RingBufferIterator(RingBuffer<T>* buffer);
             ~RingBufferIterator();
-            bool_t hasNext() const;
+            bool hasNext() const;
             status_t next(T* element);
         private:
             uint32_t mCurrentIndex;
-            bool_t mMoved;
+            bool mMoved;
             RingBuffer<T>* mBuffer;
         };
 
@@ -94,7 +94,7 @@ namespace capu
         uint32_t mStart;
         uint32_t mEnd;
         uint32_t mBufferSize;
-        bool_t mEmpty;
+        bool mEmpty;
         ScopedArray<T> mData; // we use a backing array for the ring buffer
 
         /**
@@ -107,7 +107,7 @@ namespace capu
          * Helper function to determine if the buffer is full.
          * @return True if the buffer is full, false otherwise.
          */
-        bool_t isFull() const;
+        bool isFull() const;
     };
 
     template<typename T>
@@ -126,7 +126,7 @@ namespace capu
     }
 
     template<typename T>
-    inline bool_t RingBuffer<T>::isFull() const
+    inline bool RingBuffer<T>::isFull() const
     {
         return mStart == mEnd && !mEmpty;
     }
@@ -196,7 +196,7 @@ namespace capu
     }
 
     template<typename T>
-    inline bool_t RingBuffer<T>::RingBufferIterator::hasNext() const
+    inline bool RingBuffer<T>::RingBufferIterator::hasNext() const
     {
         if (mBuffer->mEmpty)
         {

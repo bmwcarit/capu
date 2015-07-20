@@ -23,7 +23,7 @@
 
 capu::Mutex mutex2;
 capu::CondVar cv2;
-capu::bool_t cond2;
+bool cond2;
 
 class RandomPort
 {

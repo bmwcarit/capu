@@ -144,7 +144,7 @@ TEST(FileUtilsTest, SetCurrentWorkingDirectory)
 
     EXPECT_TRUE(oldCwd.getPath().startsWith(newCwd.getPath()));
 
-    capu::bool_t status = false;
+    bool status = false;
     EXPECT_EQ(newCwd.getPath(), oldCwd.getParentFile(status).getPath());
     EXPECT_TRUE(status);
 

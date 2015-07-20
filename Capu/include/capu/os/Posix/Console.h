@@ -34,7 +34,7 @@ namespace capu
         class Console
         {
         public:
-            static bool_t IsInputAvailable();
+            static bool IsInputAvailable();
             static void Print(const char_t* format, va_list values);
             static void Print(uint32_t color, const char_t* format, va_list values);
             static status_t ReadChar(char_t& buffer);
@@ -114,7 +114,7 @@ namespace capu
                 {
                     return CAPU_ERROR;
                 }
-                bool_t hasReadCharacter = false;
+                bool hasReadCharacter = false;
                 while (status == CAPU_OK && !hasReadCharacter) {
                     fd_set fdset;
                     FD_ZERO(&fdset);
@@ -210,7 +210,7 @@ namespace capu
         }
 
         inline
-        bool_t
+        bool
         Console::IsInputAvailable()
         {
             fd_set fds;

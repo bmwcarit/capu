@@ -33,7 +33,7 @@ namespace capu
         /**
          * Compare if equal to another pair
          */
-        inline bool_t operator==(const Pair<T1, T2>& rhs) const
+        inline bool operator==(const Pair<T1, T2>& rhs) const
         {
             return ((first == rhs.first) && (second == rhs.second));
         }

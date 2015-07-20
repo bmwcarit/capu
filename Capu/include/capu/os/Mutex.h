@@ -53,7 +53,7 @@ namespace capu
          * @return true if the mutex is successfully locked
          *         false if the mutex is already locked
          */
-        bool_t trylock();
+        bool trylock();
 
         /**
          *release the lock
@@ -83,7 +83,7 @@ namespace capu
     }
 
     inline
-    bool_t   Mutex::trylock()
+    bool   Mutex::trylock()
     {
         return capu::os::arch::Mutex::trylock();
     }

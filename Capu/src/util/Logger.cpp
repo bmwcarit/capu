@@ -63,7 +63,7 @@ namespace capu
     }
 
     void
-    Logger::setEnabled(bool_t enabled, const String& pattern)
+    Logger::setEnabled(bool enabled, const String& pattern)
     {
         ContextSet::Iterator current = m_logContexts.begin();
         const ContextSet::Iterator end = m_logContexts.end();

@@ -39,7 +39,7 @@ namespace capu
         }
 
         REGISTER_SYNC_CALL(RunnableExecuted);
-        bool_t executed;
+        bool executed;
     };
 
     class ITestUtilsTestInterface
@@ -80,7 +80,7 @@ namespace capu
             somethingDone = true;
         }
 
-        bool_t somethingDone;
+        bool somethingDone;
 
     private:
         ITestUtilsTestInterface& m_testInterface;

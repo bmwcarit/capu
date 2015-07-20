@@ -37,7 +37,7 @@ namespace capu
             status_t close();
             status_t setBufferSize(const int32_t bufferSize);
             status_t setTimeout(const int32_t timeout);
-            status_t allowBroadcast(const bool_t broadcast);
+            status_t allowBroadcast(const bool broadcast);
             status_t getBufferSize(int32_t& bufferSize);
             status_t getTimeout(int32_t& timeout);
             const SocketAddrInfo& getSocketAddrInfo() const;
@@ -48,8 +48,8 @@ namespace capu
         private:
             int32_t mAddressFamily;
             int32_t mSocketType;
-            bool_t mIsBound;
-            bool_t mIsInitialized;
+            bool mIsBound;
+            bool mIsInitialized;
             SocketAddrInfo mAddrInfo;
 
             void initialize();
@@ -277,7 +277,7 @@ namespace capu
 
         inline
         status_t
-        UdpSocket::allowBroadcast(const bool_t broadcast)
+        UdpSocket::allowBroadcast(const bool broadcast)
         {
             if (mSocket == -1)
             {

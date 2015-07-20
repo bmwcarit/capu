@@ -40,7 +40,7 @@ namespace capu
         private:
             SocketDescription mTcpServerSocket;
             WSADATA mWsaData;
-            bool_t mIsBound;
+            bool mIsBound;
             capu::uint16_t mPort;
         };
 

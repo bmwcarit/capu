@@ -105,7 +105,7 @@ public:
         : i(other.i)
     {}
 
-    capu::bool_t operator==(const SomeClass& other) const
+    bool operator==(const SomeClass& other) const
     {
         // will be called to compare keys!
         return other.i == i;

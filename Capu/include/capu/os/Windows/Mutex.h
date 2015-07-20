@@ -37,7 +37,7 @@ namespace capu
             Mutex();
             ~Mutex();
             status_t lock();
-            bool_t trylock();
+            bool trylock();
             status_t unlock();
 
         private:

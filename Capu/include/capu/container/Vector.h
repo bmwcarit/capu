@@ -60,7 +60,7 @@ namespace capu
              * @param other Iterator to compare with
              * @return true if Iterators don't point to the same data, false otherwise
              */
-            bool_t operator!=(const InternalIterator<TYPE>& other) const
+            bool operator!=(const InternalIterator<TYPE>& other) const
             {
                 return m_current != other.m_current;
             }
@@ -97,7 +97,7 @@ namespace capu
              * @param other InternalIterator to check with
              * @return true if other pointer is bigger than my one one, false otherwise
              */
-            bool_t operator <(const InternalIterator<TYPE>& other)
+            bool operator <(const InternalIterator<TYPE>& other)
             {
                 return m_current < other.m_current;
             }
@@ -107,7 +107,7 @@ namespace capu
              * @param other InternalIterator to check with
              * @return true if other pointer is smaller than my one one, false otherwise
              */
-            bool_t operator >(const InternalIterator<TYPE>& other)
+            bool operator >(const InternalIterator<TYPE>& other)
             {
                 return m_current > other.m_current;
             }
@@ -225,7 +225,7 @@ namespace capu
          * @param other Vector to compare with
          * @return true if both vectors are identical
          */
-        bool_t operator==(const Vector<T>& other) const;
+        bool operator==(const Vector<T>& other) const;
 
         /**
          * Returns a new Iterator to the start of the Vector
@@ -495,7 +495,7 @@ namespace capu
 
     template<typename T>
     inline
-    bool_t 
+    bool
     Vector<T>::operator==(const Vector<T>& other) const
     {
         if (size() != other.size())

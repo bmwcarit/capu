@@ -125,7 +125,7 @@ namespace capu
          * @param prefix The prefix.
          * @return True if the testString starts with the given prefix.
          */
-        static bool_t StartsWith(const char_t* str, const char_t* prefix);
+        static bool StartsWith(const char_t* str, const char_t* prefix);
     };
 
     inline
@@ -203,7 +203,7 @@ namespace capu
     }
 
     inline
-    bool_t
+    bool
     StringUtils::StartsWith(const char_t* str, const char_t* prefix)
     {
         return capu::os::arch::StringUtils::StartsWith(str, prefix);

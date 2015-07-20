@@ -41,8 +41,8 @@ namespace capu
             File(const String& path);
             File(const File& parent, const capu::String& path);
             status_t open(const FileMode& mode);
-            bool_t isOpen();
-            bool_t isEof();
+            bool isOpen();
+            bool isEof();
             status_t read(char_t* buffer, uint_t length, uint_t& numBytes);
             status_t write(const char_t* buffer, uint_t length);
             status_t flush();
@@ -55,16 +55,16 @@ namespace capu
             using generic::File::getFileName;
             using generic::File::getExtension;
             using generic::File::getPath;
-            String getParentPath(bool_t& success) const;
-            bool_t isDirectory() const;
-            bool_t exists() const;
+            String getParentPath(bool& success) const;
+            bool isDirectory() const;
+            bool exists() const;
             ~File();
 
         protected:
             using generic::File::mPath;
         private:
             FILE*   mHandle;
-            bool_t  mIsOpen;
+            bool  mIsOpen;
             static String removeTrailingBackslash(String path);
         };
 
@@ -98,7 +98,7 @@ namespace capu
         }
 
         inline
-        String File::getParentPath(bool_t& success) const
+        String File::getParentPath(bool& success) const
         {
             char_t buffer[1000]; // TODO
             char_t* filePointer = 0;
@@ -122,7 +122,7 @@ namespace capu
         status_t File::createFile()
         {
             HANDLE handle = CreateFileA(mPath.c_str(), 0, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-            capu::bool_t status = (handle != INVALID_HANDLE_VALUE);
+            bool status = (handle != INVALID_HANDLE_VALUE);
             CloseHandle(handle);
             if (status)
             {
@@ -162,14 +162,14 @@ namespace capu
         }
 
         inline
-        bool_t File::isDirectory() const
+        bool File::isDirectory() const
         {
             DWORD dwAttributes = GetFileAttributesA(mPath.c_str());
             return (dwAttributes != INVALID_FILE_ATTRIBUTES) && ((dwAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0);
         }
 
         inline
-        bool_t File::exists() const
+        bool File::exists() const
         {
             DWORD dwAttributes = GetFileAttributesA(mPath.c_str());
             return (dwAttributes != INVALID_FILE_ATTRIBUTES);
@@ -237,14 +237,14 @@ namespace capu
         }
 
         inline
-        bool_t
+        bool
         File::isOpen()
         {
             return mIsOpen;
         }
 
         inline
-        bool_t File::isEof()
+        bool File::isEof()
         {
             if (mHandle == NULL)
             {

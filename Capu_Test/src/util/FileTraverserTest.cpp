@@ -23,17 +23,17 @@ class TestVisitor : public capu::IFileVisitor
 {
 public:
     capu::uint32_t mCallCount;
-    capu::bool_t mStepIntoDirectory;
+    bool mStepIntoDirectory;
     capu::status_t mReturnValue;
 
-    TestVisitor(capu::bool_t stepIntoDir = true)
+    TestVisitor(bool stepIntoDir = true)
         : mCallCount(0)
         , mStepIntoDirectory(stepIntoDir)
         , mReturnValue(capu::CAPU_OK)
     {
     }
 
-    capu::status_t visit(capu::File& file, capu::bool_t& stepIntoDirectory)
+    capu::status_t visit(capu::File& file, bool& stepIntoDirectory)
     {
         EXPECT_TRUE(file.exists());
         ++mCallCount;

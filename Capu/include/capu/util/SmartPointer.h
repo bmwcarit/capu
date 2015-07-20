@@ -97,13 +97,13 @@ namespace capu
          * @return true if two smart pointer are equal to each other
          *         false otherwise
          */
-        capu::bool_t operator==(const SmartPointer<T>& x) const;
+        bool operator==(const SmartPointer<T>& x) const;
 
         /**
           * @return true if two smart pointer aren't equal to each other
           *         false otherwise
           */
-        capu::bool_t operator!=(const SmartPointer<T>& x) const;
+        bool operator!=(const SmartPointer<T>& x) const;
 
         /**
          * @return the object stored by the smartPointer
@@ -251,13 +251,13 @@ namespace capu
     }
 
     template<class T>
-    capu::bool_t SmartPointer<T>::operator==(const SmartPointer<T>& x) const
+    bool SmartPointer<T>::operator==(const SmartPointer<T>& x) const
     {
         return ((x.mData == this->mData) && (x.mReferenceCount == this->mReferenceCount));
     }
 
     template<class T>
-    capu::bool_t SmartPointer<T>::operator!=(const SmartPointer<T>& x) const
+    bool SmartPointer<T>::operator!=(const SmartPointer<T>& x) const
     {
         return ((x.mData != this->mData) || (x.mReferenceCount != this->mReferenceCount));
     }

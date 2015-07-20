@@ -113,10 +113,10 @@ namespace capu
 
     struct UdpBoolTestSender: public TestUdpSocketSender
     {
-        typedef bool_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const bool_t& data)
+        typedef bool VALUE_TYPE;
+        static void Send(const capu::uint16_t port, UdpSocket& socket, const bool& data)
         {
-            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&data), sizeof(bool_t));
+            SendToSocket(port, socket, reinterpret_cast<const char_t*>(&data), sizeof(bool));
         }
     };
 
@@ -175,7 +175,7 @@ namespace capu
     class TestUdpMultipleSender: public Runnable
     {
     public:
-        TestUdpMultipleSender(const uint16_t port, const int32_t intValue, const String& stringValue, const float_t floatValue, const bool_t boolValue)
+        TestUdpMultipleSender(const uint16_t port, const int32_t intValue, const String& stringValue, const float_t floatValue, const bool boolValue)
             : mIntValue(intValue)
             , mStringValue(stringValue)
             , mFloatValue(floatValue)
@@ -213,8 +213,8 @@ namespace capu
             pos += strLen;
             Memory::Copy(pos, reinterpret_cast<char_t*>(&networkFloat), sizeof(int32_t));
             pos += sizeof(int32_t);
-            Memory::Copy(pos, reinterpret_cast<char_t*>(&mBoolValue), sizeof(bool_t));
-            pos += sizeof(bool_t);
+            Memory::Copy(pos, reinterpret_cast<char_t*>(&mBoolValue), sizeof(bool));
+            pos += sizeof(bool);
 
             socket.send(buffer, static_cast<int32_t>(pos - buffer), "127.0.0.1", mPort);
         }
@@ -222,7 +222,7 @@ namespace capu
         int32_t mIntValue;
         String  mStringValue;
         float_t mFloatValue;
-        bool_t  mBoolValue;
+        bool  mBoolValue;
         uint16_t mPort;
     };
 
@@ -342,7 +342,7 @@ namespace capu
         int32_t intResult;
         String  stringResult;
         float_t floatResult;
-        bool_t  boolResult;
+        bool  boolResult;
 
         inStream >> intResult >> stringResult >> floatResult >> boolResult;
 

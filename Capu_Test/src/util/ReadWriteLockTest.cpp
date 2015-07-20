@@ -22,10 +22,10 @@
 class Reader: public capu::Runnable
 {
 public:
-    capu::bool_t& m_var;
+    bool& m_var;
     capu::ReadWriteLock& m_lock;
 
-    Reader(capu::bool_t& var, capu::ReadWriteLock& lock)
+    Reader(bool& var, capu::ReadWriteLock& lock)
         : m_var(var)
         , m_lock(lock)
     {
@@ -44,10 +44,10 @@ public:
 class Writer: public capu::Runnable
 {
 public:
-    capu::bool_t& m_var;
+    bool& m_var;
     capu::ReadWriteLock& m_lock;
 
-    Writer(capu::bool_t& var, capu::ReadWriteLock& lock)
+    Writer(bool& var, capu::ReadWriteLock& lock)
         : m_var(var)
         , m_lock(lock)
     {
@@ -64,7 +64,7 @@ public:
 TEST(ReadWriteLock, ReaderWriterLockTest)
 {
     capu::ReadWriteLock lock;
-    capu::bool_t readerIsInside = false;
+    bool readerIsInside = false;
 
     Reader r1(readerIsInside, lock);
     Reader r2(readerIsInside, lock);

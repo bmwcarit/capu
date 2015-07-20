@@ -39,7 +39,7 @@ namespace capu
 
         private:
             capu::os::SocketDescription mServerSock;
-            bool_t mIsBound;
+            bool mIsBound;
             uint16_t mPort;
         };
 

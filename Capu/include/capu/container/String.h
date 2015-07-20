@@ -125,22 +125,22 @@ namespace capu
         /**
          * Return if this string equals another
          */
-        bool_t operator==(const String& other) const;
+        bool operator==(const String& other) const;
 
         /**
          * Return if this string does not equalsanother
          */
-        bool_t operator!=(const String& other) const;
+        bool operator!=(const String& other) const;
 
         /**
          * Return if this string is lexicographically ordered before other
          */
-        bool_t operator<(const String& other) const;
+        bool operator<(const String& other) const;
 
         /**
          * Return if this string is lexicographically ordered after other
          */
-        bool_t operator>(const String& other) const;
+        bool operator>(const String& other) const;
 
         /**
          * Access operator to access a special character
@@ -194,14 +194,14 @@ namespace capu
          * @param other string to check
          * @return true if String starts with other string. False otherwise
          */
-        bool_t startsWith(const String& other) const;
+        bool startsWith(const String& other) const;
 
         /**
          * Checks if the String ends with the given string
          * @param other string to check
          * @return true if String ends with other string. False otherwise
          */
-        bool_t endsWith(const String& other) const;
+        bool endsWith(const String& other) const;
 
         /**
          * Return the index of the last occurence of the given character within the string
@@ -418,7 +418,7 @@ namespace capu
         return result.append(rOperand.c_str());
     }
 
-    inline bool_t String::operator==(const String& other) const
+    inline bool String::operator==(const String& other) const
     {
         static char_t null(0);
         const char_t* str1 = m_data.getRawData();
@@ -434,7 +434,7 @@ namespace capu
         return StringUtils::Strcmp(str1, str2) == 0;
     }
 
-    inline bool_t String::operator<(const String& other) const
+    inline bool String::operator<(const String& other) const
     {
         static char_t null(0);
         const char_t* str1 = m_data.getRawData();
@@ -450,7 +450,7 @@ namespace capu
         return StringUtils::Strcmp(str1, str2) < 0;
     }
 
-    inline bool_t String::operator>(const String& other) const
+    inline bool String::operator>(const String& other) const
     {
         static char_t null(0);
         const char_t* str1 = m_data.getRawData();
@@ -483,7 +483,7 @@ namespace capu
         operator+=(tmp);
     }
 
-    inline bool_t String::operator!=(const String& other) const
+    inline bool String::operator!=(const String& other) const
     {
         return !operator==(other);
     }
@@ -637,17 +637,17 @@ namespace capu
     }
 
     inline
-    bool_t 
+    bool
     String::startsWith(const String& other) const
     {
         return find(other, 0) == 0;
     }
 
     inline
-    bool_t
+    bool
     String::endsWith(const String& other) const
     {
-        bool_t result = false;
+        bool result = false;
         uint_t ownLen = getLength();
         uint_t otherLen = other.getLength();
         if (otherLen <= ownLen)

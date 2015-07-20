@@ -76,7 +76,7 @@ namespace capu
          * Write a bool into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const bool_t  value);
+        IOutputStream& operator<<(const bool  value);
 
         /**
          * Write a char into the stream
@@ -254,9 +254,9 @@ namespace capu
 
     inline
     IOutputStream&
-    BinaryOutputStream::operator<<(const bool_t value)
+    BinaryOutputStream::operator<<(const bool value)
     {
-        return write(reinterpret_cast<const char_t*>(&value), sizeof(bool_t));
+        return write(reinterpret_cast<const char_t*>(&value), sizeof(bool));
     }
 
     inline

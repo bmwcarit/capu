@@ -38,7 +38,7 @@ namespace capu
         * @param ptr The pointer to check.
         * @return True if the given pointer is managed by the allocator, false otherwise.
         */
-        bool_t isManagedMemory(T* ptr);
+        bool isManagedMemory(T* ptr);
 
     protected:
     private:
@@ -94,7 +94,7 @@ namespace capu
     }
 
     template<typename T, uint32_t COUNT>
-    inline bool_t StaticAllocator<T, COUNT>::isManagedMemory(T* ptr)
+    inline bool StaticAllocator<T, COUNT>::isManagedMemory(T* ptr)
     {
         // do some pointer arithmetic to check if the given ptr is inside our memory bounds
         MemoryEntry* toCheck = reinterpret_cast<MemoryEntry*>(ptr);

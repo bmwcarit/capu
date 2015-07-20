@@ -50,7 +50,7 @@ TEST(Queue, push_pop_Test)
 
     //Empty Queue, and see if it works correctly
     //First Element
-    capu::bool_t isEmpty = queue->empty();
+    bool isEmpty = queue->empty();
     EXPECT_FALSE(isEmpty);
     EXPECT_EQ(capu::CAPU_OK, queue->pop(&test));
     EXPECT_EQ(test, data1);
@@ -123,7 +123,7 @@ TEST(Queue, empty)
     capu::Queue<capu::int32_t>* queue = new capu::Queue<capu::int32_t > ();
     capu::int32_t data1;
 
-    capu::bool_t result;
+    bool result;
 
     data1 = 32;
 

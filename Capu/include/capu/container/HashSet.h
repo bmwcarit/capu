@@ -79,7 +79,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators point to the same position
              */
-            capu::bool_t operator==(const HashSetIterator<HashTableIteratorType>& iter) const
+            bool operator==(const HashSetIterator<HashTableIteratorType>& iter) const
             {
                 return (m_iter == iter.m_iter);
             }
@@ -88,7 +88,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators do not point to the same position
              */
-            capu::bool_t operator!=(const HashSetIterator<HashTableIteratorType>& iter) const
+            bool operator!=(const HashSetIterator<HashTableIteratorType>& iter) const
             {
                 return (m_iter != iter.m_iter);
             }
@@ -202,7 +202,7 @@ namespace capu
          *         false otherwise
          *
          */
-        bool_t hasElement(const T& value) const;
+        bool hasElement(const T& value) const;
 
         /**
          * Returns count of the hash set.
@@ -291,7 +291,7 @@ namespace capu
     }
 
     template <class T, class C, class H>
-    bool_t HashSet<T, C, H>::hasElement(const T& value) const
+    bool HashSet<T, C, H>::hasElement(const T& value) const
     {
         return m_table.contains(value);
     }

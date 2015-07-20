@@ -40,7 +40,7 @@ namespace capu
         capu::uchar_t        sometype9 = 42;
         capu::float_t        sometype10 = 42.f;
         capu::double_t       sometype11 = 42.0;
-        capu::bool_t         sometype12 = true;
+        bool         sometype12 = true;
         capu::char_t         sometype13[] = "HashTest";
         const capu::char_t*  sometype14 = "HashTest2";
 

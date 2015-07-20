@@ -58,7 +58,7 @@ namespace capu
              *  @param key Key of the new element to insert.
              *  @param value The value to insert.
              *  @return "true", when the element was inserted and "false" otherwise. */
-            bool_t insert(const Key& key, const T& value);
+            bool insert(const Key& key, const T& value);
 
             /// Returns an existing element by it's key, if it already exists, or creates and inserts a new one.
             /** New elements are created by the default constructor of T.
@@ -94,7 +94,7 @@ namespace capu
             /// Erases an element from the map given by it's key.
             /** @param key Key for searching the element.
              *  @return "true", when the element was erased and "false" otherwise. */
-            bool_t erase(const Key& key);
+            bool erase(const Key& key);
 
             /// Returns an iterator to the first element in the map.
             /** The first element has the smallest key in the map.
@@ -159,12 +159,12 @@ namespace capu
                 /// Compares if two iterators point to the same element.
                 /** @param other The second iterator to compare with.
                  *  @return "true", when both iterators point to the same element. */
-                bool_t operator==(const Iterator& other) const;
+                bool operator==(const Iterator& other) const;
 
                 /// Compares if two iterators point to different elements.
                 /** @param other The second iterator to compare with.
                  *  @return "true", when both iterators point to different elements. */
-                bool_t operator!=(const Iterator& other) const;
+                bool operator!=(const Iterator& other) const;
 
                 /// Dereferences the iterator to access the element as key, value pair.
                 /** @return A reference to a pair holding the key and value. */
@@ -190,7 +190,7 @@ namespace capu
             {
             public:
                 /// Evaluates the function for an element in the map.
-                virtual bool_t operator()(const Iterator& element) = 0;
+                virtual bool operator()(const Iterator& element) = 0;
             };
 
             /// Base class for a unary function object, which has a key for comparison.
@@ -243,40 +243,40 @@ namespace capu
                 /** @param visit This function object is called for each node, until it returns false.
                  *  @param visitSmaller Function object, that evaluates if the left subtree shall be traversed.
                  *  @param visitGreater Function object, that evaluates if the right subtree shall be traversed. */
-                bool_t traversePreOrder(UnaryFunction& visit, UnaryFunction& visitSmaller, UnaryFunction& visitGreater);
+                bool traversePreOrder(UnaryFunction& visit, UnaryFunction& visitSmaller, UnaryFunction& visitGreater);
 
                 /// Traverses the node's subtree in post-order sequence.
                 /** @param visit This function object is called for each node, until it returns false.
                  *  @param visitSmaller Function object, that evaluates if the left subtree shall be traversed.
                  *  @param visitGreater Function object, that evaluates if the right subtree shall be traversed. */
-                bool_t traversePostOrder(UnaryFunction& visit, UnaryFunction& visitSmaller,
+                bool traversePostOrder(UnaryFunction& visit, UnaryFunction& visitSmaller,
                 UnaryFunction& visitGreater);
 
                 /// Traverses the node's subtree in in-order sequence.
                 /** @param visit This function object is called for each node, until it returns false.
                  *  @param visitSmaller Function object, that evaluates if the left subtree shall be traversed.
                  *  @param visitGreater Function object, that evaluates if the right subtree shall be traversed. */
-                bool_t traverseInOrder(UnaryFunction& visit, UnaryFunction& visitSmaller, UnaryFunction& visitGreater);
+                bool traverseInOrder(UnaryFunction& visit, UnaryFunction& visitSmaller, UnaryFunction& visitGreater);
 
                 /// Traverses the node's subtree in mirrored pre-order sequence.
                 /** @param visit This function object is called for each node, until it returns false.
                  *  @param visitSmaller Function object, that evaluates if the left subtree shall be traversed.
                  *  @param visitGreater Function object, that evaluates if the right subtree shall be traversed. */
-                bool_t traversePreOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
+                bool traversePreOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
                 UnaryFunction& visitGreater);
 
                 /// Traverses the node's subtree in mirrored post-order sequence.
                 /** @param visit This function object is called for each node, until it returns false.
                  *  @param visitSmaller Function object, that evaluates if the left subtree shall be traversed.
                  *  @param visitGreater Function object, that evaluates if the right subtree shall be traversed. */
-                bool_t traversePostOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
+                bool traversePostOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
                 UnaryFunction& visitGreater);
 
                 /// Traverses the node's subtree in mirrored in-order sequence.
                 /** @param visit This function object is called for each node, until it returns false.
                  *  @param visitSmaller Function object, that evaluates if the left subtree shall be traversed.
                  *  @param visitGreater Function object, that evaluates if the right subtree shall be traversed. */
-                bool_t traverseInOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
+                bool traverseInOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
                 UnaryFunction& visitGreater);
 
                 /// Inserts a new node as child to this node and rebalances the tree, if necessary.
@@ -338,11 +338,11 @@ namespace capu
 
                 /// Returns whether this node is a left child of it's parent, or not.
                 /** @return "true", when this node is a left child of it's parent. */
-                bool_t isLeftChild() const;
+                bool isLeftChild() const;
 
                 /// Returns whether this node is a right child of it's parent, or not.
                 /** @return "true", when this node is a right child of it's parent. */
-                bool_t isRightChild() const;
+                bool isRightChild() const;
 
                 /// Searches the top most node that can be reached by only climbing up the left child links.
                 /** @return Top most node, which is a parent of this node, and where all intermediate child nodes
@@ -367,7 +367,7 @@ namespace capu
                  *  Checks if the balance value is correct and returns the height of the subtree of this node.
                  *  @param height The computed subtree height is returned here.
                  *  @return "true", when the subtree is consistent in all nodes, or "false" otherwise. */
-                bool_t checkConsistency(int32_t& height);
+                bool checkConsistency(int32_t& height);
 
                 /// Replaces the left or right child node by a new node.
                 /** @param child Child to be replaced.
@@ -399,7 +399,7 @@ namespace capu
             /** Only used for testing.
              *  Checks if the tree is a valid AVL tree and if all balance values are correct.
              *  @return "true", when all nodes are successfully verified and "false" otherwise. */
-            bool_t checkConsistency();
+            bool checkConsistency();
 
             /// Finds the insertion position for an element with a given key or the node itself, when the key already exists.
             /** @param key The key to search for.
@@ -438,7 +438,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::insert(const Key& key, const T& value)
+        bool Map<Key, T>::insert(const Key& key, const T& value)
         {
             if (m_root)
             {
@@ -472,7 +472,7 @@ namespace capu
                 Visit()
                 {
                 }
-                bool_t operator()(const Iterator& element)
+                bool operator()(const Iterator& element)
                 {
                     m_i = element;
                     return false;
@@ -493,7 +493,7 @@ namespace capu
                     UnaryFunctionKey(key)
                 {
                 }
-                bool_t operator()(const Iterator& element)
+                bool operator()(const Iterator& element)
                 {
                     return UnaryFunctionKey::m_key < element->first;
                 }
@@ -506,7 +506,7 @@ namespace capu
                     UnaryFunctionKey(key)
                 {
                 }
-                bool_t operator()(const Iterator& element)
+                bool operator()(const Iterator& element)
                 {
                     return element->first < UnaryFunctionKey::m_key;
                 }
@@ -620,7 +620,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::erase(const Key& key)
+        bool Map<Key, T>::erase(const Key& key)
         {
             Iterator i = find(key);
             if (i != end())
@@ -667,7 +667,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::checkConsistency()
+        bool Map<Key, T>::checkConsistency()
         {
             if (m_root)
             {
@@ -857,7 +857,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::traversePreOrder(UnaryFunction& visit, UnaryFunction& visitSmaller,
+        bool Map<Key, T>::Node::traversePreOrder(UnaryFunction& visit, UnaryFunction& visitSmaller,
         UnaryFunction& visitGreater)
         {
             Iterator i(this);
@@ -887,7 +887,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::traversePostOrder(UnaryFunction& visit, UnaryFunction& visitSmaller,
+        bool Map<Key, T>::Node::traversePostOrder(UnaryFunction& visit, UnaryFunction& visitSmaller,
         UnaryFunction& visitGreater)
         {
             Iterator i(this);
@@ -917,7 +917,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::traverseInOrder(UnaryFunction& visit, UnaryFunction& visitSmaller,
+        bool Map<Key, T>::Node::traverseInOrder(UnaryFunction& visit, UnaryFunction& visitSmaller,
         UnaryFunction& visitGreater)
         {
             Iterator i(this);
@@ -947,7 +947,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::traversePreOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
+        bool Map<Key, T>::Node::traversePreOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
         UnaryFunction& visitGreater)
         {
             Iterator i(this);
@@ -977,7 +977,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::traversePostOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
+        bool Map<Key, T>::Node::traversePostOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
         UnaryFunction& visitGreater)
         {
             Iterator i(this);
@@ -1007,7 +1007,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::traverseInOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
+        bool Map<Key, T>::Node::traverseInOrderMirrored(UnaryFunction& visit, UnaryFunction& visitSmaller,
         UnaryFunction& visitGreater)
         {
             Iterator i(this);
@@ -1289,13 +1289,13 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::isLeftChild() const
+        bool Map<Key, T>::Node::isLeftChild() const
         {
             return m_parent && m_parent->m_left == this;
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::isRightChild() const
+        bool Map<Key, T>::Node::isRightChild() const
         {
             return m_parent && m_parent->m_right == this;
         }
@@ -1392,7 +1392,7 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Node::checkConsistency(int32_t& height)
+        bool Map<Key, T>::Node::checkConsistency(int32_t& height)
         {
             int32_t leftHeight(0);
             if (m_left)
@@ -1476,13 +1476,13 @@ namespace capu
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Iterator::operator==(const Iterator& other) const
+        bool Map<Key, T>::Iterator::operator==(const Iterator& other) const
         {
             return m_current == other.m_current;
         }
 
     template<class Key, class T>
-        bool_t Map<Key, T>::Iterator::operator!=(const Iterator& other) const
+        bool Map<Key, T>::Iterator::operator!=(const Iterator& other) const
         {
             return m_current != other.m_current;
         }

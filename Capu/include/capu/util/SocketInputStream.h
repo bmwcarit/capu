@@ -119,7 +119,7 @@ namespace capu
          * Read a bool from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(bool_t&  value);
+        IInputStream& operator>>(bool&  value);
 
         /**
          * Read a float from the stream
@@ -216,9 +216,9 @@ namespace capu
 
     inline
     IInputStream&
-    SocketInputStream::operator>>(bool_t& value)
+    SocketInputStream::operator>>(bool& value)
     {
-        return read(reinterpret_cast<char_t*>(&value), sizeof(bool_t));
+        return read(reinterpret_cast<char_t*>(&value), sizeof(bool));
     }
 
     inline

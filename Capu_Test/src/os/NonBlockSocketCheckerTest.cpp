@@ -152,7 +152,7 @@ public:
         }
     }
 
-    void start(capu::uint16_t port, capu::bool_t send)
+    void start(capu::uint16_t port, bool send)
     {
         m_port = port;
         m_send = send;
@@ -172,7 +172,7 @@ public:
     }
 
     capu::uint16_t m_port;
-    capu::bool_t m_send;
+    bool m_send;
     capu::TcpSocket m_clientSocket;
     capu::Thread m_thread;
     capu::Vector<capu::os::SocketInfoPair> m_socketInfos;

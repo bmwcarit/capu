@@ -65,7 +65,7 @@ namespace capu
              * @return true if the "this" smaller than timestamp
              *          false otherwise
              */
-            bool_t operator<(const TimeStamp & timestamp) const;
+            bool operator<(const TimeStamp & timestamp) const;
 
             /**
              * Operator overloading for operator equal to
@@ -73,7 +73,7 @@ namespace capu
              * @return true if the "this" is equal tp timestamp
              *          false otherwise
              */
-            bool_t operator==(const TimeStamp & timestamp) const;
+            bool operator==(const TimeStamp & timestamp) const;
 
             /**
              * Operator overloading for operator greater than
@@ -81,27 +81,27 @@ namespace capu
              * @return true if the "this" is greater than timestamp
              *          false otherwise
              */
-            bool_t operator>(const TimeStamp & timestamp) const;
+            bool operator>(const TimeStamp & timestamp) const;
 
         protected:
             status_t formatString(String& result, const String& tmp, const String& pattern);
         };
 
-        inline bool_t TimeStamp::operator<(const TimeStamp & timestamp) const
+        inline bool TimeStamp::operator<(const TimeStamp & timestamp) const
         {
             if (difftime(timestamp.mTime, this->mTime) > 0)
                 return true;
             return false;
         }
 
-        inline bool_t TimeStamp::operator>(const TimeStamp & timestamp) const
+        inline bool TimeStamp::operator>(const TimeStamp & timestamp) const
         {
             if (difftime(this->mTime, timestamp.mTime) < 0)
                 return true;
             return false;
         }
 
-        inline bool_t TimeStamp::operator==(const TimeStamp & timestamp) const
+        inline bool TimeStamp::operator==(const TimeStamp & timestamp) const
         {
             if (difftime(this->mTime, timestamp.mTime) == 0)
                 return true;
@@ -136,7 +136,7 @@ namespace capu
             //parse seconds as string
             String year = tmp.substr(START_YEAR, LENGTH_YEAR);
 
-            bool_t parsed = false;
+            bool parsed = false;
             result = "";
             for (uint32_t i = 0; i < pattern.getLength(); ++i) {
 

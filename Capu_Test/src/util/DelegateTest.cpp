@@ -5,7 +5,7 @@
 namespace capu
 {
 
-    bool_t g_simpleVoidFunctionCalled = false;
+    bool g_simpleVoidFunctionCalled = false;
     uint32_t g_uint32Parameter = 0;
 
     class SimpleClass

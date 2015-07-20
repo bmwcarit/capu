@@ -134,7 +134,7 @@ namespace capu
          * @param other array to compare with
          * @return true if both arrays are equal, false otherwise
          */
-        bool_t operator==(const Array<T>& other) const;
+        bool operator==(const Array<T>& other) const;
 
         /**
          * Compares first x elements of the array with other array
@@ -142,7 +142,7 @@ namespace capu
          * @param numberElements the first <numberElements> elements to be compared
          * @return true if elements are equal, false otherwise
          */
-        bool_t truncatedEquals(const Array<T>& other, uint_t numberElements) const;
+        bool truncatedEquals(const Array<T>& other, uint_t numberElements) const;
 
         /**
          * Sets the raw data of the array to the given value
@@ -405,7 +405,7 @@ namespace capu
     template<typename T, int TYPE>
     struct EqualsHelper
     {
-        static bool_t equals(const Array<T>& mine, const Array<T>& other, uint_t size)
+        static bool equals(const Array<T>& mine, const Array<T>& other, uint_t size)
         {
             uint_t i = 0;
             //comparing individual elements
@@ -425,7 +425,7 @@ namespace capu
     template<typename T>
     struct EqualsHelper<T, CAPU_TYPE_PRIMITIVE>
     {
-        static bool_t equals(const Array<T>& mine, const Array<T>& other, uint_t size)
+        static bool equals(const Array<T>& mine, const Array<T>& other, uint_t size)
         {
             //for primitive types memory compare can be used
             return 0 == Memory::Compare(mine.getRawData(), other.getRawData(), sizeof(T) * size);
@@ -433,7 +433,7 @@ namespace capu
     };
 
     template<typename T>
-    bool_t 
+    bool
     Array<T>::operator==(const Array<T>& other) const
     {
         if (mSize != other.mSize)
@@ -444,7 +444,7 @@ namespace capu
     }
 
     template<typename T>
-    bool_t Array<T>::truncatedEquals(const Array<T>& other, uint_t numberElements) const
+    bool Array<T>::truncatedEquals(const Array<T>& other, uint_t numberElements) const
     {
         if ((numberElements > mSize) || (numberElements > other.mSize))
         {

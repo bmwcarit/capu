@@ -60,7 +60,7 @@ namespace capu
          * @return true if empty
          *         false otherwise
          */
-        bool_t empty();
+        bool empty();
 
     private:
         Semaphore mSemaphore;
@@ -73,7 +73,7 @@ namespace capu
     }
 
     template <class T>
-    inline bool_t BlockingQueue<T>::empty()
+    inline bool BlockingQueue<T>::empty()
     {
         ScopedMutexLock locker(mMutex);
         return Queue<T>::empty();

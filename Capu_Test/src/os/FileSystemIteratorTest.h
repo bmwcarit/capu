@@ -44,7 +44,7 @@ namespace capu
 
     private:
         File mFile;
-        bool_t mCreated;
+        bool mCreated;
     };
 
     class TestDirectory
@@ -75,7 +75,7 @@ namespace capu
 
     private:
         File mFile;
-        bool_t mCreated;
+        bool mCreated;
 
         List<TestFilePtr> mContainingFiles;
         List<TestDirectoryPtr> mContainingDirectories;

@@ -34,8 +34,8 @@ namespace capu
             File(const String& path);
             File(const File& parent, const capu::String& path);
             status_t open(const FileMode& mode);
-            bool_t isOpen();
-            bool_t isEof();
+            bool isOpen();
+            bool isEof();
             status_t read(char_t* buffer, uint_t length, uint_t& numBytes);
             status_t write(const char_t* buffer, uint_t length);
             status_t flush();
@@ -47,18 +47,18 @@ namespace capu
             using generic::File::getFileName;
             using generic::File::getExtension;
             using generic::File::getPath;
-            String getParentPath(bool_t& success) const;
+            String getParentPath(bool& success) const;
             status_t getSizeInBytes(uint_t& size) const;
-            bool_t isDirectory() const;
-            bool_t exists() const;
+            bool isDirectory() const;
+            bool exists() const;
             status_t copyTo(const capu::String& newPath);
             ~File();
         protected:
             using generic::File::mPath;
         private:
-            static String GetParentPathPrivate(String path, bool_t& success);
+            static String GetParentPathPrivate(String path, bool& success);
             static String StripLastPathComponent(const String& path);
-            bool_t  mIsOpen;
+            bool  mIsOpen;
             FILE*   mHandle;
         };
 
@@ -101,7 +101,7 @@ namespace capu
         }
 
         inline
-        bool_t File::isDirectory() const
+        bool File::isDirectory() const
         {
             struct stat tmp;
             return stat(mPath.c_str(), &tmp) == 0 && S_ISDIR(tmp.st_mode);
@@ -152,7 +152,7 @@ namespace capu
         }
 
         inline
-        bool_t File::exists() const
+        bool File::exists() const
         {
             struct stat fileStats;
             int_t status = stat(mPath.c_str(), &fileStats);
@@ -213,14 +213,14 @@ namespace capu
         }
 
         inline
-        bool_t
+        bool
         File::isOpen()
         {
             return mIsOpen;
         }
 
         inline
-        bool_t
+        bool
         File::isEof()
         {
             if (mHandle == NULL)
@@ -312,7 +312,7 @@ namespace capu
 
         inline
         String
-        File::GetParentPathPrivate(String path, bool_t& success)
+        File::GetParentPathPrivate(String path, bool& success)
         {
             // trim tailing slashes
             while (path.getLength() >= 2 &&
@@ -364,7 +364,7 @@ namespace capu
 
         inline
         String
-        File::getParentPath(bool_t& success) const
+        File::getParentPath(bool& success) const
         {
             return GetParentPathPrivate(getPath(), success);
         }

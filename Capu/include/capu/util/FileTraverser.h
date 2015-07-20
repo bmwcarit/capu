@@ -46,7 +46,7 @@ namespace capu
         status_t result = CAPU_OK;
         while (iter.isValid())
         {
-            bool_t stepIntoDirectory = true;
+            bool stepIntoDirectory = true;
             result = visitor.visit(*iter, stepIntoDirectory);
             if (result == CAPU_ERROR)
             {

@@ -93,7 +93,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators point to the same position
              */
-            capu::bool_t operator==(const ListIterator<TYPE>& other) const
+            bool operator==(const ListIterator<TYPE>& other) const
             {
                 return mCurrentNode == other.mCurrentNode;
             }
@@ -102,7 +102,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators do not point to the same position
              */
-            capu::bool_t operator!=(const ListIterator& other) const
+            bool operator!=(const ListIterator& other) const
             {
                 return !(*this == other);
             }
@@ -253,14 +253,14 @@ namespace capu
          * @param other list to compare
          * @return true if lists are equal false otherwise
          */
-        bool_t operator==(const List<T, A, C>& other) const;
+        bool operator==(const List<T, A, C>& other) const;
 
         /**
          * Checks if two lists are not equal
          * @param other list to compare
          * @return true if lists aren't equal false otherwise
          */
-        bool_t operator!=(const List<T, A, C>& other) const;
+        bool operator!=(const List<T, A, C>& other) const;
 
         /**
          * Inserts element at the end of the list
@@ -410,7 +410,7 @@ namespace capu
          * @return true if empty
          *         false otherwise
          */
-        bool_t isEmpty() const;
+        bool isEmpty() const;
 
         /**
          * Check whether the list is empty or not
@@ -420,7 +420,7 @@ namespace capu
          * @return true if empty
          *         false otherwise
          */
-        bool_t empty() const;
+        bool empty() const;
 
         /**
          * Returns an iterator pointing to the beginning of list.
@@ -512,7 +512,7 @@ namespace capu
          * @return true list contains it
          *         false otherwise
          */
-        bool_t contains(const T& element) const;
+        bool contains(const T& element) const;
     };
 
     /*
@@ -641,7 +641,7 @@ namespace capu
     }
 
     template <class T, class A, class C>
-    inline bool_t List<T, A , C>::contains(const T& element) const
+    inline bool List<T, A , C>::contains(const T& element) const
     {
         return find(element) != end();
     }
@@ -851,13 +851,13 @@ namespace capu
     }
 
     template <class T, class A, class C>
-    inline bool_t List<T, A , C>::isEmpty() const
+    inline bool List<T, A , C>::isEmpty() const
     {
         return mSize == 0;
     }
 
     template <class T, class A, class C>
-    inline bool_t List<T, A , C>::empty() const
+    inline bool List<T, A , C>::empty() const
     {
         return isEmpty();
     }
@@ -921,13 +921,13 @@ namespace capu
     }
 
     template <class T, class A, class C>
-    bool_t List<T, A, C>::operator!=(const List<T, A, C>& other) const
+    bool List<T, A, C>::operator!=(const List<T, A, C>& other) const
     {
         return !(operator==(other));
     }
 
     template <class T, class A, class C>
-    bool_t List<T, A, C>::operator==(const List<T, A, C>& other) const
+    bool List<T, A, C>::operator==(const List<T, A, C>& other) const
     {
         if (size() != other.size())
         {

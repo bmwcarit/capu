@@ -33,7 +33,7 @@ namespace capu
          * Return result of comparison.
          */
         template <class T>
-        bool_t operator()(const T& x, const T& y) const
+        bool operator()(const T& x, const T& y) const
         {
             return x == y;
         }
@@ -41,7 +41,7 @@ namespace capu
         /**
          * Return result of string comparison.
          */
-        bool_t operator()(const char_t* x, const char_t* y) const
+        bool operator()(const char_t* x, const char_t* y) const
         {
             return (StringUtils::Strcmp(x, y) == 0);
         }
@@ -49,7 +49,7 @@ namespace capu
         /**
          * Return result of string comparison.
          */
-        bool_t operator()(char_t* x, char_t* y) const
+        bool operator()(char_t* x, char_t* y) const
         {
             return (StringUtils::Strcmp(x, y) == 0);
         }

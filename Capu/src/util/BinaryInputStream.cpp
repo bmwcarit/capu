@@ -71,9 +71,9 @@ namespace capu
         return *this;
     }
 
-    IInputStream& BinaryInputStream::operator>>(bool_t& value)
+    IInputStream& BinaryInputStream::operator>>(bool& value)
     {
-        read(reinterpret_cast<char_t*>(&value), sizeof(bool_t));
+        read(reinterpret_cast<char_t*>(&value), sizeof(bool));
         return *this;
     }
 

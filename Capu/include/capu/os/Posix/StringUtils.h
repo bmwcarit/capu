@@ -38,7 +38,7 @@ namespace capu
             static int_t LastIndexOf(const char_t* str, const char_t ch);
             static int_t IndexOf(const char_t* str, const char_t ch, const uint_t offset = 0);
             static int_t IndexOf(const char_t* str, const char_t* str2, const uint_t offset = 0);
-            static bool_t StartsWith(const char_t* str, const char_t* prefix);
+            static bool StartsWith(const char_t* str, const char_t* prefix);
         };
 
         inline
@@ -130,7 +130,7 @@ namespace capu
         }
 
         inline
-        bool_t
+        bool
         StringUtils::StartsWith(const char_t* str, const char_t* prefix)
         {
             if (!prefix || !str)

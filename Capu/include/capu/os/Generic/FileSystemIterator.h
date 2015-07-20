@@ -30,14 +30,14 @@ namespace capu
         public:
             FileSystemIterator();
 
-            void setStepIntoSubdirectories(bool_t value);
+            void setStepIntoSubdirectories(bool value);
 
         protected:
             capu::File mCurrentFile;
 
             capu::File mCurrentDirectory;
 
-            bool_t mRecurseSubDirectories;
+            bool mRecurseSubDirectories;
 
             Stack<STACKTYPE> mDirectoryStack;
         };
@@ -50,7 +50,7 @@ namespace capu
         }
 
         template<typename STACKTYPE>
-        inline void FileSystemIterator<STACKTYPE>::setStepIntoSubdirectories(bool_t value)
+        inline void FileSystemIterator<STACKTYPE>::setStepIntoSubdirectories(bool value)
         {
             mRecurseSubDirectories = value;
         }

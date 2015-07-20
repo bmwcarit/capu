@@ -59,20 +59,20 @@ namespace capu
          * @return true if the iterator is pointing to an existing file
          *              after advancing, false otherwise
          */
-        bool_t next();
+        bool next();
 
         /**
          * Determines if the iterator is pointing to a valid file.
          * @return true if file is valid, false otherwise
          */
-        bool_t isValid();
+        bool isValid();
 
         /**
          * Sets or resets the traverse into subdirectory flag.
          * @param value true if the iterator should traverse into subdirectories,
          *              false otherwise
          */
-        void setStepIntoSubdirectories(bool_t value);
+        void setStepIntoSubdirectories(bool value);
 
     private:
 
@@ -96,12 +96,12 @@ namespace capu
     {
     }
 
-    inline bool_t FileSystemIterator::isValid()
+    inline bool FileSystemIterator::isValid()
     {
         return capu::os::arch::FileSystemIterator::isValid();
     }
 
-    inline bool_t FileSystemIterator::next()
+    inline bool FileSystemIterator::next()
     {
         return capu::os::arch::FileSystemIterator::next();
     }
@@ -116,7 +116,7 @@ namespace capu
         return capu::os::arch::FileSystemIterator::operator->();
     }
 
-    inline void FileSystemIterator::setStepIntoSubdirectories(bool_t value)
+    inline void FileSystemIterator::setStepIntoSubdirectories(bool value)
     {
         capu::os::arch::FileSystemIterator::setStepIntoSubdirectories(value);
     }

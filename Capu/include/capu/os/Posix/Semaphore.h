@@ -102,7 +102,7 @@ namespace capu
         Semaphore::release(uint32_t permits)
         {
             uint32_t _permits = permits;
-            bool_t    result  = true;
+            bool    result  = true;
             while (_permits)
             {
                 result &= sem_post(&mSemaphore) == 0;

@@ -47,7 +47,7 @@ namespace capu
          * @param value Reference to string which will contain the requested value
          * @return CAPU_OK if variable was successfully queried
          */
-        bool_t get(const String& key, String& value) const;
+        bool get(const String& key, String& value) const;
 
     private:
         HashTable<String, String> m_env;
@@ -76,7 +76,7 @@ namespace capu
         while (envvar);
     }
 
-    inline bool_t EnvironmentVariables::get(const String& key, String& value) const
+    inline bool EnvironmentVariables::get(const String& key, String& value) const
     {
         HashTable<String, String>::ConstIterator it = m_env.find(key);
         if (it != m_env.end())

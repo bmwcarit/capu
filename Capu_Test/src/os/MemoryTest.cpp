@@ -84,7 +84,7 @@ class SomeTestClass
 {
 public:
     capu::uint32_t i;
-    capu::bool_t assignmentOperatorCalled;
+    bool assignmentOperatorCalled;
 
     SomeTestClass()
         : i(0)

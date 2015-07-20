@@ -30,7 +30,7 @@ namespace capu
     class RecursiveFileDeleter: public IFileVisitor
     {
     public:
-        status_t visit(File& file, bool_t& stepIntoDirectory)
+        status_t visit(File& file, bool& stepIntoDirectory)
         {
             stepIntoDirectory = false; // not stepping into, because we do our own recursion!
             if (file.isDirectory())
@@ -114,7 +114,7 @@ namespace capu
 
         // non recursive traversing up until we find an existing directory.
         Stack<String> fileStack;
-        bool_t success;
+        bool success;
         File parent = directory.getParentFile(success);
         while (success && !parent.exists())
         {

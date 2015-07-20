@@ -29,7 +29,7 @@ namespace capu
         class Console
         {
         public:
-            static bool_t IsInputAvailable();
+            static bool IsInputAvailable();
             static void Print(const char_t* format, va_list values);
             static void Print(uint32_t color, const char_t* format, va_list values);
             static status_t ReadChar(char_t& buffer);
@@ -48,7 +48,7 @@ namespace capu
         };
 
         inline
-        bool_t
+        bool
         Console::IsInputAvailable()
         {
             HANDLE inHandle = GetStdHandle(STD_INPUT_HANDLE);
@@ -117,7 +117,7 @@ namespace capu
             const DWORD numberOfObjectsToWaitOn = 2;
 
             status_t status = CAPU_OK;
-            bool_t haveReadCharacter = false;
+            bool haveReadCharacter = false;
             while (CAPU_OK == status && !haveReadCharacter)
             {
                 if (inputType == FILE_TYPE_PIPE)

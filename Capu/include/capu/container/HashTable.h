@@ -144,7 +144,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators point to the same position
              */
-            capu::bool_t operator==(const ConstIterator& iter) const
+            bool operator==(const ConstIterator& iter) const
             {
                 return (mCurrentHashMapEntry == iter.mCurrentHashMapEntry);
             }
@@ -153,7 +153,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators do not point to the same position
              */
-            capu::bool_t operator!=(const ConstIterator& iter) const
+            bool operator!=(const ConstIterator& iter) const
             {
                 return (mCurrentHashMapEntry != iter.mCurrentHashMapEntry);
             }
@@ -245,7 +245,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators point to the same position
              */
-            capu::bool_t operator==(const Iterator& iter) const
+            bool operator==(const Iterator& iter) const
             {
                 return (mCurrentHashMapEntry == iter.mCurrentHashMapEntry);
             }
@@ -254,7 +254,7 @@ namespace capu
              * Compares two iterators
              * @return true if the iterators do not point to the same position
              */
-            capu::bool_t operator!=(const Iterator& iter) const
+            bool operator!=(const Iterator& iter) const
             {
                 return (mCurrentHashMapEntry != iter.mCurrentHashMapEntry);
             }
@@ -303,7 +303,7 @@ namespace capu
          * @param resizeable Indicates if the map resizes automatically if necessary. If set to false, a 'put' may
          *                   return NO_MEMORY if too many items were added.
          */
-        HashTable(const uint8_t initialBitSize, const bool_t resizeable = true);
+        HashTable(const uint8_t initialBitSize, const bool resizeable = true);
 
         /**
          * Destructor.
@@ -385,7 +385,7 @@ namespace capu
          * @param key The key.
          * @return True if the key is present, false otherwise.
          */
-        bool_t contains(const Key& key) const;
+        bool contains(const Key& key) const;
 
         /**
          * Removes the value associated with key in the hashtable.
@@ -464,7 +464,7 @@ namespace capu
         HashTableEntry* mLastHashMapEntry; // pointer to the last entry in the map
         HashTableEntry* mFirstFreeHashMapEntry; // start of pointer list of free entries
         uint_t mCount; // the current entry count
-        const bool_t mResizeable; // indicates if rehashing will be done
+        const bool mResizeable; // indicates if rehashing will be done
         const C mComparator; // compares keys
 
         void rehash();
@@ -524,7 +524,7 @@ namespace capu
     }
 
     template <class Key, class T, class C, class H>
-    inline HashTable<Key, T, C, H>::HashTable(const uint8_t initialBitSize, const bool_t resizeable)
+    inline HashTable<Key, T, C, H>::HashTable(const uint8_t initialBitSize, const bool resizeable)
         : mBitCount(initialBitSize)
         , mSize(static_cast<uint_t>(1) << mBitCount)
         , mThreshold((static_cast<uint_t>((mSize) * DEFAULT_HASH_TABLE_MAX_LOAD_FACTOR)))
@@ -601,7 +601,7 @@ namespace capu
     }
 
     template <class Key, class T, class C, class H>
-    inline bool_t HashTable<Key, T, C, H>::contains(const Key& key) const
+    inline bool HashTable<Key, T, C, H>::contains(const Key& key) const
     {
         return internalGet(key) != 0;
     }

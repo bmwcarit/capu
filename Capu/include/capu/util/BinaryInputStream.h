@@ -73,7 +73,7 @@ namespace capu
          * Read a bool from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(bool_t&  value);
+        IInputStream& operator>>(bool&  value);
 
         /**
          * Read a float from the stream

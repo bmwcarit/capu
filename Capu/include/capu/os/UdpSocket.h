@@ -119,7 +119,7 @@ namespace capu
          *         CAPU_SOCKET_ESOCKET if the socket has not been created successfully
          *         CAPU_ERROR otherwise
          */
-        status_t allowBroadcast(const bool_t broadcast);
+        status_t allowBroadcast(const bool broadcast);
 
         /**
          * get the send and receive buffer size
@@ -204,7 +204,7 @@ namespace capu
 
     inline
     status_t
-    UdpSocket::allowBroadcast(const bool_t broadcast)
+    UdpSocket::allowBroadcast(const bool broadcast)
     {
         return capu::os::arch::UdpSocket::allowBroadcast(broadcast);
     }

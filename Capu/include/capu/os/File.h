@@ -71,7 +71,7 @@ namespace capu
          * Find out if the file described exists
          * @return true, if file exists otherwise false
          */
-        bool_t exists() const;
+        bool exists() const;
         /**
          * Delete the file.
          * @return CAPU_OK, if deletion was successfull.
@@ -96,17 +96,17 @@ namespace capu
         /**
          * return true if file is open else false
          */
-        bool_t isOpen();
+        bool isOpen();
 
         /**
          * return true if file end was reached
          */
-        bool_t isEof();
+        bool isEof();
         /**
          * Find out if object is a directory.
          * @return True, if File object is a directory.
          */
-        bool_t isDirectory() const;
+        bool isDirectory() const;
 
         /**
          * Get the size of the file.
@@ -168,7 +168,7 @@ namespace capu
         * @param success Indicates if a parent file was found.
         * @return The parent file. Returns an invalid file if no parent file was found.
         */
-        File getParentFile(bool_t& success) const;
+        File getParentFile(bool& success) const;
 
         /**
          * Destruct current instance.
@@ -200,13 +200,13 @@ namespace capu
     }
 
     inline
-    bool_t
+    bool
     File::isOpen()
     {
         return capu::os::arch::File::isOpen();
     }
 
-    inline bool_t
+    inline bool
     File::isEof()
     {
         return capu::os::arch::File::isEof();
@@ -262,7 +262,7 @@ namespace capu
     }
 
     inline
-    bool_t
+    bool
     File::exists() const
     {
         return capu::os::arch::File::exists();
@@ -307,14 +307,14 @@ namespace capu
     }
 
     inline
-    File File::getParentFile(bool_t& success) const
+    File File::getParentFile(bool& success) const
     {
         capu::String parentPath = capu::os::arch::File::getParentPath(success);
         return File(parentPath);
     }
 
     inline
-    capu::bool_t File::isDirectory() const
+    bool File::isDirectory() const
     {
         return capu::os::arch::File::isDirectory();
     }

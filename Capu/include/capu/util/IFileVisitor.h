@@ -37,7 +37,7 @@ namespace capu
         * @param stepIntoDirectory Allows an IFileVisitor to specify weather the walk should continue inside a directory. Default value is true. Only applies for directories.
         * @return CAPU_ERROR to stop traversal. CAPU_OK otherwise.
         */
-        virtual status_t visit(File& file, bool_t& stepIntoDirectory) = 0;
+        virtual status_t visit(File& file, bool& stepIntoDirectory) = 0;
     };
 }
 

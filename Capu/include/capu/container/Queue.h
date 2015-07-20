@@ -111,7 +111,7 @@ namespace capu
          * @return true if empty
          *         false otherwise
          */
-        bool_t empty() const;
+        bool empty() const;
 
         /**
          * Remove all elements from queue
@@ -227,7 +227,7 @@ namespace capu
     }
 
     template <typename T>
-    inline bool_t Queue<T>::empty() const
+    inline bool Queue<T>::empty() const
     {
         return List<T>::isEmpty();
     }

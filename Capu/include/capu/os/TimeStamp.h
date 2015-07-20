@@ -92,7 +92,7 @@ namespace capu
          * @return true if the this < timestamp
          *        false otherwise
          */
-        bool_t operator<(const TimeStamp & timestamp) const;
+        bool operator<(const TimeStamp & timestamp) const;
 
         /**
          * Operator overloading for operator ==
@@ -100,7 +100,7 @@ namespace capu
          * @return true if the this == timestamp
          *        false otherwise
          */
-        bool_t operator==(const TimeStamp & timestamp) const;
+        bool operator==(const TimeStamp & timestamp) const;
 
         /**
          * Operator overloading for operator >
@@ -108,7 +108,7 @@ namespace capu
          * @return true if the this > timestamp
          *        false otherwise
          */
-        bool_t operator>(const TimeStamp & timestamp) const;
+        bool operator>(const TimeStamp & timestamp) const;
 
 
     };
@@ -123,17 +123,17 @@ namespace capu
         return capu::os::arch::TimeStamp::getFormattedString(pattern, result);
     }
 
-    inline bool_t TimeStamp::operator<(const TimeStamp & timestamp) const
+    inline bool TimeStamp::operator<(const TimeStamp & timestamp) const
     {
         return capu::os::arch::TimeStamp::operator<(timestamp);
     }
 
-    inline bool_t TimeStamp::operator>(const TimeStamp & timestamp) const
+    inline bool TimeStamp::operator>(const TimeStamp & timestamp) const
     {
         return capu::os::arch::TimeStamp::operator>(timestamp);
     }
 
-    inline bool_t TimeStamp::operator==(const TimeStamp & timestamp) const
+    inline bool TimeStamp::operator==(const TimeStamp & timestamp) const
     {
         return capu::os::arch::TimeStamp::operator==(timestamp);
     }

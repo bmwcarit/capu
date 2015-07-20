@@ -61,13 +61,13 @@ namespace capu
          * Waits until every thread has been terminated.
          * @param cancelThreads set the cancel flag on all workers before waiting
          */
-        status_t close(bool_t cancelThreads = false);
+        status_t close(bool cancelThreads = false);
 
         /**
          * Checks if the threadpool is closed, which means that no new work items can be added.
          * @return True if the pool is closed.
          */
-        bool_t isClosed() const;
+        bool isClosed() const;
 
         /**
          * Returns the number of threads used by the threadpool
@@ -100,22 +100,22 @@ namespace capu
             ~PoolWorker();
             status_t join();
             void cancel();
-            bool_t isValid() const;
+            bool isValid() const;
 
         private:
             ThreadPool& mPool;
             PoolRunnable mPoolRunnable;
             Thread mThread;
 
-            bool_t mValid;
+            bool mValid;
 
             PoolWorker operator=(const PoolWorker pw);
         };
 
         typedef SmartPointer<PoolWorker> PoolWorkerPtr;
 
-        bool_t mClosed;
-        bool_t mCloseRequested;
+        bool mClosed;
+        bool mCloseRequested;
         Queue<SmartPointer<Runnable> > mRunnableQueue;
         CondVar mCV;
         Mutex mMutex;

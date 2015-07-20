@@ -90,10 +90,10 @@ namespace capu
 
     struct TcpBoolTestSender: public TestTcpSocketSender
     {
-        typedef bool_t VALUE_TYPE;
-        static void Send(TcpSocket& socket, const bool_t& data)
+        typedef bool VALUE_TYPE;
+        static void Send(TcpSocket& socket, const bool& data)
         {
-            SendToSocket(socket, reinterpret_cast<const char_t*>(&data), sizeof(bool_t));
+            SendToSocket(socket, reinterpret_cast<const char_t*>(&data), sizeof(bool));
         }
     };
 
@@ -153,7 +153,7 @@ namespace capu
     class TestTcpMultipleSender: public Runnable
     {
     public:
-        TestTcpMultipleSender(const int32_t intValue, const String& stringValue, const float_t floatValue, const bool_t boolValue, const uint16_t port)
+        TestTcpMultipleSender(const int32_t intValue, const String& stringValue, const float_t floatValue, const bool boolValue, const uint16_t port)
             : mIntValue(intValue)
             , mStringValue(stringValue)
             , mFloatValue(floatValue)
@@ -176,7 +176,7 @@ namespace capu
         int32_t mIntValue;
         String  mStringValue;
         float_t mFloatValue;
-        bool_t  mBoolValue;
+        bool  mBoolValue;
         uint16_t mPort;
     };
 
@@ -294,7 +294,7 @@ namespace capu
         int32_t intResult;
         String  stringResult;
         float_t floatResult;
-        bool_t  boolResult;
+        bool  boolResult;
 
         inStream >> intResult >> stringResult >> floatResult >> boolResult;
 

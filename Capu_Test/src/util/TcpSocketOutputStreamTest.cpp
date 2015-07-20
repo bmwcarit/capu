@@ -111,9 +111,9 @@ namespace capu
             return *this;
         }
 
-        IInputStream& operator>>(bool_t& value)
+        IInputStream& operator>>(bool& value)
         {
-            receiveFromSocket(reinterpret_cast<char_t*>(&value), sizeof(bool_t));
+            receiveFromSocket(reinterpret_cast<char_t*>(&value), sizeof(bool));
             return *this;
         }
 
@@ -279,7 +279,7 @@ namespace capu
 
     TEST_F(TcpSocketOutputStreamTest, SendBoolData)
     {
-        EXPECT_EQ(true, TcpSocketOutputStreamTestExecutor<bool_t>::Execute(true));
+        EXPECT_EQ(true, TcpSocketOutputStreamTestExecutor<bool>::Execute(true));
     }
 
     TEST_F(TcpSocketOutputStreamTest, TestStreamInitialStateIsOk)

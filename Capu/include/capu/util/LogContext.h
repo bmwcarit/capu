@@ -47,13 +47,13 @@ namespace capu
          * Enables the LogContext for logging
          * @param enabled state of the LogContext
          */
-        void setEnabled(bool_t enabled);
+        void setEnabled(bool enabled);
 
         /**
          * Returns the enabled state of the LogContext
          * @return the enabled state of the LogContext
          */
-        bool_t isEnabled() const;
+        bool isEnabled() const;
 
 
         /**
@@ -90,7 +90,7 @@ namespace capu
         /**
          * Enabled state of the LogContext
          */
-        bool_t m_enabled;
+        bool m_enabled;
 
         /**
          * LogLevel of context
@@ -129,13 +129,13 @@ namespace capu
 
     inline
     void 
-    LogContext::setEnabled(bool_t enabled)
+    LogContext::setEnabled(bool enabled)
     {
         m_enabled = enabled;
     }
 
     inline
-    bool_t 
+    bool
     LogContext::isEnabled() const
     {
         return m_enabled;

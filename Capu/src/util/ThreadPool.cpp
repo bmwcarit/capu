@@ -62,7 +62,7 @@ capu::status_t capu::ThreadPool::add(capu::SmartPointer<capu::Runnable> runnable
     return result;
 }
 
-capu::status_t capu::ThreadPool::close(bool_t cancelThreads)
+capu::status_t capu::ThreadPool::close(bool cancelThreads)
 {
     {
         ScopedMutexLock lock(mMutex);
@@ -108,7 +108,7 @@ capu::uint_t capu::ThreadPool::getSize() const
     return mWorkerList.size();
 }
 
-capu::bool_t capu::ThreadPool::isClosed() const
+bool capu::ThreadPool::isClosed() const
 {
     return mClosed;
 }
@@ -186,7 +186,7 @@ capu::ThreadPool::PoolWorker::~PoolWorker()
 {
 }
 
-capu::bool_t capu::ThreadPool::PoolWorker::isValid() const
+bool capu::ThreadPool::PoolWorker::isValid() const
 {
     return mValid;
 }

@@ -147,7 +147,7 @@ namespace capu
          * Return the state if dlt was found at runtime
          * @return if dlt was successfully initialized
          */
-        bool_t isDltInitialized()
+        bool isDltInitialized()
         {
             return m_dltInitialized;
         }
@@ -211,7 +211,7 @@ namespace capu
          * if dlt libs are there but dlt-daemon is not running dlt_init return negative
          * values, in which case this variable stays false
          */
-        bool_t m_dltInitialized;
+        bool m_dltInitialized;
 
         /**
          * Internal flag to track errors
