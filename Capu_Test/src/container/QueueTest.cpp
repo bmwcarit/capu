@@ -19,19 +19,19 @@
 TEST(Queue, Constructor_Default)
 {
     //create an empty linked Queue
-    capu::Queue<capu::int32_t*>* queue = NULL;
-    queue = new capu::Queue<capu::int32_t*>();
+    capu::Queue<int32_t*>* queue = NULL;
+    queue = new capu::Queue<int32_t*>();
     EXPECT_TRUE(queue != NULL);
     delete queue;
 }
 
 TEST(Queue, push_pop_Test)
 {
-    capu::Queue<capu::int32_t>* queue = new capu::Queue<capu::int32_t > ();
-    capu::int32_t data1;
-    capu::int32_t data2;
-    capu::int32_t data3;
-    capu::int32_t test = 0;
+    capu::Queue<int32_t>* queue = new capu::Queue<int32_t > ();
+    int32_t data1;
+    int32_t data2;
+    int32_t data3;
+    int32_t test = 0;
     capu::status_t result;
 
     data1 = 32;
@@ -73,9 +73,9 @@ TEST(Queue, push_pop_Test)
 
 TEST(Queue, popWith0)
 {
-    capu::Queue<capu::int32_t> queue;
+    capu::Queue<int32_t> queue;
     queue.push(1);
-    capu::int32_t* somenullptr = 0;
+    int32_t* somenullptr = 0;
     EXPECT_EQ(capu::CAPU_OK, queue.pop(somenullptr));
     EXPECT_TRUE(queue.empty());
     EXPECT_EQ(capu::CAPU_EINVAL, queue.pop(somenullptr));
@@ -83,8 +83,8 @@ TEST(Queue, popWith0)
 
 TEST(Queue, size)
 {
-    capu::Queue<capu::int32_t>* queue = new capu::Queue<capu::int32_t > ();
-    capu::int32_t data1;
+    capu::Queue<int32_t>* queue = new capu::Queue<int32_t > ();
+    int32_t data1;
 
     capu::uint_t result;
 
@@ -120,8 +120,8 @@ TEST(Queue, size)
 
 TEST(Queue, empty)
 {
-    capu::Queue<capu::int32_t>* queue = new capu::Queue<capu::int32_t > ();
-    capu::int32_t data1;
+    capu::Queue<int32_t>* queue = new capu::Queue<int32_t > ();
+    int32_t data1;
 
     bool result;
 
@@ -141,10 +141,10 @@ TEST(Queue, empty)
 
 TEST(Queue, clear)
 {
-    capu::Queue<capu::int32_t>* queue = new capu::Queue<capu::int32_t > ();
-    capu::int32_t data1;
-    capu::int32_t data2;
-    capu::int32_t data3;
+    capu::Queue<int32_t>* queue = new capu::Queue<int32_t > ();
+    int32_t data1;
+    int32_t data2;
+    int32_t data3;
     capu::status_t result;
 
     data1 = 32;
@@ -164,7 +164,7 @@ TEST(Queue, clear)
     result = queue->push(data1);
     EXPECT_EQ(capu::CAPU_OK, result);
 
-    capu::int32_t test = 0;
+    int32_t test = 0;
     EXPECT_EQ(capu::CAPU_OK, queue->pop(&test));
     EXPECT_EQ(data1, test);
     delete queue;
@@ -172,10 +172,10 @@ TEST(Queue, clear)
 
 TEST(Queue, pop)
 {
-    capu::Queue<capu::int32_t>* queue = new capu::Queue<capu::int32_t > ();
-    capu::int32_t test;
-    capu::int32_t data1;
-    capu::int32_t data2;
+    capu::Queue<int32_t>* queue = new capu::Queue<int32_t > ();
+    int32_t test;
+    int32_t data1;
+    int32_t data2;
 
     int cnt = 0;
     EXPECT_TRUE(queue->empty());
@@ -202,11 +202,11 @@ TEST(Queue, pop)
 
 TEST(Queue, swap)
 {
-    capu::Queue<capu::int32_t> queue1;
-    capu::Queue<capu::int32_t> queue2;
-    capu::int32_t test;
-    capu::int32_t data1;
-    capu::int32_t data2;
+    capu::Queue<int32_t> queue1;
+    capu::Queue<int32_t> queue2;
+    int32_t test;
+    int32_t data1;
+    int32_t data2;
 
     EXPECT_TRUE(queue1.empty());
     EXPECT_TRUE(queue2.empty());
@@ -239,7 +239,7 @@ TEST(Queue, swap)
 
 TEST(Queue, frontBack)
 {
-    capu::Queue<capu::int32_t> queue;
+    capu::Queue<int32_t> queue;
     queue.push(3);
     EXPECT_EQ(3, queue.front());
     EXPECT_EQ(3, queue.back());
@@ -263,8 +263,8 @@ TEST(Queue, frontBack)
 
 TEST(Queue, peek)
 {
-    capu::Queue<capu::int32_t> queue;
-    capu::int32_t val;
+    capu::Queue<int32_t> queue;
+    int32_t val;
     EXPECT_EQ(capu::CAPU_EINVAL, queue.peek(val));
 
     queue.push(3);
@@ -276,8 +276,8 @@ TEST(Queue, peek)
 
 TEST(Queue, popAll)
 {
-    capu::List<capu::int32_t> list;
-    capu::Queue<capu::int32_t> queue;
+    capu::List<int32_t> list;
+    capu::Queue<int32_t> queue;
     queue.push(1);
     queue.push(2);
     queue.push(3);

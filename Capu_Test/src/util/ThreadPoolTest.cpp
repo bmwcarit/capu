@@ -24,9 +24,9 @@
 class Globals
 {
 public:
-    static capu::uint32_t var;
+    static uint32_t var;
 };
-capu::uint32_t Globals::var = 0;
+uint32_t Globals::var = 0;
 
 class WorkToDo : public capu::Runnable
 {
@@ -67,17 +67,17 @@ TEST(ThreadPool, ConstructorTest)
 {
     capu::ThreadPool* pool = new capu::ThreadPool();
     EXPECT_TRUE(pool != NULL);
-    EXPECT_EQ(static_cast<capu::uint32_t>(5), pool->getSize());
+    EXPECT_EQ(static_cast<uint32_t>(5), pool->getSize());
     delete pool;
     pool = new capu::ThreadPool(10);
     EXPECT_TRUE(pool != NULL);
-    EXPECT_EQ(static_cast<capu::uint32_t>(10), pool->getSize());
+    EXPECT_EQ(static_cast<uint32_t>(10), pool->getSize());
     delete pool;
 }
 
 TEST(ThreadPool, TooManyThreadsTest)
 {
-    capu::uint32_t poolSize = 1000000;
+    uint32_t poolSize = 1000000;
 
     capu::ThreadPool* pool = new capu::ThreadPool(poolSize);
     EXPECT_TRUE(pool->getSize() < poolSize);
@@ -91,7 +91,7 @@ TEST(ThreadPool, AddCloseTest)
     Globals::var = 0;
 
     capu::ThreadPool* pool = new capu::ThreadPool(capu::ThreadPool::MAX_THREAD_POOL_THREADS);
-    for (capu::int32_t i = 0; i < 1000; i++)
+    for (int32_t i = 0; i < 1000; i++)
     {
         capu::SmartPointer<WorkToDo> w = new WorkToDo();
         EXPECT_EQ(capu::CAPU_OK, pool->add(w));
@@ -113,19 +113,19 @@ TEST(ThreadPool, AddCloseCancelTest)
 {
     Globals::var = 0;
     capu::Semaphore waiter;
-    capu::uint32_t poolSize = 5;
+    uint32_t poolSize = 5;
     capu::ThreadPool* pool = new capu::ThreadPool(poolSize);
 
     // add a lot of workers
     // a worker will increase the counter and then stay active
-    for (capu::int32_t i = 0; i < 10000; i++)
+    for (int32_t i = 0; i < 10000; i++)
     {
         capu::SmartPointer<WorkToDoCancelable> w = new WorkToDoCancelable(waiter);
         EXPECT_EQ(capu::CAPU_OK, pool->add(w));
     }
 
     // wait that all workers that fit in the pool have increased the global counter
-    for (capu::uint32_t i = 0; i < poolSize; i++)
+    for (uint32_t i = 0; i < poolSize; i++)
     {
         waiter.aquire();
     }
@@ -145,9 +145,9 @@ TEST(ThreadPool, AddCloseCancelTest)
 TEST(ThreadPool, SizeTest)
 {
     capu::ThreadPool pool(3);
-    EXPECT_EQ(static_cast<capu::uint32_t>(3), pool.getSize());
+    EXPECT_EQ(static_cast<uint32_t>(3), pool.getSize());
     pool.close();
-    EXPECT_EQ(static_cast<capu::uint32_t>(3), pool.getSize());
+    EXPECT_EQ(static_cast<uint32_t>(3), pool.getSize());
 }
 
 TEST(ThreadPool, CloseTest)

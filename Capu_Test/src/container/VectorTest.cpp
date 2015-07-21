@@ -559,15 +559,15 @@ namespace capu
     }
     TEST_F(VectorTest, ForEach)
     {
-        capu::Vector<capu::int32_t> vector;
+        capu::Vector<int32_t> vector;
 
         vector.push_back(32);
         vector.push_back(43);
         vector.push_back(44);
 
-        capu::Vector<capu::int32_t> testVector;
+        capu::Vector<int32_t> testVector;
 
-        capu_foreach(capu::Vector<capu::int32_t>, vector, iter)
+        capu_foreach(capu::Vector<int32_t>, vector, iter)
         {
             testVector.push_back(*iter);
         }

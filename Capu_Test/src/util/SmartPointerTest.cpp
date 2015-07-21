@@ -20,13 +20,13 @@
 class DummyClass
 {
 private:
-    capu::int32_t mValue;
+    int32_t mValue;
     FRIEND_TEST(SmartPointer, Constructors);
     FRIEND_TEST(SmartPointer, Deconstructor);
     FRIEND_TEST(SmartPointer, FileOperator);
     FRIEND_TEST(SmartPointer, DereferencingOperator);
 public:
-    static capu::int32_t mRefCount;
+    static int32_t mRefCount;
 
 public:
     DummyClass()
@@ -40,7 +40,7 @@ public:
         mRefCount--;
     };
 
-    void set(capu::int32_t value)
+    void set(int32_t value)
     {
         mValue = value;
     };
@@ -55,19 +55,19 @@ public:
     }
 };
 
-capu::int32_t DummyClass::mRefCount = 0;
+int32_t DummyClass::mRefCount = 0;
 
 TEST(SmartPointer, Constructors)
 {
     {
         capu::SmartPointer<DummyClass> ptr(new DummyClass());
-        EXPECT_EQ((capu::uint32_t)1, ptr.getRefCount());
+        EXPECT_EQ((uint32_t)1, ptr.getRefCount());
         EXPECT_EQ(1, DummyClass::mRefCount);
 
         //Copy constructor
         capu::SmartPointer<DummyClass> ptr2(ptr);
-        EXPECT_EQ((capu::uint32_t)2, ptr.getRefCount());
-        EXPECT_EQ((capu::uint32_t)2, ptr2.getRefCount());
+        EXPECT_EQ((uint32_t)2, ptr.getRefCount());
+        EXPECT_EQ((uint32_t)2, ptr2.getRefCount());
         EXPECT_EQ(1, DummyClass::mRefCount);
         EXPECT_EQ(5, ptr2->mValue);
 
@@ -77,42 +77,42 @@ TEST(SmartPointer, Constructors)
     //constructor for castable type
     capu::SmartPointer<ChildDummyClass> childPtr(new ChildDummyClass());
     capu::SmartPointer<DummyClass> parentPtr(childPtr);
-    EXPECT_EQ((capu::uint32_t)2, childPtr.getRefCount());
-    EXPECT_EQ((capu::uint32_t)2, parentPtr.getRefCount());
+    EXPECT_EQ((uint32_t)2, childPtr.getRefCount());
+    EXPECT_EQ((uint32_t)2, parentPtr.getRefCount());
 }
 
 TEST(SmartPointer, AssignmentOperator)
 {
     capu::SmartPointer<DummyClass> ptr = new DummyClass();
-    EXPECT_EQ((capu::uint32_t)1, ptr.getRefCount());
+    EXPECT_EQ((uint32_t)1, ptr.getRefCount());
 
     //copy
     capu::SmartPointer<DummyClass> ptr2 = ptr;
-    EXPECT_EQ((capu::uint32_t)2, ptr.getRefCount());
+    EXPECT_EQ((uint32_t)2, ptr.getRefCount());
 
     capu::SmartPointer<DummyClass> ptr3 = new DummyClass();
     ptr3 = NULL;
-    EXPECT_EQ((capu::uint32_t)1, ptr3.getRefCount());
+    EXPECT_EQ((uint32_t)1, ptr3.getRefCount());
 
     capu::SmartPointer<DummyClass> ptr4 = ptr3;
-    EXPECT_EQ((capu::uint32_t)2, ptr4.getRefCount());
+    EXPECT_EQ((uint32_t)2, ptr4.getRefCount());
     ptr3 = new DummyClass();
-    EXPECT_EQ((capu::uint32_t)1, ptr3.getRefCount());
-    EXPECT_EQ((capu::uint32_t)1, ptr4.getRefCount());
+    EXPECT_EQ((uint32_t)1, ptr3.getRefCount());
+    EXPECT_EQ((uint32_t)1, ptr4.getRefCount());
 
     //assignment of castable type
     capu::SmartPointer<ChildDummyClass> childPtr(new ChildDummyClass());
     capu::SmartPointer<DummyClass> parentPtr(new DummyClass());
     capu::SmartPointer<DummyClass> parentPtrCopy(parentPtr);
 
-    EXPECT_EQ((capu::uint32_t)2, parentPtr.getRefCount());
-    EXPECT_EQ((capu::uint32_t)2, parentPtrCopy.getRefCount());
+    EXPECT_EQ((uint32_t)2, parentPtr.getRefCount());
+    EXPECT_EQ((uint32_t)2, parentPtrCopy.getRefCount());
 
     //assign
     parentPtr = childPtr;
-    EXPECT_EQ((capu::uint32_t)2, childPtr.getRefCount());
-    EXPECT_EQ((capu::uint32_t)2, parentPtr.getRefCount());
-    EXPECT_EQ((capu::uint32_t)1, parentPtrCopy.getRefCount());
+    EXPECT_EQ((uint32_t)2, childPtr.getRefCount());
+    EXPECT_EQ((uint32_t)2, parentPtr.getRefCount());
+    EXPECT_EQ((uint32_t)1, parentPtrCopy.getRefCount());
 
 }
 
@@ -157,17 +157,17 @@ TEST(SmartPointer, getRefCount)
         capu::SmartPointer<DummyClass> ptr;
         ptr = new DummyClass();
         ptr2 = ptr;
-        EXPECT_EQ((capu::uint32_t)2, ptr.getRefCount());
+        EXPECT_EQ((uint32_t)2, ptr.getRefCount());
         EXPECT_EQ(ptr.getRefCount(), ptr2.getRefCount());
     }
-    EXPECT_EQ((capu::uint32_t)1, ptr2.getRefCount());
+    EXPECT_EQ((uint32_t)1, ptr2.getRefCount());
 }
 
 TEST(SmartPointer, operatorTest)
 {
     capu::SmartPointer<DummyClass> ptr, ptr2;
     ptr = new DummyClass();
-    EXPECT_EQ((capu::uint32_t)1, ptr.getRefCount());
+    EXPECT_EQ((uint32_t)1, ptr.getRefCount());
     EXPECT_FALSE(ptr == ptr2);
     EXPECT_TRUE(ptr != ptr2);
     ptr2 = ptr;
@@ -180,9 +180,9 @@ TEST(SmartPointer, castTest)
     capu::SmartPointer<DummyClass> ptr2;
     capu::SmartPointer<ChildDummyClass> ptr;
     ptr = new ChildDummyClass();
-    EXPECT_EQ((capu::uint32_t)1, ptr.getRefCount());
+    EXPECT_EQ((uint32_t)1, ptr.getRefCount());
     capu::SmartPointer<DummyClass> gecastet =  ptr;
-    EXPECT_EQ((capu::uint32_t)2, ptr.getRefCount());
+    EXPECT_EQ((uint32_t)2, ptr.getRefCount());
 }
 
 TEST(SmartPointer, smartpointer_castTest)
@@ -190,14 +190,14 @@ TEST(SmartPointer, smartpointer_castTest)
     capu::SmartPointer<DummyClass> spDummy;
 
     spDummy = new ChildDummyClass();
-    EXPECT_EQ((capu::uint32_t)1, spDummy.getRefCount());
+    EXPECT_EQ((uint32_t)1, spDummy.getRefCount());
 
     // test cast to pointer and copy
     capu::SmartPointer<ChildDummyClass> spChildDummy = capu::smartpointer_cast<ChildDummyClass>(spDummy);
-    EXPECT_EQ((capu::uint32_t)2, spDummy.getRefCount());
-    EXPECT_EQ((capu::uint32_t)2, spChildDummy.getRefCount());
+    EXPECT_EQ((uint32_t)2, spDummy.getRefCount());
+    EXPECT_EQ((uint32_t)2, spChildDummy.getRefCount());
     // change pointer
     spDummy = new ChildDummyClass();
-    EXPECT_EQ((capu::uint32_t)1, spDummy.getRefCount());
-    EXPECT_EQ((capu::uint32_t)1, spChildDummy.getRefCount());
+    EXPECT_EQ((uint32_t)1, spDummy.getRefCount());
+    EXPECT_EQ((uint32_t)1, spChildDummy.getRefCount());
 }

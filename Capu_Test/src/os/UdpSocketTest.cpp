@@ -31,7 +31,7 @@ public:
     /**
      * Gets a Random Port between 1024 and 10024
      */
-    static capu::uint16_t get()
+    static uint16_t get()
     {
         return (rand() % 10000) + 30000; // 0-1023 = Well Known, 1024-49151 = User, 49152 - 65535 = Dynamic
     }
@@ -39,19 +39,19 @@ public:
 
 class ThreadClientUdpTest : public capu::Runnable
 {
-    capu::uint16_t port;
+    uint16_t port;
 public:
     //client thread to test data exchange between client and server
-    ThreadClientUdpTest(capu::uint16_t port) : port(port) {}
+    ThreadClientUdpTest(uint16_t port) : port(port) {}
     void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
         capu::UdpSocket* clientSocket = new capu::UdpSocket();
 
-        capu::int32_t i = 5;
+        int32_t i = 5;
         //try to connect to ipv6
-        //EXPECT_EQ(capu::CAPU_SOCKET_EADDR, clientSocket->send((char*) &i, sizeof(capu::int32_t), "::1", port) );
+        //EXPECT_EQ(capu::CAPU_SOCKET_EADDR, clientSocket->send((char*) &i, sizeof(int32_t), "::1", port) );
 
         //wait for other side to start up
         mutex2.lock();
@@ -62,12 +62,12 @@ public:
         cond2 = false;
         mutex2.unlock();
         //send data
-        EXPECT_EQ(capu::CAPU_OK, clientSocket->send((char*) &i, sizeof(capu::int32_t), "127.0.0.1", port));
+        EXPECT_EQ(capu::CAPU_OK, clientSocket->send((char*) &i, sizeof(int32_t), "127.0.0.1", port));
 
         //receive
         capu::status_t result = capu::CAPU_ERROR;
 
-        result = clientSocket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes, 0);
+        result = clientSocket->receive((char*) &communication_variable, sizeof(int32_t), numBytes, 0);
         EXPECT_EQ(capu::CAPU_OK, result);
 
         //check value
@@ -87,20 +87,20 @@ public:
 
 class ThreadTimeoutClientUdpTest : public capu::Runnable
 {
-    capu::uint16_t port;
+    uint16_t port;
 public:
     //timeout test
-    ThreadTimeoutClientUdpTest(capu::uint16_t port) : port(port) {}
+    ThreadTimeoutClientUdpTest(uint16_t port) : port(port) {}
     void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
         capu::Thread::Sleep(1000);
         //ALLOCATION AND SYNCH OF cient and  server
         capu::UdpSocket* cli_socket = new capu::UdpSocket();
         //timeout is 2 second;
         cli_socket->setTimeout(2);
-        capu::int32_t i = 5;
+        int32_t i = 5;
 
         //wait for other side to start up
         mutex2.lock();
@@ -112,10 +112,10 @@ public:
         mutex2.unlock();
 
         //send data
-        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(capu::int32_t), "127.0.0.1", port));
+        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(int32_t), "127.0.0.1", port));
 
         //receive
-        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes, 0));
+        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((char*) &communication_variable, sizeof(int32_t), numBytes, 0));
 
         mutex2.lock();
         cond2 = true;
@@ -131,14 +131,14 @@ public:
 
 class ThreadServerUdpTest : public capu::Runnable
 {
-    capu::uint16_t port;
+    uint16_t port;
 public:
     //SERVER thread to test data exchange between client and server
-    ThreadServerUdpTest(capu::uint16_t port) : port(port) {}
+    ThreadServerUdpTest(uint16_t port) : port(port) {}
     void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
         //server socket allocation
         capu::UdpSocket* serverSocket = new capu::UdpSocket();
 
@@ -155,7 +155,7 @@ public:
         cond2 = true;
         cv2.signal();
         mutex2.unlock();
-        result = serverSocket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes, &remoteSocket);
+        result = serverSocket->receive((char*) &communication_variable, sizeof(int32_t), numBytes, &remoteSocket);
         EXPECT_EQ(capu::CAPU_OK, result);
 
         EXPECT_STREQ("127.0.0.1", remoteSocket.addr.c_str());
@@ -167,7 +167,7 @@ public:
         communication_variable++;
 
         //send it back
-        EXPECT_EQ(capu::CAPU_OK, serverSocket->send((char*) &communication_variable, sizeof(capu::int32_t), remoteSocket));
+        EXPECT_EQ(capu::CAPU_OK, serverSocket->send((char*) &communication_variable, sizeof(int32_t), remoteSocket));
 
         mutex2.lock();
         while (!cond2)
@@ -185,14 +185,14 @@ public:
 
 class ThreadTimeoutServerUdpTest : public capu::Runnable
 {
-    capu::uint16_t port;
+    uint16_t port;
 public:
     //timeout test
-    ThreadTimeoutServerUdpTest(capu::uint16_t port) : port(port) {}
+    ThreadTimeoutServerUdpTest(uint16_t port) : port(port) {}
     void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
         //server socket allocation
         capu::UdpSocket* serverSocket = new capu::UdpSocket();
 
@@ -207,7 +207,7 @@ public:
         cond2 = true;
         cv2.signal();
         mutex2.unlock();
-        result = serverSocket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes, NULL);
+        result = serverSocket->receive((char*) &communication_variable, sizeof(int32_t), numBytes, NULL);
         EXPECT_EQ(capu::CAPU_OK, result);
 
         //check value
@@ -230,10 +230,10 @@ public:
 
 TEST(UdpSocket, CloseReceiveAndSendTest)
 {
-    capu::uint16_t port = RandomPort::get();
+    uint16_t port = RandomPort::get();
     capu::UdpSocket* socket = new capu::UdpSocket();
-    capu::int32_t i = 0;
-    capu::int32_t numBytes = 0;
+    int32_t i = 0;
+    int32_t numBytes = 0;
     EXPECT_EQ(capu::CAPU_OK, socket->close());
     //try to send data via closed socket
     EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->send((char*) "asda", 4, "127.0.0.1", port));
@@ -250,7 +250,7 @@ TEST(UdpSocket, SetAndGetPropertiesTest)
     EXPECT_EQ(capu::CAPU_OK, socket->setBufferSize(1024));
     EXPECT_EQ(capu::CAPU_OK, socket->setTimeout(90));
 
-    capu::int32_t int_tmp;
+    int32_t int_tmp;
 
     //CHECK THE PROPERTIES ARE CORRECTLY SET
     EXPECT_EQ(capu::CAPU_OK, socket->getBufferSize(int_tmp));
@@ -277,7 +277,7 @@ TEST(UdpSocket, SetAndGetPropertiesTest)
 TEST(UdpSocketAndUdpServerSocket, CommunicationTest)
 {
     cond2 = false;
-    capu::uint16_t port = RandomPort::get();
+    uint16_t port = RandomPort::get();
     ThreadServerUdpTest server(port);
     ThreadClientUdpTest client(port);
     capu::Thread* server_thread = new capu::Thread();
@@ -295,7 +295,7 @@ TEST(UdpSocketAndUdpServerSocket, CommunicationTest)
 TEST(UdpSocketAndUdpServerSocket, TimeoutTest)
 {
     cond2 = false;
-    capu::uint16_t port = RandomPort::get();
+    uint16_t port = RandomPort::get();
     ThreadTimeoutServerUdpTest server(port);
     ThreadTimeoutClientUdpTest client(port);
     capu::Thread* server_thread = new capu::Thread();
@@ -325,7 +325,7 @@ TEST(UdpSocketAndUdpServerSocket, BroadcastTest)
 {
     capu::UdpSocket socket;
     socket.bind(0, 0);
-    capu::uint16_t port = socket.getSocketAddrInfo().port;  // send broadcast to self
+    uint16_t port = socket.getSocketAddrInfo().port;  // send broadcast to self
 
     EXPECT_EQ(capu::CAPU_ERROR, socket.send("test", 4, "255.255.255.255", port)); // check for standard behaviour
 

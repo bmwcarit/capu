@@ -28,10 +28,10 @@ class HashTableTest: public ::testing::Test
 public:
     struct MyStruct
     {
-        capu::uint32_t a;
-        capu::int16_t  b;
+        uint32_t a;
+        int16_t  b;
 
-        capu::uint32_t getA()
+        uint32_t getA()
         {
             return a;
         }
@@ -41,9 +41,9 @@ public:
             return (a == other.a);
         }
     };
-    typedef capu::HashTable<capu::int32_t, capu::int32_t> Int32HashMap;
+    typedef capu::HashTable<int32_t, int32_t> Int32HashMap;
 
-    static const capu::uint32_t PERFORMANCE_MAP_SIZE = 1000000;
+    static const uint32_t PERFORMANCE_MAP_SIZE = 1000000;
 
     enum SomeEnumeration
     {

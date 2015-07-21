@@ -20,12 +20,12 @@
 
 TEST(MemoryPoolTest, GetElementsUntilFull)
 {
-    capu::MemoryPool<capu::uint32_t, 3> m_pool;
+    capu::MemoryPool<uint32_t, 3> m_pool;
 
-    capu::uint32_t* first = m_pool.getEntry();
-    capu::uint32_t* second = m_pool.getEntry();
-    capu::uint32_t* third = m_pool.getEntry(); 
-    capu::uint32_t* fourth = m_pool.getEntry();
+    uint32_t* first = m_pool.getEntry();
+    uint32_t* second = m_pool.getEntry();
+    uint32_t* third = m_pool.getEntry(); 
+    uint32_t* fourth = m_pool.getEntry();
 
     *first = 1;
     *second = 2;
@@ -43,11 +43,11 @@ TEST(MemoryPoolTest, GetElementsUntilFull)
 
 TEST(MemoryPoolTest, FillPoolAndRelease)
 {
-    capu::MemoryPool<capu::uint32_t, 3> m_pool;
+    capu::MemoryPool<uint32_t, 3> m_pool;
 
-    capu::uint32_t* first = m_pool.getEntry();
-    capu::uint32_t* second = m_pool.getEntry();
-    capu::uint32_t* third = m_pool.getEntry();
+    uint32_t* first = m_pool.getEntry();
+    uint32_t* second = m_pool.getEntry();
+    uint32_t* third = m_pool.getEntry();
 
     m_pool.releaseEntry(second);
 
@@ -75,7 +75,7 @@ TEST(MemoryPoolTest, FillPoolAndRelease)
     EXPECT_EQ(3u, *third);
     EXPECT_EQ(1u, *first);
 
-    capu::uint32_t* fourth = m_pool.getEntry();
+    uint32_t* fourth = m_pool.getEntry();
 
     EXPECT_TRUE(0 == fourth);
 

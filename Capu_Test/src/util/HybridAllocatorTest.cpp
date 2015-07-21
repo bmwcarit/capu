@@ -22,12 +22,12 @@ using namespace capu;
 
 TEST(HybridAllocator, TestHybridAllocation)
 {
-    HybridAllocator<capu::uint32_t, 3> hybridAlloc; // allocator with three static spaces
-    capu::uint32_t* int1 = hybridAlloc.allocate(); // on stack
-    capu::uint32_t* int2 = hybridAlloc.allocate(); // on stack
-    capu::uint32_t* int3 = hybridAlloc.allocate(); // on stack
-    capu::uint32_t* int4 = hybridAlloc.allocate(); // on heap
-    capu::uint32_t* int5 = hybridAlloc.allocate(); // on heap
+    HybridAllocator<uint32_t, 3> hybridAlloc; // allocator with three static spaces
+    uint32_t* int1 = hybridAlloc.allocate(); // on stack
+    uint32_t* int2 = hybridAlloc.allocate(); // on stack
+    uint32_t* int3 = hybridAlloc.allocate(); // on stack
+    uint32_t* int4 = hybridAlloc.allocate(); // on heap
+    uint32_t* int5 = hybridAlloc.allocate(); // on heap
     EXPECT_TRUE(int1 != 0);
     EXPECT_TRUE(int2 != 0);
     EXPECT_TRUE(int3 != 0);
@@ -55,7 +55,7 @@ TEST(HybridAllocator, TestHybridAllocation)
 
 TEST(HybridAllocator, TestHybridAllocationInList)
 {
-    List<capu::uint32_t, HybridAllocator<GenericListNode<capu::uint32_t>, 3> > list;
+    List<uint32_t, HybridAllocator<GenericListNode<uint32_t>, 3> > list;
     list.push_front(1); // stack
     list.push_front(2); // stack
     list.push_front(3); // stack

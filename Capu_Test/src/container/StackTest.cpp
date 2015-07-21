@@ -20,12 +20,12 @@
 
 TEST(Stack, PushPop)
 {
-    capu::Stack<capu::uint32_t> stack;
+    capu::Stack<uint32_t> stack;
     stack.push(1);
     stack.push(2);
     stack.push(3);
     stack.push(4);
-    capu::uint32_t val;
+    uint32_t val;
     stack.pop(&val);
     EXPECT_EQ(4u, val);
     stack.pop(&val);
@@ -38,13 +38,13 @@ TEST(Stack, PushPop)
 
 TEST(Stack, PopOnEmpty)
 {
-    capu::Stack<capu::uint32_t> stack;
+    capu::Stack<uint32_t> stack;
     EXPECT_EQ(capu::CAPU_EINVAL, stack.pop());
 }
 
 TEST(Stack, Clear)
 {
-    capu::Stack<capu::uint32_t> stack;
+    capu::Stack<uint32_t> stack;
     stack.push(1);
     stack.push(2);
     stack.push(3);
@@ -55,7 +55,7 @@ TEST(Stack, Clear)
 
 TEST(Stack, IsEmpty)
 {
-    capu::Stack<capu::uint32_t> stack;
+    capu::Stack<uint32_t> stack;
     EXPECT_TRUE(stack.isEmpty());
     stack.push(1);
     EXPECT_FALSE(stack.isEmpty());
@@ -68,7 +68,7 @@ TEST(Stack, IsEmpty)
 
 TEST(Stack, Size)
 {
-    capu::Stack<capu::uint32_t> stack;
+    capu::Stack<uint32_t> stack;
     EXPECT_EQ(0, stack.size());
     stack.push(1);
     EXPECT_EQ(1, stack.size());

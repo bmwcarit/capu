@@ -155,7 +155,7 @@ namespace capu
              * Step the iterator forward to the next element (postfix operator)
              * @return the next iterator
              */
-            const ListIterator operator++(capu::int32_t) const
+            const ListIterator operator++(int32_t) const
             {
                 ListIterator oldValue(*this);
                 ++(*this);
@@ -167,7 +167,7 @@ namespace capu
              * Step the iterator forward to the next element (postfix operator)
              * @return the next iterator
              */
-            ListIterator<TYPE> operator++(capu::int32_t)
+            ListIterator<TYPE> operator++(int32_t)
             {
                 ListIterator<TYPE> oldValue(*this);
                 ++(*this);

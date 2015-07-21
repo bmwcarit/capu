@@ -39,7 +39,7 @@ public:
         --lockCount;
     }
 
-    capu::int32_t lockCount;
+    int32_t lockCount;
 };
 
 

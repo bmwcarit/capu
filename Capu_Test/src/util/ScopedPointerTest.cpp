@@ -28,7 +28,7 @@ public:
         ++refCount;
     }
 
-    void setData(capu::int32_t data)
+    void setData(int32_t data)
     {
         mData = data;
     }
@@ -38,25 +38,25 @@ public:
         --refCount;
     }
 
-    static capu::int32_t refCount;
+    static int32_t refCount;
 
-    capu::int32_t mData;
+    int32_t mData;
 };
 
 struct CustomDeleter
 {
-    static void performDelete(capu::int32_t* ptr)
+    static void performDelete(int32_t* ptr)
     {
         delete ptr;
         ++count;
     }
 
-    static capu::uint32_t count;
+    static uint32_t count;
 };
 
-capu::uint32_t CustomDeleter::count = 0;
+uint32_t CustomDeleter::count = 0;
 
-capu::int32_t Resource::refCount = 0;
+int32_t Resource::refCount = 0;
 
 TEST(ScopedArrayTest, NoResource)
 {
@@ -86,7 +86,7 @@ TEST(ScopedArrayTest, SingleResource)
 TEST(ScopedArrayTest, MultipleResources)
 {
     Resource::refCount = 0;
-    for (capu::int32_t i = 0; i < 100; ++i)
+    for (int32_t i = 0; i < 100; ++i)
     {
         {
             capu::ScopedArray<Resource> handler(i);
@@ -100,17 +100,17 @@ TEST(ScopedArrayTest, MultipleResources)
 TEST(ScopedArrayTest, AccessOperator)
 {
     Resource::refCount = 0;
-    for (capu::int32_t i = 0; i < 100; ++i)
+    for (int32_t i = 0; i < 100; ++i)
     {
         {
             capu::ScopedArray<Resource> handler(i);
             EXPECT_EQ(i, Resource::refCount);
 
-            for (capu::int32_t j = 0; j < i; ++j)
+            for (int32_t j = 0; j < i; ++j)
             {
                 handler[j].setData(j);
             }
-            for (capu::int32_t j = 0; j < i; ++j)
+            for (int32_t j = 0; j < i; ++j)
             {
                 EXPECT_EQ(j, handler[j].mData);
             }
@@ -245,7 +245,7 @@ TEST(ScopedPointerTest, CustomDeleter)
 {
     CustomDeleter::count = 0;
     {
-        capu::ScopedPointer<capu::int32_t, CustomDeleter> scopedPointer(new capu::int32_t(42));
+        capu::ScopedPointer<int32_t, CustomDeleter> scopedPointer(new int32_t(42));
         EXPECT_EQ(42, *scopedPointer);
     }
     EXPECT_EQ(1u, CustomDeleter::count);
@@ -254,6 +254,6 @@ TEST(ScopedPointerTest, CustomDeleter)
 TEST(ScopedPointerTest, DefaultConstructorValue)
 {
     capu::ScopedPointer<Resource> ptr; // will automatically create a resource object
-    capu::int32_t val = ptr->mData;
+    int32_t val = ptr->mData;
     EXPECT_EQ(0, val);
 }

@@ -29,15 +29,14 @@ namespace capu
 
     TEST(CapuDefaultHashFunctionTest, useTraitsToFindCorrectHashFunction)
     {
-        capu::uint64_t       sometype1 = 42;
-        capu::uint32_t       sometype2 = 42;
-        capu::int32_t        sometype3 = 42;
-        capu::uint16_t       sometype4 = 42;
-        capu::int16_t        sometype5 = 42;
-        capu::uint8_t        sometype6 = 42;
-        capu::int8_t         sometype7 = 42;
+        uint64_t       sometype1 = 42;
+        uint32_t       sometype2 = 42;
+        int32_t        sometype3 = 42;
+        uint16_t       sometype4 = 42;
+        int16_t        sometype5 = 42;
+        uint8_t        sometype6 = 42;
+        int8_t         sometype7 = 42;
         char         sometype8 = 42;
-        capu::uchar_t        sometype9 = 42;
         float        sometype10 = 42.f;
         double       sometype11 = 42.0;
         bool         sometype12 = true;
@@ -58,7 +57,6 @@ namespace capu
         capu::CapuDefaultHashFunction<>::Digest(sometype6);
         capu::CapuDefaultHashFunction<>::Digest(sometype7);
         capu::CapuDefaultHashFunction<>::Digest(sometype8);
-        capu::CapuDefaultHashFunction<>::Digest(sometype9);
         capu::CapuDefaultHashFunction<>::Digest(sometype10);
         capu::CapuDefaultHashFunction<>::Digest(sometype11);
         capu::CapuDefaultHashFunction<>::Digest(sometype12);

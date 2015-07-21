@@ -27,7 +27,7 @@ namespace capu
 {
     struct TestUdpSocketSender
     {
-        static void SendToSocket(const capu::uint16_t port, UdpSocket& socket, const char* data, const uint32_t size)
+        static void SendToSocket(const uint16_t port, UdpSocket& socket, const char* data, const uint32_t size)
         {
             socket.send(data, size, "127.0.0.1", port);
         }
@@ -36,7 +36,7 @@ namespace capu
     struct UdpInt32TestSender: public TestUdpSocketSender
     {
         typedef int32_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const int32_t& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const int32_t& data)
         {
             int32_t tmp = htonl(data);
             SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(int32_t));
@@ -46,7 +46,7 @@ namespace capu
     struct UdpUInt32TestSender: public TestUdpSocketSender
     {
         typedef uint32_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const uint32_t& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const uint32_t& data)
         {
             int32_t tmp = htonl(data);
             SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(uint32_t));
@@ -56,7 +56,7 @@ namespace capu
     struct UdpInt64TestSender: public TestUdpSocketSender
     {
         typedef int64_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const int64_t& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const int64_t& data)
         {
             int64_t tmp = _htonll(data);
             SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(int64_t));
@@ -66,7 +66,7 @@ namespace capu
     struct UdpUInt64TestSender: public TestUdpSocketSender
     {
         typedef uint64_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const uint64_t& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const uint64_t& data)
         {
             int64_t tmp = _htonll(data);
             SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(uint64_t));
@@ -76,7 +76,7 @@ namespace capu
     struct UdpUInt16TestSender: public TestUdpSocketSender
     {
         typedef uint16_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const uint16_t& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const uint16_t& data)
         {
             uint16_t tmp = htons(data);
             SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(uint16_t));
@@ -86,7 +86,7 @@ namespace capu
     struct UdpInt16TestSender: public TestUdpSocketSender
     {
         typedef int16_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const int16_t& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const int16_t& data)
         {
             int16_t tmp = htons(data);
             SendToSocket(port, socket, reinterpret_cast<char*>(&tmp), sizeof(int16_t));
@@ -96,7 +96,7 @@ namespace capu
     struct UdpInt8TestSender: public TestUdpSocketSender
     {
         typedef int8_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const int8_t& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const int8_t& data)
         {
             SendToSocket(port, socket, reinterpret_cast<const char*>(&data), sizeof(int8_t));
         }
@@ -105,7 +105,7 @@ namespace capu
     struct UdpUInt8TestSender: public TestUdpSocketSender
     {
         typedef uint8_t VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const uint8_t& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const uint8_t& data)
         {
             SendToSocket(port, socket, reinterpret_cast<const char*>(&data), sizeof(uint8_t));
         }
@@ -114,7 +114,7 @@ namespace capu
     struct UdpBoolTestSender: public TestUdpSocketSender
     {
         typedef bool VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const bool& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const bool& data)
         {
             SendToSocket(port, socket, reinterpret_cast<const char*>(&data), sizeof(bool));
         }
@@ -123,7 +123,7 @@ namespace capu
     struct UdpFloatTestSender: public TestUdpSocketSender
     {
         typedef float VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const float& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const float& data)
         {
             const int32_t tmp = htonl(*reinterpret_cast<const int32_t*>(&data));
             SendToSocket(port, socket, reinterpret_cast<const char*>(&tmp), sizeof(int32_t));
@@ -133,7 +133,7 @@ namespace capu
     struct UdpStringTestSender: public TestUdpSocketSender
     {
         typedef String VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const String& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const String& data)
         {
             int32_t strLen = static_cast<uint32_t>(data.getLength() + 1);
             int32_t strNetLent  = htonl(strLen);
@@ -145,7 +145,7 @@ namespace capu
     struct UdpGuidTestSender: public TestUdpSocketSender
     {
         typedef Guid VALUE_TYPE;
-        static void Send(const capu::uint16_t port, UdpSocket& socket, const Guid& data)
+        static void Send(const uint16_t port, UdpSocket& socket, const Guid& data)
         {
             SendToSocket(port, socket, reinterpret_cast<const char*>(&(data.getGuidData())), sizeof(generic_uuid_t));
         }
@@ -155,7 +155,7 @@ namespace capu
     class TestUdpSenderRunnable: public Runnable
     {
     public:
-        TestUdpSenderRunnable(const capu::uint16_t port, const typename T::VALUE_TYPE& value)
+        TestUdpSenderRunnable(const uint16_t port, const typename T::VALUE_TYPE& value)
             : mValue(value)
             , mPort(port)
         {
@@ -169,7 +169,7 @@ namespace capu
         }
     private:
         const typename T::VALUE_TYPE& mValue;
-        const capu::uint16_t mPort;
+        const uint16_t mPort;
     };
 
     class TestUdpMultipleSender: public Runnable

@@ -40,7 +40,7 @@ namespace capu
          * @return TcpSocket if a connection is accepted
          *         NULL otherwise
          */
-        TcpSocket* accept(capu::uint32_t timeoutMillis = 0);
+        TcpSocket* accept(uint32_t timeoutMillis = 0);
 
         /**
          * Close the socket which is used for accepting connection
@@ -79,7 +79,7 @@ namespace capu
          * @return The port to which the server socket is bound or 0 if the server socket
          *         is not bound yet.
          */
-        capu::uint16_t port();
+        uint16_t port();
         
         /**
          * Returns the internal descriptor of the socket. This can be different on 
@@ -92,7 +92,7 @@ namespace capu
 
     inline
     TcpSocket*
-    TcpServerSocket::accept(capu::uint32_t timeoutMillis)
+    TcpServerSocket::accept(uint32_t timeoutMillis)
     {
         return capu::os::arch::TcpServerSocket::accept(timeoutMillis);
     }

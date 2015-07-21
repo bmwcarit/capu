@@ -39,7 +39,7 @@ namespace capu
         String  stringVal = "Dies ist ein Text";
         uint32_t strlen = static_cast<uint32_t>(stringVal.getLength());
 
-        mFile.write(reinterpret_cast<char*>(&intVal), sizeof(capu::int32_t));
+        mFile.write(reinterpret_cast<char*>(&intVal), sizeof(int32_t));
         mFile.write(reinterpret_cast<char*>(&floatVal), sizeof(float));
         mFile.write(reinterpret_cast<char*>(&strlen), sizeof(uint32_t));
         mFile.write(stringVal.c_str(), stringVal.getLength());
@@ -59,7 +59,7 @@ namespace capu
 
         capu::BinaryFileInputStream inputStream(mFile);
 
-        capu::int32_t intVal = 0;
+        int32_t intVal = 0;
         float floatVal = 0.f;
         capu::String  stringVal = "";
 

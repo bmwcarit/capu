@@ -822,7 +822,7 @@ namespace capu
     {
         Memory::Set(mBuckets, 0, sizeof(HashTableEntry*) * mSize);
         HashTableEntry* entry = mData;
-        for (capu::uint32_t i = 0; i < mThreshold + 1; ++i)
+        for (uint32_t i = 0; i < mThreshold + 1; ++i)
         {
             entry->previous = 0;
             entry->next = entry + 1;

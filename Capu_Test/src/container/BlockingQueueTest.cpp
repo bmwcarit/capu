@@ -26,89 +26,89 @@ using namespace std;
 class Producer: public capu::Runnable
 {
 public:
-    capu::BlockingQueue<capu::uint32_t>& mQueue;
-    capu::int32_t mCount;
-    capu::uint32_t mId;
+    capu::BlockingQueue<uint32_t>& mQueue;
+    int32_t mCount;
+    uint32_t mId;
 
-    static capu::uint32_t mSum;
+    static uint32_t mSum;
 
-    Producer(capu::BlockingQueue<capu::uint32_t>& queue, capu::int32_t count, capu::uint32_t id)
+    Producer(capu::BlockingQueue<uint32_t>& queue, int32_t count, uint32_t id)
         : mQueue(queue), mCount(count), mId(id)
     {
     }
 
     inline void run()
     {
-        for (capu::int32_t i = 0; i < mCount; ++i)
+        for (int32_t i = 0; i < mCount; ++i)
         {
-            capu::uint32_t val = i + mId * 100 + 100;
+            uint32_t val = i + mId * 100 + 100;
             mQueue.push(val);
-            capu::uint32_t sleepTime = rand() % 100;
+            uint32_t sleepTime = rand() % 100;
             capu::Thread::Sleep(sleepTime);
             capu::AtomicOperation::AtomicAdd(mSum, val);
         }
     }
 };
 
-capu::uint32_t Producer::mSum = 0;
+uint32_t Producer::mSum = 0;
 
 class Consumer: public capu::Runnable
 {
 public:
-    capu::BlockingQueue<capu::uint32_t>& mQueue;
-    capu::int32_t mCount;
-    capu::uint32_t mId;
+    capu::BlockingQueue<uint32_t>& mQueue;
+    int32_t mCount;
+    uint32_t mId;
 
-    static capu::uint32_t mSum;
+    static uint32_t mSum;
 
-    Consumer(capu::BlockingQueue<capu::uint32_t>& queue, capu::int32_t count, capu::uint32_t id)
+    Consumer(capu::BlockingQueue<uint32_t>& queue, int32_t count, uint32_t id)
         : mQueue(queue), mCount(count), mId(id)
     {
     }
 
     inline void run()
     {
-        for (capu::int32_t i = 0; i < mCount; ++i)
+        for (int32_t i = 0; i < mCount; ++i)
         {
-            capu::uint32_t tmp = 0;
+            uint32_t tmp = 0;
             EXPECT_EQ(capu::CAPU_OK, mQueue.pop(&tmp));
             capu::AtomicOperation::AtomicAdd(mSum, tmp);
         }
     }
 };
-capu::uint32_t Consumer::mSum = 0;
+uint32_t Consumer::mSum = 0;
 
 TEST(BlockingQueue, PushPopSingleThread)
 {
-    capu::BlockingQueue<capu::int32_t> queue;
+    capu::BlockingQueue<int32_t> queue;
     queue.push(3);
-    capu::int32_t val = 0;
+    int32_t val = 0;
     EXPECT_EQ(capu::CAPU_OK, queue.pop(&val));
     EXPECT_EQ(3, val);
 }
 
 TEST(BlockingQueue, TestPopTimeout)
 {
-    capu::BlockingQueue<capu::int32_t> queue;
-    capu::int32_t val;
+    capu::BlockingQueue<int32_t> queue;
+    int32_t val;
     EXPECT_EQ(capu::CAPU_ETIMEOUT, queue.pop(&val, 10));
 }
 
 TEST(BlockingQueue, TestEmpty)
 {
-    capu::BlockingQueue<capu::int32_t> queue;
+    capu::BlockingQueue<int32_t> queue;
     EXPECT_TRUE(queue.empty());
     queue.push(3);
     EXPECT_FALSE(queue.empty());
-    capu::int32_t val;
+    int32_t val;
     queue.pop(&val);
     EXPECT_TRUE(queue.empty());
 }
 
 TEST(BlockingQueue, TestPeek)
 {
-    capu::int32_t val = 0;
-    capu::BlockingQueue<capu::int32_t> queue;
+    int32_t val = 0;
+    capu::BlockingQueue<int32_t> queue;
     EXPECT_EQ(capu::CAPU_EINVAL, queue.peek(val));
     queue.push(3);
     EXPECT_EQ(capu::CAPU_OK, queue.peek(val));
@@ -119,27 +119,27 @@ TEST(BlockingQueue, TestPeek)
 
 TEST(BlockingQueue, PushPopMultiThread)
 {
-    capu::BlockingQueue<capu::uint32_t> queue;
+    capu::BlockingQueue<uint32_t> queue;
 
     // countProducer * countPerProducer % countConsumer == 0 must be ensured!!!
-    capu::int32_t countProducer = 20;
-    capu::int32_t countConsumer = 100;
-    capu::int32_t countPerProducer = 10;
-    capu::int32_t count = countProducer * countPerProducer;
-    capu::int32_t countPerConsumer = count / countConsumer;
+    int32_t countProducer = 20;
+    int32_t countConsumer = 100;
+    int32_t countPerProducer = 10;
+    int32_t count = countProducer * countPerProducer;
+    int32_t countPerConsumer = count / countConsumer;
 
     // this ensures correct test configuration
     ASSERT_EQ(0, countProducer * countPerProducer % countConsumer);
 
     capu::ThreadPool consumer(countConsumer);
 
-    for (capu::int32_t i = 0; i < countConsumer; ++i)
+    for (int32_t i = 0; i < countConsumer; ++i)
     {
         consumer.add(new Consumer(queue, countPerConsumer, i + 20));
     }
 
     capu::ThreadPool producer(countProducer);
-    for (capu::int32_t i = 0; i < countProducer; ++i)
+    for (int32_t i = 0; i < countProducer; ++i)
     {
         producer.add(new Producer(queue, countPerProducer, i + 10));
     }

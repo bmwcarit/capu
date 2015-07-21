@@ -21,8 +21,8 @@
 
 TEST(SwapTest, UInt32)
 {
-    capu::uint32_t first = 5;
-    capu::uint32_t second = 50;
+    uint32_t first = 5;
+    uint32_t second = 50;
 
     capu::swap(first, second);
 

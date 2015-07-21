@@ -212,7 +212,7 @@ namespace capu
 
             TcpSocket socket;
             capu::status_t result = capu::CAPU_ERROR;
-            capu::int32_t attemps = 0;
+            int32_t attemps = 0;
             while (result != capu::CAPU_OK && attemps < 100)
             {
                 result = socket.connect("127.0.0.1", runnable.mPort);

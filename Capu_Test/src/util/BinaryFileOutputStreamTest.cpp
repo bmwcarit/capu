@@ -53,13 +53,13 @@ namespace capu
         char buffer[64];
         capu::uint_t numBytes = 0;
 
-        EXPECT_EQ(capu::CAPU_OK, mFile.read(buffer, sizeof(capu::int32_t), numBytes));
-        EXPECT_EQ(sizeof(capu::int32_t), numBytes);
+        EXPECT_EQ(capu::CAPU_OK, mFile.read(buffer, sizeof(int32_t), numBytes));
+        EXPECT_EQ(sizeof(int32_t), numBytes);
 
         union
         {
            char charVal[4];
-           capu::int32_t int32Val;
+           int32_t int32Val;
         }int32Convert;
 
         int32Convert.charVal[0] = buffer[0];

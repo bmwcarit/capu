@@ -71,12 +71,12 @@ TEST(TcpServerSocket, AcceptTimeoutTest)
     capu::TcpServerSocket socket;
     EXPECT_EQ(capu::CAPU_OK, socket.bind(0, "0.0.0.0"));
     EXPECT_EQ(capu::CAPU_OK, socket.listen(3));
-    capu::uint32_t timeout = 1500;
-    capu::uint64_t start = capu::Time::GetMilliseconds();
+    uint32_t timeout = 1500;
+    uint64_t start = capu::Time::GetMilliseconds();
     socket.accept(timeout);
-    capu::uint64_t dur = capu::Time::GetMilliseconds() - start;
+    uint64_t dur = capu::Time::GetMilliseconds() - start;
 
-    capu::uint64_t diff = dur - timeout;
+    uint64_t diff = dur - timeout;
     EXPECT_GE(1000, capu::Math::Abs(static_cast<capu::int_t>(diff)));
 }
 

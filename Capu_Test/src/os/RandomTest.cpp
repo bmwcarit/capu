@@ -24,18 +24,18 @@ TEST(Random, TestUInt8)
 {
     capu::Random rand;
 
-    capu::uint32_t max = capu::NumericLimits::Max<capu::uint8_t>();
+    uint32_t max = capu::NumericLimits::Max<uint8_t>();
 
-    capu::uint32_t* counts = new capu::uint32_t[max + 1];
-    capu::Memory::Set(counts, 0, (max + 1) * sizeof(capu::uint32_t));
+    uint32_t* counts = new uint32_t[max + 1];
+    capu::Memory::Set(counts, 0, (max + 1) * sizeof(uint32_t));
 
-    for (capu::uint32_t i = 0; i < 1000000; ++i)
+    for (uint32_t i = 0; i < 1000000; ++i)
     {
         counts[rand.nextUInt8()]++;
     }
 
     // expect each number at least once
-    for (capu::uint32_t i = 0; i < max + 1; ++i)
+    for (uint32_t i = 0; i < max + 1; ++i)
     {
         EXPECT_LT(0u, counts[i]);
     }
@@ -45,16 +45,16 @@ TEST(Random, TestUInt8)
 TEST(Random, TestUInt16)
 {
     capu::Random rand;
-    capu::uint16_t i1 = rand.nextUInt16();
-    capu::uint16_t i2 = rand.nextUInt16();
+    uint16_t i1 = rand.nextUInt16();
+    uint16_t i2 = rand.nextUInt16();
     EXPECT_TRUE(i1 != i2);
 }
 
 TEST(Random, TestUInt32)
 {
     capu::Random rand;
-    capu::uint32_t i1 = rand.nextUInt32();
-    capu::uint32_t i2 = rand.nextUInt32();
+    uint32_t i1 = rand.nextUInt32();
+    uint32_t i2 = rand.nextUInt32();
     EXPECT_TRUE(i1 != i2);
 }
 

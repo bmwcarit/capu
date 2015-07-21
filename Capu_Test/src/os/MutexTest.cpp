@@ -22,19 +22,19 @@ class ThreadLockTest : public capu::Runnable
 {
 public:
     static capu::Mutex lock;
-    static capu::int32_t variable;
+    static int32_t variable;
 
-    ThreadLockTest(capu::int32_t sleepTime)
+    ThreadLockTest(int32_t sleepTime)
     {
         mSleepTime = sleepTime;
     }
 
     void run()
     {
-        for (capu::int32_t i = 0; i < 20; i++)
+        for (int32_t i = 0; i < 20; i++)
         {
             lock.lock();
-            capu::int32_t temp = variable;
+            int32_t temp = variable;
             capu::Thread::Sleep(mSleepTime) ;
             variable = ++temp;
             lock.unlock();
@@ -42,20 +42,20 @@ public:
     }
 
 private:
-    capu::int32_t mSleepTime;
+    int32_t mSleepTime;
 };
 class ThreadNoLockTest : public capu::Runnable
 {
 public:
-    static capu::int32_t variable2;
+    static int32_t variable2;
     static capu::Mutex lock2;
 
     void operator()(void* param)
     {
-        for (capu::int32_t i = 0; i < 100; i++)
+        for (int32_t i = 0; i < 100; i++)
         {
-            capu::int32_t* sleepTime = (capu::int32_t*) param;
-            capu::int32_t temp = variable2;
+            int32_t* sleepTime = (int32_t*) param;
+            int32_t temp = variable2;
             lock2.lock();
             capu::Thread::Sleep(*sleepTime) ;
             variable2 = ++temp;
@@ -65,8 +65,8 @@ public:
 };
 capu::Mutex ThreadLockTest::lock;
 capu::Mutex ThreadNoLockTest::lock2;
-capu::int32_t ThreadLockTest::variable = 0;
-capu::int32_t ThreadNoLockTest::variable2 = 0;
+int32_t ThreadLockTest::variable = 0;
+int32_t ThreadNoLockTest::variable2 = 0;
 
 TEST(Mutex, ConstructorTest)
 {

@@ -31,20 +31,20 @@ namespace capu
         {
         protected:
             time_t mTime;
-            static const capu::int32_t START_DAY = 0;
-            static const capu::int32_t LENGTH_DAY = 3;
-            static const capu::int32_t START_MONTH = 4;
-            static const capu::int32_t LENGTH_MONTH = 3;
-            static const capu::int32_t START_DATE = 8;
-            static const capu::int32_t LENGTH_DATE = 2;
-            static const capu::int32_t START_HOUR = 11;
-            static const capu::int32_t LENGTH_HOUR = 2;
-            static const capu::int32_t START_MINUTE = 14;
-            static const capu::int32_t LENGTH_MINUTE = 2;
-            static const capu::int32_t START_SECONDS = 17;
-            static const capu::int32_t LENGTH_SECONDS = 2;
-            static const capu::int32_t START_YEAR = 20;
-            static const capu::int32_t LENGTH_YEAR = 4;
+            static const int32_t START_DAY = 0;
+            static const int32_t LENGTH_DAY = 3;
+            static const int32_t START_MONTH = 4;
+            static const int32_t LENGTH_MONTH = 3;
+            static const int32_t START_DATE = 8;
+            static const int32_t LENGTH_DATE = 2;
+            static const int32_t START_HOUR = 11;
+            static const int32_t LENGTH_HOUR = 2;
+            static const int32_t START_MINUTE = 14;
+            static const int32_t LENGTH_MINUTE = 2;
+            static const int32_t START_SECONDS = 17;
+            static const int32_t LENGTH_SECONDS = 2;
+            static const int32_t START_YEAR = 20;
+            static const int32_t LENGTH_YEAR = 4;
         public:
 
             /**

@@ -22,7 +22,7 @@
 class TestVisitor : public capu::IFileVisitor
 {
 public:
-    capu::uint32_t mCallCount;
+    uint32_t mCallCount;
     bool mStepIntoDirectory;
     capu::status_t mReturnValue;
 

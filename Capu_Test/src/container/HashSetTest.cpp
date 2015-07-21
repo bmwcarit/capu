@@ -21,18 +21,18 @@
 
 TEST(HashSet, Constructor_Default)
 {
-    capu::HashSet<capu::int32_t>* list = new capu::HashSet<capu::int32_t > ();
+    capu::HashSet<int32_t>* list = new capu::HashSet<int32_t > ();
     delete list;
 }
 
 TEST(HashSet, copyConstructor)
 {
-    capu::HashSet<capu::int32_t> list;
+    capu::HashSet<int32_t> list;
     list.put(1);
     list.put(2);
     list.put(3);
 
-    capu::HashSet<capu::int32_t> list2 = list; // copy
+    capu::HashSet<int32_t> list2 = list; // copy
 
     list.clear();
 
@@ -43,10 +43,10 @@ TEST(HashSet, copyConstructor)
 
 TEST(HashSet, put)
 {
-    capu::int32_t value2 = 10;
-    capu::int32_t value = 5;
+    int32_t value2 = 10;
+    int32_t value = 5;
 
-    capu::HashSet<capu::int32_t>* h1 = new capu::HashSet<capu::int32_t > ();
+    capu::HashSet<int32_t>* h1 = new capu::HashSet<int32_t > ();
 
     // add new key
     EXPECT_EQ(capu::CAPU_OK,  h1->put(value));
@@ -62,9 +62,9 @@ TEST(HashSet, put)
 
 TEST(HashSet, count)
 {
-    capu::int32_t value2 = 10;
-    capu::int32_t value = 5;
-    capu::HashSet<capu::int32_t>* h1 = new capu::HashSet<capu::int32_t > ();
+    int32_t value2 = 10;
+    int32_t value = 5;
+    capu::HashSet<int32_t>* h1 = new capu::HashSet<int32_t > ();
 
     //check count
     EXPECT_EQ(0u, h1->count());
@@ -86,10 +86,10 @@ TEST(HashSet, count)
 
 TEST(HashSet, clear)
 {
-    capu::int32_t value = 5;
-    capu::int32_t value2 = 6;
+    int32_t value = 5;
+    int32_t value2 = 6;
 
-    capu::HashSet<capu::int32_t>* h1 = new capu::HashSet<capu::int32_t > ();
+    capu::HashSet<int32_t>* h1 = new capu::HashSet<int32_t > ();
     // add new keys
     EXPECT_EQ(capu::CAPU_OK, h1->put(value));
 
@@ -110,10 +110,10 @@ TEST(HashSet, clear)
 
 TEST(HashSet, remove)
 {
-    capu::int32_t value = 5;
-    capu::int32_t value2 = 6;
+    int32_t value = 5;
+    int32_t value2 = 6;
 
-    capu::HashSet<capu::int32_t>* h1 = new capu::HashSet<capu::int32_t > ();
+    capu::HashSet<int32_t>* h1 = new capu::HashSet<int32_t > ();
 
     // add new keys
     EXPECT_EQ(capu::CAPU_OK, h1->put(value));
@@ -138,10 +138,10 @@ TEST(HashSet, remove)
 
 TEST(HashSet, hasElement)
 {
-    capu::int32_t value = 5;
-    capu::int32_t value2 = 6;
+    int32_t value = 5;
+    int32_t value2 = 6;
 
-    capu::HashSet<capu::int32_t>* h1 = new capu::HashSet<capu::int32_t > ();
+    capu::HashSet<int32_t>* h1 = new capu::HashSet<int32_t > ();
 
     // add new keys
     EXPECT_EQ(capu::CAPU_OK, h1->put(value));
@@ -159,13 +159,13 @@ TEST(HashSet, hasElement)
 
 TEST(HashSetIterator, hasNext)
 {
-    capu::int32_t value = 10;
-    capu::int32_t value2 = 12;
+    int32_t value = 10;
+    int32_t value2 = 12;
 
-    capu::HashSet<capu::int32_t>* h1 = new capu::HashSet<capu::int32_t > ();
+    capu::HashSet<int32_t>* h1 = new capu::HashSet<int32_t > ();
 
     //create iterator
-    capu::HashSet<capu::int32_t>::Iterator it = h1->begin();
+    capu::HashSet<int32_t>::Iterator it = h1->begin();
 
     //check hasNext
     EXPECT_EQ(it, h1->end());
@@ -184,16 +184,16 @@ TEST(HashSetIterator, hasNext)
 
 TEST(HashSetIterator, next)
 {
-    capu::int32_t value = 10;
-    capu::int32_t value2 = 12;
+    int32_t value = 10;
+    int32_t value2 = 12;
 
-    capu::HashSet<capu::int32_t>* h1 = new capu::HashSet<capu::int32_t > ();
+    capu::HashSet<int32_t>* h1 = new capu::HashSet<int32_t > ();
 
-    capu::int32_t check_value = 0;
-    capu::int32_t check_value2 = 0;
+    int32_t check_value = 0;
+    int32_t check_value2 = 0;
 
     //create iterator
-    capu::HashSet<capu::int32_t>::Iterator it = h1->begin();
+    capu::HashSet<int32_t>::Iterator it = h1->begin();
 
     //check hasNext
     EXPECT_TRUE(it == h1->end());
@@ -218,15 +218,15 @@ TEST(HashSetIterator, next)
 
 TEST(HashSetIterator, ForEach)
 {
-    capu::HashSet<capu::int32_t> hashSet;
+    capu::HashSet<int32_t> hashSet;
 
     hashSet.put(32);
     hashSet.put(43);
     hashSet.put(44);
 
-    capu::HashSet<capu::int32_t> testHashSet;
+    capu::HashSet<int32_t> testHashSet;
 
-    capu_foreach(capu::HashSet<capu::int32_t>, hashSet, iter)
+    capu_foreach(capu::HashSet<int32_t>, hashSet, iter)
     {
         testHashSet.put(*iter);
     }
@@ -239,12 +239,12 @@ TEST(HashSetIterator, ForEach)
 
 #define COUNT 500000
 
-capu::HashSet<capu::uint32_t> set;
+capu::HashSet<uint32_t> set;
 
 TEST(HashSet, performancePut)
 {
-    //capu::HashSet<capu::uint32_t> set;
-    for (capu::uint32_t i = 0; i < COUNT; i++)
+    //capu::HashSet<uint32_t> set;
+    for (uint32_t i = 0; i < COUNT; i++)
     {
         set.put(i);
     }
@@ -252,7 +252,7 @@ TEST(HashSet, performancePut)
 
 TEST(HashSet, performanceIterate)
 {
-    capu::HashSet<capu::uint32_t>::Iterator iter = set.begin();
+    capu::HashSet<uint32_t>::Iterator iter = set.begin();
     while (iter != set.end())
     {
         iter++;
@@ -261,8 +261,8 @@ TEST(HashSet, performanceIterate)
 
 TEST(HashSet, performanceConstIterate)
 {
-    const capu::HashSet<capu::uint32_t>& setConstRef = set;
-    capu::HashSet<capu::uint32_t>::ConstIterator iter = setConstRef.begin();
+    const capu::HashSet<uint32_t>& setConstRef = set;
+    capu::HashSet<uint32_t>::ConstIterator iter = setConstRef.begin();
     while (iter != setConstRef.end())
     {
         iter++;
@@ -271,8 +271,8 @@ TEST(HashSet, performanceConstIterate)
 
 TEST(HashSet, performanceRemove)
 {
-    // capu::HashSet<capu::uint32_t> set;
-    for (capu::uint32_t i = 0; i < COUNT; i++)
+    // capu::HashSet<uint32_t> set;
+    for (uint32_t i = 0; i < COUNT; i++)
     {
         set.remove(i);
     }
@@ -280,16 +280,16 @@ TEST(HashSet, performanceRemove)
 
 TEST(HashSet, iteratorPointsToNextElementAfterDeletion)
 {
-    capu::HashSet<capu::uint32_t> set;
+    capu::HashSet<uint32_t> set;
 
     set.put(1);
     set.put(2);
     set.put(3);
 
     // point to middle element
-    capu::HashSet<capu::uint32_t>::Iterator i1 = set.begin();
-    capu::HashSet<capu::uint32_t>::Iterator i2 = set.begin(); ++i2;
-    capu::HashSet<capu::uint32_t>::Iterator i3 = set.begin(); ++i3; ++i3;
+    capu::HashSet<uint32_t>::Iterator i1 = set.begin();
+    capu::HashSet<uint32_t>::Iterator i2 = set.begin(); ++i2;
+    capu::HashSet<uint32_t>::Iterator i3 = set.begin(); ++i3; ++i3;
 
     // all iterators point to different elements
     // no assumption which value each iterator points to, because no order is defined
@@ -308,13 +308,13 @@ TEST(HashSet, iteratorPointsToNextElementAfterDeletion)
 
 TEST(HashSet, canRemoveElementsDuringCycle)
 {
-    capu::HashSet<capu::uint32_t> set;
+    capu::HashSet<uint32_t> set;
 
     set.put(1);
     set.put(2);
     set.put(3);
 
-    capu::HashSet<capu::uint32_t>::Iterator iter = set.begin();
+    capu::HashSet<uint32_t>::Iterator iter = set.begin();
     while (iter != set.end())
     {
         set.removeAt(iter);

@@ -33,8 +33,8 @@ TEST(Semaphore, singleThreadTest)
 TEST(Semaphore, timeoutTest)
 {
     capu::Semaphore sem;
-    capu::uint64_t start = capu::Time::GetMilliseconds();
+    uint64_t start = capu::Time::GetMilliseconds();
     EXPECT_EQ(capu::CAPU_ETIMEOUT, sem.tryAquire(100));
-    capu::uint64_t dur = capu::Time::GetMilliseconds() - start;
+    uint64_t dur = capu::Time::GetMilliseconds() - start;
     EXPECT_GE(dur, 50u);
 }

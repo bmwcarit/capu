@@ -69,21 +69,21 @@ TEST(Memory, move)
 
 TEST(Memory, copyObjectWithPrimitiveType)
 {
-    capu::uint32_t vals[42];
+    uint32_t vals[42];
     vals[5] = 10;
-    capu::uint32_t othervals[42];
+    uint32_t othervals[42];
 
     capu::Memory::CopyObject(othervals, vals, 42);
-    EXPECT_EQ(static_cast<capu::uint32_t>(10), othervals[5]);
+    EXPECT_EQ(static_cast<uint32_t>(10), othervals[5]);
 
     capu::Memory::CopyObject(othervals, vals, 0);
-    EXPECT_EQ(static_cast<capu::uint32_t>(10), othervals[5]);
+    EXPECT_EQ(static_cast<uint32_t>(10), othervals[5]);
 }
 
 class SomeTestClass
 {
 public:
-    capu::uint32_t i;
+    uint32_t i;
     bool assignmentOperatorCalled;
 
     SomeTestClass()
@@ -118,14 +118,14 @@ TEST(Memory, copyObjectWithClassType)
     }
 
     capu::Memory::CopyObject(othervals, vals, 100);
-    EXPECT_EQ(static_cast<capu::uint32_t>(10), othervals[5].i); // test that assignment operator was called
+    EXPECT_EQ(static_cast<uint32_t>(10), othervals[5].i); // test that assignment operator was called
     for (int i = 0; i < 100; i++)
     {
         EXPECT_TRUE(othervals[i].assignmentOperatorCalled);
     }
 
     capu::Memory::CopyObject(othervals, vals, 0);
-    EXPECT_EQ(static_cast<capu::uint32_t>(10), othervals[5].i); // test that assignment operator was called
+    EXPECT_EQ(static_cast<uint32_t>(10), othervals[5].i); // test that assignment operator was called
     for (int i = 0; i < 100; i++)
     {
         EXPECT_TRUE(othervals[i].assignmentOperatorCalled);
@@ -151,20 +151,20 @@ TEST(Memory, copyWithStrings)
 TEST(Memory, moveOjectWithClassTypeNoOverlap)
 {
     SomeTestClass vals[10];
-    for (capu::uint32_t i = 0; i < 10; ++i)
+    for (uint32_t i = 0; i < 10; ++i)
     {
         vals[i].i = i;
     }
 
     capu::Memory::MoveObject(&vals[5], &vals[0], 3);
-    for (capu::uint32_t i = 5; i < 5 + 3; ++i)
+    for (uint32_t i = 5; i < 5 + 3; ++i)
     {
         EXPECT_EQ(i - 5, vals[i].i);
         EXPECT_TRUE(vals[i].assignmentOperatorCalled);
     }
 
     capu::Memory::MoveObject(&vals[5], &vals[0], 0);
-    for (capu::uint32_t i = 5; i < 5 + 3; ++i)
+    for (uint32_t i = 5; i < 5 + 3; ++i)
     {
         EXPECT_EQ(i - 5, vals[i].i);
         EXPECT_TRUE(vals[i].assignmentOperatorCalled);
@@ -174,20 +174,20 @@ TEST(Memory, moveOjectWithClassTypeNoOverlap)
 TEST(Memory, moveOjectWithClassTypeOverlapForward)
 {
     SomeTestClass vals[10];
-    for (capu::uint32_t i = 0; i < 10; ++i)
+    for (uint32_t i = 0; i < 10; ++i)
     {
         vals[i].i = i;
     }
 
     capu::Memory::MoveObject(&vals[3], &vals[0], 6);
-    for (capu::uint32_t i = 3; i < 3 + 6; ++i)
+    for (uint32_t i = 3; i < 3 + 6; ++i)
     {
         EXPECT_EQ(i - 3, vals[i].i);
         EXPECT_TRUE(vals[i].assignmentOperatorCalled);
     }
 
     capu::Memory::MoveObject(&vals[3], &vals[0], 0);
-    for (capu::uint32_t i = 3; i < 3 + 6; ++i)
+    for (uint32_t i = 3; i < 3 + 6; ++i)
     {
         EXPECT_EQ(i - 3, vals[i].i);
         EXPECT_TRUE(vals[i].assignmentOperatorCalled);
@@ -197,20 +197,20 @@ TEST(Memory, moveOjectWithClassTypeOverlapForward)
 TEST(Memory, moveOjectWithClassTypeOverlapBackward)
 {
     SomeTestClass vals[10];
-    for (capu::uint32_t i = 0; i < 10; ++i)
+    for (uint32_t i = 0; i < 10; ++i)
     {
         vals[i].i = i;
     }
 
     capu::Memory::MoveObject(&vals[0], &vals[3], 6);
-    for (capu::uint32_t i = 0; i < 6; ++i)
+    for (uint32_t i = 0; i < 6; ++i)
     {
         EXPECT_EQ(i + 3, vals[i].i);
         EXPECT_TRUE(vals[i].assignmentOperatorCalled);
     }
 
     capu::Memory::MoveObject(&vals[0], &vals[3], 0);
-    for (capu::uint32_t i = 0; i < 6; ++i)
+    for (uint32_t i = 0; i < 6; ++i)
     {
         EXPECT_EQ(i + 3, vals[i].i);
         EXPECT_TRUE(vals[i].assignmentOperatorCalled);

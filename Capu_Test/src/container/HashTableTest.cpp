@@ -32,14 +32,14 @@ void HashTableTest::TearDown()
 
 TEST_F(HashTableTest, TestWithEnum)
 {
-    capu::HashTable<SomeEnumeration, capu::int32_t> map;
+    capu::HashTable<SomeEnumeration, int32_t> map;
     map.put(TEST_VALUE1, 3);
     EXPECT_EQ(3, map.at(TEST_VALUE1));
 }
 
 TEST_F(HashTableTest, TestWithString)
 {
-    capu::HashTable<capu::String, capu::int32_t> map;
+    capu::HashTable<capu::String, int32_t> map;
 
     map.put("testFloat", 3);
     map.put("testFloat4", 4);
@@ -49,7 +49,7 @@ TEST_F(HashTableTest, TestWithString)
 
     // Test clear
     map.clear();
-    EXPECT_EQ(static_cast<capu::uint32_t>(0), map.count());
+    EXPECT_EQ(static_cast<uint32_t>(0), map.count());
 }
 
 TEST_F(HashTableTest, TestCopyConstructor)
@@ -85,14 +85,14 @@ TEST_F(HashTableTest, TestCopyConstructor)
 
     // Test clear
     map1.clear();
-    EXPECT_EQ(static_cast<capu::uint32_t>(0), map1.count());
+    EXPECT_EQ(static_cast<uint32_t>(0), map1.count());
     EXPECT_TRUE(newmap.contains(20));
 }
 
 class SomeClass
 {
 public:
-    capu::uint32_t i;
+    uint32_t i;
     SomeClass()
     {
         i = 0;
@@ -114,13 +114,13 @@ public:
 
 TEST_F(HashTableTest, AssignmentOperator)
 {
-    capu::HashTable<capu::uint32_t, capu::uint32_t> table;
+    capu::HashTable<uint32_t, uint32_t> table;
 
     table.put(1, 2);
     table.put(3, 4);
     table.put(5, 6);
 
-    capu::HashTable<capu::uint32_t, capu::uint32_t> table2;
+    capu::HashTable<uint32_t, uint32_t> table2;
 
     table2 = table;
 
@@ -132,13 +132,13 @@ TEST_F(HashTableTest, AssignmentOperator)
 
 TEST_F(HashTableTest, AssignmentOperatorDoesNothingOnWrongSizedMap)
 {
-    capu::HashTable<capu::uint32_t, capu::uint32_t> table(5, true);
+    capu::HashTable<uint32_t, uint32_t> table(5, true);
 
     table.put(1, 2);
     table.put(3, 4);
     table.put(5, 6);
 
-    capu::HashTable<capu::uint32_t, capu::uint32_t> table2(4, false); // not resizable
+    capu::HashTable<uint32_t, uint32_t> table2(4, false); // not resizable
 
     table2 = table;
 
@@ -147,13 +147,13 @@ TEST_F(HashTableTest, AssignmentOperatorDoesNothingOnWrongSizedMap)
 
 TEST_F(HashTableTest, AssignmentOperatorWorksOnCorrectSizedMap)
 {
-    capu::HashTable<capu::uint32_t, capu::uint32_t> table(4, true);
+    capu::HashTable<uint32_t, uint32_t> table(4, true);
 
     table.put(1, 2);
     table.put(3, 4);
     table.put(5, 6);
 
-    capu::HashTable<capu::uint32_t, capu::uint32_t> table2(4, false); // not resizable
+    capu::HashTable<uint32_t, uint32_t> table2(4, false); // not resizable
 
     table2 = table;
 
@@ -162,7 +162,7 @@ TEST_F(HashTableTest, AssignmentOperatorWorksOnCorrectSizedMap)
 
 TEST_F(HashTableTest, TestMapRehashWithObjects)
 {
-    capu::HashTable<SomeClass, capu::uint32_t> table(2);
+    capu::HashTable<SomeClass, uint32_t> table(2);
     SomeClass c1(1);
     SomeClass c2(2);
     SomeClass c3(3);
@@ -179,7 +179,7 @@ TEST_F(HashTableTest, TestMapRehashWithObjects)
 
 TEST_F(HashTableTest, TestMapRehashWithStrings)
 {
-    capu::HashTable<capu::String, capu::uint32_t> table(2);
+    capu::HashTable<capu::String, uint32_t> table(2);
     capu::String s1 = "s1";
     capu::String s2 = "s2";
     capu::String s3 = "s3";
@@ -204,10 +204,10 @@ TEST_F(HashTableTest, TestClear)
     newmap.put(3, 30);
 
     newmap.clear();
-    EXPECT_EQ(static_cast<capu::uint32_t>(0), newmap.count());
+    EXPECT_EQ(static_cast<uint32_t>(0), newmap.count());
 
     capu::status_t ret = 0;
-    capu::int32_t value = newmap.at(1, &ret);
+    int32_t value = newmap.at(1, &ret);
     EXPECT_EQ(capu::CAPU_ENOT_EXIST, ret);
     EXPECT_EQ(0, value);
 
@@ -227,7 +227,7 @@ TEST_F(HashTableTest, TestClear)
 
 TEST_F(HashTableTest, TestClear2)
 {
-    capu::HashTable<capu::int32_t, capu::int32_t> table;
+    capu::HashTable<int32_t, int32_t> table;
 
     table.put(1, 1);
     table.put(2, 2);
@@ -294,8 +294,8 @@ TEST_F(HashTableTest, IteratorRemove)
     newmap.put(2, 11);
 
     Int32HashMap::Iterator iter2 = newmap.begin();
-    capu::int32_t expectedValue = iter2->value;
-    capu::int32_t oldValue = 0;
+    int32_t expectedValue = iter2->value;
+    int32_t oldValue = 0;
     newmap.remove(iter2, &oldValue);
     EXPECT_EQ(expectedValue, oldValue);
 
@@ -315,12 +315,12 @@ TEST_F(HashTableTest, find)
     EXPECT_EQ(5, (*newmap.find(1)).value);
 }
 
-typedef capu::HashTable<capu::int32_t, SomeClass> SomeHashMap;
+typedef capu::HashTable<int32_t, SomeClass> SomeHashMap;
 TEST_F(HashTableTest, operator_subscript_read)
 {
     Int32HashMap newmap;
     newmap.put(1, 5);
-    capu::int32_t val = newmap[1];
+    int32_t val = newmap[1];
     EXPECT_EQ(5, val);
 
     // non trivial object
@@ -351,9 +351,9 @@ TEST_F(HashTableTest, operator_subscript_assign)
 {
     /* native types */
     Int32HashMap newmap;
-    capu::int32_t val_in = 5;
+    int32_t val_in = 5;
     newmap[1] = val_in;
-    capu::int32_t val_out = newmap[1];
+    int32_t val_out = newmap[1];
     EXPECT_EQ(val_in, val_out);
 
     val_in = 10;
@@ -378,7 +378,7 @@ TEST_F(HashTableTest, operator_subscript_assign)
 
 TEST_F(HashTableTest, TestAddGet2)
 {
-    capu::HashTable<capu::int32_t, capu::int32_t> map;
+    capu::HashTable<int32_t, int32_t> map;
     map.put(3, 3);
     EXPECT_FALSE(map.contains(19));
 }
@@ -482,7 +482,7 @@ TEST_F(HashTableTest, TestRemove)
 
     EXPECT_EQ(0, newmap.at(2));
 
-    capu::int32_t value;
+    int32_t value;
     removeResult = newmap.remove(3, &value);
     EXPECT_EQ(capu::CAPU_OK, removeResult);
     EXPECT_EQ(1u, newmap.count());
@@ -526,7 +526,7 @@ TEST_F(HashTableTest, TestIterator2)
     newmap.put(3, 30);
 
     Int32HashMap::Iterator it = newmap.begin();
-    capu::Pair<capu::int32_t, capu::int32_t> pair;
+    capu::Pair<int32_t, int32_t> pair;
 
     EXPECT_NE(it, newmap.end());
 
@@ -583,7 +583,7 @@ TEST_F(HashTableTest, TestConstIterator2)
     newmap.put(3, 30);
 
     Int32HashMap::ConstIterator it = newmapConstRef.begin();
-    capu::Pair<capu::int32_t, capu::int32_t> pair;
+    capu::Pair<int32_t, int32_t> pair;
 
     EXPECT_NE(it, newmapConstRef.end());
 
@@ -605,9 +605,9 @@ TEST_F(HashTableTest, TestConstIterator2)
 
 TEST_F(HashTableTest, IteratorPrimitiveKeyComplexValue)
 {
-    capu::List<capu::int32_t> mylist;
+    capu::List<int32_t> mylist;
     mylist.push_back(3);
-    capu::List<capu::int32_t>::Iterator iter = mylist.begin();
+    capu::List<int32_t>::Iterator iter = mylist.begin();
 
     (*iter) = 5;
 
@@ -615,11 +615,11 @@ TEST_F(HashTableTest, IteratorPrimitiveKeyComplexValue)
     testStruct.a =  1;
     testStruct.b = -1;
 
-    capu::HashTable<capu::uint32_t, MyStruct> hashTable;
+    capu::HashTable<uint32_t, MyStruct> hashTable;
 
     hashTable.put(0, testStruct);
 
-    capu::HashTable<capu::uint32_t, MyStruct>::Iterator hashTableIter = hashTable.begin();
+    capu::HashTable<uint32_t, MyStruct>::Iterator hashTableIter = hashTable.begin();
 
     EXPECT_EQ(0u, hashTableIter->key);
     EXPECT_EQ(1u, hashTableIter->value.a);
@@ -645,11 +645,11 @@ TEST_F(HashTableTest, IteratorPrimitiveKeyComplexPtrValue)
     testStruct.a =  1;
     testStruct.b = -1;
 
-    capu::HashTable<capu::uint32_t, MyStruct*> hashTable;
+    capu::HashTable<uint32_t, MyStruct*> hashTable;
 
     hashTable.put(0, &testStruct);
 
-    capu::HashTable<capu::uint32_t, MyStruct*>::Iterator hashTableIter = hashTable.begin();
+    capu::HashTable<uint32_t, MyStruct*>::Iterator hashTableIter = hashTable.begin();
 
     EXPECT_EQ(&testStruct, hashTableIter->value);
     EXPECT_EQ(0u, hashTableIter->key);
@@ -676,11 +676,11 @@ TEST_F(HashTableTest, IteratorMethodCall)
     testStruct.a =  1;
     testStruct.b = -1;
 
-    capu::HashTable<capu::uint32_t, MyStruct> hashTable;
+    capu::HashTable<uint32_t, MyStruct> hashTable;
 
     hashTable.put(0, testStruct);
 
-    capu::HashTable<capu::uint32_t, MyStruct>::Iterator hashTableIter = hashTable.begin();
+    capu::HashTable<uint32_t, MyStruct>::Iterator hashTableIter = hashTable.begin();
 
     EXPECT_EQ(1u, hashTableIter->value.getA());
     EXPECT_EQ(1u, (*hashTableIter).value.getA());
@@ -695,7 +695,7 @@ TEST_F(HashTableTest, TestRehasing)
     newmap.put(3, 30);
     capu::status_t returnCode = newmap.put(4, 40); // rehashing will occur
     EXPECT_EQ(capu::CAPU_OK, returnCode);
-    EXPECT_EQ(static_cast<capu::uint32_t>(4), newmap.count());
+    EXPECT_EQ(static_cast<uint32_t>(4), newmap.count());
 
     EXPECT_EQ(10, newmap.at(1));
     EXPECT_EQ(20, newmap.at(2));
@@ -712,12 +712,12 @@ TEST_F(HashTableTest, TestForbidRehashing)
     newmap.put(3, 30);
     capu::status_t returnCode = newmap.put(4, 40); // rehashing is forbidden
     EXPECT_EQ(capu::CAPU_ENO_MEMORY, returnCode);
-    EXPECT_EQ(static_cast<capu::uint32_t>(3), newmap.count());
+    EXPECT_EQ(static_cast<uint32_t>(3), newmap.count());
 
     newmap.remove(3);
     returnCode = newmap.put(4, 40);
     EXPECT_EQ(capu::CAPU_OK, returnCode);
-    EXPECT_EQ(static_cast<capu::uint32_t>(3), newmap.count());
+    EXPECT_EQ(static_cast<uint32_t>(3), newmap.count());
 }
 
 TEST_F(HashTableTest, TestWildRemoving)
@@ -748,7 +748,7 @@ TEST_F(HashTableTest, TestWildRemoving)
     }
 
     newmap.put(2000, 2000); // TODO how to check that everything worked?
-    EXPECT_EQ(static_cast<capu::uint32_t>(1001), newmap.count());
+    EXPECT_EQ(static_cast<uint32_t>(1001), newmap.count());
 }
 
 TEST_F(HashTableTest, ForEach)

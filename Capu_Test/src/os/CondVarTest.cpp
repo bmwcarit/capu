@@ -21,25 +21,25 @@
 class GlobalVariables
 {
 public:
-    static capu::int32_t loops;
-    static capu::int32_t buffer;
+    static int32_t loops;
+    static int32_t buffer;
     static capu::CondVar cv;
     static capu::CondVar pv;
     static capu::Mutex mutex;
 };
 
-capu::int32_t GlobalVariables::loops = 10000;
+int32_t GlobalVariables::loops = 10000;
 capu::CondVar GlobalVariables::cv;
 capu::CondVar GlobalVariables::pv;
 capu::Mutex GlobalVariables::mutex;
-capu::int32_t GlobalVariables::buffer = 0;
+int32_t GlobalVariables::buffer = 0;
 
 class ThreadCondVarConsumer : public capu::Runnable
 {
 public:
     void run()
     {
-        for (capu::int32_t i = 0; i < GlobalVariables::loops; i++)
+        for (int32_t i = 0; i < GlobalVariables::loops; i++)
         {
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::mutex.lock());
             while (GlobalVariables::buffer == 0)
@@ -58,7 +58,7 @@ class ThreadCondVarProducerBroadcast : public capu::Runnable
 public:
     void run()
     {
-        for (capu::int32_t i = 0; i < GlobalVariables::loops * 1; i++)
+        for (int32_t i = 0; i < GlobalVariables::loops * 1; i++)
         {
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::mutex.lock());
             while (GlobalVariables::buffer == 100)
@@ -77,7 +77,7 @@ class ThreadCondVarProducerSignal : public capu::Runnable
 public:
     void run()
     {
-        for (capu::int32_t i = 0; i < GlobalVariables::loops; i++)
+        for (int32_t i = 0; i < GlobalVariables::loops; i++)
         {
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::mutex.lock());
             while (GlobalVariables::buffer == 100)

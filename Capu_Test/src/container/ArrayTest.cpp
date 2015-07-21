@@ -31,7 +31,7 @@ public:
         mValuePtr = &mValue;
     }
 
-    ComplexCopyable(capu::int32_t value)
+    ComplexCopyable(int32_t value)
         : mValue(value)
     {
         mValuePtr = &mValue;
@@ -50,47 +50,47 @@ public:
         return *this;
     }
 
-    capu::int32_t getValue()
+    int32_t getValue()
     {
         return mValue;
     }
 
-    capu::int32_t getValueByPtr()
+    int32_t getValueByPtr()
     {
         return *mValuePtr;
     }
 
 private:
-    capu::int32_t mValue;
-    capu::int32_t* mValuePtr;
+    int32_t mValue;
+    int32_t* mValuePtr;
 };
 
-void testSet(capu::Array<capu::uint32_t>& array,
-             capu::uint32_t initialValue,
-             capu::uint32_t valueToSet,
-             capu::uint32_t offset,
-             capu::uint32_t count)
+void testSet(capu::Array<uint32_t>& array,
+             uint32_t initialValue,
+             uint32_t valueToSet,
+             uint32_t offset,
+             uint32_t count)
 {
 
     array.set(initialValue);
 
-    for (capu::uint32_t i = 0; i < array.size(); i++)
+    for (uint32_t i = 0; i < array.size(); i++)
     {
         EXPECT_EQ(initialValue, array[i]);
     }
 
     EXPECT_EQ(capu::CAPU_OK, array.set(valueToSet, offset, count));
 
-    for (capu::uint32_t i = 0; i < array.size(); ++i)
+    for (uint32_t i = 0; i < array.size(); ++i)
     {
-        capu::uint32_t expected = i < offset || i >= offset + count ? initialValue : valueToSet;
+        uint32_t expected = i < offset || i >= offset + count ? initialValue : valueToSet;
         EXPECT_EQ(expected, array[i]);
     }
 }
 
 TEST(Array, SetPerformance)
 {
-    capu::Array<capu::uint32_t> array(10000);
+    capu::Array<uint32_t> array(10000);
 
     for (int i = 0; i < 10000; ++i)
     {
@@ -101,11 +101,11 @@ TEST(Array, SetPerformance)
 
 TEST(Array, Constructor)
 {
-    capu::Array<capu::uint32_t> emptyArray;
+    capu::Array<uint32_t> emptyArray;
     EXPECT_EQ(0u, emptyArray.size());
 
-    capu::Array<capu::uint32_t>* myArray = NULL;
-    myArray = new capu::Array<capu::uint32_t>(10);
+    capu::Array<uint32_t>* myArray = NULL;
+    myArray = new capu::Array<uint32_t>(10);
     EXPECT_TRUE(myArray != NULL);
     EXPECT_EQ(10u, myArray->size());
     delete myArray;
@@ -113,15 +113,15 @@ TEST(Array, Constructor)
 
 TEST(Array, ConstructorFromArray)
 {
-    capu::uint8_t nativeArray[8];
-    capu::Array<capu::uint8_t> constructedFromNativeArray(nativeArray, 8);
+    uint8_t nativeArray[8];
+    capu::Array<uint8_t> constructedFromNativeArray(nativeArray, 8);
 }
 
 TEST(Array, SetAndGetValues)
 {
-    capu::Array<capu::uint32_t> myArray(10);
+    capu::Array<uint32_t> myArray(10);
     myArray.set(5);
-    for (capu::int32_t i = 0; i < 10; i++)
+    for (int32_t i = 0; i < 10; i++)
     {
         EXPECT_EQ(5u, myArray[i]);
     }
@@ -141,9 +141,9 @@ TEST(Array, SetAndGetValues)
     EXPECT_EQ(4u, myArray[5]);
     EXPECT_EQ(4u, myArray[6]);
 
-    capu::Array<capu::uint32_t> myArray2(20);
+    capu::Array<uint32_t> myArray2(20);
     myArray2.set(5);
-    for (capu::int32_t i = 0; i < 20; i++)
+    for (int32_t i = 0; i < 20; i++)
     {
         EXPECT_EQ(5u, myArray2[i]);
     }
@@ -201,12 +201,12 @@ TEST(Array, SetAndGetValues)
 
 TEST(Array, Swap)
 {
-    capu::Array<capu::uint32_t> myArray1(3);
+    capu::Array<uint32_t> myArray1(3);
     myArray1[0] = 1;
     myArray1[1] = 2;
     myArray1[2] = 3;
 
-    capu::Array<capu::uint32_t> myArray2(5);
+    capu::Array<uint32_t> myArray2(5);
     myArray2[0] = 5;
     myArray2[1] = 4;
     myArray2[2] = 3;
@@ -230,8 +230,8 @@ TEST(Array, Swap)
     EXPECT_EQ(3u, myArray2[2]);
 
     // test swapping between heap and stack arrays
-    capu::Array<capu::uint32_t> myArrayStack;
-    capu::Array<capu::uint32_t> *myArrayHeap = new capu::Array<capu::uint32_t>();
+    capu::Array<uint32_t> myArrayStack;
+    capu::Array<uint32_t> *myArrayHeap = new capu::Array<uint32_t>();
 
     capu::swap(myArrayStack, *myArrayHeap);
     EXPECT_EQ(0u, myArrayHeap->size());
@@ -244,7 +244,7 @@ TEST(Array, Swap)
 
 TEST(Array, Move)
 {
-    capu::Array<capu::uint32_t> myArray(10);
+    capu::Array<uint32_t> myArray(10);
     myArray.set(5);
 
     myArray[0] = 10;
@@ -264,11 +264,11 @@ TEST(Array, Move)
     // complex type
 
     capu::Array<ComplexCopyable> complexArray(10);
-    for (capu::int32_t i = 0; i < 10; ++i)
+    for (int32_t i = 0; i < 10; ++i)
     {
         complexArray[i] = i;
     }
-    for (capu::int32_t i = 0; i < 10; ++i)
+    for (int32_t i = 0; i < 10; ++i)
     {
         ComplexCopyable& tmp = complexArray[i];
         EXPECT_EQ(i, tmp.getValue());
@@ -277,7 +277,7 @@ TEST(Array, Move)
 
     // move with overlap
     EXPECT_EQ(capu::CAPU_OK, complexArray.move(0, 7, 3));
-    for (capu::int32_t i = 3; i < 10; ++i)
+    for (int32_t i = 3; i < 10; ++i)
     {
         ComplexCopyable& tmp = complexArray[i];
         EXPECT_EQ(i - 3, tmp.getValue());
@@ -289,10 +289,10 @@ TEST(Array, Move)
 TEST(Array, CopyConstructor)
 {
 
-    capu::Array<capu::uint32_t> myArray(10);
+    capu::Array<uint32_t> myArray(10);
     myArray.set(5);
 
-    capu::Array<capu::uint32_t> myArray2(myArray);
+    capu::Array<uint32_t> myArray2(myArray);
 
     EXPECT_EQ(5u, myArray2[0]);
     EXPECT_EQ(5u, myArray2[4]);
@@ -301,9 +301,9 @@ TEST(Array, CopyConstructor)
 
 TEST(Array, Assignment)
 {
-    capu::Array<capu::uint32_t> myEmptyArray;
+    capu::Array<uint32_t> myEmptyArray;
 
-    capu::Array<capu::uint32_t> myArray(10);
+    capu::Array<uint32_t> myArray(10);
     myArray.set(5);
 
     myEmptyArray = myArray;
@@ -312,15 +312,15 @@ TEST(Array, Assignment)
     EXPECT_EQ(5u, myEmptyArray[4]);
     EXPECT_EQ(5u, myEmptyArray[9]);
 
-    capu::Array<capu::uint32_t> myArray2(10);
+    capu::Array<uint32_t> myArray2(10);
     myArray2 = myArray;
 
     EXPECT_EQ(5u, myArray2[0]);
     EXPECT_EQ(5u, myArray2[4]);
     EXPECT_EQ(5u, myArray2[9]);
 
-    capu::Array<capu::uint32_t> myArray3(10);
-    capu::Array<capu::uint32_t> myArray4(20);
+    capu::Array<uint32_t> myArray3(10);
+    capu::Array<uint32_t> myArray4(20);
     myArray3.set(1);
     myArray4.set(2);
 
@@ -336,11 +336,11 @@ TEST(Array, Assignment)
     EXPECT_EQ(0u, complexArrayAssigned.size());
     {
         capu::Array<ComplexCopyable> complexArrayFirst(10);
-        for (capu::int32_t i = 0; i < 10; ++i)
+        for (int32_t i = 0; i < 10; ++i)
         {
             complexArrayFirst[i] = i;
         }
-        for (capu::int32_t i = 0; i < 10; ++i)
+        for (int32_t i = 0; i < 10; ++i)
         {
             ComplexCopyable& tmp = complexArrayFirst[i];
             EXPECT_EQ(i, tmp.getValue());
@@ -350,7 +350,7 @@ TEST(Array, Assignment)
         // now assign and check contents
         complexArrayAssigned = complexArrayFirst;
         EXPECT_EQ(10u, complexArrayAssigned.size());
-        for (capu::int32_t i = 0; i < 10; ++i)
+        for (int32_t i = 0; i < 10; ++i)
         {
             ComplexCopyable& tmp = complexArrayAssigned[i];
             EXPECT_EQ(i, tmp.getValue());
@@ -358,13 +358,13 @@ TEST(Array, Assignment)
         }
 
         // now change original array
-        for (capu::int32_t i = 0; i < 10; ++i)
+        for (int32_t i = 0; i < 10; ++i)
         {
             complexArrayFirst[i] = i + 10;
         }
 
         // check assigned array again
-        for (capu::int32_t i = 0; i < 10; ++i)
+        for (int32_t i = 0; i < 10; ++i)
         {
             ComplexCopyable& tmp = complexArrayAssigned[i];
             EXPECT_EQ(i, tmp.getValue());
@@ -374,7 +374,7 @@ TEST(Array, Assignment)
     }
 
     // check assigned array again
-    for (capu::int32_t i = 0; i < 10; ++i)
+    for (int32_t i = 0; i < 10; ++i)
     {
         ComplexCopyable& tmp = complexArrayAssigned[i];
         EXPECT_EQ(i, tmp.getValue());
@@ -382,16 +382,16 @@ TEST(Array, Assignment)
     }
 
     // copy empty array into empty array
-    capu::Array<capu::uint32_t> myEmptyArray2;
-    capu::Array<capu::uint32_t> myEmptyArray3;
+    capu::Array<uint32_t> myEmptyArray2;
+    capu::Array<uint32_t> myEmptyArray3;
 
     myEmptyArray2 = myEmptyArray3;
 
     // one array on stack, one on heap
-    capu::Array<capu::uint32_t> myEmptyArrayStack1;
-    capu::Array<capu::uint32_t> myEmptyArrayStack2;
-    capu::Array<capu::uint32_t> *myEmptyArrayHeap1 = new capu::Array<capu::uint32_t>();
-    capu::Array<capu::uint32_t> *myEmptyArrayHeap2 = new capu::Array<capu::uint32_t>();
+    capu::Array<uint32_t> myEmptyArrayStack1;
+    capu::Array<uint32_t> myEmptyArrayStack2;
+    capu::Array<uint32_t> *myEmptyArrayHeap1 = new capu::Array<uint32_t>();
+    capu::Array<uint32_t> *myEmptyArrayHeap2 = new capu::Array<uint32_t>();
 
 
     myEmptyArrayStack1 = *myEmptyArrayHeap1;
@@ -409,11 +409,11 @@ TEST(Array, Assignment)
 
 TEST(Array, CopyMethodNormal)
 {
-    capu::Array<capu::uint32_t> original(5);
-    capu::uint32_t newVals[5];
+    capu::Array<uint32_t> original(5);
+    uint32_t newVals[5];
 
     // fill with default values
-    for (capu::uint32_t i = 0; i < original.size(); i++)
+    for (uint32_t i = 0; i < original.size(); i++)
     {
         original[i] = i;
         newVals[i] = i + 1;
@@ -422,7 +422,7 @@ TEST(Array, CopyMethodNormal)
     capu::status_t status = original.copy(newVals, original.size());
     EXPECT_EQ(capu::CAPU_OK, status);
 
-    for (capu::uint32_t i = 0; i < original.size(); i++)
+    for (uint32_t i = 0; i < original.size(); i++)
     {
         EXPECT_EQ(i + 1, original[i]);
     }
@@ -430,15 +430,15 @@ TEST(Array, CopyMethodNormal)
 
 TEST(Array, CopyMethodNormalWithBiggerArray)
 {
-    capu::Array<capu::uint32_t> original(5);
-    capu::uint32_t newVals[50]; // this one's bigger
+    capu::Array<uint32_t> original(5);
+    uint32_t newVals[50]; // this one's bigger
 
     // fill with default values
-    for (capu::uint32_t i = 0; i < original.size(); i++)
+    for (uint32_t i = 0; i < original.size(); i++)
     {
         original[i] = i;
     }
-    for (capu::uint32_t i = 0; i < 50; i++)
+    for (uint32_t i = 0; i < 50; i++)
     {
         newVals[i] = i + 1;
     }
@@ -446,7 +446,7 @@ TEST(Array, CopyMethodNormalWithBiggerArray)
     capu::status_t status = original.copy(newVals, original.size()); // only copy the first 5 values
     EXPECT_EQ(capu::CAPU_OK, status);
 
-    for (capu::uint32_t i = 0; i < original.size(); i++)
+    for (uint32_t i = 0; i < original.size(); i++)
     {
         EXPECT_EQ(i + 1, original[i]);
     }
@@ -454,18 +454,18 @@ TEST(Array, CopyMethodNormalWithBiggerArray)
 
 TEST(Array, CopyMethodInvalidSize)
 {
-    capu::Array<capu::uint32_t> original(5);
-    for (capu::uint32_t i = 0; i < original.size(); i++)
+    capu::Array<uint32_t> original(5);
+    for (uint32_t i = 0; i < original.size(); i++)
     {
         original[i] = i;
     }
-    capu::uint32_t newVals[7];
+    uint32_t newVals[7];
 
     capu::status_t status = original.copy(newVals, 7); // give invalid size
     EXPECT_EQ(capu::CAPU_ERANGE, status);
 
     // no changes in original array
-    for (capu::uint32_t i = 0; i < original.size(); i++)
+    for (uint32_t i = 0; i < original.size(); i++)
     {
         EXPECT_EQ(i, original[i]);
     }
@@ -473,8 +473,8 @@ TEST(Array, CopyMethodInvalidSize)
 
 TEST(Array, CopyMethodZeroSize)
 {
-    capu::Array<capu::uint32_t> src(0);
-    capu::Array<capu::uint32_t> destination(5);
+    capu::Array<uint32_t> src(0);
+    capu::Array<uint32_t> destination(5);
 
     EXPECT_EQ(capu::CAPU_OK, destination.copy(src.getRawData(), src.size()));
 
@@ -483,8 +483,8 @@ TEST(Array, CopyMethodZeroSize)
 
 TEST(Array, CopyMethodZeroSizeNormal)
 {
-    capu::Array<capu::uint32_t> original(0);
-    capu::uint32_t newVals[1];
+    capu::Array<uint32_t> original(0);
+    uint32_t newVals[1];
 
     capu::status_t status = original.copy(newVals, original.size()); // copy with zero, no error expected
     EXPECT_EQ(capu::CAPU_OK, status);
@@ -492,8 +492,8 @@ TEST(Array, CopyMethodZeroSizeNormal)
 
 TEST(Array, CopyMethodZeroSizeInvalidSize)
 {
-    capu::Array<capu::uint32_t> original(0);
-    capu::uint32_t newVals[1];
+    capu::Array<uint32_t> original(0);
+    uint32_t newVals[1];
 
     capu::status_t status = original.copy(newVals, 1);
     EXPECT_EQ(capu::CAPU_ERANGE, status);
@@ -501,7 +501,7 @@ TEST(Array, CopyMethodZeroSizeInvalidSize)
 
 TEST(Array, SetRawData)
 {
-    capu::Array<capu::uint32_t> array(3u);
+    capu::Array<uint32_t> array(3u);
 
     array.setRawData(0);
 
@@ -512,16 +512,16 @@ TEST(Array, SetRawData)
 
 TEST(Array, CompareEmptyArrays)
 {
-    capu::Array<capu::uint32_t> array1;
-    capu::Array<capu::uint32_t> array2;
+    capu::Array<uint32_t> array1;
+    capu::Array<uint32_t> array2;
 
     EXPECT_EQ(array1, array2);
 }
 
 TEST(Array, CompareEmptyArrayWithNonEmptyArray)
 {
-    capu::Array<capu::uint32_t> array1(3u);
-    capu::Array<capu::uint32_t> array2;
+    capu::Array<uint32_t> array1(3u);
+    capu::Array<uint32_t> array2;
 
     array1[0] = 1;
     array1[1] = 2;
@@ -532,8 +532,8 @@ TEST(Array, CompareEmptyArrayWithNonEmptyArray)
 
 TEST(Array, Compare)
 {
-    capu::Array<capu::uint32_t> array1(3u);
-    capu::Array<capu::uint32_t> array2(3u);
+    capu::Array<uint32_t> array1(3u);
+    capu::Array<uint32_t> array2(3u);
 
     array1[0] = 1;
     array1[1] = 2;
@@ -549,7 +549,7 @@ TEST(Array, Compare)
 
     EXPECT_TRUE(array1 == array2);
 
-    capu::Array<capu::uint32_t> array3(2u);
+    capu::Array<uint32_t> array3(2u);
 
     EXPECT_FALSE(array2 == array3);
 }
@@ -578,8 +578,8 @@ TEST(Array, CompareComplexType)
 
 TEST(Array, TruncatedEquals)
 {
-    capu::Array<capu::uint32_t> array1(3u);
-    capu::Array<capu::uint32_t> array2(3u);
+    capu::Array<uint32_t> array1(3u);
+    capu::Array<uint32_t> array2(3u);
 
     array1[0] = 1;
     array1[1] = 2;

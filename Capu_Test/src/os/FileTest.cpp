@@ -241,7 +241,7 @@ TEST(File, ReadWriteBinaryTest)
     f3.close();
 
     EXPECT_EQ(sizeof(buf1), bytes);
-    for (capu::uint32_t i = 0; i < sizeof(buf1); i++)
+    for (uint32_t i = 0; i < sizeof(buf1); i++)
     {
         EXPECT_EQ(buf1[i], buf2[i]);
     }

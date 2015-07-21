@@ -44,7 +44,7 @@ TEST(StringUtils, Strncpy2)
     EXPECT_STREQ("My ", string2);
 
     // check that only 4 bytes are written, an no more
-    for (capu::uint32_t i = 4; i < sizeof(string2); ++i)
+    for (uint32_t i = 4; i < sizeof(string2); ++i)
     {
         EXPECT_EQ(42, string2[i]);
     }
@@ -91,9 +91,9 @@ TEST(StringUtils, Sprintf)
 class VscprintfTest
 {
 public:
-    static capu::int32_t Vscprintf(const char* format, ...)
+    static int32_t Vscprintf(const char* format, ...)
     {
-        capu::int32_t length = 0;
+        int32_t length = 0;
         va_list args;
         va_start(args, format);
         length = capu::StringUtils::Vscprintf(format, args);
@@ -104,16 +104,16 @@ public:
 
 TEST(StringUtils, Vscprintf)
 {
-    capu::int32_t length = VscprintfTest::Vscprintf("This is a test! %d", 12345);
+    int32_t length = VscprintfTest::Vscprintf("This is a test! %d", 12345);
     EXPECT_EQ(21, length);
 }
 
 class VsprintfTest
 {
 public:
-    static capu::int32_t Vsprintf(char* buffer, capu::int32_t buffersize, const char* format, ...)
+    static int32_t Vsprintf(char* buffer, int32_t buffersize, const char* format, ...)
     {
-        capu::int32_t length = 0;
+        int32_t length = 0;
         va_list args;
         va_start(args, format);
         length = capu::StringUtils::Vsprintf(buffer, buffersize, format, args);

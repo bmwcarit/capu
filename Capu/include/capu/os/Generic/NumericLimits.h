@@ -32,128 +32,128 @@ namespace capu
 
         template<>
         inline
-        capu::int64_t
-        NumericLimits::Max<capu::int64_t>()
+        int64_t
+        NumericLimits::Max<int64_t>()
         {
             return 0x7FFFFFFFFFFFFFFFULL;
         }
 
         template<>
         inline
-        capu::int64_t
-        NumericLimits::Min<capu::int64_t>()
+        int64_t
+        NumericLimits::Min<int64_t>()
         {
             return 0x8000000000000000LL;
         }
 
         template<>
         inline
-        capu::uint64_t
-        NumericLimits::Max<capu::uint64_t>()
+        uint64_t
+        NumericLimits::Max<uint64_t>()
         {
             return 0xFFFFFFFFFFFFFFFFULL;
         }
 
         template<>
         inline
-        capu::uint64_t
-        NumericLimits::Min<capu::uint64_t>()
+        uint64_t
+        NumericLimits::Min<uint64_t>()
         {
             return 0x0;
         }
 
         template<>
         inline
-        capu::int32_t
-        NumericLimits::Max<capu::int32_t>()
+        int32_t
+        NumericLimits::Max<int32_t>()
         {
             return 0x7fffffff;
         }
 
         template<>
         inline
-        capu::int32_t
-        NumericLimits::Min<capu::int32_t>()
+        int32_t
+        NumericLimits::Min<int32_t>()
         {
             return 0x80000000;
         }
 
         template<>
         inline
-        capu::uint32_t
-        NumericLimits::Max<capu::uint32_t>()
+        uint32_t
+        NumericLimits::Max<uint32_t>()
         {
             return 0xFFFFFFFF;
         }
 
         template<>
         inline
-        capu::uint32_t
-        NumericLimits::Min<capu::uint32_t>()
+        uint32_t
+        NumericLimits::Min<uint32_t>()
         {
             return 0x0;
         }
 
         template<>
         inline
-        capu::int16_t
-        NumericLimits::Min<capu::int16_t>()
+        int16_t
+        NumericLimits::Min<int16_t>()
         {
             return -32768;
         }
 
         template<>
         inline
-        capu::int16_t
-        NumericLimits::Max<capu::int16_t>()
+        int16_t
+        NumericLimits::Max<int16_t>()
         {
             return 32767;
         }
 
         template<>
         inline
-        capu::uint16_t
-        NumericLimits::Min<capu::uint16_t>()
+        uint16_t
+        NumericLimits::Min<uint16_t>()
         {
             return 0;
         }
 
         template<>
         inline
-        capu::uint16_t
-        NumericLimits::Max<capu::uint16_t>()
+        uint16_t
+        NumericLimits::Max<uint16_t>()
         {
             return 0xFFFF;
         }
 
         template<>
         inline
-        capu::int8_t
-        NumericLimits::Min<capu::int8_t>()
+        int8_t
+        NumericLimits::Min<int8_t>()
         {
             return -128;
         }
 
         template<>
         inline
-        capu::int8_t
-        NumericLimits::Max<capu::int8_t>()
+        int8_t
+        NumericLimits::Max<int8_t>()
         {
             return 127;
         }
 
         template<>
         inline
-        capu::uint8_t
-        NumericLimits::Min<capu::uint8_t>()
+        uint8_t
+        NumericLimits::Min<uint8_t>()
         {
             return 0;
         }
 
         template<>
         inline
-        capu::uint8_t
-        NumericLimits::Max<capu::uint8_t>()
+        uint8_t
+        NumericLimits::Max<uint8_t>()
         {
             return 0xFF;
         }

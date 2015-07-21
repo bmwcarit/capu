@@ -20,9 +20,9 @@
 class ThreadTest : public capu::Runnable
 {
 public:
-    static capu::int32_t variable;
+    static int32_t variable;
 
-    ThreadTest(capu::int32_t val)
+    ThreadTest(int32_t val)
     {
         variable = 0;
         mVal = val;
@@ -35,13 +35,13 @@ public:
         variable = mVal;
     }
 private:
-    capu::int32_t mVal;
+    int32_t mVal;
 };
 
 class IncrementerThreadTest : public capu::Runnable
 {
 public:
-    static capu::int32_t variable;
+    static int32_t variable;
 
     IncrementerThreadTest()
     {
@@ -91,8 +91,8 @@ public:
 };
 
 
-capu::int32_t ThreadTest::variable = 0;
-capu::int32_t IncrementerThreadTest::variable = 0;
+int32_t ThreadTest::variable = 0;
+int32_t IncrementerThreadTest::variable = 0;
 
 TEST(Thread, startAndJoinTest)
 {
@@ -173,7 +173,7 @@ TEST(Thread, reuseCancelledThread)
         EXPECT_EQ(capu::CAPU_OK, thread.join());
         EXPECT_EQ(capu::TS_TERMINATED, thread.getState());
         EXPECT_LT(0, IncrementerThreadTest::variable); // should have run at least once until now
-        capu::int32_t previousValue = IncrementerThreadTest::variable;
+        int32_t previousValue = IncrementerThreadTest::variable;
 
         // restart without reset only runs first part of code
         EXPECT_EQ(capu::CAPU_OK, thread.start(runnable));
@@ -203,7 +203,7 @@ TEST(Thread, joinWithoutStartingIsOK)
 
 TEST(Thread, startAndDestructorTest)
 {
-    capu::int32_t newval = 6;
+    int32_t newval = 6;
     ThreadTest _test(newval);
 
     capu::Thread* CAPU_thread = new capu::Thread();
@@ -215,7 +215,7 @@ TEST(Thread, startAndDestructorTest)
 
 TEST(Thread, sleepTest)
 {
-    capu::int32_t newval = 5;
+    int32_t newval = 5;
     ThreadTest _test(newval);
     //CREATE THREAD
     capu::Thread* CAPU_thread = new capu::Thread();
@@ -228,7 +228,7 @@ TEST(Thread, sleepTest)
 
 TEST(Thread, contextTest)
 {
-    capu::int32_t newval = 4;
+    int32_t newval = 4;
     ThreadTest _test(newval);
     {
         capu::Thread thread;

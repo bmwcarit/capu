@@ -27,7 +27,7 @@
 capu::Mutex mutex;
 capu::CondVar cv;
 bool cond = false;
-capu::uint16_t chosenPort = 0;
+uint16_t chosenPort = 0;
 
 class RandomPort
 {
@@ -35,7 +35,7 @@ public:
     /**
      * Gets a Random Port between 1024 and 10024
      */
-    static capu::uint16_t get()
+    static uint16_t get()
     {
         return (rand() % 10000) + 40000; // 0-1023 = Well Known, 1024-49151 = User, 49152 - 65535 = Dynamic
     }
@@ -43,15 +43,15 @@ public:
 
 class ThreadClientTest : public capu::Runnable
 {
-    capu::uint16_t port;
+    uint16_t port;
 public:
     //client thread to test data exchange between client and server
-    ThreadClientTest(capu::uint16_t port) : port(port) {}
+    ThreadClientTest(uint16_t port) : port(port) {}
 
     void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
         //ALLOCATION AND SYNCH OF cient and  server
         capu::TcpSocket* cli_socket = new capu::TcpSocket();
 
@@ -74,7 +74,7 @@ public:
 
         //connects to he given id
         capu::status_t result = capu::CAPU_ERROR;
-        capu::int32_t attemps = 0;
+        int32_t attemps = 0;
         while (result != capu::CAPU_OK && attemps < 100)
         {
             result = cli_socket->connect("localhost", port);
@@ -83,13 +83,13 @@ public:
         }
         EXPECT_EQ(capu::CAPU_OK, result);
 
-        capu::int32_t i = 5;
-        capu::int32_t sendData;
+        int32_t i = 5;
+        int32_t sendData;
         //send data
-        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(capu::int32_t), sendData));
+        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(int32_t), sendData));
 
         //receive
-        capu::status_t res = cli_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes);
+        capu::status_t res = cli_socket->receive((char*) &communication_variable, sizeof(int32_t), numBytes);
         EXPECT_EQ(capu::CAPU_OK, res);
 
         //CHECK VALUE
@@ -109,15 +109,15 @@ public:
 
 class ThreadTimeoutOnReceiveClientTest : public capu::Runnable
 {
-    capu::uint16_t port;
+    uint16_t port;
 public:
     //timeout test
-    ThreadTimeoutOnReceiveClientTest(capu::uint16_t port) : port(port) {}
+    ThreadTimeoutOnReceiveClientTest(uint16_t port) : port(port) {}
 
     void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
         capu::TcpSocket* cli_socket = new capu::TcpSocket();
 
         cli_socket->setTimeout(2);
@@ -139,14 +139,14 @@ public:
         result = cli_socket->connect("localhost", port);
         ASSERT_TRUE(result == capu::CAPU_OK);
 
-        capu::int32_t i = 5;
+        int32_t i = 5;
 
-        capu::int32_t sentBytes;
+        int32_t sentBytes;
         //send data
-        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(capu::int32_t), sentBytes));
+        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(int32_t), sentBytes));
 
         //receive
-        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes));
+        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((char*) &communication_variable, sizeof(int32_t), numBytes));
 
         //client has received timeout, server can close socket
         mutex.lock();
@@ -162,10 +162,10 @@ public:
 
 class ThreadTimeoutOnSendClientTest : public capu::Runnable
 {
-    capu::uint16_t port;
+    uint16_t port;
 public:
     //timeout test
-    ThreadTimeoutOnSendClientTest(capu::uint16_t port) : port(port) {}
+    ThreadTimeoutOnSendClientTest(uint16_t port) : port(port) {}
 
 private:
     capu::TcpSocket cli_socket;
@@ -180,8 +180,8 @@ private:
 
         //try to send again on broken socket
         char data = 5;
-        capu::int32_t sentBytes = 0;
-        capu::status_t currentErrorOnSend = cli_socket.send(&data, sizeof(capu::int32_t), sentBytes);
+        int32_t sentBytes = 0;
+        capu::status_t currentErrorOnSend = cli_socket.send(&data, sizeof(int32_t), sentBytes);
         if (previousErrorOnSend == capu::CAPU_ERROR)
         {
             EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, currentErrorOnSend);
@@ -234,14 +234,14 @@ public:
             }
         }
 
-        const capu::uint32_t dataSize = 1024 * 1024 / 8;
-        capu::uint32_t messageCount = 100;
+        const uint32_t dataSize = 1024 * 1024 / 8;
+        uint32_t messageCount = 100;
 
         char* data = new char[dataSize];
 
         capu::Memory::Set(data, 0x00000000, dataSize);
 
-        capu::int32_t sentBytes;
+        int32_t sentBytes;
         capu::status_t status;
 
         while(messageCount--)
@@ -271,15 +271,15 @@ public:
 
 class ThreadServerTest : public capu::Runnable
 {
-    capu::uint16_t port;
+    uint16_t port;
 public:
     //SERVER thread to test data exchange between client and server
-    ThreadServerTest(capu::uint16_t port) : port(port) {}
+    ThreadServerTest(uint16_t port) : port(port) {}
 
     void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
         //server socket allocation
         capu::TcpServerSocket* socket = new capu::TcpServerSocket();
 
@@ -306,7 +306,7 @@ public:
         //receive data
         capu::status_t result = capu::CAPU_ERROR;
 
-        result = new_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes);
+        result = new_socket->receive((char*) &communication_variable, sizeof(int32_t), numBytes);
         EXPECT_EQ(capu::CAPU_OK, result);
         //CHECK VALUE
         EXPECT_EQ(5, communication_variable);
@@ -314,9 +314,9 @@ public:
         communication_variable++;
 
 
-        capu::int32_t sentBytes;
+        int32_t sentBytes;
         //send it back
-        EXPECT_EQ(capu::CAPU_OK, new_socket->send((char*) &communication_variable, sizeof(capu::int32_t), sentBytes));
+        EXPECT_EQ(capu::CAPU_OK, new_socket->send((char*) &communication_variable, sizeof(int32_t), sentBytes));
 
         //wait with close until client has received data
         mutex.lock();
@@ -337,15 +337,15 @@ public:
 
 class ThreadTimeoutOnReceiveServerTest : public capu::Runnable
 {
-    capu::uint16_t mPort;
+    uint16_t mPort;
 
 public:
     //timeout test
-    ThreadTimeoutOnReceiveServerTest(capu::uint16_t port) : mPort(port) {}
+    ThreadTimeoutOnReceiveServerTest(uint16_t port) : mPort(port) {}
     inline void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
         //server socket allocation
         capu::TcpServerSocket* socket = new capu::TcpServerSocket();
 
@@ -370,7 +370,7 @@ public:
         capu::TcpSocket* new_socket = socket->accept();
         capu::status_t result = capu::CAPU_ERROR;
 
-        result = new_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes);
+        result = new_socket->receive((char*) &communication_variable, sizeof(int32_t), numBytes);
         EXPECT_EQ(capu::CAPU_OK, result);
         //CHECK VALUE
         EXPECT_EQ(5, communication_variable);
@@ -395,11 +395,11 @@ public:
 
 class ThreadTimeoutOnSendServerTest : public capu::Runnable
 {
-    capu::uint16_t mPort;
+    uint16_t mPort;
 
 public:
     //timeout test
-    ThreadTimeoutOnSendServerTest(capu::uint16_t port) : mPort(port) {}
+    ThreadTimeoutOnSendServerTest(uint16_t port) : mPort(port) {}
     inline void run()
     {
         //server socket allocation
@@ -447,11 +447,11 @@ public:
 
 class ThreadReconnectServerTest : public capu::Runnable
 {
-    capu::uint16_t mPort;
+    uint16_t mPort;
     capu::TcpServerSocket mSocket;
 public:
     //timeout test
-    ThreadReconnectServerTest(capu::uint16_t port) : mPort(port)
+    ThreadReconnectServerTest(uint16_t port) : mPort(port)
     {
 
         //bind to given address
@@ -472,13 +472,13 @@ public:
 
     inline void run()
     {
-        capu::int32_t communication_variable;
-        capu::int32_t numBytes = 0;
+        int32_t communication_variable;
+        int32_t numBytes = 0;
 
         capu::TcpSocket* new_socket = mSocket.accept();
         capu::status_t result = capu::CAPU_ERROR;
 
-        result = new_socket->receive((char*) &communication_variable, sizeof(capu::int32_t), numBytes);
+        result = new_socket->receive((char*) &communication_variable, sizeof(int32_t), numBytes);
         EXPECT_EQ(capu::CAPU_OK, result);
         //CHECK VALUE
         EXPECT_EQ(5, communication_variable);
@@ -490,7 +490,7 @@ public:
 
     }
 
-    inline capu::uint16_t port()
+    inline uint16_t port()
     {
         return mPort;
     }
@@ -500,7 +500,7 @@ TEST(TcpSocket, ConnectTest)
 {
     capu::TcpSocket* socket = new capu::TcpSocket();
     //pass null
-    capu::uint16_t port = RandomPort::get();
+    uint16_t port = RandomPort::get();
     EXPECT_EQ(capu::CAPU_EINVAL, socket->connect(NULL, port));
 
     EXPECT_EQ(capu::CAPU_SOCKET_EADDR, socket->connect("www.test", port));
@@ -519,11 +519,11 @@ TEST(TcpSocket, ConnectTwiceTest)
 TEST(TcpSocket, UnconnectedSocketCloseReceiveAndSendTest)
 {
     capu::TcpSocket* socket = new capu::TcpSocket();
-    capu::int32_t i = 0;
-    capu::int32_t numBytes = 0;
+    int32_t i = 0;
+    int32_t numBytes = 0;
     EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->close());
     //try to send data via closed socket
-    capu::int32_t sentBytes;
+    int32_t sentBytes;
     EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->send((char*) "asda", 4, sentBytes));
     //try to receive data from closed socket
     EXPECT_EQ(capu::CAPU_SOCKET_ESOCKET, socket->receive((char*) &i, 4, numBytes));
@@ -542,8 +542,8 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
     EXPECT_EQ(capu::CAPU_OK, socket->setNoDelay(false));
     EXPECT_EQ(capu::CAPU_OK, socket->setTimeout(90));
 
-    capu::int32_t int_tmp = 0;
-    capu::uint16_t short_tmp = 0;
+    int32_t int_tmp = 0;
+    uint16_t short_tmp = 0;
     bool boolmp = false;
     char* remoteIP = 0;
 
@@ -564,7 +564,7 @@ TEST(TcpSocket, SetAndGetPropertiesTest)
     EXPECT_EQ(90, int_tmp);
 
     serverSocket->bind(0, "0.0.0.0");
-    capu::uint16_t port = serverSocket->port();
+    uint16_t port = serverSocket->port();
     serverSocket->listen(3);
 
     socket->connect("127.0.0.1", port);
@@ -639,19 +639,19 @@ TEST(SocketAndTcpServerSocket, ReconnectTest)
 {
     cond = false;
     ThreadReconnectServerTest server(0);
-    capu::uint16_t port = server.port();
+    uint16_t port = server.port();
     ASSERT_LT(0u, port);
     capu::Thread server_thread;
 
     capu::TcpSocket socket;
-    capu::int32_t buffer = 5;
-    capu::int32_t sentBytes;
+    int32_t buffer = 5;
+    int32_t sentBytes;
 
-    for (capu::int32_t i = 0 ; i < 5; ++i)
+    for (int32_t i = 0 ; i < 5; ++i)
     {
         server_thread.start(server);
         socket.connect("127.0.0.1", port);
-        socket.send((char*)&buffer, sizeof(capu::int32_t), sentBytes);
+        socket.send((char*)&buffer, sizeof(int32_t), sentBytes);
         server_thread.join();
     }
 
@@ -701,8 +701,8 @@ class TestServer: public capu::Runnable
 {
 public:
     capu::TcpServerSocket server;
-    capu::uint16_t port;
-    capu::int32_t receivedLength;
+    uint16_t port;
+    int32_t receivedLength;
     capu::status_t receivedRetVal;
     capu::Thread t;
 

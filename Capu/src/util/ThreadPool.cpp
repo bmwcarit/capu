@@ -18,16 +18,16 @@
 
 #include "capu/util/ScopedLock.h"
 
-const capu::uint32_t capu::ThreadPool::MAX_THREAD_POOL_THREADS = 64;
+const uint32_t capu::ThreadPool::MAX_THREAD_POOL_THREADS = 64;
 
-capu::ThreadPool::ThreadPool(const capu::uint32_t size)
+capu::ThreadPool::ThreadPool(const uint32_t size)
     : mClosed(false)
     , mCloseRequested(false)
 {
-    const capu::uint32_t poolSize = size < MAX_THREAD_POOL_THREADS ? size : MAX_THREAD_POOL_THREADS;
+    const uint32_t poolSize = size < MAX_THREAD_POOL_THREADS ? size : MAX_THREAD_POOL_THREADS;
 
     // create the workers
-    for (capu::uint32_t i = 0; i < poolSize; i++)
+    for (uint32_t i = 0; i < poolSize; i++)
     {
         capu::ThreadPool::PoolWorkerPtr t(new capu::ThreadPool::PoolWorker(*this));
         if (t->isValid())

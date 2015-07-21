@@ -45,7 +45,7 @@ GTEST_API_ int main(int argc, char** argv)
 #endif
 
     //initialize pseudo random generate used for all the tests
-    srand(static_cast<capu::uint32_t>(capu::Time::GetMilliseconds()));
+    srand(static_cast<uint32_t>(capu::Time::GetMilliseconds()));
 
     bool wait = false;
     // special wait command

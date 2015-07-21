@@ -46,6 +46,35 @@
 #include <stdlib.h>
 #include <time.h>
 
+#cmakedefine CAPU_HAVE_STDINT_H
+#cmakedefine CAPU_HAVE_STDDEF_H
+#cmakedefine HAVE_CAPU_SIZEOF_LONG_LONG_INT
+@CAPU_SIZEOF_LONG_LONG_INT_CODE@
+#cmakedefine HAVE_CAPU_SIZEOF_LONG_INT
+@CAPU_SIZEOF_LONG_INT_CODE@
+#cmakedefine HAVE_CAPU___INT64
+#cmakedefine HAVE_CAPU_INT64_T
+#cmakedefine HAVE_CAPU_SIZEOF_CHAR
+@CAPU_SIZEOF_CHAR_CODE@
+#cmakedefine HAVE_CAPU_SIZEOF_SHORT_INT
+@CAPU_SIZEOF_SHORT_INT_CODE@
+#cmakedefine HAVE_CAPU_SIZEOF_INT
+@CAPU_SIZEOF_INT_CODE@
+
+#ifndef HAVE_CAPU_INT64_T
+#undef CAPU_HAVE_STDINT_H
+#endif // HAVE_CAPU_INT64_T
+
+#ifdef CAPU_HAVE_STDINT_H
+#include <stdint.h>
+#else
+#include "capu/capustdint.h"
+#endif // CAPU_HAVE_STDINT_H
+
+#ifdef CAPU_HAVE_STDDEF_H
+#include <stddef.h>
+#endif // CAPU_HAVE_STDDEF_H
+
 #define UNUSED(x) {(void)(x);}
 
 #define capu_foreach(IteratableType, Iteratable, Iter)\
@@ -58,22 +87,12 @@
 
 namespace capu
 {
-    typedef signed char    int8_t;
-    typedef signed short   int16_t;
-    typedef unsigned char   uchar_t;
-    typedef unsigned char   uint8_t;
-    typedef unsigned short  uint16_t;
-    typedef signed int int32_t;
-    typedef signed long long int int64_t;
-    typedef unsigned int uint32_t;
-    typedef unsigned long long int uint64_t;
-
     #if defined(ARCH_X86_64) || defined(ARCH_ARM64)
-        typedef signed long long int int_t;
-        typedef unsigned long long  int uint_t;
+        typedef int64_t int_t;
+        typedef uint64_t uint_t;
     #else
-        typedef signed int int_t;
-        typedef unsigned int uint_t;
+        typedef int32_t int_t;
+        typedef uint32_t uint_t;
     #endif
 }
 
