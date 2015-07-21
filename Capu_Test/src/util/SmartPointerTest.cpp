@@ -152,11 +152,15 @@ TEST(SmartPointer, BoolOperator)
 
 TEST(SmartPointer, getRefCount)
 {
-    capu::SmartPointer<DummyClass> ptr;
-    ptr = new DummyClass();
-    EXPECT_EQ((capu::uint32_t)1, ptr.getRefCount());
-    ptr.~SmartPointer();
-    EXPECT_EQ((capu::uint32_t)0, ptr.getRefCount());
+    capu::SmartPointer<DummyClass> ptr2;
+    {
+        capu::SmartPointer<DummyClass> ptr;
+        ptr = new DummyClass();
+        ptr2 = ptr;
+        EXPECT_EQ((capu::uint32_t)2, ptr.getRefCount());
+        EXPECT_EQ(ptr.getRefCount(), ptr2.getRefCount());
+    }
+    EXPECT_EQ((capu::uint32_t)1, ptr2.getRefCount());
 }
 
 TEST(SmartPointer, operatorTest)
