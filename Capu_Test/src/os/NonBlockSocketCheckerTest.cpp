@@ -22,6 +22,7 @@
 #include "gmock/gmock-generated-matchers.h"
 #include "capu/container/HashTable.h"
 #include "capu/os/NonBlockSocketChecker.h"
+#include "capu/os/Time.h"
 
 
 class RandomPort
@@ -116,8 +117,8 @@ public:
         , m_send(false)
         , m_receiveCount(0)
     {
-
     }
+
     void receiveSomeData(const capu::os::SocketDescription&)
     {
         capu::int32_t data;
@@ -136,6 +137,8 @@ public:
         m_clientSocket.setTimeout(1000);
 
         while (m_clientSocket.connect("localhost", m_port) != capu::CAPU_OK){
+            if (isCancelRequested())
+                return;
         }
 
         m_socketInfos.push_back(capu::os::SocketInfoPair(m_clientSocket.getSocketDescription(), capu::os::SocketDelegate::Create<AsyncClient, &AsyncClient::receiveSomeData>(*this)));
@@ -148,8 +151,6 @@ public:
             EXPECT_EQ(static_cast<capu::int32_t>(sizeof(sendValue)), sendBytes);
         }
     }
-     
-
 
     void start(capu::uint16_t port, capu::bool_t send)
     {
@@ -180,7 +181,8 @@ public:
 
 TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
 {
-    static const capu::uint32_t clientcount = 50;
+    static const capu::uint32_t clientcount = 10;
+    static const capu::uint64_t testtimeout = 5000;
 
     capu::uint16_t port = RandomPort::get();
 
@@ -193,15 +195,20 @@ TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
         asyncClient[i].start(port, false);
     }
 
-    while (asyncSocketHandler.m_clientSockets.count() < clientcount)
+    capu::uint64_t startTime = capu::Time::GetMilliseconds();
+    bool timeout = false;
+    while (asyncSocketHandler.m_clientSockets.count() < clientcount && !timeout)
     {
         capu::NonBlockSocketChecker::CheckSocketsForIncomingData(asyncSocketHandler.m_socketInfos, 10);
+        timeout = ((capu::Time::GetMilliseconds() - startTime) > testtimeout);
     }
 
     for (capu::uint32_t i = 0; i < clientcount; ++i)
     {
         asyncClient[i].stop();
     }
+
+    EXPECT_FALSE(timeout);
 }
 
 TEST(NonBlockSocketCheckerTest, DISABLED_ReceiveDataFromALotOfClients)
