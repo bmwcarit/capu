@@ -25,10 +25,13 @@ SET(CMAKE_C_COMPILER   clang)
 SET(CMAKE_CXX_COMPILER clang++)
 SET(CMAKE_LINKER       llvm-link)
 
-SET(CMAKE_C_FLAGS_DEBUG "-m32 -fPIC -ggdb -Wall -Wextra -D_DEBUG  -Wno-missing-field-initializers" CACHE STRING "")
+SET(CMAKE_C_FLAGS "-m32 -Wall -Wextra -Wno-missing-field-initializers -Werror -fPIC"  CACHE STRING "")
+SET(CMAKE_CXX_FLAGS "-m32 -Wall -Wextra -Wno-missing-field-initializers -Werror -fPIC"  CACHE STRING "")
+
+SET(CMAKE_C_FLAGS_DEBUG "-ggdb -D_DEBUG" CACHE STRING "")
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}" CACHE STRING "")
 
-SET(CMAKE_C_FLAGS_RELEASE "-m32 -fPIC -Wall -Wextra -O3 -DNDEBUG -Wno-missing-field-initializers" CACHE STRING "")
+SET(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE STRING "")
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}" CACHE STRING "")
 
 add_definitions("-DTARGET_OS=Linux")

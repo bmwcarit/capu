@@ -26,7 +26,7 @@ include(CMakeForceCompiler)
 CMAKE_FORCE_C_COMPILER(clang clang)
 CMAKE_FORCE_CXX_COMPILER(clang++ clang)
 
-SET(CMAKE_C_FLAGS "-m32 -arch i386 -ggdb -Wall" CACHE STRING "")
+SET(CMAKE_C_FLAGS "-m32 -arch i386 -ggdb -Wall -Wextra -Wno-missing-field-initializers -Werror" CACHE STRING "")
 SET(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS} CACHE STRING "")
 
 SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -D_DEBUG" CACHE STRING "")
