@@ -1,6 +1,5 @@
 #include "DelegateTest.h"
 #include "capu/Config.h"
-#include <capu/container/Vector.h>
 
 namespace capu
 {
