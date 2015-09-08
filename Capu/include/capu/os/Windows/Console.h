@@ -19,7 +19,6 @@
 
 #include <conio.h>
 #include "capu/container/String.h"
-#include "capu/container/Vector.h"
 #include "capu/os/Mutex.h"
 
 namespace capu
