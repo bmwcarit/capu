@@ -307,7 +307,7 @@ namespace capu
         /**
          * Removes the element in the specified iterator position and if the element_old
          * parameter is not NULL, the removed element will be put to element_old
-         * @param iterator of element that will be removed
+         * @param iterator iterator of element that will be removed
          * @param elementOld the buffer which will keep the copy of the removed element
          * @return CAPU_EINVAL invalid iterator
          *         CAPU_OK if the element is successfully removed
