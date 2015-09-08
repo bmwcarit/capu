@@ -142,7 +142,7 @@ namespace capu
              * Creates a Iterator for the Vector
              * @param start pointer for the iterator
              */
-            InternalIterator(TYPE* start)
+            explicit InternalIterator(TYPE* start)
                 : m_current(start)
             {
 
