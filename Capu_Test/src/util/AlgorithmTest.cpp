@@ -137,4 +137,25 @@ namespace capu
         EXPECT_EQ(99u, v[1]);
         EXPECT_EQ(99u, v[2]);
     }
+
+    TEST(AlgorithmTest, EqualSame)
+    {
+        uint_t a[3] = { 1, 2, 3 };
+        uint_t b[3] = { 1, 2, 3 };
+        EXPECT_TRUE(equal(a, a+3, b));
+    }
+
+    TEST(AlgorithmTest, EqualNotSame)
+    {
+        uint_t a[3] = { 1, 2, 3 };
+        uint_t b[3] = { 1, 5, 3 };
+        EXPECT_FALSE(equal(a, a + 3, b));
+    }
+
+    TEST(AlgorithmTest, EqualOnEmpty)
+    {
+        uint_t a[1] = { 1 };
+        uint_t b[1] = { 2 };
+        EXPECT_TRUE(equal(a, a + 0, b));
+    }
 }

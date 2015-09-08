@@ -73,6 +73,27 @@ namespace capu
         }
         return first;
     }
+
+    /**
+     * Compare two equal-length ranges for default equality
+     * @param first1 begin of first range
+     * @param last1 non-inclusive end of first range
+     * @param first2 begin of second range to compare to
+     */
+    template <class InputIt1, class InputIt2>
+    bool equal(InputIt1 first1, InputIt1 last1, InputIt2 first2)
+    {
+        while (first1 != last1)
+        {
+            if (*first1 != *first2)
+            {
+                return false;
+            }
+            ++first1;
+            ++first2;
+        }
+        return true;
+    }
 }
 
 #endif // CAPU_ALGORITHM_H
