@@ -204,6 +204,12 @@ namespace capu
         status_t push_back(const T& value);
 
         /**
+         * Removes the last element of the vector.
+         * Returns CAPU_ERANGE if vector was empty.
+         */
+        status_t pop_back();
+
+        /**
          * Returns the current size of the Vector
          * @return size of the current Vector
          */
@@ -479,6 +485,23 @@ namespace capu
         ++m_dataEnd;
 
         return status;
+    }
+
+    template<typename T>
+    inline
+    status_t
+    Vector<T>::pop_back()
+    {
+        if (m_dataEnd > m_data)
+        {
+            (m_dataEnd - 1)->~T();
+            --m_dataEnd;
+            return CAPU_OK;
+        }
+        else
+        {
+            return CAPU_ERANGE;
+        }
     }
 
     template<typename T>

@@ -156,7 +156,7 @@ namespace capu
         EXPECT_EQ(1u, capuVector.size());
 
         stlvector.pop_back();
-        capuVector.erase(0);
+        capuVector.pop_back();
 
         EXPECT_EQ(0u, stlvector.size());
         EXPECT_EQ(0u, capuVector.size());
@@ -180,7 +180,7 @@ namespace capu
         EXPECT_EQ(6u, capuVector.size());
 
         stlvector.pop_back();
-        capuVector.erase(0);
+        capuVector.pop_back();
 
         EXPECT_EQ(5u, stlvector.size());
         EXPECT_EQ(5u, capuVector.size());
@@ -401,6 +401,33 @@ namespace capu
         EXPECT_EQ(TypeParam(42u), vector[0]);
     }
 
+    TYPED_TEST(TypedVectorTest, PopBack)
+    {
+        Vector<TypeParam> vector(0);
+
+        vector.push_back(TypeParam(42u));
+        status_t status = vector.pop_back();
+
+        EXPECT_EQ(CAPU_OK, status);
+        EXPECT_EQ(TypeParam(0u), vector.size());
+    }
+
+    TYPED_TEST(TypedVectorTest, PopBack2)
+    {
+        Vector<TypeParam> vector(0);
+
+        vector.push_back(TypeParam(42u));
+        vector.push_back(TypeParam(43u));
+        status_t status = vector.pop_back();
+        status_t status2 = vector.pop_back();
+        vector.push_back(TypeParam(44u));
+
+        EXPECT_EQ(CAPU_OK, status);
+        EXPECT_EQ(CAPU_OK, status2);
+        EXPECT_EQ(1u, vector.size());
+        EXPECT_EQ(TypeParam(44u), vector[0]);
+    }
+
     TYPED_TEST(TypedVectorTest, empty)
     {
         Vector<TypeParam> vector(0);
@@ -410,6 +437,19 @@ namespace capu
         vector.push_back(TypeParam(123u));
         EXPECT_FALSE(vector.empty());
     }
+
+    TYPED_TEST(TypedVectorTest, PopBackNonExistingElementReturnsError)
+    {
+        Vector<TypeParam> vector(0);
+
+        vector.push_back(TypeParam(42u));
+        status_t status = vector.pop_back();
+        status_t status2 = vector.pop_back();
+
+        EXPECT_EQ(CAPU_OK, status);
+        EXPECT_NE(CAPU_OK, status2);
+    }
+
     TYPED_TEST(TypedVectorTest, IteratorInc)
     {
         Vector<TypeParam> vector;
