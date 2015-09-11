@@ -14,154 +14,183 @@
  * limitations under the License.
  */
 
-#include <container/VectorTest.h>
+// Workaround for integrityOS compiler
+// It supports typed tests, but gtest does not know this yet
+#if defined(__GHS_VERSION_NUMBER)
+# define GTEST_HAS_TYPED_TEST 1
+# define GTEST_HAS_TYPED_TEST_P 1
+#endif
+
+#include "gmock/gmock.h"
+#include "capu/container/Vector.h"
 #include "capu/container/String.h"
 
 namespace capu
 {
-    VectorTest::VectorTest()
+    class ComplexTestingType
     {
+    public:
+        ComplexTestingType(int_t someID = 0)
+        {
+            NumberOfObjects++;
+            SomeID = someID;
+        }
+        ComplexTestingType(const ComplexTestingType& other)
+        {
+            NumberOfObjects++;
+            SomeID = other.SomeID;
+        }
+        virtual ~ComplexTestingType()
+        {
+            NumberOfObjects--;
+        }
 
-    }
+        bool operator==(const ComplexTestingType& other) const
+        {
+            return SomeID == other.SomeID;
+        }
 
-    VectorTest::~VectorTest()
+        static int_t NumberOfObjects;
+        int_t SomeID;
+    };
+    int_t ComplexTestingType::NumberOfObjects = 0;
+
+    template <typename ElementType>
+    class TypedVectorTest : public testing::Test
     {
+    };
 
-    }
+    typedef ::testing::Types
+        <
+        uint_t,
+        ComplexTestingType
+        > ElementTypes;
 
-    void VectorTest::SetUp()
+    TYPED_TEST_CASE(TypedVectorTest, ElementTypes);
+
+    TYPED_TEST(TypedVectorTest, Constructor)
     {
-
-    }
-
-    void VectorTest::TearDown()
-    {
-
-    }
-
-    TEST_F(VectorTest, Constructor)
-    {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
         EXPECT_EQ(0U, vector.size());
     }
 
-    TEST_F(VectorTest, ConstructorWithCapacity)
+    TYPED_TEST(TypedVectorTest, ConstructorWithSize)
     {
-        Vector<uint32_t> vector(3);
+        Vector<TypeParam> vector(3);
         EXPECT_EQ(0u, vector.size());
     }
 
-    TEST_F(VectorTest, ConstructorWithCapacityAndValue)
+    TYPED_TEST(TypedVectorTest, ConstructorWithCapacityAndValue)
     {
-        Vector<uint32_t> vector(3, 5);
+        Vector<TypeParam> vector(3, 5);
 
-        EXPECT_EQ(5u, vector[0]);
-        EXPECT_EQ(5u, vector[1]);
-        EXPECT_EQ(5u, vector[2]);
+        EXPECT_EQ(TypeParam(5u), vector[0]);
+        EXPECT_EQ(TypeParam(5u), vector[1]);
+        EXPECT_EQ(TypeParam(5u), vector[2]);
     }
 
-    TEST_F(VectorTest, CopyConstructor)
+    TYPED_TEST(TypedVectorTest, CopyConstructor)
     {
-        Vector<uint32_t>* vector = new Vector<uint32_t>(32);
+        Vector<TypeParam>* vector = new Vector<TypeParam>(0);
 
         for(uint32_t i = 0; i < 32; ++i)
         {
             vector->push_back(i);
         }
 
-        const Vector<uint32_t> vectorCopy(*vector);
+        const Vector<TypeParam> vectorCopy(*vector);
         delete vector;
 
         for(uint32_t i = 0; i < 32; ++i)
         {
-            EXPECT_EQ(i, vectorCopy[i]);
+            EXPECT_EQ(TypeParam(i), vectorCopy[i]);
         }
 
         EXPECT_EQ(32u, vectorCopy.size());
     }
 
-    TEST_F(VectorTest, PushBack)
+    TYPED_TEST(TypedVectorTest, PushBack)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(42u);
-        vector.push_back(47u);
+        vector.push_back(TypeParam(42u));
+        vector.push_back(TypeParam(47u));
 
-        EXPECT_EQ(42u, vector[0]);
-        EXPECT_EQ(47u, vector[1]);
+        EXPECT_EQ(TypeParam(42u), vector[0]);
+        EXPECT_EQ(TypeParam(47u), vector[1]);
     }
 
-    TEST_F(VectorTest, PushBack2)
+    TYPED_TEST(TypedVectorTest, PushBack2)
     {
-        Vector<uint32_t> vector(1);
+        Vector<TypeParam> vector(2);
 
-        vector.push_back(42u);
-        vector.push_back(47u);
+        vector[0] = TypeParam(42u);
+        vector[1] = TypeParam(47u);
 
-        EXPECT_EQ(42u, vector[0]);
-        EXPECT_EQ(47u, vector[1]);
+        EXPECT_EQ(TypeParam(42u), vector[0]);
+        EXPECT_EQ(TypeParam(47u), vector[1]);
     }
 
-    TEST_F(VectorTest, PushBack3)
+    TYPED_TEST(TypedVectorTest, PushBack3)
     {
-        Vector<uint32_t> vector(0);
+        Vector<TypeParam> vector(0);
 
-        vector.push_back(42u);
+        vector.push_back(TypeParam(42u));
 
-        EXPECT_EQ(42u, vector[0]);
+        EXPECT_EQ(TypeParam(42u), vector[0]);
     }
 
-    TEST_F(VectorTest, IteratorInc)
+    TYPED_TEST(TypedVectorTest, IteratorInc)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
 
-        Vector<uint32_t>::Iterator current = vector.begin();
+        typename Vector<TypeParam>::Iterator current = vector.begin();
 
-        EXPECT_EQ(1u, *current);
+        EXPECT_EQ(TypeParam(1u), *current);
         ++current;
-        EXPECT_EQ(2u, *current);
+        EXPECT_EQ(TypeParam(2u), *current);
         ++current;
-        EXPECT_EQ(3u, *current);
+        EXPECT_EQ(TypeParam(3u), *current);
         ++current;
-        EXPECT_EQ(4u, *current);
+        EXPECT_EQ(TypeParam(4u), *current);
     }
 
-    TEST_F(VectorTest, IteratorDec)
+    TYPED_TEST(TypedVectorTest, IteratorDec)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
 
-        Vector<uint32_t>::Iterator end = vector.end();
+        typename Vector<TypeParam>::Iterator end = vector.end();
         --end;
-        EXPECT_EQ(4u, *end);
+        EXPECT_EQ(TypeParam(4u), *end);
         --end;
-        EXPECT_EQ(3u, *end);
+        EXPECT_EQ(TypeParam(3u), *end);
         --end;
-        EXPECT_EQ(2u, *end);
+        EXPECT_EQ(TypeParam(2u), *end);
         --end;
-        EXPECT_EQ(1u, *end);
+        EXPECT_EQ(TypeParam(1u), *end);
     }
 
-    TEST_F(VectorTest, IteratorNotEqual)
+    TYPED_TEST(TypedVectorTest, IteratorNotEqual)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
 
-        Vector<uint32_t>::Iterator start = vector.begin();
-        Vector<uint32_t>::Iterator end = vector.end();
+        typename Vector<TypeParam>::Iterator start = vector.begin();
+        typename Vector<TypeParam>::Iterator end = vector.end();
 
         EXPECT_TRUE(start != end);
         end = start;
@@ -169,235 +198,198 @@ namespace capu
 
     }
 
-    TEST_F(VectorTest, IteratorSmaller)
+    TYPED_TEST(TypedVectorTest, IteratorSmaller)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
 
-        Vector<uint32_t>::Iterator start = vector.begin();
-        Vector<uint32_t>::Iterator end = vector.end();
+        typename Vector<TypeParam>::Iterator start = vector.begin();
+        typename Vector<TypeParam>::Iterator end = vector.end();
 
         EXPECT_TRUE(start < end);
         EXPECT_FALSE(end < start);
     }
 
-    TEST_F(VectorTest, IteratorBigger)
+    TYPED_TEST(TypedVectorTest, IteratorBigger)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
 
-        Vector<uint32_t>::Iterator start = vector.begin();
-        Vector<uint32_t>::Iterator end = vector.end();
+        typename Vector<TypeParam>::Iterator start = vector.begin();
+        typename Vector<TypeParam>::Iterator end = vector.end();
 
         EXPECT_TRUE(end > start);
         EXPECT_FALSE(start > end);
     }
 
-    TEST_F(VectorTest, IteratorAddValue)
+    TYPED_TEST(TypedVectorTest, IteratorAddValue)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
 
-        Vector<uint32_t>::Iterator start = vector.begin();
+        typename Vector<TypeParam>::Iterator start = vector.begin();
 
-        EXPECT_EQ(1u, *(start + 0u));
-        EXPECT_EQ(2u, *(start + 1u));
-        EXPECT_EQ(3u, *(start + 2u));
-        EXPECT_EQ(4u, *(start + 3u));
+        EXPECT_EQ(TypeParam(1u), *(start + 0u));
+        EXPECT_EQ(TypeParam(2u), *(start + 1u));
+        EXPECT_EQ(TypeParam(3u), *(start + 2u));
+        EXPECT_EQ(TypeParam(4u), *(start + 3u));
     }
 
-    TEST_F(VectorTest, IteratorSubValue)
+    TYPED_TEST(TypedVectorTest, IteratorSubValue)
     {
-         Vector<uint32_t> vector;
+         Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
 
-        Vector<uint32_t>::Iterator end = vector.end();
+        typename Vector<TypeParam>::Iterator end = vector.end();
 
-        EXPECT_EQ(4u, *(end - 1u));
-        EXPECT_EQ(3u, *(end - 2u));
-        EXPECT_EQ(2u, *(end - 3u));
-        EXPECT_EQ(1u, *(end - 4u));
+        EXPECT_EQ(TypeParam(4u), *(end - 1u));
+        EXPECT_EQ(TypeParam(3u), *(end - 2u));
+        EXPECT_EQ(TypeParam(2u), *(end - 3u));
+        EXPECT_EQ(TypeParam(1u), *(end - 4u));
     }
 
-    TEST_F(VectorTest, Iterator)
+    TYPED_TEST(TypedVectorTest, Iterator)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(42u);
-        vector.push_back(47u);
+        vector.push_back(TypeParam(42u));
+        vector.push_back(TypeParam(47u));
 
-        Vector<uint32_t> vector2;
+        Vector<TypeParam> vector2;
 
-        for (Vector<uint32_t>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
+        for (typename Vector<TypeParam>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
 
-        EXPECT_EQ(42u, vector2[0]);
-        EXPECT_EQ(47u, vector2[1]);
+        EXPECT_EQ(TypeParam(42u), vector2[0]);
+        EXPECT_EQ(TypeParam(47u), vector2[1]);
     }
 
-    TEST_F(VectorTest, IteratorOnConstVector)
+    TYPED_TEST(TypedVectorTest, IteratorOnConstVector)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        const Vector<uint32_t>& constVector = vector;
+        const Vector<TypeParam>& constVector = vector;
 
-        vector.push_back(42u);
-        vector.push_back(47u);
+        vector.push_back(TypeParam(42u));
+        vector.push_back(TypeParam(47u));
 
-        Vector<uint32_t> vector2;
+        Vector<TypeParam> vector2;
 
-        for (Vector<uint32_t>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        for (typename Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        {
+            vector2.push_back(*iter);
+        }
+
+        EXPECT_EQ(TypeParam(2u), vector2.size());
+        EXPECT_EQ(TypeParam(42u), vector2[0]);
+        EXPECT_EQ(TypeParam(47u), vector2[1]);
+    }
+
+    TYPED_TEST(TypedVectorTest, IteratorOnConstVectorWithInitialCapacity)
+    {
+        Vector<TypeParam> vector(2);
+
+        const Vector<TypeParam>& constVector = vector;
+
+        vector.push_back(TypeParam(42u));
+        vector.push_back(TypeParam(47u));
+
+        Vector<TypeParam> vector2;
+
+        for (typename Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
 
         EXPECT_EQ(2u, vector2.size());
-        EXPECT_EQ(42u, vector2[0]);
-        EXPECT_EQ(47u, vector2[1]);
+        EXPECT_EQ(TypeParam(42u), vector2[0]);
+        EXPECT_EQ(TypeParam(47u), vector2[1]);
     }
 
-    TEST_F(VectorTest, IteratorOnConstVectorWithInitialCapacity)
+    TYPED_TEST(TypedVectorTest, IteratorOnConstVectorWithInitialCapacityAndValues)
     {
-        Vector<uint32_t> vector(32);
+        Vector<TypeParam> vector(12, TypeParam(55u));
 
-        const Vector<uint32_t>& constVector = vector;
+        const Vector<TypeParam>& constVector = vector;
 
-        vector.push_back(42u);
-        vector.push_back(47u);
+        Vector<TypeParam> vector2(0);
 
-        Vector<uint32_t> vector2;
-
-        for (Vector<uint32_t>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
-        {
-            vector2.push_back(*iter);
-        }
-
-        EXPECT_EQ(2u, vector2.size());
-        EXPECT_EQ(42u, vector2[0]);
-        EXPECT_EQ(47u, vector2[1]);
-    }
-
-    TEST_F(VectorTest, IteratorOnConstVectorWithInitialCapacityAndValues)
-    {
-        Vector<uint32_t> vector(12, 55u);
-
-        const Vector<uint32_t>& constVector = vector;
-
-        Vector<uint32_t> vector2;
-
-        for (Vector<uint32_t>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        for (typename Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
 
         EXPECT_EQ(12u, vector2.size());
-        EXPECT_EQ(55u, vector2[0]);
-        EXPECT_EQ(55u, vector2[1]);
-        EXPECT_EQ(55u, vector2[2]);
-        EXPECT_EQ(55u, vector2[3]);
-        EXPECT_EQ(55u, vector2[4]);
-        EXPECT_EQ(55u, vector2[5]);
-        EXPECT_EQ(55u, vector2[6]);
-        EXPECT_EQ(55u, vector2[7]);
-        EXPECT_EQ(55u, vector2[8]);
-        EXPECT_EQ(55u, vector2[9]);
-        EXPECT_EQ(55u, vector2[10]);
-        EXPECT_EQ(55u, vector2[11]);
+        EXPECT_EQ(TypeParam(55u), vector2[0]);
+        EXPECT_EQ(TypeParam(55u), vector2[1]);
+        EXPECT_EQ(TypeParam(55u), vector2[2]);
+        EXPECT_EQ(TypeParam(55u), vector2[3]);
+        EXPECT_EQ(TypeParam(55u), vector2[4]);
+        EXPECT_EQ(TypeParam(55u), vector2[5]);
+        EXPECT_EQ(TypeParam(55u), vector2[6]);
+        EXPECT_EQ(TypeParam(55u), vector2[7]);
+        EXPECT_EQ(TypeParam(55u), vector2[8]);
+        EXPECT_EQ(TypeParam(55u), vector2[9]);
+        EXPECT_EQ(TypeParam(55u), vector2[10]);
+        EXPECT_EQ(TypeParam(55u), vector2[11]);
     }
 
-    TEST_F(VectorTest, AccessOperator)
+    TYPED_TEST(TypedVectorTest, AccessOperator)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(42u);
-        vector.push_back(47u);
+        vector.push_back(TypeParam(42u));
+        vector.push_back(TypeParam(47u));
 
-        vector[0] = 47u;
-        vector[1] = 42u;
+        vector[0] = TypeParam(47u);
+        vector[1] = TypeParam(42u);
 
-        EXPECT_EQ(47u, vector[0]);
-        EXPECT_EQ(42u, vector[1]);
+        EXPECT_EQ(TypeParam(47u), vector[0]);
+        EXPECT_EQ(TypeParam(42u), vector[1]);
     }
 
-    struct TestStruct
+    TYPED_TEST(TypedVectorTest, Resize)
     {
-        uint32_t value1;
-        float  value2;
-    };
+        Vector<TypeParam> vector(0);
 
-    TEST_F(VectorTest, Object)
-    {
-        Vector<TestStruct> vector;
-
-        TestStruct struct1;
-        struct1.value1 = 47;
-        struct1.value2   = 11.f;
-
-        TestStruct struct2;
-        struct2.value1 = 8;
-        struct2.value2 = 15.f;
-
-        vector.push_back(struct1);
-        vector.push_back(struct2);
-
-        Vector<uint32_t> vector2;
-
-        for (Vector<TestStruct>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
-        {
-            vector2.push_back(iter->value1);
-        }
-
-        EXPECT_EQ(47u, vector2[0]);
-        EXPECT_EQ(8u, vector2[1]);
-    }
-
-    TEST_F(VectorTest, Resize)
-    {
-        Vector<uint32_t> vector(2);
-
-        vector.push_back(1);
-        vector.push_back(2);
+        vector.push_back(TypeParam(1));
+        vector.push_back(TypeParam(2));
 
         vector.resize(19);
 
-        EXPECT_EQ(1u, vector[0]);
-        EXPECT_EQ(2u, vector[1]);
+        EXPECT_EQ(TypeParam(1u), vector[0]);
+        EXPECT_EQ(TypeParam(2u), vector[1]);
 
         vector.resize(1);
 
-        EXPECT_EQ(1u, vector[0]);
+        EXPECT_EQ(TypeParam(1u), vector[0]);
     }
 
-    TEST_F(VectorTest, Clear)
+    TYPED_TEST(TypedVectorTest, Clear)
     {
-        TestStruct struct1;
-        struct1.value1 = 47;
-        struct1.value2   = 11.f;
+        TypeParam struct1 = TypeParam(47);
 
-        TestStruct struct2;
-        struct2.value1 = 8;
-        struct2.value2 = 15.f;
+        TypeParam struct2 = TypeParam(8);
 
-
-        Vector<TestStruct> vector;
+        Vector<TypeParam> vector;
 
         vector.push_back(struct1);
         vector.push_back(struct2);
@@ -407,65 +399,62 @@ namespace capu
         vector.push_back(struct2);
         vector.push_back(struct1);
 
-        EXPECT_EQ(struct2.value1, vector[0].value1);
-        EXPECT_EQ(struct2.value2, vector[0].value2);
-        EXPECT_EQ(struct1.value1, vector[1].value1);
-        EXPECT_EQ(struct1.value2, vector[1].value2);
-
+        EXPECT_EQ(struct2, vector[0]);
+        EXPECT_EQ(struct1, vector[1]);
     }
 
-    TEST_F(VectorTest, EraseIterator)
+    TYPED_TEST(TypedVectorTest, EraseIterator)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector(0);
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
-        vector.push_back(5u);
+        vector.push_back(TypeParam(1));
+        vector.push_back(TypeParam(2));
+        vector.push_back(TypeParam(3));
+        vector.push_back(TypeParam(4));
+        vector.push_back(TypeParam(5));
 
-        Vector<uint32_t>::Iterator iter = vector.begin();
+        typename Vector<TypeParam>::Iterator iter = vector.begin();
 
         EXPECT_EQ(capu::CAPU_EINVAL, vector.erase(iter + 8u));
 
         vector.erase(iter + 2u);
 
         EXPECT_EQ(4u, vector.size());
-        EXPECT_EQ(1u, vector[0]);
-        EXPECT_EQ(2u, vector[1]);
-        EXPECT_EQ(4u, vector[2]);
-        EXPECT_EQ(5u, vector[3]);
+        EXPECT_EQ(TypeParam(1), vector[0]);
+        EXPECT_EQ(TypeParam(2), vector[1]);
+        EXPECT_EQ(TypeParam(4), vector[2]);
+        EXPECT_EQ(TypeParam(5), vector[3]);
 
         vector.erase(vector.begin());
 
         EXPECT_EQ(3u, vector.size());
-        EXPECT_EQ(2u, vector[0]);
-        EXPECT_EQ(4u, vector[1]);
-        EXPECT_EQ(5u, vector[2]);
+        EXPECT_EQ(TypeParam(2), vector[0]);
+        EXPECT_EQ(TypeParam(4), vector[1]);
+        EXPECT_EQ(TypeParam(5), vector[2]);
 
         vector.erase(vector.end() - 1u);
 
         EXPECT_EQ(2u, vector.size());
-        EXPECT_EQ(2u, vector[0]);
-        EXPECT_EQ(4u, vector[1]);
+        EXPECT_EQ(TypeParam(2), vector[0]);
+        EXPECT_EQ(TypeParam(4), vector[1]);
 
         vector.erase(vector.begin());
         vector.erase(vector.begin());
 
-        EXPECT_EQ(0u, vector.size());
+        EXPECT_EQ(TypeParam(0u), vector.size());
     }
 
-    TEST_F(VectorTest, EraseIndex)
+    TYPED_TEST(TypedVectorTest, EraseIndex)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
-        vector.push_back(5u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
+        vector.push_back(TypeParam(5u));
 
-        Vector<uint32_t>::Iterator iter = vector.begin();
+        typename Vector<TypeParam>::Iterator iter = vector.begin();
 
         ++iter;
         ++iter;
@@ -474,18 +463,18 @@ namespace capu
 
         EXPECT_TRUE(CAPU_OK == result);
         EXPECT_EQ(4u, vector.size());
-        EXPECT_EQ(1u, vector[0]);
-        EXPECT_EQ(2u, vector[1]);
-        EXPECT_EQ(4u, vector[2]);
-        EXPECT_EQ(5u, vector[3]);
+        EXPECT_EQ(TypeParam(1u), vector[0]);
+        EXPECT_EQ(TypeParam(2u), vector[1]);
+        EXPECT_EQ(TypeParam(4u), vector[2]);
+        EXPECT_EQ(TypeParam(5u), vector[3]);
 
         result = vector.erase(vector.begin());
 
         EXPECT_TRUE(CAPU_OK == result);
         EXPECT_EQ(3u, vector.size());
-        EXPECT_EQ(2u, vector[0]);
-        EXPECT_EQ(4u, vector[1]);
-        EXPECT_EQ(5u, vector[2]);
+        EXPECT_EQ(TypeParam(2u), vector[0]);
+        EXPECT_EQ(TypeParam(4u), vector[1]);
+        EXPECT_EQ(TypeParam(5u), vector[2]);
 
         iter = vector.end();
 
@@ -493,9 +482,9 @@ namespace capu
 
         EXPECT_FALSE(CAPU_OK == result);
         EXPECT_EQ(3u, vector.size());
-        EXPECT_EQ(2u, vector[0]);
-        EXPECT_EQ(4u, vector[1]);
-        EXPECT_EQ(5u, vector[2]);
+        EXPECT_EQ(TypeParam(2u), vector[0]);
+        EXPECT_EQ(TypeParam(4u), vector[1]);
+        EXPECT_EQ(TypeParam(5u), vector[2]);
 
         --iter;
 
@@ -503,8 +492,8 @@ namespace capu
 
         EXPECT_TRUE(CAPU_OK == result);
         EXPECT_EQ(2u, vector.size());
-        EXPECT_EQ(2u, vector[0]);
-        EXPECT_EQ(4u, vector[1]);
+        EXPECT_EQ(TypeParam(2u), vector[0]);
+        EXPECT_EQ(TypeParam(4u), vector[1]);
 
         result = vector.erase(vector.begin());
 
@@ -516,94 +505,94 @@ namespace capu
         EXPECT_EQ(0u, vector.size());
     }
 
-    TEST_F(VectorTest, EraseWithElementOld)
+    TYPED_TEST(TypedVectorTest, EraseWithElementOld)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
-        vector.push_back(5u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
+        vector.push_back(TypeParam(5u));
 
-        uint32_t old;
+        TypeParam old;
 
         vector.erase(vector.begin(), &old);
-        EXPECT_EQ(old, 1u);
+        EXPECT_EQ(old, TypeParam(1u));
 
         vector.erase(vector.begin()+2u, &old);
-        EXPECT_EQ(old, 4u);
+        EXPECT_EQ(old, TypeParam(4u));
     }
 
-    TEST_F(VectorTest, EraseAdd)
+    TYPED_TEST(TypedVectorTest, EraseAdd)
     {
-        Vector<uint32_t> vector;
+        Vector<TypeParam> vector;
 
-        vector.push_back(1u);
-        vector.push_back(2u);
-        vector.push_back(3u);
-        vector.push_back(4u);
-        vector.push_back(5u);
+        vector.push_back(TypeParam(1u));
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(3u));
+        vector.push_back(TypeParam(4u));
+        vector.push_back(TypeParam(5u));
 
         vector.erase(3);
         vector.erase(1);
-        vector.push_back(2u);
-        vector.push_back(4u);
+        vector.push_back(TypeParam(2u));
+        vector.push_back(TypeParam(4u));
 
         EXPECT_EQ(5u, vector.size());
-        EXPECT_EQ(1u, vector[0]);
-        EXPECT_EQ(3u, vector[1]);
-        EXPECT_EQ(5u, vector[2]);
-        EXPECT_EQ(2u, vector[3]);
-        EXPECT_EQ(4u, vector[4]);
+        EXPECT_EQ(TypeParam(1u), vector[0]);
+        EXPECT_EQ(TypeParam(3u), vector[1]);
+        EXPECT_EQ(TypeParam(5u), vector[2]);
+        EXPECT_EQ(TypeParam(2u), vector[3]);
+        EXPECT_EQ(TypeParam(4u), vector[4]);
     }
-    TEST_F(VectorTest, ForEach)
+
+    TYPED_TEST(TypedVectorTest, ForEach)
     {
-        capu::Vector<int32_t> vector;
+        capu::Vector<TypeParam> vector;
 
-        vector.push_back(32);
-        vector.push_back(43);
-        vector.push_back(44);
+        vector.push_back(TypeParam(32));
+        vector.push_back(TypeParam(43));
+        vector.push_back(TypeParam(44));
 
-        capu::Vector<int32_t> testVector;
+        capu::Vector<TypeParam> testVector;
 
-        capu_foreach(capu::Vector<int32_t>, vector, iter)
+        capu_foreach(typename capu::Vector<TypeParam>, vector, iter)
         {
             testVector.push_back(*iter);
         }
 
-        EXPECT_EQ(32, testVector[0]);
-        EXPECT_EQ(43, testVector[1]);
-        EXPECT_EQ(44, testVector[2]);
+        EXPECT_EQ(TypeParam(32), testVector[0]);
+        EXPECT_EQ(TypeParam(43), testVector[1]);
+        EXPECT_EQ(TypeParam(44), testVector[2]);
 
     }
 
-    
-    TEST_F(VectorTest, Compare)
+    TYPED_TEST(TypedVectorTest, Compare)
     {
-        Vector<uint32_t> vector1;
-        Vector<uint32_t> vector2;
-        Vector<uint32_t> vector3;
+        Vector<TypeParam> vector1;
+        Vector<TypeParam> vector2;
+        Vector<TypeParam> vector3;
 
-        vector1.push_back(1);
-        vector1.push_back(2);
-        vector1.push_back(3);
+        vector1.push_back(TypeParam(1));
+        vector1.push_back(TypeParam(2));
+        vector1.push_back(TypeParam(3));
 
-        vector2.push_back(1);
-        vector2.push_back(2);
-        vector2.push_back(2);
+        vector2.push_back(TypeParam(1));
+        vector2.push_back(TypeParam(2));
+        vector2.push_back(TypeParam(2));
 
         EXPECT_FALSE(vector1 == vector2);
 
-        vector2[2] = 3;
-        
+        vector2[2] = TypeParam(3);
+
         EXPECT_TRUE(vector1 == vector2);
 
         EXPECT_FALSE(vector3 == vector2);
-    
+
     }
 
-    TEST_F(VectorTest, CompareComplexType)
+    TYPED_TEST(TypedVectorTest, CompareComplexType)
     {
         Vector<String> vector1;
         Vector<String> vector2;
