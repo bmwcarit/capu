@@ -399,7 +399,7 @@
 
         for(uint32_t i = 0; i < 32; ++i)
         {
-            vector->push_back(i);
+            vector->push_back(TypeParam(i));
         }
 
         const capu::Vector<TypeParam> vectorCopy(*vector);
