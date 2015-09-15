@@ -363,6 +363,15 @@ namespace capu
         EXPECT_EQ(TypeParam(42u), vector[0]);
     }
 
+    TYPED_TEST(TypedVectorTest, empty)
+    {
+        Vector<TypeParam> vector(0);
+
+        EXPECT_TRUE(vector.empty());
+
+        vector.push_back(TypeParam(123u));
+        EXPECT_FALSE(vector.empty());
+    }
     TYPED_TEST(TypedVectorTest, IteratorInc)
     {
         Vector<TypeParam> vector;

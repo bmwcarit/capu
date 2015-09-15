@@ -209,6 +209,11 @@ namespace capu
         uint_t size() const;
 
         /**
+         * Returns if the vector is empty.
+         */
+        bool empty() const;
+
+        /**
          * Returns the first element.
          */
         T& front();
@@ -374,6 +379,12 @@ namespace capu
             return 0 == Memory::Compare(&mine.front(), &other.front(), sizeof(T) * size);
         }
     };
+
+    template<typename T>
+    bool capu::Vector<T>::empty() const
+    {
+        return m_data == m_dataEnd;
+    }
 
     template<typename T>
     capu::Vector<T>::Vector(const Vector& other)
