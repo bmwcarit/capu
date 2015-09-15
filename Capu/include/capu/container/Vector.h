@@ -20,6 +20,7 @@
 #include "capu/Error.h"
 #include "capu/util/Traits.h"
 #include "capu/os/Memory.h"
+#include "capu/util/Iterator.h"
 #include <new>
 #include <assert.h>
 
@@ -38,7 +39,7 @@ namespace capu
          * Iterator for Vector
          */
         template<typename TYPE>
-        class InternalIterator
+        class InternalIterator : public iterator<random_access_iterator_tag, TYPE>
         {
         public:
             friend class Vector<T>;
