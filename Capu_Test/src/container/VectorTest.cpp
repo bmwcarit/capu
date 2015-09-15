@@ -83,6 +83,11 @@ namespace capu
     {
     };
 
+    template <typename ElementType>
+    class TypedVectorPerformanceTest : public testing::Test
+    {
+    };
+
     typedef ::testing::Types
         <
         uint_t,
@@ -91,6 +96,39 @@ namespace capu
 
     TYPED_TEST_CASE(TypedVectorTest, ElementTypes);
     TYPED_TEST_CASE(TypedVectorEnsureSTLCompatibility, ElementTypes);
+    TYPED_TEST_CASE(TypedVectorPerformanceTest, ElementTypes);
+
+    TYPED_TEST(TypedVectorPerformanceTest, DISABLED_STLinsertLots)
+    {
+        std::vector<TypeParam> stlvector(0);
+
+        for (uint_t i = 0; i < 100000; ++i)
+        {
+            stlvector.push_back(TypeParam(i));
+        }
+    }
+
+    TYPED_TEST(TypedVectorPerformanceTest, DISABLED_CAPUinsertLots)
+    {
+        capu::Vector<TypeParam> capuVector(0);
+
+        for (uint_t i = 0; i < 100000; ++i)
+        {
+            capuVector.push_back(TypeParam(i));
+        }
+    }
+
+    TYPED_TEST(TypedVectorPerformanceTest, DISABLED_STLReserveLots)
+    {
+        std::vector<TypeParam>* stlvector = new std::vector<TypeParam>(1000000);
+        delete stlvector;
+    }
+
+    TYPED_TEST(TypedVectorPerformanceTest, DISABLED_CAPUReserveLots)
+    {
+        capu::Vector<TypeParam>* capuVector = new capu::Vector<TypeParam>(1000000);
+        delete capuVector;
+    }
 
     TYPED_TEST(TypedVectorEnsureSTLCompatibility, initialDefault)
     {
