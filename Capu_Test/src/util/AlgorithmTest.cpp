@@ -1,0 +1,112 @@
+/*
+* Copyright (C) 2015 BMW Car IT GmbH
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+#include "capu/util/Algorithm.h"
+#include "capu/container/Vector.h"
+#include "capu/Config.h"
+#include "gmock/gmock.h"
+
+namespace capu
+{
+    TEST(AlgorithmTest, CopyPointers)
+    {
+        uint32_t src[3] = {2, 3, 4};
+        uint32_t dst[4] = { 0 };
+
+        uint32_t* result = copy(src, src + 3, dst);
+        EXPECT_EQ(dst + 3, result);
+        EXPECT_EQ(2u, dst[0]);
+        EXPECT_EQ(3u, dst[1]);
+        EXPECT_EQ(4u, dst[2]);
+        EXPECT_EQ(0u, dst[3]);
+    }
+
+    TEST(AlgorithmTest, CopyVector)
+    {
+        Vector<uint_t> src(3, 0);
+        src[0] = 2;
+        src[1] = 3;
+        src[2] = 4;
+        Vector<uint_t> dst(4, 0);
+
+        const Vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
+        EXPECT_EQ(dst.begin() + 3u, result);
+        EXPECT_EQ(2u, dst[0]);
+        EXPECT_EQ(3u, dst[1]);
+        EXPECT_EQ(4u, dst[2]);
+        EXPECT_EQ(0u, dst[3]);
+    }
+
+    TEST(AlgorithmTest, CopyZeroElements)
+    {
+        uint32_t src[2] = { 2, 3 };
+        uint32_t dst[1] = { 0 };
+
+        uint32_t* result = copy(src, src + 0, dst);
+        EXPECT_EQ(dst, result);
+        EXPECT_EQ(0u, dst[0]);
+    }
+
+    TEST(AlgorithmTest, CopyEmptyVector)
+    {
+        Vector<uint_t> src;
+        Vector<uint_t> dst(2, 0);
+
+        Vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
+        EXPECT_EQ(dst.begin(), result);
+        EXPECT_EQ(0u, dst[0]);
+    }
+
+    TEST(AlgorithmTest, FillArray)
+    {
+        uint_t a[3] = { 0 };
+        uint_t* result = fill_n(a, 2, 1u);
+        EXPECT_EQ(a + 2, result);
+        EXPECT_EQ(1u, a[0]);
+        EXPECT_EQ(1u, a[1]);
+        EXPECT_EQ(0u, a[2]);
+    }
+
+    TEST(AlgorithmTest, FillArrayWithZeroElements)
+    {
+        uint_t a[3] = { 99, 99, 99 };
+        uint_t* result = fill_n(a, 0, 1u);
+        EXPECT_EQ(a, result);
+        EXPECT_EQ(99u, a[0]);
+        EXPECT_EQ(99u, a[1]);
+        EXPECT_EQ(99u, a[2]);
+    }
+
+    TEST(AlgorithmTest, FillVector)
+    {
+        Vector<uint_t> v(3, 0);
+        Vector<uint_t>::Iterator result = fill_n(v.begin(), 2, 1u);
+        EXPECT_EQ(v.begin() + 2u, result);
+        EXPECT_EQ(1u, v[0]);
+        EXPECT_EQ(1u, v[1]);
+        EXPECT_EQ(0u, v[2]);
+    }
+
+    TEST(AlgorithmTest, FillVectorWithZeroElements)
+    {
+        Vector<uint_t> v(3, 99);
+        Vector<uint_t>::Iterator result = fill_n(v.begin(), 0, 1u);
+        EXPECT_EQ(v.begin(), result);
+        EXPECT_EQ(99u, v[0]);
+        EXPECT_EQ(99u, v[1]);
+        EXPECT_EQ(99u, v[2]);
+    }
+}
