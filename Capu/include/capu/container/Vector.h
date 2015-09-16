@@ -436,7 +436,7 @@ namespace capu
     {
         for (uint_t i = 0; i < initialSize; ++i)
         {
-            new(&m_data[i])T();
+            new(&m_data[i])T;
         }
     }
 
@@ -554,7 +554,7 @@ namespace capu
             const uint_t numberOfNewObjects = newSize - previousNumberOfElements;
             for (uint_t i = 0; i < numberOfNewObjects; ++i)
             {
-                new(&m_data[previousNumberOfElements + i])T();
+                new(&m_data[previousNumberOfElements + i])T;
             }
         }
         else
@@ -565,7 +565,7 @@ namespace capu
             const uint_t numberOfNewObjects = newSize - previousNumberOfElements;
             for (uint_t i = 0; i < numberOfNewObjects; ++i)
             {
-                new(&m_data[previousNumberOfElements + i])T();
+                new(&m_data[previousNumberOfElements + i])T;
             }
 
         }
