@@ -17,7 +17,11 @@
 #ifndef CAPU_VECTOR_H
 #define CAPU_VECTOR_H
 
-#include <capu/container/Array.h>
+#include "capu/Error.h"
+#include "capu/util/Traits.h"
+#include "capu/os/Memory.h"
+#include <new>
+#include <assert.h>
 
 namespace capu
 {
@@ -161,18 +165,19 @@ namespace capu
         Vector();
 
         /**
-         * Creates a new vector with a given initial capacity
-         * @param initialCapacity for the Vector
+         * Creates a new vector with a given initial size
+         * and initializes elements with default values
+         * @param initialSize for the Vector
          */
-        Vector(const uint_t initialCapacity);
+        Vector(const uint_t initialSize);
 
         /**
-         * Initializes the vector with the given capacity and sets all elements
+         * Initializes the vector with the given size and sets all elements
          * to the given value
-         * @param initialCapacity for the Vector
+         * @param initialSize for the Vector
          * @param value to set for all elements
          */
-        Vector(const uint_t initialCapacity, const T& value);
+        Vector(const uint_t initialSize, const T& value);
 
         /**
          * Initializes the vector from another vector
@@ -187,6 +192,11 @@ namespace capu
         Vector& operator=(const Vector& other);
 
         /**
+         * Destructor
+         */
+        ~Vector();
+
+        /**
          * Adds an Element to the end of the vector
          * @param reference to the value to add
          */
@@ -199,14 +209,41 @@ namespace capu
         uint_t size() const;
 
         /**
+         * Returns the first element.
+         */
+        T& front();
+
+        /**
+         * Returns the first element.
+         */
+        const T& front() const;
+
+        /**
+         * Returns the current capacity of the vector.
+         * The capacity is the total number of elements the vector can hold
+         * without causing reallocation because the memory is already reserved.
+         * The capacity can be influenced by use of the reserve method.
+         */
+        uint_t capacity() const;
+
+        /**
          * Resizes the vector to the given size
-         * The currently containing data of the vector will
-         * be still available. If the new size is smaller than the
-         * old size only the elements which fit into the new size are
-         * available after resizing
+         * If the new size is smaller than the old size
+         * only the elements which fit into the new size are
+         * available after resizing.
+         * if new size is larger than the old size
+         * the new elements are initialized with default values.
          * @param new size of the Vector
          */
         void resize(const uint_t size);
+
+        /**
+         * Reserves given capacity for the vector
+         * Only has effect if new capacity is larger than the
+         * old capacity.
+         * @param new capacity of the Vector
+         */
+        void reserve(const uint_t capacity);
 
         /**
          * Removes all elements from the Vector
@@ -276,19 +313,19 @@ namespace capu
     protected:
     private:
         /**
-         * Internal Array to store the elements
+         * Internal data to store the elements
          */
-        Array<T> m_data;
+        T* m_data;
 
         /**
-         * Iterator which points to the start of the data
+         * Iterator which points one after the end of the data
          */
-        Iterator m_start;
+        T* m_dataEnd;
 
         /**
-         * Iterator which points to one after the end of the data
+         * Iterator which points to one after the end of the capacity
          */
-        Iterator m_end;
+        T* m_capacityEnd;
 
         /**
          * Internal method to double the current memory
@@ -297,42 +334,92 @@ namespace capu
     };
 
     template<typename T>
-    capu::Vector<T>::Vector(const Vector& other)
-        : m_data(other.m_data)
-        , m_start(m_data.getRawData())
-        , m_end(m_data.getRawData() + other.size())
+    T& capu::Vector<T>::front()
     {
+        return *m_data;
+    }
 
+    template<typename T>
+    const T& capu::Vector<T>::front() const
+    {
+        return *m_data;
+    }
+
+    template<typename T, int TYPE>
+    struct VectorEqualsHelper
+    {
+        static bool equals(const Vector<T>& mine, const Vector<T>& other, uint_t size)
+        {
+            uint_t i = 0;
+            //comparing individual elements
+            while ((i < size) && (mine[i] == other[i]))
+            {
+                i++;
+            }
+
+            if (i == size)
+            {
+                return true;
+            }
+            return false;
+        }
+    };
+
+    template<typename T>
+    struct VectorEqualsHelper<T, CAPU_TYPE_PRIMITIVE>
+    {
+        static bool equals(const Vector<T>& mine, const Vector<T>& other, uint_t size)
+        {
+            //for primitive types memory compare can be used
+            return 0 == Memory::Compare(&mine.front(), &other.front(), sizeof(T) * size);
+        }
+    };
+
+    template<typename T>
+    capu::Vector<T>::Vector(const Vector& other)
+        : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * other.capacity()]))
+        , m_dataEnd( m_data + other.size())
+        , m_capacityEnd( m_data + other.capacity())
+    {
+        for (uint_t i = 0; i < other.size(); ++i)
+        {
+            new(&m_data[i])T(other.m_data[i]);
+        }
     }
 
     template<typename T>
     inline
     Vector<T>::Vector()
-        : m_data(16)
-        , m_start(m_data.getRawData())
-        , m_end(m_data.getRawData())
+        : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * 16]))
+        , m_dataEnd(m_data)
+        , m_capacityEnd(m_data + 16)
     {
-
     }
 
     template<typename T>
     inline
-    Vector<T>::Vector(const uint_t initialCapacity, const T& value)
-        : m_data(initialCapacity)
-        , m_start(m_data.getRawData())
-        , m_end(m_data.getRawData() + m_data.size())
+    Vector<T>::Vector(const uint_t initialSize, const T& value)
+        : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
+        , m_dataEnd(m_data + initialSize)
+        , m_capacityEnd(m_data + initialSize)
     {
-        m_data.set(value);
+        for (uint_t i = 0; i < initialSize; ++i)
+        {
+            new(&m_data[i])T(value);
+        }
     }
 
     template<typename T>
     inline
     Vector<T>::Vector(const uint_t initialSize)
-        : m_data(initialSize)
-        , m_start(m_data.getRawData())
-        , m_end(m_data.getRawData())
+        : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
+        , m_dataEnd(m_data + initialSize)
+        , m_capacityEnd(m_data + initialSize)
     {
-
+        for (uint_t i = 0; i < initialSize; ++i)
+        {
+            new(&m_data[i])T();
+        }
     }
 
     template<typename T>
@@ -340,11 +427,25 @@ namespace capu
     Vector<T>&
     Vector<T>::operator=(const Vector<T>& other)
     {
-        m_data  = other.m_data;
-        m_start = m_data.getRawData();
-        m_end   = m_data.getRawData() + other.size();
+        clear();
+        reserve(other.size());
+
+        const uint_t numberOfElementsToCopy = other.size();
+        for (uint_t i = 0; i < numberOfElementsToCopy; ++i)
+        {
+            new(&m_data[i])T(other.m_data[i]);
+        }
+        m_dataEnd = m_data + numberOfElementsToCopy;
 
         return *this;
+    }
+
+    template<typename T>
+    inline Vector<T>::~Vector()
+    {
+        clear();
+        const uint8_t* untypedMemory = reinterpret_cast<uint8_t*>(m_data);
+        delete[] untypedMemory;
     }
 
     template<typename T>
@@ -353,15 +454,17 @@ namespace capu
     Vector<T>::push_back(const T& value)
     {
         status_t status = CAPU_OK;
-        if (size() == m_data.size())
+        if (m_dataEnd == m_capacityEnd)
         {
             /*status = */
             // todo: should check status of grow here
             grow();
         }
 
-        (*m_end) = value;
-        ++m_end;
+        T* thing = reinterpret_cast<T*>(m_dataEnd);
+        new(thing)T(value);
+
+        ++m_dataEnd;
 
         return status;
     }
@@ -371,7 +474,12 @@ namespace capu
     void
     Vector<T>::clear()
     {
-        m_end = m_start;
+        const uint_t currentNumberOfElements = size();
+        for (uint_t i = 0; i < currentNumberOfElements; ++i)
+        {
+            (m_data + i)->~T();
+        }
+        m_dataEnd = m_data;
     }
 
     template<typename T>
@@ -379,35 +487,80 @@ namespace capu
     void
     Vector<T>::grow()
     {
-        uint_t newSize = 2 * m_data.size();
+        const uint_t currentNumberOfElements = size();
+        uint_t newSize = 2 * currentNumberOfElements;
         if(0 == newSize)
         {
             newSize = 1;
         }
 
-        Array<T> tmpArray(newSize);
-        m_data.swap(tmpArray);
-
-        m_start = m_data.getRawData();
-        m_end   = m_data.getRawData() + tmpArray.size();
-
-        Memory::CopyObject(m_start.m_current, tmpArray.getRawData(), tmpArray.size());
+        reserve(newSize);
     }
 
     template<typename T>
     inline
     void
-    Vector<T>::resize(const uint_t size)
+    Vector<T>::resize(const uint_t newSize)
     {
-        Array<T> tmpArray(size);
-        const uint_t mySize = Vector<T>::size();
-        const uint_t sizeToCopy = size < mySize ? size : mySize;
+        const uint_t previousNumberOfElements = size();
+        if (newSize < previousNumberOfElements)
+        {
+            // must delete excess elements
+            for (uint_t i = newSize; i < previousNumberOfElements; ++i)
+            {
+                (m_data + i)->~T();
+            }
+        }
+        else if (newSize > capacity())
+        {
+            // new size does not fit, must grow first
+            reserve(newSize);
+            // initialize new objects
+            const uint_t numberOfNewObjects = newSize - previousNumberOfElements;
+            for (uint_t i = 0; i < numberOfNewObjects; ++i)
+            {
+                new(&m_data[previousNumberOfElements + i])T();
+            }
+        }
+        else
+        {
+            // fits into reserved capacity
+            // construct all objects
+            // initialize new objects
+            const uint_t numberOfNewObjects = newSize - previousNumberOfElements;
+            for (uint_t i = 0; i < numberOfNewObjects; ++i)
+            {
+                new(&m_data[previousNumberOfElements + i])T();
+            }
 
-        tmpArray.copy(m_start.m_current, sizeToCopy);
-        m_data.swap(tmpArray);
+        }
+        m_dataEnd = m_data + newSize;
+    }
 
-        m_start = m_data.getRawData();
-        m_end   = m_data.getRawData() + mySize;
+    template<typename T>
+    inline
+    void
+    Vector<T>::reserve(const uint_t newSize)
+    {
+        if (newSize > capacity())
+        {
+            const uint_t currentNumberOfElements = size();
+            void* newMemory = new uint8_t[sizeof(T) * newSize];
+            T* newTypedMemory = reinterpret_cast<T*>(newMemory);
+
+            for (uint_t i = 0; i < currentNumberOfElements; ++i)
+            {
+                new(&newTypedMemory[i])T(m_data[i]);
+                m_data[i].~T();
+            }
+
+            // delete previous memory
+            uint8_t* untypedMemory = reinterpret_cast<uint8_t*>(m_data);
+            delete[] untypedMemory;
+            m_data = newTypedMemory;
+            m_dataEnd = m_data + currentNumberOfElements;
+            m_capacityEnd = m_data + newSize;
+        }
     }
 
     template<typename T>
@@ -415,7 +568,7 @@ namespace capu
     T&
     Vector<T>::operator[](const uint_t index) const
     {
-        return *(m_start + index);
+        return *(m_data + index);
     }
 
     template<typename T>
@@ -423,15 +576,22 @@ namespace capu
     uint_t
     Vector<T>::size() const
     {
-        return m_end.m_current - m_start.m_current;
+        const uint_t numberOfElements = (m_dataEnd - m_data);
+        return numberOfElements;
     }
 
     template<typename T>
     inline
-    typename Vector<T>::Iterator
-    Vector<T>::begin()
+    uint_t Vector<T>::capacity() const
     {
-        return m_start;
+        return (m_capacityEnd - m_data);
+    }
+
+    template <typename T>
+    inline
+    typename Vector<T>::Iterator Vector<T>::begin()
+    {
+        return Iterator(m_data);
     }
 
     template<typename T>
@@ -439,7 +599,7 @@ namespace capu
     typename Vector<T>::ConstIterator
     Vector<T>::begin() const
     {
-        return ConstIterator(m_start.m_current);
+        return ConstIterator(m_data);
     }
 
     template<typename T>
@@ -447,7 +607,7 @@ namespace capu
     typename Vector<T>::Iterator
     Vector<T>::end()
     {
-        return Iterator(m_end);
+        return Iterator(m_dataEnd);
     }
 
     template<typename T>
@@ -455,14 +615,14 @@ namespace capu
     typename Vector<T>::ConstIterator
     Vector<T>::end() const
     {
-        return ConstIterator(m_end);
+        return ConstIterator(m_dataEnd);
     }
 
     template<typename T>
     inline
     status_t Vector<T>::erase(const uint_t index, T* elementOld)
     {
-        Iterator current = Iterator(m_start + index);
+        const Iterator current = Iterator(m_data + index);
         return erase(current, elementOld);
     }
 
@@ -470,7 +630,7 @@ namespace capu
     inline
     status_t Vector<T>::erase(const Iterator& iterator, T* elementOld)
     {
-        if(iterator >= m_end)
+        if(iterator >= m_dataEnd)
         {
             return CAPU_EINVAL;
         }
@@ -480,15 +640,16 @@ namespace capu
             *elementOld = *iterator;
         }
 
-        if(iterator == m_end - 1u)
+        if(iterator == m_dataEnd - 1u)
         {
-            --m_end;
+            --m_dataEnd;
         }
         else
         {
-            Memory::Move(iterator, iterator + 1u, (m_end.m_current - (iterator.m_current + 1u)) * sizeof(T));
-            --m_end;
+            Memory::Move(iterator, iterator + 1u, (m_dataEnd - (iterator + 1u)) * sizeof(T));
+            --m_dataEnd;
         }
+        (*(m_dataEnd)).~T();
 
         return CAPU_OK;
     }
@@ -502,7 +663,7 @@ namespace capu
         {
             return false;
         }
-        return m_data.truncatedEquals(other.m_data, size());
+        return VectorEqualsHelper<T, Type<T>::Identifier>::equals(*this, other, size());
     }
 
 }

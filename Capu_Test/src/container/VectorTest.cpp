@@ -55,8 +55,31 @@ namespace capu
     };
     int_t ComplexTestingType::NumberOfObjects = 0;
 
+    template<typename T>
+    struct NumberOfExistingObjectsHelper
+    {
+        static void assertNumberOfExistingObjectsEquals(int_t expectedNumber)
+        {
+            UNUSED(expectedNumber);
+        }
+    };
+
+    template<>
+    struct NumberOfExistingObjectsHelper<ComplexTestingType>
+    {
+        static void assertNumberOfExistingObjectsEquals(int_t expectedNumber)
+        {
+            ASSERT_EQ(expectedNumber, ComplexTestingType::NumberOfObjects);
+        }
+    };
+
     template <typename ElementType>
     class TypedVectorTest : public testing::Test
+    {
+    };
+
+    template <typename ElementType>
+    class TypedVectorEnsureSTLCompatibility : public testing::Test
     {
     };
 
@@ -67,6 +90,178 @@ namespace capu
         > ElementTypes;
 
     TYPED_TEST_CASE(TypedVectorTest, ElementTypes);
+    TYPED_TEST_CASE(TypedVectorEnsureSTLCompatibility, ElementTypes);
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, initialDefault)
+    {
+        std::vector<TypeParam> stlvector;
+        capu::Vector<TypeParam> capuVector;
+
+        EXPECT_EQ(stlvector.size(), capuVector.size());
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, sizeBehaviour)
+    {
+        std::vector<TypeParam> stlvector(0);
+        capu::Vector<TypeParam> capuVector(0);
+
+        EXPECT_EQ(0u, stlvector.capacity());
+        EXPECT_EQ(0u, capuVector.capacity());
+
+        EXPECT_EQ(0u, stlvector.size());
+        EXPECT_EQ(0u, capuVector.size());
+
+        stlvector.push_back(0);
+        capuVector.push_back(0);
+
+        EXPECT_EQ(1u, stlvector.size());
+        EXPECT_EQ(1u, capuVector.size());
+
+        stlvector.pop_back();
+        capuVector.erase(0);
+
+        EXPECT_EQ(0u, stlvector.size());
+        EXPECT_EQ(0u, capuVector.size());
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, sizeBehaviour2)
+    {
+        std::vector<TypeParam> stlvector(5);
+        capu::Vector<TypeParam> capuVector(5);
+
+        EXPECT_EQ(5u, stlvector.capacity());
+        EXPECT_EQ(5u, capuVector.capacity());
+
+        EXPECT_EQ(5u, stlvector.size());
+        EXPECT_EQ(5u, capuVector.size());
+
+        stlvector.push_back(0);
+        capuVector.push_back(0);
+
+        EXPECT_EQ(6u, stlvector.size());
+        EXPECT_EQ(6u, capuVector.size());
+
+        stlvector.pop_back();
+        capuVector.erase(0);
+
+        EXPECT_EQ(5u, stlvector.size());
+        EXPECT_EQ(5u, capuVector.size());
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, reserveBahaviour)
+    {
+        std::vector<TypeParam> stlvector(5);
+        capu::Vector<TypeParam> capuVector(5);
+
+        EXPECT_EQ(5u, stlvector.capacity());
+        EXPECT_EQ(5u, capuVector.capacity());
+
+        EXPECT_EQ(5u, stlvector.size());
+        EXPECT_EQ(5u, capuVector.size());
+
+        stlvector.reserve(15);
+        capuVector.reserve(15);
+
+        EXPECT_EQ(15u, stlvector.capacity());
+        EXPECT_EQ(15u, capuVector.capacity());
+
+        EXPECT_EQ(5u, stlvector.size());
+        EXPECT_EQ(5u, capuVector.size());
+
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, reserveConstructsClass)
+    {
+        {
+            std::vector<TypeParam> stlvector(5);
+            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5);
+        }
+        {
+            capu::Vector<TypeParam> capuvector(5);
+            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5);
+        }
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, deletingVectorAlsoCallsDestructorsOfElements)
+    {
+        {
+            {
+                std::vector<TypeParam> stlvector(5);
+            }
+            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
+        }
+        {
+            {
+                capu::Vector<TypeParam> capuvector(5);
+            }
+            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
+        }
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, resizeSmallerDeconstructsElements)
+    {
+        capu::Vector<TypeParam> capuVector(5);
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5);
+
+        capuVector.resize(0);
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, resizeBahaviour)
+    {
+        std::vector<TypeParam> stlvector(5);
+        capu::Vector<TypeParam> capuVector(5);
+
+        EXPECT_EQ(5u, stlvector.capacity());
+        EXPECT_EQ(5u, capuVector.capacity());
+
+        EXPECT_EQ(5u, stlvector.size());
+        EXPECT_EQ(5u, capuVector.size());
+
+        stlvector.resize(15);
+        capuVector.resize(15);
+
+        EXPECT_EQ(15u, stlvector.capacity());
+        EXPECT_EQ(15u, capuVector.capacity());
+
+        EXPECT_EQ(15u, stlvector.size());
+        EXPECT_EQ(15u, capuVector.size());
+
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, initialRequestedSize)
+    {
+        std::vector<TypeParam> stlvector(876);
+        capu::Vector<TypeParam> capuVector(876);
+
+        EXPECT_EQ(876u, stlvector.capacity());
+        EXPECT_EQ(876u, capuVector.capacity());
+        EXPECT_EQ(stlvector.size(), capuVector.size());
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, resize)
+    {
+        std::vector<TypeParam> stlvector;
+        capu::Vector<TypeParam> capuVector;
+
+        stlvector.resize(128);
+        capuVector.resize(128);
+
+        EXPECT_EQ(stlvector.size(), capuVector.size());
+        EXPECT_EQ(stlvector.capacity(), capuVector.capacity());
+    }
+
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, reserve)
+    {
+        std::vector<TypeParam> stlvector;
+        capu::Vector<TypeParam> capuVector;
+
+        stlvector.reserve(128);
+        capuVector.reserve(128);
+
+        EXPECT_EQ(stlvector.size(), capuVector.size());
+        EXPECT_EQ(stlvector.capacity(), capuVector.capacity());
+    }
 
     TYPED_TEST(TypedVectorTest, Constructor)
     {
@@ -77,7 +272,7 @@ namespace capu
     TYPED_TEST(TypedVectorTest, ConstructorWithSize)
     {
         Vector<TypeParam> vector(3);
-        EXPECT_EQ(0u, vector.size());
+        EXPECT_EQ(3u, vector.size());
     }
 
     TYPED_TEST(TypedVectorTest, ConstructorWithCapacityAndValue)
@@ -107,6 +302,34 @@ namespace capu
         }
 
         EXPECT_EQ(32u, vectorCopy.size());
+    }
+
+    TYPED_TEST(TypedVectorTest, AssignmentOperator)
+    {
+        Vector<TypeParam>* vector = new Vector<TypeParam>(0);
+
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            vector->push_back(TypeParam(i));
+        }
+
+        Vector<TypeParam> vectorCopy;
+        vectorCopy = *vector;
+        delete vector;
+
+        ASSERT_EQ(32u, vectorCopy.size());
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            EXPECT_EQ(TypeParam(i), vectorCopy[i]);
+        }
+    }
+
+    TYPED_TEST(TypedVectorTest, reserveThenResizeIntoIt)
+    {
+        Vector<TypeParam> vector;
+        vector.reserve(64);
+        vector.resize(32);
+        EXPECT_EQ(32U, vector.size());
     }
 
     TYPED_TEST(TypedVectorTest, PushBack)
@@ -309,8 +532,8 @@ namespace capu
 
         const Vector<TypeParam>& constVector = vector;
 
-        vector.push_back(TypeParam(42u));
-        vector.push_back(TypeParam(47u));
+        vector[0] = TypeParam(42u);
+        vector[1] = TypeParam(47u);
 
         Vector<TypeParam> vector2;
 
@@ -420,6 +643,7 @@ namespace capu
         vector.erase(iter + 2u);
 
         EXPECT_EQ(4u, vector.size());
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(4);
         EXPECT_EQ(TypeParam(1), vector[0]);
         EXPECT_EQ(TypeParam(2), vector[1]);
         EXPECT_EQ(TypeParam(4), vector[2]);
@@ -428,6 +652,7 @@ namespace capu
         vector.erase(vector.begin());
 
         EXPECT_EQ(3u, vector.size());
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(3);
         EXPECT_EQ(TypeParam(2), vector[0]);
         EXPECT_EQ(TypeParam(4), vector[1]);
         EXPECT_EQ(TypeParam(5), vector[2]);
@@ -435,6 +660,7 @@ namespace capu
         vector.erase(vector.end() - 1u);
 
         EXPECT_EQ(2u, vector.size());
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(2);
         EXPECT_EQ(TypeParam(2), vector[0]);
         EXPECT_EQ(TypeParam(4), vector[1]);
 
@@ -442,6 +668,7 @@ namespace capu
         vector.erase(vector.begin());
 
         EXPECT_EQ(TypeParam(0u), vector.size());
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
     }
 
     TYPED_TEST(TypedVectorTest, EraseIndex)

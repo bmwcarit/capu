@@ -41,8 +41,8 @@ class AsyncSocketHandler
 {
 public:
 
-    AsyncSocketHandler(const uint32_t numberOfClients, uint16_t port)
-        : m_socketInfos(numberOfClients*2)
+    AsyncSocketHandler(uint16_t port)
+        : m_socketInfos()
         , m_receiveCount(0)
     {
         m_serverSocket.bind(port, "0.0.0.0");
@@ -186,7 +186,7 @@ TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
 
     uint16_t port = RandomPort::get();
 
-    AsyncSocketHandler asyncSocketHandler(clientcount, port);
+    AsyncSocketHandler asyncSocketHandler(port);
 
     AsyncClient asyncClient[clientcount];
 
@@ -217,7 +217,7 @@ TEST(NonBlockSocketCheckerTest, DISABLED_ReceiveDataFromALotOfClients)
 
     uint16_t port = RandomPort::get();
 
-    AsyncSocketHandler asyncSocketHandler(clientcount, port);
+    AsyncSocketHandler asyncSocketHandler(port);
 
 
     AsyncClient asyncClient[clientcount];
@@ -242,7 +242,7 @@ TEST(NonBlockSocketCheckerTest, DISABLED_ReceiveDataOnClientSide)
 {
     uint16_t port = RandomPort::get();
 
-    AsyncSocketHandler asyncSocketHandler(1, port);
+    AsyncSocketHandler asyncSocketHandler(port);
 
     AsyncClient asyncClient;
     asyncClient.start(port, false);
