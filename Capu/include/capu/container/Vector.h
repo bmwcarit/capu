@@ -525,19 +525,14 @@ namespace capu
         {
             // must delete excess elements
             destruct_raw(m_data + newSize, m_data + previousNumberOfElements);
-           }
-        else if (newSize > capacity())
-        {
-            // new size does not fit, must grow first
-            reserve(newSize);
-            // initialize new objects
-            const uint_t numberOfNewObjects = newSize - previousNumberOfElements;
-            fill_n_raw(m_data + previousNumberOfElements, numberOfNewObjects);
         }
         else
         {
-            // fits into reserved capacity
-            // construct all objects
+            if (newSize > capacity())
+            {
+                // new size does not fit, must grow first
+                reserve(newSize);
+            }
             // initialize new objects
             const uint_t numberOfNewObjects = newSize - previousNumberOfElements;
             fill_n_raw(m_data + previousNumberOfElements, numberOfNewObjects);
