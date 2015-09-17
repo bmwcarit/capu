@@ -21,6 +21,7 @@
 #include "capu/util/Traits.h"
 #include "capu/os/Memory.h"
 #include "capu/util/Iterator.h"
+#include "capu/util/AlgorithmRaw.h"
 #include <new>
 #include <assert.h>
 
@@ -399,10 +400,7 @@ namespace capu
         , m_dataEnd( m_data + other.size())
         , m_capacityEnd( m_data + other.capacity())
     {
-        for (uint_t i = 0; i < other.size(); ++i)
-        {
-            new(&m_data[i])T(other.m_data[i]);
-        }
+        copy_to_raw(other.m_data, other.m_dataEnd, m_data);
     }
 
     template<typename T>
@@ -421,10 +419,7 @@ namespace capu
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
     {
-        for (uint_t i = 0; i < initialSize; ++i)
-        {
-            new(&m_data[i])T(value);
-        }
+        fill_n_raw(m_data, initialSize, value);
     }
 
     template<typename T>
@@ -434,10 +429,7 @@ namespace capu
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
     {
-        for (uint_t i = 0; i < initialSize; ++i)
-        {
-            new(&m_data[i])T;
-        }
+        fill_n_raw(m_data, initialSize);
     }
 
     template<typename T>
@@ -446,14 +438,11 @@ namespace capu
     Vector<T>::operator=(const Vector<T>& other)
     {
         clear();
-        reserve(other.size());
+        const uint_t numberOfElementsInOther = other.size();
+        reserve(numberOfElementsInOther);
 
-        const uint_t numberOfElementsToCopy = other.size();
-        for (uint_t i = 0; i < numberOfElementsToCopy; ++i)
-        {
-            new(&m_data[i])T(other.m_data[i]);
-        }
-        m_dataEnd = m_data + numberOfElementsToCopy;
+        copy_to_raw(other.m_data, other.m_dataEnd, m_data);
+        m_dataEnd = m_data + numberOfElementsInOther;
 
         return *this;
     }
@@ -509,11 +498,7 @@ namespace capu
     void
     Vector<T>::clear()
     {
-        const uint_t currentNumberOfElements = size();
-        for (uint_t i = 0; i < currentNumberOfElements; ++i)
-        {
-            (m_data + i)->~T();
-        }
+        destruct_raw(m_data, m_dataEnd);
         m_dataEnd = m_data;
     }
 
@@ -541,21 +526,15 @@ namespace capu
         if (newSize < previousNumberOfElements)
         {
             // must delete excess elements
-            for (uint_t i = newSize; i < previousNumberOfElements; ++i)
-            {
-                (m_data + i)->~T();
-            }
-        }
+            destruct_raw(m_data + newSize, m_data + previousNumberOfElements);
+           }
         else if (newSize > capacity())
         {
             // new size does not fit, must grow first
             reserve(newSize);
             // initialize new objects
             const uint_t numberOfNewObjects = newSize - previousNumberOfElements;
-            for (uint_t i = 0; i < numberOfNewObjects; ++i)
-            {
-                new(&m_data[previousNumberOfElements + i])T;
-            }
+            fill_n_raw(m_data + previousNumberOfElements, numberOfNewObjects);
         }
         else
         {
@@ -563,10 +542,7 @@ namespace capu
             // construct all objects
             // initialize new objects
             const uint_t numberOfNewObjects = newSize - previousNumberOfElements;
-            for (uint_t i = 0; i < numberOfNewObjects; ++i)
-            {
-                new(&m_data[previousNumberOfElements + i])T;
-            }
+            fill_n_raw(m_data + previousNumberOfElements, numberOfNewObjects);
 
         }
         m_dataEnd = m_data + newSize;
@@ -583,11 +559,8 @@ namespace capu
             void* newMemory = new uint8_t[sizeof(T) * newSize];
             T* newTypedMemory = reinterpret_cast<T*>(newMemory);
 
-            for (uint_t i = 0; i < currentNumberOfElements; ++i)
-            {
-                new(&newTypedMemory[i])T(m_data[i]);
-                m_data[i].~T();
-            }
+            copy_to_raw(m_data, m_dataEnd, newTypedMemory);
+            destruct_raw(m_data, m_dataEnd);
 
             // delete previous memory
             uint8_t* untypedMemory = reinterpret_cast<uint8_t*>(m_data);
