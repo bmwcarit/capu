@@ -74,6 +74,32 @@ namespace capu
     // iterator_traits specialization for constant pointers
     template <class T>
     struct iterator_traits<const T*> : public iterator<random_access_iterator_tag, T> {};
+
+
+    template <class InputIt>
+    typename capu::iterator_traits<InputIt>::difference_type DistanceHelper(InputIt first, InputIt last, random_access_iterator_tag)
+    {
+        return last - first;
+    }
+
+    template <class InputIt>
+    typename capu::iterator_traits<InputIt>::difference_type DistanceHelper(InputIt first, InputIt last, input_iterator_tag)
+    {
+        typename capu::iterator_traits<InputIt>::difference_type result = 0;
+        while (first != last)
+        {
+            ++first;
+            ++result;
+        }
+        return result;
+    }
+
+    template <class InputIt>
+    typename capu::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last)
+    {
+        typedef typename capu::iterator_traits<InputIt>::iterator_category iterator_category;
+        return DistanceHelper(first, last, iterator_category());
+    }
 }
 
 #endif // CAPU_ITERATOR_H
