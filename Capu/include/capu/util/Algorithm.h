@@ -40,6 +40,24 @@ namespace capu
     }
 
     /**
+    * Copy range to destination iterator
+    * @param first begin of source range
+    * @param last non-inclusive end of source range
+    * @param lastResult non-inclusive end of destination range
+    */
+    template <class InputIt, class OutputIt>
+    OutputIt copy_backward(InputIt first, InputIt last, OutputIt lastResult)
+    {
+        while (first != last)
+        {
+            --last;
+            --lastResult;
+            *lastResult = *last;
+        }
+        return lastResult;
+    }
+
+    /**
      * Fill a number of elements with given value
      * @param first start of range to fill
      * @param count number of consecutive elements to fill

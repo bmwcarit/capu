@@ -70,6 +70,34 @@ namespace capu
         EXPECT_EQ(0u, dst[0]);
     }
 
+    TEST(AlgorithmTest, CopyBackwardsPointers)
+    {
+        uint32_t arr[4] = {2, 3, 4, 99};
+
+        uint32_t* result = copy_backward(arr, arr + 3, arr + 4);
+        EXPECT_EQ(arr + 1, result);
+        EXPECT_EQ(2u, arr[0]);
+        EXPECT_EQ(2u, arr[1]);
+        EXPECT_EQ(3u, arr[2]);
+        EXPECT_EQ(4u, arr[3]);
+    }
+
+    TEST(AlgorithmTest, CopyBackwardsVector)
+    {
+        Vector<uint_t> src(3, 0);
+        src[0] = 2;
+        src[1] = 3;
+        src[2] = 4;
+        Vector<uint_t> dst(4, 0);
+
+        Vector<uint_t>::Iterator result = copy_backward(src.begin(), src.end(), dst.end()-1u);
+        EXPECT_EQ(dst.begin(), result);
+        EXPECT_EQ(2u, dst[0]);
+        EXPECT_EQ(3u, dst[1]);
+        EXPECT_EQ(4u, dst[2]);
+        EXPECT_EQ(0u, dst[3]);
+    }
+
     TEST(AlgorithmTest, FillArray)
     {
         uint_t a[3] = { 0 };
