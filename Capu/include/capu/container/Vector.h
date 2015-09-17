@@ -22,6 +22,7 @@
 #include "capu/os/Memory.h"
 #include "capu/util/Iterator.h"
 #include "capu/util/AlgorithmRaw.h"
+#include "capu/util/Algorithm.h"
 #include <new>
 #include <assert.h>
 
@@ -358,36 +359,6 @@ namespace capu
         return *m_data;
     }
 
-    template<typename T, int TYPE>
-    struct VectorEqualsHelper
-    {
-        static bool equals(const Vector<T>& mine, const Vector<T>& other, uint_t size)
-        {
-            uint_t i = 0;
-            //comparing individual elements
-            while ((i < size) && (mine[i] == other[i]))
-            {
-                i++;
-            }
-
-            if (i == size)
-            {
-                return true;
-            }
-            return false;
-        }
-    };
-
-    template<typename T>
-    struct VectorEqualsHelper<T, CAPU_TYPE_PRIMITIVE>
-    {
-        static bool equals(const Vector<T>& mine, const Vector<T>& other, uint_t size)
-        {
-            //for primitive types memory compare can be used
-            return 0 == Memory::Compare(&mine.front(), &other.front(), sizeof(T) * size);
-        }
-    };
-
     template<typename T>
     bool capu::Vector<T>::empty() const
     {
@@ -671,7 +642,7 @@ namespace capu
         {
             return false;
         }
-        return VectorEqualsHelper<T, Type<T>::Identifier>::equals(*this, other, size());
+        return equal(m_data, m_dataEnd, other.m_data);
     }
 
 }

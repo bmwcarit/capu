@@ -25,12 +25,10 @@
 #include "capu/container/Vector.h"
 #include "capu/container/String.h"
 
-namespace capu
-{
     class ComplexTestingType
     {
     public:
-        ComplexTestingType(int_t someID = 0)
+        ComplexTestingType(capu::int_t someID = 0)
         {
             NumberOfObjects++;
             SomeID = someID;
@@ -45,20 +43,25 @@ namespace capu
             NumberOfObjects--;
         }
 
+        bool operator!=(const ComplexTestingType& other) const
+        {
+            return SomeID != other.SomeID;
+        }
+
         bool operator==(const ComplexTestingType& other) const
         {
             return SomeID == other.SomeID;
         }
 
-        static int_t NumberOfObjects;
-        int_t SomeID;
+        static capu::int_t NumberOfObjects;
+        capu::int_t SomeID;
     };
-    int_t ComplexTestingType::NumberOfObjects = 0;
+    capu::int_t ComplexTestingType::NumberOfObjects = 0;
 
     template<typename T>
     struct NumberOfExistingObjectsHelper
     {
-        static void assertNumberOfExistingObjectsEquals(int_t expectedNumber)
+        static void assertNumberOfExistingObjectsEquals(capu::int_t expectedNumber)
         {
             UNUSED(expectedNumber);
         }
@@ -67,7 +70,7 @@ namespace capu
     template<>
     struct NumberOfExistingObjectsHelper<ComplexTestingType>
     {
-        static void assertNumberOfExistingObjectsEquals(int_t expectedNumber)
+        static void assertNumberOfExistingObjectsEquals(capu::int_t expectedNumber)
         {
             ASSERT_EQ(expectedNumber, ComplexTestingType::NumberOfObjects);
         }
@@ -90,7 +93,7 @@ namespace capu
 
     typedef ::testing::Types
         <
-        uint_t,
+        capu::uint_t,
         ComplexTestingType
         > ElementTypes;
 
@@ -102,7 +105,7 @@ namespace capu
     {
         std::vector<TypeParam> stlvector(0);
 
-        for (uint_t i = 0; i < 100000; ++i)
+        for (capu::uint_t i = 0; i < 100000; ++i)
         {
             stlvector.push_back(TypeParam(i));
         }
@@ -112,7 +115,7 @@ namespace capu
     {
         capu::Vector<TypeParam> capuVector(0);
 
-        for (uint_t i = 0; i < 100000; ++i)
+        for (capu::uint_t i = 0; i < 100000; ++i)
         {
             capuVector.push_back(TypeParam(i));
         }
@@ -245,6 +248,7 @@ namespace capu
         NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
     }
 
+
     TYPED_TEST(TypedVectorEnsureSTLCompatibility, resizeBahaviour)
     {
         std::vector<TypeParam> stlvector(5);
@@ -303,19 +307,19 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, Constructor)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
         EXPECT_EQ(0U, vector.size());
     }
 
     TYPED_TEST(TypedVectorTest, ConstructorWithSize)
     {
-        Vector<TypeParam> vector(3);
+        capu::Vector<TypeParam> vector(3);
         EXPECT_EQ(3u, vector.size());
     }
 
     TYPED_TEST(TypedVectorTest, ConstructorWithCapacityAndValue)
     {
-        Vector<TypeParam> vector(3, 5);
+        capu::Vector<TypeParam> vector(3, 5);
 
         EXPECT_EQ(TypeParam(5u), vector[0]);
         EXPECT_EQ(TypeParam(5u), vector[1]);
@@ -324,14 +328,14 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, CopyConstructor)
     {
-        Vector<TypeParam>* vector = new Vector<TypeParam>(0);
+        capu::Vector<TypeParam>* vector = new capu::Vector<TypeParam>(0);
 
         for(uint32_t i = 0; i < 32; ++i)
         {
             vector->push_back(i);
         }
 
-        const Vector<TypeParam> vectorCopy(*vector);
+        const capu::Vector<TypeParam> vectorCopy(*vector);
         delete vector;
 
         for(uint32_t i = 0; i < 32; ++i)
@@ -344,14 +348,14 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, AssignmentOperator)
     {
-        Vector<TypeParam>* vector = new Vector<TypeParam>(0);
+        capu::Vector<TypeParam>* vector = new capu::Vector<TypeParam>(0);
 
         for (uint32_t i = 0; i < 32; ++i)
         {
             vector->push_back(TypeParam(i));
         }
 
-        Vector<TypeParam> vectorCopy;
+        capu::Vector<TypeParam> vectorCopy;
         vectorCopy = *vector;
         delete vector;
 
@@ -364,7 +368,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, reserveThenResizeIntoIt)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
         vector.reserve(64);
         vector.resize(32);
         EXPECT_EQ(32U, vector.size());
@@ -372,7 +376,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, PushBack)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(42u));
         vector.push_back(TypeParam(47u));
@@ -383,7 +387,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, PushBack2)
     {
-        Vector<TypeParam> vector(2);
+        capu::Vector<TypeParam> vector(2);
 
         vector[0] = TypeParam(42u);
         vector[1] = TypeParam(47u);
@@ -394,7 +398,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, PushBack3)
     {
-        Vector<TypeParam> vector(0);
+        capu::Vector<TypeParam> vector(0);
 
         vector.push_back(TypeParam(42u));
 
@@ -403,34 +407,34 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, PopBack)
     {
-        Vector<TypeParam> vector(0);
+        capu::Vector<TypeParam> vector(0);
 
         vector.push_back(TypeParam(42u));
-        status_t status = vector.pop_back();
+        capu::status_t status = vector.pop_back();
 
-        EXPECT_EQ(CAPU_OK, status);
+        EXPECT_EQ(capu::CAPU_OK, status);
         EXPECT_EQ(TypeParam(0u), vector.size());
     }
 
     TYPED_TEST(TypedVectorTest, PopBack2)
     {
-        Vector<TypeParam> vector(0);
+        capu::Vector<TypeParam> vector(0);
 
         vector.push_back(TypeParam(42u));
         vector.push_back(TypeParam(43u));
-        status_t status = vector.pop_back();
-        status_t status2 = vector.pop_back();
+        capu::status_t status = vector.pop_back();
+        capu::status_t status2 = vector.pop_back();
         vector.push_back(TypeParam(44u));
 
-        EXPECT_EQ(CAPU_OK, status);
-        EXPECT_EQ(CAPU_OK, status2);
+        EXPECT_EQ(capu::CAPU_OK, status);
+        EXPECT_EQ(capu::CAPU_OK, status2);
         EXPECT_EQ(1u, vector.size());
         EXPECT_EQ(TypeParam(44u), vector[0]);
     }
 
     TYPED_TEST(TypedVectorTest, empty)
     {
-        Vector<TypeParam> vector(0);
+        capu::Vector<TypeParam> vector(0);
 
         EXPECT_TRUE(vector.empty());
 
@@ -440,26 +444,26 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, PopBackNonExistingElementReturnsError)
     {
-        Vector<TypeParam> vector(0);
+        capu::Vector<TypeParam> vector(0);
 
         vector.push_back(TypeParam(42u));
-        status_t status = vector.pop_back();
-        status_t status2 = vector.pop_back();
+        capu::status_t status = vector.pop_back();
+        capu::status_t status2 = vector.pop_back();
 
-        EXPECT_EQ(CAPU_OK, status);
-        EXPECT_NE(CAPU_OK, status2);
+        EXPECT_EQ(capu::CAPU_OK, status);
+        EXPECT_NE(capu::CAPU_OK, status2);
     }
 
     TYPED_TEST(TypedVectorTest, IteratorInc)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
         vector.push_back(TypeParam(3u));
         vector.push_back(TypeParam(4u));
 
-        typename Vector<TypeParam>::Iterator current = vector.begin();
+        typename capu::Vector<TypeParam>::Iterator current = vector.begin();
 
         EXPECT_EQ(TypeParam(1u), *current);
         ++current;
@@ -472,14 +476,14 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorDec)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
         vector.push_back(TypeParam(3u));
         vector.push_back(TypeParam(4u));
 
-        typename Vector<TypeParam>::Iterator end = vector.end();
+        typename capu::Vector<TypeParam>::Iterator end = vector.end();
         --end;
         EXPECT_EQ(TypeParam(4u), *end);
         --end;
@@ -492,15 +496,15 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorNotEqual)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
         vector.push_back(TypeParam(3u));
         vector.push_back(TypeParam(4u));
 
-        typename Vector<TypeParam>::Iterator start = vector.begin();
-        typename Vector<TypeParam>::Iterator end = vector.end();
+        typename capu::Vector<TypeParam>::Iterator start = vector.begin();
+        typename capu::Vector<TypeParam>::Iterator end = vector.end();
 
         EXPECT_TRUE(start != end);
         end = start;
@@ -510,15 +514,15 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorSmaller)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
         vector.push_back(TypeParam(3u));
         vector.push_back(TypeParam(4u));
 
-        typename Vector<TypeParam>::Iterator start = vector.begin();
-        typename Vector<TypeParam>::Iterator end = vector.end();
+        typename capu::Vector<TypeParam>::Iterator start = vector.begin();
+        typename capu::Vector<TypeParam>::Iterator end = vector.end();
 
         EXPECT_TRUE(start < end);
         EXPECT_FALSE(end < start);
@@ -526,15 +530,15 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorBigger)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
         vector.push_back(TypeParam(3u));
         vector.push_back(TypeParam(4u));
 
-        typename Vector<TypeParam>::Iterator start = vector.begin();
-        typename Vector<TypeParam>::Iterator end = vector.end();
+        typename capu::Vector<TypeParam>::Iterator start = vector.begin();
+        typename capu::Vector<TypeParam>::Iterator end = vector.end();
 
         EXPECT_TRUE(end > start);
         EXPECT_FALSE(start > end);
@@ -542,14 +546,14 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorAddValue)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
         vector.push_back(TypeParam(3u));
         vector.push_back(TypeParam(4u));
 
-        typename Vector<TypeParam>::Iterator start = vector.begin();
+        typename capu::Vector<TypeParam>::Iterator start = vector.begin();
 
         EXPECT_EQ(TypeParam(1u), *(start + 0u));
         EXPECT_EQ(TypeParam(2u), *(start + 1u));
@@ -559,14 +563,14 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorSubValue)
     {
-         Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
         vector.push_back(TypeParam(3u));
         vector.push_back(TypeParam(4u));
 
-        typename Vector<TypeParam>::Iterator end = vector.end();
+        typename capu::Vector<TypeParam>::Iterator end = vector.end();
 
         EXPECT_EQ(TypeParam(4u), *(end - 1u));
         EXPECT_EQ(TypeParam(3u), *(end - 2u));
@@ -576,14 +580,14 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, Iterator)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(42u));
         vector.push_back(TypeParam(47u));
 
-        Vector<TypeParam> vector2;
+        capu::Vector<TypeParam> vector2;
 
-        for (typename Vector<TypeParam>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
+        for (typename capu::Vector<TypeParam>::Iterator iter = vector.begin(); iter != vector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
@@ -594,16 +598,16 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorOnConstVector)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
-        const Vector<TypeParam>& constVector = vector;
+        const capu::Vector<TypeParam>& constVector = vector;
 
         vector.push_back(TypeParam(42u));
         vector.push_back(TypeParam(47u));
 
-        Vector<TypeParam> vector2;
+        capu::Vector<TypeParam> vector2;
 
-        for (typename Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        for (typename capu::Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
@@ -615,16 +619,16 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorOnConstVectorWithInitialCapacity)
     {
-        Vector<TypeParam> vector(2);
+        capu::Vector<TypeParam> vector(2);
 
-        const Vector<TypeParam>& constVector = vector;
+        const capu::Vector<TypeParam>& constVector = vector;
 
         vector[0] = TypeParam(42u);
         vector[1] = TypeParam(47u);
 
-        Vector<TypeParam> vector2;
+        capu::Vector<TypeParam> vector2;
 
-        for (typename Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        for (typename capu::Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
@@ -636,13 +640,13 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, IteratorOnConstVectorWithInitialCapacityAndValues)
     {
-        Vector<TypeParam> vector(12, TypeParam(55u));
+        capu::Vector<TypeParam> vector(12, TypeParam(55u));
 
-        const Vector<TypeParam>& constVector = vector;
+        const capu::Vector<TypeParam>& constVector = vector;
 
-        Vector<TypeParam> vector2(0);
+        capu::Vector<TypeParam> vector2(0);
 
-        for (typename Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
+        for (typename capu::Vector<TypeParam>::ConstIterator iter = constVector.begin(); iter != constVector.end(); ++iter)
         {
             vector2.push_back(*iter);
         }
@@ -664,7 +668,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, AccessOperator)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(42u));
         vector.push_back(TypeParam(47u));
@@ -678,7 +682,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, Resize)
     {
-        Vector<TypeParam> vector(0);
+        capu::Vector<TypeParam> vector(0);
 
         vector.push_back(TypeParam(1));
         vector.push_back(TypeParam(2));
@@ -699,7 +703,7 @@ namespace capu
 
         TypeParam struct2 = TypeParam(8);
 
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(struct1);
         vector.push_back(struct2);
@@ -715,7 +719,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, EraseIterator)
     {
-        Vector<TypeParam> vector(0);
+        capu::Vector<TypeParam> vector(0);
 
         vector.push_back(TypeParam(1));
         vector.push_back(TypeParam(2));
@@ -723,7 +727,7 @@ namespace capu
         vector.push_back(TypeParam(4));
         vector.push_back(TypeParam(5));
 
-        typename Vector<TypeParam>::Iterator iter = vector.begin();
+        typename capu::Vector<TypeParam>::Iterator iter = vector.begin();
 
         EXPECT_EQ(capu::CAPU_EINVAL, vector.erase(iter + 8u));
 
@@ -760,7 +764,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, EraseIndex)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
@@ -768,14 +772,14 @@ namespace capu
         vector.push_back(TypeParam(4u));
         vector.push_back(TypeParam(5u));
 
-        typename Vector<TypeParam>::Iterator iter = vector.begin();
+        typename capu::Vector<TypeParam>::Iterator iter = vector.begin();
 
         ++iter;
         ++iter;
 
-        status_t result = vector.erase(iter);
+        capu::status_t result = vector.erase(iter);
 
-        EXPECT_TRUE(CAPU_OK == result);
+        EXPECT_TRUE(capu::CAPU_OK == result);
         EXPECT_EQ(4u, vector.size());
         EXPECT_EQ(TypeParam(1u), vector[0]);
         EXPECT_EQ(TypeParam(2u), vector[1]);
@@ -784,7 +788,7 @@ namespace capu
 
         result = vector.erase(vector.begin());
 
-        EXPECT_TRUE(CAPU_OK == result);
+        EXPECT_TRUE(capu::CAPU_OK == result);
         EXPECT_EQ(3u, vector.size());
         EXPECT_EQ(TypeParam(2u), vector[0]);
         EXPECT_EQ(TypeParam(4u), vector[1]);
@@ -794,7 +798,7 @@ namespace capu
 
         result = vector.erase(iter);
 
-        EXPECT_FALSE(CAPU_OK == result);
+        EXPECT_FALSE(capu::CAPU_OK == result);
         EXPECT_EQ(3u, vector.size());
         EXPECT_EQ(TypeParam(2u), vector[0]);
         EXPECT_EQ(TypeParam(4u), vector[1]);
@@ -804,24 +808,24 @@ namespace capu
 
         result = vector.erase(iter);
 
-        EXPECT_TRUE(CAPU_OK == result);
+        EXPECT_TRUE(capu::CAPU_OK == result);
         EXPECT_EQ(2u, vector.size());
         EXPECT_EQ(TypeParam(2u), vector[0]);
         EXPECT_EQ(TypeParam(4u), vector[1]);
 
         result = vector.erase(vector.begin());
 
-        EXPECT_TRUE(CAPU_OK == result);
+        EXPECT_TRUE(capu::CAPU_OK == result);
 
         result = vector.erase(vector.begin());
 
-        EXPECT_TRUE(CAPU_OK == result);
+        EXPECT_TRUE(capu::CAPU_OK == result);
         EXPECT_EQ(0u, vector.size());
     }
 
     TYPED_TEST(TypedVectorTest, EraseWithElementOld)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
@@ -840,7 +844,7 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, EraseAdd)
     {
-        Vector<TypeParam> vector;
+        capu::Vector<TypeParam> vector;
 
         vector.push_back(TypeParam(1u));
         vector.push_back(TypeParam(2u));
@@ -884,9 +888,9 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, Compare)
     {
-        Vector<TypeParam> vector1;
-        Vector<TypeParam> vector2;
-        Vector<TypeParam> vector3;
+        capu::Vector<TypeParam> vector1;
+        capu::Vector<TypeParam> vector2;
+        capu::Vector<TypeParam> vector3;
 
         vector1.push_back(TypeParam(1));
         vector1.push_back(TypeParam(2));
@@ -908,9 +912,9 @@ namespace capu
 
     TYPED_TEST(TypedVectorTest, CompareComplexType)
     {
-        Vector<String> vector1;
-        Vector<String> vector2;
-        Vector<String> vector3;
+        capu::Vector<capu::String> vector1;
+        capu::Vector<capu::String> vector2;
+        capu::Vector<capu::String> vector3;
 
         vector1.push_back("test");
         vector2.push_back("something");
@@ -925,4 +929,3 @@ namespace capu
         EXPECT_FALSE(vector3 == vector2);
 
     }
-}
