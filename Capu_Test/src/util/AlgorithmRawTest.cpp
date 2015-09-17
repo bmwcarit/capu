@@ -17,6 +17,7 @@
 #include "capu/util/AlgorithmRaw.h"
 #include "capu/container/Vector.h"
 #include "capu/Config.h"
+#include "BidirectionalTestContainer.h"
 #include "gmock/gmock.h"
 
 namespace capu
@@ -58,72 +59,6 @@ namespace capu
     uint_t ComplexTestType::ctor_count = 0u;
     uint_t ComplexTestType::copyctor_count = 0u;
     uint_t ComplexTestType::dtor_count = 0u;
-
-    template <typename T>
-    class BidirectionalTestContainer
-    {
-        struct TWithPadding
-        {
-            T value;
-            char padding[32];
-        };
-        Vector<TWithPadding> vec;
-
-    public:
-        BidirectionalTestContainer(uint_t initial_size)
-            : vec(initial_size)
-        {
-        }
-
-        T& operator[](uint_t idx)
-        {
-            return vec[idx].value;
-        }
-
-        class Iterator : public iterator<bidirectional_iterator_tag, T>
-        {
-        public:
-            Iterator(Vector<TWithPadding>& v_, uint_t idx_)
-                : v(v_), idx(idx_)
-            {
-            }
-            Iterator& operator--()
-            {
-                assert(idx > 0);
-                --idx;
-                return *this;
-            }
-            Iterator& operator++()
-            {
-                assert(idx < v.size());
-                ++idx;
-                return *this;
-            }
-
-            bool operator!=(const Iterator& other)
-            {
-                return other.idx != idx;
-            }
-
-            T& operator*()
-            {
-                return v[idx].value;
-            }
-
-            Vector<TWithPadding>& v;
-            uint_t idx;
-        };
-
-        Iterator begin()
-        {
-            return Iterator(vec, 0);
-        }
-
-        Iterator end()
-        {
-            return Iterator(vec, vec.size());
-        }
-    };
 
     TEST(AlgorithmRawTest, CopyToRawPointers)
     {
