@@ -29,6 +29,7 @@
     {
     public:
         ComplexTestingType(capu::int_t someID = 0)
+            : string("teststring")
         {
             NumberOfObjects++;
             SomeID = someID;
@@ -37,6 +38,7 @@
         {
             NumberOfObjects++;
             SomeID = other.SomeID;
+            string = other.string;
         }
         virtual ~ComplexTestingType()
         {
@@ -55,6 +57,7 @@
 
         static capu::int_t NumberOfObjects;
         capu::int_t SomeID;
+        capu::String string;
     };
     capu::int_t ComplexTestingType::NumberOfObjects = 0;
 
@@ -780,6 +783,26 @@
 
         EXPECT_EQ(struct2, vector[0]);
         EXPECT_EQ(struct1, vector[1]);
+    }
+
+    TYPED_TEST(TypedVectorTest, EraseIteratorFromMiddle)
+    {
+        capu::Vector<TypeParam> vector(0);
+
+        vector.push_back(TypeParam(1));
+        vector.push_back(TypeParam(2));
+        vector.push_back(TypeParam(3));
+        vector.push_back(TypeParam(4));
+        vector.push_back(TypeParam(5));
+
+        vector.erase(vector.begin() + 2u);
+
+        EXPECT_EQ(4u, vector.size());
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(4);
+        EXPECT_EQ(TypeParam(1), vector[0]);
+        EXPECT_EQ(TypeParam(2), vector[1]);
+        EXPECT_EQ(TypeParam(4), vector[2]);
+        EXPECT_EQ(TypeParam(5), vector[3]);
     }
 
     TYPED_TEST(TypedVectorTest, EraseIterator)

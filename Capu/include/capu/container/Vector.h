@@ -641,16 +641,8 @@ namespace capu
             *elementOld = *iterator;
         }
 
-        if(iterator == m_dataEnd - 1u)
-        {
-            --m_dataEnd;
-        }
-        else
-        {
-            Memory::Move(iterator, iterator + 1u, (m_dataEnd - (iterator + 1u)) * sizeof(T));
-            --m_dataEnd;
-        }
-        (*(m_dataEnd)).~T();
+        copy(iterator + 1u, Iterator(m_dataEnd), iterator);
+        resize(size() - 1);
 
         return CAPU_OK;
     }
