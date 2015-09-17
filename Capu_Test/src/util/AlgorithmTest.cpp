@@ -16,6 +16,7 @@
 
 #include "capu/util/Algorithm.h"
 #include "capu/container/Vector.h"
+#include "capu/container/String.h"
 #include "capu/Config.h"
 #include "gmock/gmock.h"
 
@@ -145,10 +146,24 @@ namespace capu
         EXPECT_TRUE(equal(a, a+3, b));
     }
 
+    TEST(AlgorithmTest, EqualSameComplexType)
+    {
+        String a[3] = { "1", "2", "3" };
+        String b[3] = { "1", "2", "3" };
+        EXPECT_TRUE(equal(a, a + 3, b));
+    }
+
     TEST(AlgorithmTest, EqualNotSame)
     {
         uint_t a[3] = { 1, 2, 3 };
         uint_t b[3] = { 1, 5, 3 };
+        EXPECT_FALSE(equal(a, a + 3, b));
+    }
+
+    TEST(AlgorithmTest, EqualNotSameComplexType)
+    {
+        String a[3] = { "1", "2", "3" };
+        String b[3] = { "1", "5", "3" };
         EXPECT_FALSE(equal(a, a + 3, b));
     }
 
