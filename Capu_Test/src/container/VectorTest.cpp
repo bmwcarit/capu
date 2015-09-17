@@ -251,8 +251,7 @@
         NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
     }
 
-
-    TYPED_TEST(TypedVectorEnsureSTLCompatibility, resizeBahaviour)
+    TYPED_TEST(TypedVectorEnsureSTLCompatibility, resizeBehaviour)
     {
         std::vector<TypeParam> stlvector(5);
         capu::Vector<TypeParam> capuVector(5);
