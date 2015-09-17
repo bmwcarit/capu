@@ -305,6 +305,71 @@
         EXPECT_EQ(stlvector.capacity(), capuVector.capacity());
     }
 
+    TYPED_TEST(TypedVectorTest, insertWhileNeedingToGrow)
+    {
+        capu::Vector<TypeParam> capuVector(0);
+
+        for (capu::uint_t i = 0; i < 11; ++i)
+        {
+            capuVector.insert(capuVector.begin(), TypeParam(i));
+        }
+
+        EXPECT_EQ(TypeParam(10u), capuVector[0]);
+        EXPECT_EQ(TypeParam(9u), capuVector[1]);
+        EXPECT_EQ(TypeParam(8u), capuVector[2]);
+        EXPECT_EQ(TypeParam(7u), capuVector[3]);
+        EXPECT_EQ(TypeParam(6u), capuVector[4]);
+        EXPECT_EQ(TypeParam(5u), capuVector[5]);
+        EXPECT_EQ(TypeParam(4u), capuVector[6]);
+        EXPECT_EQ(TypeParam(3u), capuVector[7]);
+        EXPECT_EQ(TypeParam(2u), capuVector[8]);
+        EXPECT_EQ(TypeParam(1u), capuVector[9]);
+        EXPECT_EQ(TypeParam(0u), capuVector[10]);
+    }
+
+    TYPED_TEST(TypedVectorTest, insertIntoReservedSpace)
+    {
+        capu::Vector<TypeParam> capuVector;
+        capuVector.reserve(64);
+
+        for (capu::uint_t i = 0; i < 11; ++i)
+        {
+            capuVector.insert(capuVector.begin(), TypeParam(i));
+        }
+
+        EXPECT_EQ(TypeParam(10u), capuVector[0]);
+        EXPECT_EQ(TypeParam(9u), capuVector[1]);
+        EXPECT_EQ(TypeParam(8u), capuVector[2]);
+        EXPECT_EQ(TypeParam(7u), capuVector[3]);
+        EXPECT_EQ(TypeParam(6u), capuVector[4]);
+        EXPECT_EQ(TypeParam(5u), capuVector[5]);
+        EXPECT_EQ(TypeParam(4u), capuVector[6]);
+        EXPECT_EQ(TypeParam(3u), capuVector[7]);
+        EXPECT_EQ(TypeParam(2u), capuVector[8]);
+        EXPECT_EQ(TypeParam(1u), capuVector[9]);
+        EXPECT_EQ(TypeParam(0u), capuVector[10]);
+    }
+
+    TYPED_TEST(TypedVectorTest, insertAtEndPosition)
+    {
+        capu::Vector<TypeParam> capuVector(2, TypeParam(0));
+        capuVector.insert(capuVector.end(), TypeParam(123));
+
+        EXPECT_EQ(TypeParam(0u), capuVector[0]);
+        EXPECT_EQ(TypeParam(0u), capuVector[1]);
+        EXPECT_EQ(TypeParam(123u), capuVector[2]);
+    }
+
+    TYPED_TEST(TypedVectorTest, insertIntoMiddle)
+    {
+        capu::Vector<TypeParam> capuVector(2, TypeParam(0));
+        capuVector.insert(capuVector.begin()+1u, TypeParam(123));
+
+        EXPECT_EQ(TypeParam(0u), capuVector[0]);
+        EXPECT_EQ(TypeParam(123u), capuVector[1]);
+        EXPECT_EQ(TypeParam(0u), capuVector[2]);
+    }
+
     TYPED_TEST(TypedVectorTest, Constructor)
     {
         capu::Vector<TypeParam> vector;

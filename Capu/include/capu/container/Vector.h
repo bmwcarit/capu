@@ -324,6 +324,13 @@ namespace capu
          */
         status_t erase(const Iterator& iterator, T* elementOld = 0);
 
+        /**
+         * Inserts the given value at the specified iterator position
+         * @param iterator iterator where value is to be inserted
+         * @param value value to insert
+         **/
+        status_t insert(const Iterator& iterator, const T& value);
+
     protected:
     private:
         /**
@@ -357,6 +364,26 @@ namespace capu
     const T& capu::Vector<T>::front() const
     {
         return *m_data;
+    }
+
+    template<typename T>
+    status_t capu::Vector<T>::insert(const Iterator& iterator, const T& value)
+    {
+        const uint_t numberFromBeginning = (iterator - m_data);
+        if (m_dataEnd == m_capacityEnd)
+        {
+            /*status = */
+            // todo: should check status of grow here
+            grow();
+        }
+
+        // move back
+        new(m_dataEnd)T();
+        copy_backward(m_data + numberFromBeginning, m_dataEnd, m_dataEnd + 1u);
+        ++m_dataEnd;
+
+        m_data[numberFromBeginning] = value;
+        return CAPU_OK;
     }
 
     template<typename T>
