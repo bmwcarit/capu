@@ -195,11 +195,6 @@ namespace capu
          */
         String m_appDesc;
 
-        /*
-         * Singleton DltAdapter instance
-         */
-        static DltAdapter* s_singleton;
-
         /**
          * Context for filetransfers
          */

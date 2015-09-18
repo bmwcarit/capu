@@ -30,8 +30,6 @@ extern "C"
 
 namespace capu
 {
-    DltAdapter* DltAdapter::s_singleton = 0;
-
     void* DltAdapter::s_fileContext = 0;
 
     DltAdapter::DltAdapter()
@@ -58,26 +56,18 @@ namespace capu
 
     DltAdapter::~DltAdapter()
     {
-        int32_t status = 0;
+        getDltAdapter()->unregisterApplication();
 
-        unregisterApplication();
-
-        status = dlt_free();
+       int32_t status = dlt_free();
         DLT_CHECK_ERROR(DLT_ERROR_DEINIT)
-
-        delete s_singleton;
-        s_singleton = 0;
 
         m_dltInitialized = false;
     }
 
     DltAdapter* DltAdapter::getDltAdapter()
     {
-        if(!s_singleton)
-        {
-            s_singleton = new DltAdapter();
-        }
-        return s_singleton;
+        static DltAdapter dltAdapter;
+        return &dltAdapter;
     }
 
     void DltAdapter::logMessage(const capu::LogMessage& msg)
