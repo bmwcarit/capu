@@ -389,7 +389,8 @@ namespace capu
         * @param first Iterator pointing to beginning of range to insert from
         * @param last Iterator pointing after last value to insert
         **/
-        status_t insert(const Iterator& iterator, Iterator first, Iterator last);
+        template <typename InputIt>
+        status_t insert(const Iterator& iterator, InputIt first, InputIt last);
 
     protected:
     private:
@@ -458,10 +459,11 @@ namespace capu
         return CAPU_OK;
     }
 
-    template<typename T>
-    status_t capu::Vector<T>::insert(const Iterator& iterator, Iterator first, Iterator last)
+    template <typename T>
+    template <typename InputIt>
+    status_t capu::Vector<T>::insert(const Iterator& iterator, InputIt first, InputIt last)
     {
-        const uint_t numberOfNewElements = last - first;
+        const uint_t numberOfNewElements = distance(first, last);
         const uint_t insertOffset = (iterator.m_current - m_data);
         reserve(size() + numberOfNewElements);
 
@@ -478,9 +480,13 @@ namespace capu
         {
             // insert new elements must be split
             copy_to_raw(m_data + insertOffset, m_dataEnd, m_dataEnd + numberOfNewElements - numberOfExistingElementsThatNeedToBeMoved);
+
             const uint_t numberOfElementsToInsertDirectly = numberOfExistingElementsThatNeedToBeMoved;
-            copy(first, first + numberOfElementsToInsertDirectly, m_data + insertOffset);
-            copy_to_raw(first + numberOfElementsToInsertDirectly, last, m_dataEnd);
+            InputIt insertDirectlyEnd = first;
+            advance(insertDirectlyEnd, numberOfElementsToInsertDirectly);
+
+            copy(first, insertDirectlyEnd, m_data + insertOffset);
+            copy_to_raw(insertDirectlyEnd, last, m_dataEnd);
         }
         m_dataEnd += numberOfNewElements;
 

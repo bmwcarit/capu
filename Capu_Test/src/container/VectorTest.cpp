@@ -24,6 +24,7 @@
 #include "gmock/gmock.h"
 #include "capu/container/Vector.h"
 #include "capu/container/String.h"
+#include "util/BidirectionalTestContainer.h"
 
     class ComplexTestingType
     {
@@ -436,6 +437,25 @@
         capuVector[1] = 2;
 
         capuVector.insert(capuVector.end(), source.begin(), source.end());
+
+        EXPECT_EQ(TypeParam(1u), capuVector[0]);
+        EXPECT_EQ(TypeParam(2u), capuVector[1]);
+        EXPECT_EQ(TypeParam(3u), capuVector[2]);
+        EXPECT_EQ(TypeParam(4u), capuVector[3]);
+        EXPECT_EQ(TypeParam(5u), capuVector[4]);
+    }
+
+    TYPED_TEST(TypedVectorTest, insertRangeFromBidirectionalIterator)
+    {
+        capu::BidirectionalTestContainer<TypeParam> source(3);
+        source[0] = 2;
+        source[1] = 3;
+        source[2] = 4;
+        capu::Vector<TypeParam> capuVector(2);
+        capuVector[0] = 1;
+        capuVector[1] = 5;
+
+        capuVector.insert(capuVector.begin() + 1u, source.begin(), source.end());
 
         EXPECT_EQ(TypeParam(1u), capuVector[0]);
         EXPECT_EQ(TypeParam(2u), capuVector[1]);
