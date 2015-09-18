@@ -18,6 +18,7 @@
 #define CAPU_ITERATOR_H
 
 #include "capu/Config.h"
+#include <assert.h>
 
 namespace capu
 {
@@ -99,6 +100,46 @@ namespace capu
     {
         typedef typename capu::iterator_traits<InputIt>::iterator_category iterator_category;
         return DistanceHelper(first, last, iterator_category());
+    }
+
+
+    template <class InputIt, class Distance>
+    void AdvanceHelper(InputIt& it, Distance n, input_iterator_tag)
+    {
+        assert(n >= 0);
+        while (n > 0)
+        {
+            ++it;
+            --n;
+        }
+    }
+
+    template <class InputIt, class Distance>
+    void AdvanceHelper(InputIt& it, Distance n, bidirectional_iterator_tag)
+    {
+        while (n > 0)
+        {
+            --n;
+            ++it;
+        }
+        while (n < 0)
+        {
+            ++n;
+            --it;
+        }
+    }
+
+    template <class InputIt, class Distance>
+    void AdvanceHelper(InputIt& it, Distance n, random_access_iterator_tag)
+    {
+        it = it + n;
+    }
+
+    template <class InputIt, class Distance>
+    void advance(InputIt& it, Distance n)
+    {
+        typedef typename iterator_traits<InputIt>::iterator_category iterator_category;
+        AdvanceHelper<InputIt, Distance>(it, n, iterator_category());
     }
 }
 
