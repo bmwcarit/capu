@@ -35,10 +35,10 @@ namespace capu
         {
             Thread::Sleep(500); // wait a while before release
             executed = true;
-            RELEASE_SYNC_CALL(RunnableExecuted);
+            runnableExecuted.release();
         }
 
-        REGISTER_SYNC_CALL(RunnableExecuted);
+        ThreadSynchronizer runnableExecuted;
         bool executed;
     };
 
@@ -57,7 +57,7 @@ namespace capu
     public:
         MOCK_METHOD0(doSomething, void());
 
-        REGISTER_SYNC_CALL(DoSomethingCall);
+        ThreadSynchronizer doSomethingCall;
     };
 
 
@@ -114,7 +114,7 @@ namespace capu
 
         thread.start(testRunnable);
 
-        WAIT_FOR_SYNC_CALL(testRunnable, RunnableExecuted);
+        testRunnable.runnableExecuted.wait();
 
         thread.join();
 
@@ -129,12 +129,11 @@ namespace capu
 
         EXPECT_CALL(testInterface, doSomething())
         .Times(testing::Exactly(1))
-        .WillOnce(ReleaseSyncCall(&SYNC_CALL_CONDVAR_OF_CALLER(testInterface, DoSomethingCall))); // register release of sync call
+        .WillOnce(ReleaseSyncCall(&testInterface.doSomethingCall)); // register release of sync call
 
         thread.start(testRunnable);
 
-
-        WAIT_FOR_SYNC_CALL(testInterface, DoSomethingCall);
+        testInterface.doSomethingCall.wait();
 
         thread.join();
 

@@ -33,14 +33,14 @@ namespace capu
 
         void run()
         {
-            RELEASE_SYNC_CALL(ready);
+            ready.release();
             for (uint32_t i = 0; i < 100; ++i)
             {
                 mList->pop_back();
             }
         }
 
-        REGISTER_SYNC_CALL(ready);
+        ThreadSynchronizer ready;
 
     private:
 
@@ -61,7 +61,8 @@ namespace capu
 
         Thread thread;
         thread.start(testRunnable);
-        WAIT_FOR_SYNC_CALL(testRunnable, ready);
+
+        testRunnable.ready.wait();
         for (uint32_t i = 0; i < 100; ++i)
         {
             syncList->push_back(1);

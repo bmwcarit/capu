@@ -23,10 +23,42 @@
 
 namespace capu
 {
+    class ThreadSynchronizer
+    {
+    public:
+        ThreadSynchronizer()
+            : m_condition(false)
+        {
+        }
+
+        void wait()
+        {
+            m_mutex.lock();
+            while (!m_condition)
+            {
+                m_condVar.wait(&m_mutex);
+            }
+            m_mutex.unlock();
+        }
+
+        void release()
+        {
+            m_mutex.lock();
+            m_condition = true;
+            m_condVar.signal();
+            m_mutex.unlock();
+        }
+
+    private:
+        Mutex m_mutex;
+        CondVar m_condVar;
+        bool m_condition;
+    };
+
     /**
-     * Special GMock actionf or releasing condition variables on mock calls
-     */
-    ACTION_P(ReleaseSyncCall, CondVar)
+    * Special GMock actionf or releasing condition variables on mock calls
+    */
+    ACTION_P(ReleaseSyncCall, syncer)
     {
         UNUSED(arg9);
         UNUSED(arg8);
@@ -39,61 +71,8 @@ namespace capu
         UNUSED(arg1);
         UNUSED(arg0);
         UNUSED(args);
-        CondVar->signal();
+        syncer->release();
     }
-
-    /**
-     * Helper macro to concatenate strings
-     */
-#define CONCAT(a, b) a##b
-
-    /**
-     * Create local helper struct to handle condition variable and mutex
-     */
-#define  REGISTER_SYNC_CALL(name)                 \
-    struct CONCAT(name, Class)                    \
-    {                                             \
-        capu::Mutex    mutex;                     \
-        capu::CondVar condVar;                    \
-    };                                            \
-    CONCAT(name, Class) CONCAT(name ,LockHandler);
-
-    /**
-     * Returns the full name of a condition variable
-     */
-#define SYNC_CALL_CONDVAR(name)\
-    CONCAT(name, LockHandler).condVar
-
-    /**
-     * Returns the full name of a mutex
-     */
-#define SYNC_CALL_LOCK(name)\
-    CONCAT(name, LockHandler).mutex
-
-    /**
-     * Returns the condition variable of a caller
-     */
-#define SYNC_CALL_CONDVAR_OF_CALLER(callee, name)\
-    callee.SYNC_CALL_CONDVAR(name)
-
-    /**
-     * Returns the lock variable of a caller
-     */
-#define SYNC_CALL_LOCK_OF_CALLER(callee, name)\
-    callee.SYNC_CALL_LOCK(name)
-
-    /**
-     * Releases a condition variable
-     */
-#define RELEASE_SYNC_CALL(name)\
-    SYNC_CALL_CONDVAR(name).signal();
-
-    /**
-     * Waits for a given call on a given caller
-     */
-#define WAIT_FOR_SYNC_CALL(callee, function)\
-    SYNC_CALL_CONDVAR_OF_CALLER(callee, function).wait(&SYNC_CALL_LOCK_OF_CALLER(callee, function));
-
 }
 
 #endif // CAPU_TESTUTILS_H
