@@ -109,13 +109,9 @@ namespace capu
                 return *m_current;
             }
 
-            /**
-             * Autocast to the pointer of the current element
-             * @return the pointer to the current element
-             */
-            operator TYPE*() const
+            const TYPE& operator*() const
             {
-                return m_current;
+                return *m_current;
             }
 
             /**
@@ -397,7 +393,7 @@ namespace capu
     template<typename T>
     status_t capu::Vector<T>::insert(const Iterator& iterator, const T& value)
     {
-        const uint_t numberFromBeginning = (iterator - m_data);
+        const uint_t numberFromBeginning = (iterator.m_current - m_data);
         if (m_dataEnd == m_capacityEnd)
         {
             /*status = */
@@ -659,7 +655,7 @@ namespace capu
     inline
     status_t Vector<T>::erase(const Iterator& iterator, T* elementOld)
     {
-        if(iterator >= m_dataEnd)
+        if(iterator.m_current >= m_dataEnd)
         {
             return CAPU_EINVAL;
         }
