@@ -63,13 +63,41 @@ namespace capu
             }
 
             /**
-             * Compares two Iterators if their internal position is the same
+             * Compares two Iterators if their internal position is not the same
              * @param other Iterator to compare with
              * @return true if Iterators don't point to the same data, false otherwise
              */
-            bool operator!=(const InternalIterator<TYPE>& other) const
+            bool operator!=(const InternalIterator<T>& other) const
             {
                 return m_current != other.m_current;
+            }
+
+            /**
+             * @copydoc operator!=(const InternalIterator<T>& other) const
+             *
+             **/
+            bool operator!=(const InternalIterator<const T>& other) const
+            {
+                return m_current != other.m_current;
+            }
+
+            /**
+            * Compares two Iterators if their internal position is the same
+            * @param other Iterator to compare with
+            * @return true if Iterators point to the same data, false otherwise
+            */
+            bool operator==(const InternalIterator<T>& other) const
+            {
+                return m_current == other.m_current;
+            }
+
+            /**
+            * @copydoc operator==(const InternalIterator<T>& other) const
+            *
+            **/
+            bool operator==(const InternalIterator<const T>& other) const
+            {
+                return m_current == other.m_current;
             }
 
             /**

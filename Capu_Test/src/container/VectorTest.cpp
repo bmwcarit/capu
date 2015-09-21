@@ -1016,3 +1016,46 @@
         EXPECT_FALSE(vector3 == vector2);
 
     }
+
+    TEST(VectorTest, relationalOpsOnIterators)
+    {
+        capu::Vector<capu::uint_t> vec(2, 0);
+
+        EXPECT_TRUE(vec.begin() == vec.begin());
+        EXPECT_TRUE(vec.begin() != vec.end());
+        EXPECT_TRUE(vec.begin() < vec.begin() + 1u);
+        EXPECT_TRUE(vec.begin() + 1u > vec.begin());
+    }
+
+    TEST(VectorTest, relationalOpsOnIteratorsForConstValues)
+    {
+        capu::Vector<const capu::uint_t*> vec(2, 0);
+
+        EXPECT_TRUE(vec.begin() == vec.begin());
+        EXPECT_TRUE(vec.begin() != vec.end());
+        EXPECT_TRUE(vec.begin() < vec.begin() + 1u);
+        EXPECT_TRUE(vec.begin() + 1u > vec.begin());
+    }
+
+    TEST(VectorTest, relationalOpsOnConstIterators)
+    {
+        capu::Vector<capu::uint_t> vec(2, 0);
+        const capu::Vector<capu::uint_t>& vecConst = vec;
+
+        EXPECT_TRUE(vecConst.begin() == vecConst.begin());
+        EXPECT_TRUE(vecConst.begin() != vecConst.end());
+        EXPECT_TRUE(vecConst.begin() < vecConst.begin() + 1u);
+        EXPECT_TRUE(vecConst.begin() + 1u > vecConst.begin());
+    }
+
+    TEST(VectorTest, relationalOpsOnMixedteratorAndConstIterators)
+    {
+        capu::Vector<capu::uint_t> vec(2, 0);
+        const capu::Vector<capu::uint_t>& vecConst = vec;
+
+        EXPECT_TRUE(vecConst.begin() == vec.begin());
+        EXPECT_TRUE(vecConst.begin() != vec.end());
+
+        EXPECT_TRUE(vec.begin() == vecConst.begin());
+        EXPECT_TRUE(vec.begin() != vecConst.end());
+    }
