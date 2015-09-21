@@ -163,6 +163,16 @@ namespace capu
                 return InternalIterator(m_current - value);
             }
 
+            /**
+            * Difference of the positions the iterators point
+            * @param value to substract from this iterator
+            * @return number of elements between iterators. may be negative
+            */
+            int_t operator-(const InternalIterator<TYPE>& other) const
+            {
+                return m_current - other.m_current;
+            }
+
         protected:
         private:
             /**

@@ -1017,6 +1017,15 @@
 
     }
 
+    TEST(VectorTest, iteratorDifference)
+    {
+        capu::Vector<capu::uint_t> vec(3, 0);
+
+        EXPECT_EQ(3, vec.end() - vec.begin());
+        EXPECT_EQ(-3, vec.begin() - vec.end());
+        EXPECT_EQ(0, vec.begin() - vec.begin());
+    }
+
     TEST(VectorTest, relationalOpsOnIterators)
     {
         capu::Vector<capu::uint_t> vec(2, 0);
