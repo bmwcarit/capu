@@ -275,6 +275,16 @@ namespace capu
         const T& front() const;
 
         /**
+        * Returns the last element.
+        */
+        T& back();
+
+        /**
+        * Returns the last element.
+        */
+        const T& back() const;
+
+        /**
          * Returns the current capacity of the vector.
          * The capacity is the total number of elements the vector can hold
          * without causing reallocation because the memory is already reserved.
@@ -414,6 +424,18 @@ namespace capu
     const T& capu::Vector<T>::front() const
     {
         return *m_data;
+    }
+
+    template<typename T>
+    T& capu::Vector<T>::back()
+    {
+        return *(m_dataEnd -1);
+    }
+
+    template<typename T>
+    const T& capu::Vector<T>::back() const
+    {
+        return *(m_dataEnd - 1);
     }
 
     template<typename T>

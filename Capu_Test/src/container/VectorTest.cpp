@@ -1069,6 +1069,21 @@
 
     }
 
+    TYPED_TEST(TypedVectorTest, TestFrontBack)
+    {
+        capu::Vector<TypeParam> vec;
+        vec.push_back(TypeParam(1));
+        vec.push_back(TypeParam(2));
+        vec.push_back(TypeParam(3));
+
+        const capu::Vector<TypeParam>& constVec = vec;
+        EXPECT_EQ(TypeParam(1), vec.front());
+        EXPECT_EQ(TypeParam(1), constVec.front());
+
+        EXPECT_EQ(TypeParam(3), vec.back());
+        EXPECT_EQ(TypeParam(3), constVec.back());
+    }
+
     TEST(VectorTest, CompareComplexType)
     {
         capu::Vector<capu::String> vector1;
