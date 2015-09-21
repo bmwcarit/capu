@@ -1069,7 +1069,7 @@
 
     }
 
-    TYPED_TEST(TypedVectorTest, CompareComplexType)
+    TEST(VectorTest, CompareComplexType)
     {
         capu::Vector<capu::String> vector1;
         capu::Vector<capu::String> vector2;
