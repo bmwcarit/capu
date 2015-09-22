@@ -1086,7 +1086,6 @@
         EXPECT_TRUE(vector1 ==  vector2);
 
         EXPECT_FALSE(vector3 == vector2);
-
     }
 
     TEST(VectorTest, iteratorDifference)
@@ -1096,6 +1095,25 @@
         EXPECT_EQ(3, vec.end() - vec.begin());
         EXPECT_EQ(-3, vec.begin() - vec.end());
         EXPECT_EQ(0, vec.begin() - vec.begin());
+    }
+
+    TEST(VectorTest, IteratorAccessOperators)
+    {
+        capu::Vector<ComplexTestingType> vec(3, 0);
+
+        capu::Vector<ComplexTestingType>::Iterator it = vec.begin();
+        EXPECT_EQ(0, (*it).SomeID);
+        EXPECT_EQ(0, it->SomeID);
+    }
+
+    TEST(VectorTest, ConstIteratorAccessOperators)
+    {
+        capu::Vector<ComplexTestingType> vec(3, 0);
+        const capu::Vector<ComplexTestingType>& constVec = vec;
+
+        capu::Vector<ComplexTestingType>::ConstIterator it = constVec.begin();
+        EXPECT_EQ(0, (*it).SomeID);
+        EXPECT_EQ(0, it->SomeID);
     }
 
     TEST(VectorTest, relationalOpsOnIterators)

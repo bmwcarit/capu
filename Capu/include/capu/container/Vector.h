@@ -124,6 +124,14 @@ namespace capu
             }
 
             /**
+            * @copydoc operator->
+            */
+            const TYPE* operator->() const
+            {
+                return &** this;
+            }
+
+            /**
              * Checks if the pointer of the other iterator is bigger than my own pointer
              * @param other InternalIterator to check with
              * @return true if other pointer is bigger than my one one, false otherwise
