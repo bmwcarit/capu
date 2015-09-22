@@ -365,6 +365,14 @@ namespace capu
          **/
         status_t insert(const Iterator& iterator, const T& value);
 
+        /**
+        * Inserts the given range of value at the specified iterator position
+        * @param iterator iterator where value is to be inserted
+        * @param first Iterator pointing to beginning of range to insert from
+        * @param last Iterator pointing after last value to insert
+        **/
+        status_t insert(const Iterator& iterator, Iterator first, Iterator last);
+
     protected:
     private:
         /**
@@ -417,6 +425,35 @@ namespace capu
         ++m_dataEnd;
 
         m_data[numberFromBeginning] = value;
+        return CAPU_OK;
+    }
+
+    template<typename T>
+    status_t capu::Vector<T>::insert(const Iterator& iterator, Iterator first, Iterator last)
+    {
+        const uint_t numberOfNewElements = last - first;
+        const uint_t insertOffset = (iterator.m_current - m_data);
+        reserve(size() + numberOfNewElements);
+
+        const uint_t numberOfExistingElementsThatNeedToBeMoved = size() - insertOffset;
+        if (numberOfExistingElementsThatNeedToBeMoved > numberOfNewElements)
+        {
+            // existing elements move must be split
+            copy_to_raw(m_dataEnd - numberOfNewElements, m_dataEnd, m_dataEnd);
+            const uint_t numberOfExistingElementsToCopyDirectly = numberOfExistingElementsThatNeedToBeMoved - numberOfNewElements;
+            copy_backward(m_data + insertOffset, m_data + insertOffset + numberOfExistingElementsToCopyDirectly, m_dataEnd);
+            copy(first, last, m_data + insertOffset);
+        }
+        else
+        {
+            // insert new elements must be split
+            copy_to_raw(m_data + insertOffset, m_dataEnd, m_dataEnd + numberOfNewElements - numberOfExistingElementsThatNeedToBeMoved);
+            const uint_t numberOfElementsToInsertDirectly = numberOfExistingElementsThatNeedToBeMoved;
+            copy(first, first + numberOfElementsToInsertDirectly, m_data + insertOffset);
+            copy_to_raw(first + numberOfElementsToInsertDirectly, last, m_dataEnd);
+        }
+        m_dataEnd += numberOfNewElements;
+
         return CAPU_OK;
     }
 
