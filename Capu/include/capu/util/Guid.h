@@ -20,6 +20,7 @@
 #include "capu/os/Memory.h"
 #include "capu/os/Random.h"
 #include "capu/container/String.h"
+#include "capu/Config.h"
 
 namespace capu
 {
@@ -41,16 +42,20 @@ namespace capu
     {
     public:
         /**
-         * Creates a new random guid.
-         */
-        Guid();
+        * Creates a guid
+        * @param valid if valid is true a new random guid will be created, if not an invalid Guid will be created
+        */
+        explicit Guid(bool valid = true);
 
         /**
          * Parses a guid from the given string. The guid will be invalid if the string does not match the
          * format XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
          * @param guid The guid string.
          */
-        Guid(const String& guid);
+        explicit Guid(const String& guid);
+
+        /** @copydoc Guid(const String&) */
+        explicit Guid(const char* guid);
 
         /**
          * Takes the given generic uuid and sets it internally.
@@ -124,17 +129,26 @@ namespace capu
         static Random& getRandom();
     };
 
-    inline Guid::Guid()
+    inline Guid::Guid(bool valid /*=true*/)
         : m_stringRepresentationIsInvalid(true)
     {
         Memory::Set(&m_id, 0, sizeof(generic_uuid_t));
-        createNew();
+        if (valid)
+        {
+            createNew();
+        }
     }
 
     inline Guid::Guid(const String& guid)
         : m_stringRepresentationIsInvalid(true)
     {
         parse(guid);
+    }
+
+    inline Guid::Guid(const char* guid)
+        : m_stringRepresentationIsInvalid(true)
+    {
+        parse(String(guid));
     }
 
     inline Guid::Guid(const Guid& other)
