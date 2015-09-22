@@ -19,6 +19,8 @@
 #include "capu/container/String.h"
 #include "capu/Config.h"
 #include "gmock/gmock.h"
+#include "BidirectionalTestContainer.h"
+#include "ComplexTestType.h"
 
 namespace capu
 {
@@ -83,9 +85,9 @@ namespace capu
         EXPECT_EQ(4u, arr[3]);
     }
 
-    TEST(AlgorithmTest, CopyBackwardsVector)
+    TEST(AlgorithmTest, CopyBackwardIntegralType)
     {
-        Vector<uint_t> src(3, 0);
+        BidirectionalTestContainer<uint32_t> src(3);
         src[0] = 2;
         src[1] = 3;
         src[2] = 4;
@@ -97,6 +99,22 @@ namespace capu
         EXPECT_EQ(3u, dst[1]);
         EXPECT_EQ(4u, dst[2]);
         EXPECT_EQ(0u, dst[3]);
+    }
+
+    TEST(AlgorithmTest, CopyBackwardComplexType)
+    {
+        BidirectionalTestContainer<ComplexTestType> src(3);
+        src[0] = 2;
+        src[1] = 3;
+        src[2] = 4;
+        Vector<ComplexTestType> dst(4, 0);
+
+        Vector<ComplexTestType>::Iterator result = copy_backward(src.begin(), src.end(), dst.end() - 1u);
+        EXPECT_EQ(dst.begin(), result);
+        EXPECT_EQ(ComplexTestType(2u), dst[0]);
+        EXPECT_EQ(ComplexTestType(3u), dst[1]);
+        EXPECT_EQ(ComplexTestType(4u), dst[2]);
+        EXPECT_EQ(ComplexTestType(0u), dst[3]);
     }
 
     TEST(AlgorithmTest, FillArray)

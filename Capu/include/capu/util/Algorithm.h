@@ -18,6 +18,8 @@
 #define CAPU_ALGORITHM_H
 
 #include "capu/util/Iterator.h"
+#include "capu/util/Traits.h"
+#include "capu/os/Memory.h"
 
 namespace capu
 {
@@ -39,6 +41,32 @@ namespace capu
         return dest;
     }
 
+    template<class InputIt, class OutputIt, typename T, int TYPE, class InputItCategory, class OutputItCategory>
+    struct CopyBackwardHelper
+    {
+        static OutputIt copy_backward(InputIt first, InputIt last, OutputIt lastResult)
+        {
+            while (first != last)
+            {
+                --last;
+                --lastResult;
+                *lastResult = *last;
+            }
+            return lastResult;
+        }
+    };
+
+    template<class InputIt, class OutputIt, typename T>
+    struct CopyBackwardHelper<InputIt, OutputIt, T, CAPU_TYPE_PRIMITIVE, random_access_iterator_tag, random_access_iterator_tag>
+    {
+        static OutputIt copy_backward(InputIt first, InputIt last, OutputIt lastResult)
+        {
+            const uint_t distance = (last - first);
+            Memory::Move(&*(lastResult-distance), &*first, distance * sizeof(T));
+            return lastResult - distance;
+        }
+    };
+
     /**
     * Copy range to destination iterator
     * @param first begin of source range
@@ -48,13 +76,10 @@ namespace capu
     template <class InputIt, class OutputIt>
     OutputIt copy_backward(InputIt first, InputIt last, OutputIt lastResult)
     {
-        while (first != last)
-        {
-            --last;
-            --lastResult;
-            *lastResult = *last;
-        }
-        return lastResult;
+        typedef typename iterator_traits<InputIt>::value_type T;
+        typedef typename iterator_traits<InputIt>::iterator_category InputItCategory;
+        typedef typename iterator_traits<OutputIt>::iterator_category OutputItCategory;
+        return CopyBackwardHelper<InputIt, OutputIt, T, Type<T>::Identifier, InputItCategory, OutputItCategory>::copy_backward(first, last, lastResult);
     }
 
     /**
