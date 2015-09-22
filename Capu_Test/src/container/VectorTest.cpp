@@ -25,58 +25,23 @@
 #include "capu/container/Vector.h"
 #include "capu/container/String.h"
 #include "util/BidirectionalTestContainer.h"
-
-    class ComplexTestingType
-    {
-    public:
-        ComplexTestingType(capu::int_t someID = 0)
-            : string("teststring")
-        {
-            NumberOfObjects++;
-            SomeID = someID;
-        }
-        ComplexTestingType(const ComplexTestingType& other)
-        {
-            NumberOfObjects++;
-            SomeID = other.SomeID;
-            string = other.string;
-        }
-        virtual ~ComplexTestingType()
-        {
-            NumberOfObjects--;
-        }
-
-        bool operator!=(const ComplexTestingType& other) const
-        {
-            return SomeID != other.SomeID;
-        }
-
-        bool operator==(const ComplexTestingType& other) const
-        {
-            return SomeID == other.SomeID;
-        }
-
-        static capu::int_t NumberOfObjects;
-        capu::int_t SomeID;
-        capu::String string;
-    };
-    capu::int_t ComplexTestingType::NumberOfObjects = 0;
+#include "util/ComplexTestType.h"
 
     template<typename T>
     struct NumberOfExistingObjectsHelper
     {
-        static void assertNumberOfExistingObjectsEquals(capu::int_t expectedNumber)
+        static void assertNumberOfExistingObjectsEquals(capu::uint_t expectedNumber)
         {
             UNUSED(expectedNumber);
         }
     };
 
     template<>
-    struct NumberOfExistingObjectsHelper<ComplexTestingType>
+    struct NumberOfExistingObjectsHelper<ComplexTestType>
     {
-        static void assertNumberOfExistingObjectsEquals(capu::int_t expectedNumber)
+        static void assertNumberOfExistingObjectsEquals(capu::uint_t expectedNumber)
         {
-            ASSERT_EQ(expectedNumber, ComplexTestingType::NumberOfObjects);
+            ASSERT_EQ(expectedNumber, ComplexTestType::ctor_count + ComplexTestType::copyctor_count - ComplexTestType::dtor_count);
         }
     };
 
@@ -98,7 +63,7 @@
     typedef ::testing::Types
         <
         capu::uint_t,
-        ComplexTestingType
+        ComplexTestType
         > ElementTypes;
 
     TYPED_TEST_CASE(TypedVectorTest, ElementTypes);
@@ -219,11 +184,11 @@
     {
         {
             std::vector<TypeParam> stlvector(5);
-            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5);
+            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5u);
         }
         {
             capu::Vector<TypeParam> capuvector(5);
-            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5);
+            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5u);
         }
     }
 
@@ -233,23 +198,23 @@
             {
                 std::vector<TypeParam> stlvector(5);
             }
-            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
+            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0u);
         }
         {
             {
                 capu::Vector<TypeParam> capuvector(5);
             }
-            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
+            NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0u);
         }
     }
 
     TYPED_TEST(TypedVectorEnsureSTLCompatibility, resizeSmallerDeconstructsElements)
     {
         capu::Vector<TypeParam> capuVector(5);
-        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5);
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(5u);
 
         capuVector.resize(0);
-        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0);
+        NumberOfExistingObjectsHelper<TypeParam>::assertNumberOfExistingObjectsEquals(0u);
     }
 
     TYPED_TEST(TypedVectorEnsureSTLCompatibility, resizeBehaviour)
@@ -1134,21 +1099,21 @@
 
     TEST(VectorTest, IteratorAccessOperators)
     {
-        capu::Vector<ComplexTestingType> vec(3, 0);
+        capu::Vector<ComplexTestType> vec(3, 0);
 
-        capu::Vector<ComplexTestingType>::Iterator it = vec.begin();
-        EXPECT_EQ(0, (*it).SomeID);
-        EXPECT_EQ(0, it->SomeID);
+        capu::Vector<ComplexTestType>::Iterator it = vec.begin();
+        EXPECT_EQ(0u, (*it).value);
+        EXPECT_EQ(0u, it->value);
     }
 
     TEST(VectorTest, ConstIteratorAccessOperators)
     {
-        capu::Vector<ComplexTestingType> vec(3, 0);
-        const capu::Vector<ComplexTestingType>& constVec = vec;
+        capu::Vector<ComplexTestType> vec(3, 0);
+        const capu::Vector<ComplexTestType>& constVec = vec;
 
-        capu::Vector<ComplexTestingType>::ConstIterator it = constVec.begin();
-        EXPECT_EQ(0, (*it).SomeID);
-        EXPECT_EQ(0, it->SomeID);
+        capu::Vector<ComplexTestType>::ConstIterator it = constVec.begin();
+        EXPECT_EQ(0u, (*it).value);
+        EXPECT_EQ(0u, it->value);
     }
 
     TEST(VectorTest, relationalOpsOnIterators)

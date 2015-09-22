@@ -19,47 +19,10 @@
 #include "capu/Config.h"
 #include "BidirectionalTestContainer.h"
 #include "gmock/gmock.h"
+#include "ComplexTestType.h"
 
 namespace capu
 {
-    class ComplexTestType
-    {
-    public:
-        ComplexTestType(uint_t value_ = 0u)
-            :value(value_)
-        {
-            ++ctor_count;
-        }
-
-        ComplexTestType(const ComplexTestType& other)
-        {
-            value = other.value;
-            ++copyctor_count;
-        }
-
-        ~ComplexTestType()
-        {
-            ++dtor_count;
-        }
-
-        static void Reset()
-        {
-            ctor_count = 0;
-            copyctor_count = 0;
-            dtor_count = 0;
-        }
-
-        uint_t value;
-
-        static uint_t ctor_count;
-        static uint_t copyctor_count;
-        static uint_t dtor_count;
-    };
-
-    uint_t ComplexTestType::ctor_count = 0u;
-    uint_t ComplexTestType::copyctor_count = 0u;
-    uint_t ComplexTestType::dtor_count = 0u;
-
     TEST(AlgorithmRawTest, CopyToRawPointers)
     {
         uint32_t src[3] = { 2, 3, 4 };
