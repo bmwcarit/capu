@@ -212,6 +212,11 @@ namespace capu
          * Internal flag to track errors
          */
         DltError m_dltError;
+
+        /**
+         * Vector of all created contexts.
+         */
+        Vector<void*> m_dltContextList;
     };
 }
 #endif // RAMSES_DLTADAPTER_H

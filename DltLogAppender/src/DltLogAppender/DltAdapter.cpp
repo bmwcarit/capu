@@ -177,6 +177,7 @@ namespace capu
         m_appDesc = description;
 
         s_fileContext = new DltContext;
+        m_dltContextList.push_back(s_fileContext);
         status = dlt_register_context(static_cast<DltContext*>(s_fileContext),"FILE","File Transfer Context");
         DLT_CHECK_ERROR(DLT_ERROR_REGISTER_CONTEXT_FAILED)
     }
@@ -190,11 +191,20 @@ namespace capu
             return;
         }
 
-        status = dlt_unregister_context(static_cast<DltContext*>(s_fileContext));
+        if(s_fileContext)
+        {
+            status = dlt_unregister_context(static_cast<DltContext*>(s_fileContext));
+        }
+
+        for(uint32_t i = 0; i < m_dltContextList.size(); i++ )
+        {
+            delete (DltContext*)m_dltContextList[i];
+        }
+
         DLT_CHECK_ERROR(DLT_ERROR_UNREGISTER_CONTEXT_FAILED)
+
         status = dlt_unregister_app();
         DLT_CHECK_ERROR(DLT_ERROR_UNREGISTER_APPLICATION_FAILED)
-        delete static_cast<DltContext*>(s_fileContext);
 
         m_appName.truncate(0);
         m_appDesc.truncate(0);
@@ -222,6 +232,7 @@ namespace capu
         }
 
         dltContext = new DltContext;
+        m_dltContextList.push_back(dltContext);
         String contextName = ctx->getContextName();
         dlt_register_context(dltContext,id.c_str(),contextName.c_str());
         DLT_CHECK_ERROR(DLT_ERROR_REGISTER_CONTEXT_FAILED)
