@@ -37,6 +37,21 @@ $ make
 
 If you use the cmake-gui you need to select the option "Specify toolchain file for cross-compiling" during the configure step.
 
+###### Activate test for build
+The CAPU unit tests are based on the Google C++ Testing Framework (https://github.com/google/googletest).
+This dependency is already contained in the Git repository as a Git submodule.
+In order to checkout the repository, please execute the following Git command:
+```Shell
+$ cd <capu-root>
+$ git submodule update --init --recursive
+```
+
+In order to enable the CAPU unit tests, you need to activate the CMake option Capu_BUILD_TESTS.
+Command line:
+```Shell
+$ cmake -DCapu_BUILD_TESTS:BOOL=ON -DCMAKE_TOOLCHAIN_FILE=<capu-root>/cmake/toolchain/Linux_X86_64.toolchain <capu-root> 
+```
+
 ---------------------------
 C++ STL implementation
 ---------------------------
