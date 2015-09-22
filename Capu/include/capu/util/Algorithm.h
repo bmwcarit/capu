@@ -23,6 +23,32 @@
 
 namespace capu
 {
+    template<class InputIt, class OutputIt, typename T, int TYPE, class InputItCategory, class OutputItCategory>
+    struct CopyHelper
+    {
+        static OutputIt copy(InputIt first, InputIt last, OutputIt dest)
+        {
+            while (first != last)
+            {
+                *dest = *first;
+                ++first;
+                ++dest;
+            }
+            return dest;
+        }
+    };
+
+    template<class InputIt, class OutputIt, typename T>
+    struct CopyHelper<InputIt, OutputIt, T, CAPU_TYPE_PRIMITIVE, random_access_iterator_tag, random_access_iterator_tag>
+    {
+        static OutputIt copy(InputIt first, InputIt last, OutputIt dest)
+        {
+            const uint_t distance = (last - first);
+            Memory::Move(&*dest, &*first, distance * sizeof(T));
+            return dest + distance;
+        }
+    };
+
     /**
      * Copy range to destination iterator
      * @param first begin of source range
@@ -32,13 +58,10 @@ namespace capu
     template <class InputIt, class OutputIt>
     OutputIt copy(InputIt first, InputIt last, OutputIt dest)
     {
-        while (first != last)
-        {
-            *dest = *first;
-            ++first;
-            ++dest;
-        }
-        return dest;
+        typedef typename iterator_traits<InputIt>::value_type T;
+        typedef typename iterator_traits<InputIt>::iterator_category InputItCategory;
+        typedef typename iterator_traits<OutputIt>::iterator_category OutputItCategory;
+        return CopyHelper<InputIt, OutputIt, T, Type<T>::Identifier, InputItCategory, OutputItCategory>::copy(first, last, dest);
     }
 
     template<class InputIt, class OutputIt, typename T, int TYPE, class InputItCategory, class OutputItCategory>

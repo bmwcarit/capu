@@ -53,6 +53,57 @@ namespace capu
         EXPECT_EQ(0u, dst[3]);
     }
 
+    TEST(AlgorithmTest, CopyVectorWithSmallElementSizeAndOverlap)
+    {
+        // Try to trigger problems with optimized overlapped copying with random access iterators
+        Vector<uint8_t> vec(80);
+        for (uint_t i = 0; i < vec.size(); ++i)
+        {
+            vec[i] = static_cast<uint8_t>(i + 1);
+        }
+
+        Vector<uint8_t>::Iterator result = copy(vec.begin() + 1, vec.end(), vec.begin());
+        EXPECT_EQ(vec.end() - 1, result);
+        for (uint_t i = 0; i < vec.size() - 1; ++i)
+        {
+            SCOPED_TRACE(i);
+            EXPECT_EQ(static_cast<uint8_t>(i + 2), vec[i]);
+        }
+        EXPECT_EQ(80u, vec.back());
+    }
+
+    TEST(AlgorithmTest, CopyVectorIntegralType)
+    {
+        BidirectionalTestContainer<uint_t> src(3);
+        src[0] = 2;
+        src[1] = 3;
+        src[2] = 4;
+        Vector<uint_t> dst(4, 0);
+
+        const Vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
+        EXPECT_EQ(dst.begin() + 3u, result);
+        EXPECT_EQ(2u, dst[0]);
+        EXPECT_EQ(3u, dst[1]);
+        EXPECT_EQ(4u, dst[2]);
+        EXPECT_EQ(0u, dst[3]);
+    }
+
+    TEST(AlgorithmTest, CopyVectorComplexType)
+    {
+        BidirectionalTestContainer<ComplexTestType> src(3);
+        src[0] = 2;
+        src[1] = 3;
+        src[2] = 4;
+        Vector<ComplexTestType> dst(4, 0);
+
+        const Vector<ComplexTestType>::Iterator result = copy(src.begin(), src.end(), dst.begin());
+        EXPECT_EQ(dst.begin() + 3u, result);
+        EXPECT_EQ(ComplexTestType(2u), dst[0]);
+        EXPECT_EQ(ComplexTestType(3u), dst[1]);
+        EXPECT_EQ(ComplexTestType(4u), dst[2]);
+        EXPECT_EQ(ComplexTestType(0u), dst[3]);
+    }
+
     TEST(AlgorithmTest, CopyZeroElements)
     {
         uint32_t src[2] = { 2, 3 };
