@@ -63,9 +63,14 @@ namespace capu
                 return *this;
             }
 
-            bool operator!=(const Iterator& other)
+            bool operator!=(const Iterator& other) const
             {
                 return other.idx != idx;
+            }
+
+            bool operator==(const Iterator& other) const
+            {
+                return other.idx == idx;
             }
 
             T& operator*()
@@ -86,6 +91,11 @@ namespace capu
         Iterator end()
         {
             return Iterator(vec, vec.size());
+        }
+
+        Iterator iteratorAt(uint_t index)
+        {
+            return Iterator(vec, index);
         }
     };
 }
