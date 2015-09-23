@@ -198,6 +198,45 @@ namespace capu
         EXPECT_EQ(0u, v[2]);
     }
 
+    TEST(AlgorithmTest, FindWithPointers)
+    {
+        uint_t a[4] = { 2, 3, 0, 1 };
+        EXPECT_EQ(a + 0, find(a, a + 4, 2u));
+        EXPECT_EQ(a + 2, find(a, a + 4, 0u));
+        EXPECT_EQ(a + 4, find(a, a + 4, 10u));
+    }
+
+    TEST(AlgorithmTest, FindWithMultipleOccurences)
+    {
+        uint_t a[4] = { 3, 2, 1, 2 };
+        EXPECT_EQ(a + 1, find(a, a + 4, 2u));
+        EXPECT_EQ(a + 3, find(a + 2, a + 4, 2u));
+    }
+
+    TEST(AlgorithmTest, FindInVector)
+    {
+        Vector<uint_t> v(5);
+        v[0] = 6;
+        v[1] = 5;
+        v[2] = 1;
+        v[3] = 7;
+        v[4] = 2;
+        EXPECT_EQ(v.begin() + 4, find(v.begin(), v.end(), 2u));
+        EXPECT_EQ(v.begin() + 0, find(v.begin(), v.end(), 6u));
+        EXPECT_EQ(v.end(), find(v.begin(), v.end(), 10u));
+    }
+
+    TEST(AlgorithmTest, FindInBidirectionalContainer)
+    {
+        BidirectionalTestContainer<uint_t> v(4);
+        v[0] = 1;
+        v[1] = 4;
+        v[2] = 7;
+        v[3] = 2;
+        EXPECT_EQ(v.iteratorAt(1), find(v.begin(), v.end(), 4u));
+        EXPECT_EQ(v.end(), find(v.begin(), v.end(), 10u));
+    }
+
     TEST(AlgorithmTest, FillVectorWithZeroElements)
     {
         Vector<uint_t> v(3, 99);

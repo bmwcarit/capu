@@ -146,6 +146,23 @@ namespace capu
         }
         return true;
     }
+
+    /**
+     * Find a value in a given range
+     * @param first begin of range to search value in
+     * @param last non-inclusive end of range to search value in
+     * @param value to search for
+     * @return iterator pointing to the element if found or pointing to last if not
+     */
+    template <class InputIt, class T>
+    InputIt find(InputIt first, InputIt last, const T& value)
+    {
+        while (first != last && *first != value)
+        {
+            ++first;
+        }
+        return first;
+    }
 }
 
 #endif // CAPU_ALGORITHM_H
