@@ -313,6 +313,11 @@ namespace capu
         void reserve(const uint_t capacity);
 
         /**
+         * Reduces the capacity to size
+         */
+        void shrink_to_fit();
+
+        /**
          * Removes all elements from the Vector
          */
         void clear();
@@ -688,6 +693,16 @@ namespace capu
             m_dataEnd = m_data + currentNumberOfElements;
             m_capacityEnd = m_data + newSize;
         }
+    }
+
+    template<typename T>
+    inline
+    void
+    Vector<T>::shrink_to_fit()
+    {
+        Vector<T> tmp(0);
+        tmp.insert(tmp.begin(), this->begin(), this->end());
+        this->swap(tmp);
     }
 
     template<typename T>

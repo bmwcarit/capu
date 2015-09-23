@@ -1201,3 +1201,25 @@
         EXPECT_EQ(2u, other[1]);
         EXPECT_EQ(3u, other[2]);
     }
+
+    TEST(VectorTest, Shrink)
+    {
+        capu::Vector<capu::uint_t> vec(3, 0);
+        vec[0] = 1;
+        vec[1] = 2;
+        vec[2] = 3;
+        vec.reserve(20);
+        EXPECT_EQ(20u, vec.capacity());
+
+        vec.shrink_to_fit();
+        EXPECT_EQ(3u, vec.capacity());
+        EXPECT_EQ(3u, vec.size());
+
+        vec.shrink_to_fit();
+        EXPECT_EQ(3u, vec.capacity());
+        EXPECT_EQ(3u, vec.size());
+
+        EXPECT_EQ(1u, vec[0]);
+        EXPECT_EQ(2u, vec[1]);
+        EXPECT_EQ(3u, vec[2]);
+    }
