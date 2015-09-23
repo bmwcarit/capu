@@ -1158,3 +1158,46 @@
         EXPECT_TRUE(vec.begin() == vecConst.begin());
         EXPECT_TRUE(vec.begin() != vecConst.end());
     }
+
+    TEST(VectorTest, SwapVectorViaMemberFunction)
+    {
+        capu::Vector<capu::uint_t> vec(3);
+        vec[0] = 1;
+        vec[1] = 2;
+        vec[2] = 3;
+        vec.reserve(20);
+        capu::Vector<capu::uint_t> other(1);
+        other[0] = 11;
+
+        vec.swap(other);
+        EXPECT_EQ(1u, vec.capacity());
+        EXPECT_EQ(20u, other.capacity());
+        ASSERT_EQ(1u, vec.size());
+        EXPECT_EQ(11u, vec[0]);
+        ASSERT_EQ(3u, other.size());
+        EXPECT_EQ(1u, other[0]);
+        EXPECT_EQ(2u, other[1]);
+        EXPECT_EQ(3u, other[2]);
+    }
+
+    TEST(VectorTest, SwapVectorViaSwapFreeFunction)
+    {
+        capu::Vector<capu::uint_t> vec(3);
+        vec[0] = 1;
+        vec[1] = 2;
+        vec[2] = 3;
+        vec.reserve(20);
+        capu::Vector<capu::uint_t> other(1);
+        other[0] = 11;
+
+        using capu::swap;
+        swap(vec, other);
+        EXPECT_EQ(1u, vec.capacity());
+        EXPECT_EQ(20u, other.capacity());
+        ASSERT_EQ(1u, vec.size());
+        EXPECT_EQ(11u, vec[0]);
+        ASSERT_EQ(3u, other.size());
+        EXPECT_EQ(1u, other[0]);
+        EXPECT_EQ(2u, other[1]);
+        EXPECT_EQ(3u, other[2]);
+    }

@@ -23,6 +23,7 @@
 #include "capu/util/Iterator.h"
 #include "capu/util/AlgorithmRaw.h"
 #include "capu/util/Algorithm.h"
+#include "capu/util/Swap.h"
 #include <new>
 #include <assert.h>
 
@@ -392,6 +393,12 @@ namespace capu
         template <typename InputIt>
         status_t insert(const Iterator& iterator, InputIt first, InputIt last);
 
+        /**
+         * Exchange the content of this vector with other
+         * @param other the other vector
+         */
+        void swap(Vector<T>& other);
+
     protected:
     private:
         /**
@@ -414,6 +421,18 @@ namespace capu
          */
         void grow();
     };
+
+    /**
+     * swap specialization for Vector<T>
+     * @param first first vector
+     * @param second vector to swap with first
+     */
+    template <typename T>
+    inline
+    void swap(Vector<T>& first, Vector<T>& second)
+    {
+        first.swap(second);
+    }
 
     template<typename T>
     T& capu::Vector<T>::front()
@@ -766,6 +785,15 @@ namespace capu
         return equal(m_data, m_dataEnd, other.m_data);
     }
 
+    template<typename T>
+    inline
+    void Vector<T>::swap(Vector<T>& other)
+    {
+        using capu::swap;
+        swap(m_data, other.m_data);
+        swap(m_dataEnd, other.m_dataEnd);
+        swap(m_capacityEnd, other.m_capacityEnd);
+    }
 }
 
 #endif // CAPU_VECTOR_H
