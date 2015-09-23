@@ -54,6 +54,7 @@ namespace capu
      * @param first begin of source range
      * @param last non-inclusive end of source range
      * @param dest start of destination range
+     * @return iterator one after the last element that was written
      */
     template <class InputIt, class OutputIt>
     OutputIt copy(InputIt first, InputIt last, OutputIt dest)
@@ -95,6 +96,7 @@ namespace capu
     * @param first begin of source range
     * @param last non-inclusive end of source range
     * @param lastResult non-inclusive end of destination range
+    * @return iterator on the last element that was written
     */
     template <class InputIt, class OutputIt>
     OutputIt copy_backward(InputIt first, InputIt last, OutputIt lastResult)
@@ -110,6 +112,7 @@ namespace capu
      * @param first start of range to fill
      * @param count number of consecutive elements to fill
      * @param value reference value used set elements to
+     * @return iterator one after the last element that was written
      */
     template <class OutputIt, class Size, class T>
     OutputIt fill_n(OutputIt first, Size count, const T& value)
@@ -127,6 +130,7 @@ namespace capu
      * @param first1 begin of first range
      * @param last1 non-inclusive end of first range
      * @param first2 begin of second range to compare to
+     * @return true if all elements from first and second range are equal, false if not
      */
     template <class InputIt1, class InputIt2>
     bool equal(InputIt1 first1, InputIt1 last1, InputIt2 first2)

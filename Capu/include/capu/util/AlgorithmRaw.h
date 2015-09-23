@@ -55,6 +55,7 @@ namespace capu
      * @param first begin of range to copy from
      * @param last non-inclusive end of range to copy from
      * @param dest iterator to raw (uninitialized memory) where elements are constructed
+     * @return iterator one after the last element that was written
      */
     template <class InputIt, class OutputIt>
     OutputIt copy_to_raw(InputIt first, InputIt last, OutputIt dest)
@@ -102,7 +103,8 @@ namespace capu
      * Fill a number of elements in uninitialized memory with given value
      * @param first start of uninitialized memory range to fill
      * @param count number of consecutive elements to fill
-     * @param value reference value used set elements to
+     * @param value reference value used to set elements to
+     * @return iterator one after the last element that was written
      */
     template <class OutputIt, class Size, class T>
     OutputIt fill_n_raw(OutputIt first, Size count, const T& value = T())
@@ -115,6 +117,7 @@ namespace capu
     * Fill a number of elements in uninitialized memory with default value
     * @param first start of uninitialized memory range to fill
     * @param count number of consecutive elements to fill
+    * @return iterator one after the last element that was written
     */
     template <class OutputIt, class Size>
     OutputIt fill_n_raw(OutputIt first, Size count)
