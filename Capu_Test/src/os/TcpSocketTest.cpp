@@ -59,7 +59,7 @@ public:
         mutex.lock();
         while (!cond)
         {
-            cv.wait(&mutex);
+            cv.wait(mutex);
         }
         cond = false;
         if (0 == port)
@@ -128,7 +128,7 @@ public:
         mutex.lock();
         while (!cond)
         {
-            cv.wait(&mutex);
+            cv.wait(mutex);
         }
         if (0 == port)
         {
@@ -217,7 +217,7 @@ public:
         mutex.lock();
         while (!cond)
         {
-            cv.wait(&mutex);
+            cv.wait(mutex);
         }
         if (0 == port)
         {
@@ -322,7 +322,7 @@ public:
         mutex.lock();
         while (!cond)
         {
-            cv.wait(&mutex);
+            cv.wait(mutex);
         }
         cond = false;
         mutex.unlock();
@@ -379,7 +379,7 @@ public:
         mutex.lock();
         while (!cond)
         {
-            cv.wait(&mutex);
+            cv.wait(mutex);
         }
         cond = false;
         mutex.unlock();
@@ -431,7 +431,7 @@ public:
         mutex.lock();
         while (!cond)
         {
-            cv.wait(&mutex);
+            cv.wait(mutex);
         }
         cond = false;
         mutex.unlock();

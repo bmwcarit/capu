@@ -96,7 +96,7 @@ namespace capu
         ScopedMutexLock lock(mCountLock);
         while (mCount > 0)
         {
-            status_t retVal = mCountChanged.wait(&mCountLock, timeoutMillis);
+            status_t retVal = mCountChanged.wait(mCountLock, timeoutMillis);
             if (retVal != CAPU_OK)
             {
                 return retVal;

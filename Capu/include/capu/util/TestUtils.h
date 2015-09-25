@@ -36,7 +36,7 @@ namespace capu
             m_mutex.lock();
             while (!m_condition)
             {
-                m_condVar.wait(&m_mutex);
+                m_condVar.wait(m_mutex);
             }
             m_mutex.unlock();
         }

@@ -67,13 +67,8 @@ namespace capu
                 }
             }
 
-            status_t wait(capu::Mutex* mutex, uint32_t timeoutMillis)
+            status_t wait(capu::Mutex& mutex, uint32_t timeoutMillis)
             {
-                if (mutex == NULL)
-                {
-                    return CAPU_EINVAL;
-                }
-
                 if (timeoutMillis != 0)
                 {
                     // use platform independent GetMilliseconds() function here because clock_gettime is not always available
@@ -82,7 +77,7 @@ namespace capu
                     timeout.tv_sec = endTime / 1000;
                     timeout.tv_nsec = (endTime % 1000) * 1000000;
 
-                    int32_t ret = pthread_cond_timedwait(&mCond, &mutex->mLock, &timeout);
+                    int32_t ret = pthread_cond_timedwait(&mCond, &mutex.mLock, &timeout);
 
                     switch (ret)
                     {
@@ -96,7 +91,7 @@ namespace capu
                 }
                 else
                 {
-                    if (pthread_cond_wait(&mCond, &mutex->mLock) == 0)
+                    if (pthread_cond_wait(&mCond, &mutex.mLock) == 0)
                     {
                         return CAPU_OK;
                     }

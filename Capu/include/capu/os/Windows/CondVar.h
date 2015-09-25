@@ -51,16 +51,11 @@ namespace capu
                 return CAPU_OK;
             }
 
-            status_t wait(capu::Mutex* mutex, uint32_t timeoutMillis)
+            status_t wait(capu::Mutex& mutex, uint32_t timeoutMillis)
             {
-                if (mutex == NULL)
-                {
-                    return CAPU_EINVAL;
-                }
-
                 if (timeoutMillis != 0)
                 {
-                    BOOL ret = SleepConditionVariableCS(&mCond, &mutex->mLock, timeoutMillis);
+                    BOOL ret = SleepConditionVariableCS(&mCond, &mutex.mLock, timeoutMillis);
 
                     if (ret != 0)
                     {
@@ -78,7 +73,7 @@ namespace capu
                 }
                 else
                 {
-                    BOOL ret = SleepConditionVariableCS(&mCond, &mutex->mLock, INFINITE);
+                    BOOL ret = SleepConditionVariableCS(&mCond, &mutex.mLock, INFINITE);
 
                     if (ret != 0)
                     {

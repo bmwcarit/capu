@@ -44,7 +44,7 @@ public:
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::mutex.lock());
             while (GlobalVariables::buffer == 0)
             {
-                EXPECT_EQ(capu::CAPU_OK, GlobalVariables::cv.wait(&GlobalVariables::mutex));
+                EXPECT_EQ(capu::CAPU_OK, GlobalVariables::cv.wait(GlobalVariables::mutex));
             }
             GlobalVariables::buffer--;
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::pv.signal());
@@ -63,7 +63,7 @@ public:
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::mutex.lock());
             while (GlobalVariables::buffer == 100)
             {
-                EXPECT_EQ(capu::CAPU_OK, GlobalVariables::pv.wait(&GlobalVariables::mutex));
+                EXPECT_EQ(capu::CAPU_OK, GlobalVariables::pv.wait(GlobalVariables::mutex));
             }
             GlobalVariables::buffer++;
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::cv.broadcast());
@@ -82,7 +82,7 @@ public:
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::mutex.lock());
             while (GlobalVariables::buffer == 100)
             {
-                EXPECT_EQ(capu::CAPU_OK, GlobalVariables::pv.wait(&GlobalVariables::mutex));
+                EXPECT_EQ(capu::CAPU_OK, GlobalVariables::pv.wait(GlobalVariables::mutex));
             }
             GlobalVariables::buffer++;
             EXPECT_EQ(capu::CAPU_OK, GlobalVariables::cv.signal());
@@ -95,13 +95,6 @@ TEST(CondVar, ConstructorTest)
 {
     capu::CondVar* _cv = new capu::CondVar();
     EXPECT_TRUE(_cv != NULL);
-    delete _cv;
-}
-
-TEST(CondVar, WaitTest)
-{
-    capu::CondVar* _cv = new capu::CondVar();
-    EXPECT_EQ(capu::CAPU_EINVAL, _cv->wait(NULL));
     delete _cv;
 }
 
@@ -152,7 +145,7 @@ TEST(CondVar, TimedWaitTest)
     capu::CondVar condvar;
     mutex.lock();
     // 100ms wait and timeout
-    EXPECT_EQ(capu::CAPU_ETIMEOUT, condvar.wait(&mutex, 100));
+    EXPECT_EQ(capu::CAPU_ETIMEOUT, condvar.wait(mutex, 100));
     mutex.unlock();
 }
 

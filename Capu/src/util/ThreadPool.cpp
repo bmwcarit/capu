@@ -151,7 +151,7 @@ void capu::ThreadPool::PoolRunnable::run()
                     mPool.mClosed = true;
                     break;
                 }
-                mPool.mCV.wait(&mPool.mMutex); // block until a job is available
+                mPool.mCV.wait(mPool.mMutex); // block until a job is available
             }
             if (mPool.isClosed())
             {

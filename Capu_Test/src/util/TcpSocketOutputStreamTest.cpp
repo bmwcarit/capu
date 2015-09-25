@@ -207,7 +207,7 @@ namespace capu
             Thread thread;
             thread.start(runnable);
 
-            runnable.mStartupCv.wait(&runnable.mStartupMutex);
+            runnable.mStartupCv.wait(runnable.mStartupMutex);
             runnable.mStartupMutex.unlock();
 
             TcpSocket socket;

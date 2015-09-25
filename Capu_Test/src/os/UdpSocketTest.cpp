@@ -57,7 +57,7 @@ public:
         mutex2.lock();
         while (!cond2)
         {
-            cv2.wait(&mutex2);
+            cv2.wait(mutex2);
         }
         cond2 = false;
         mutex2.unlock();
@@ -106,7 +106,7 @@ public:
         mutex2.lock();
         while (!cond2)
         {
-            cv2.wait(&mutex2);
+            cv2.wait(mutex2);
         }
         cond2 = false;
         mutex2.unlock();
@@ -172,7 +172,7 @@ public:
         mutex2.lock();
         while (!cond2)
         {
-            cv2.wait(&mutex2);
+            cv2.wait(mutex2);
         }
         cond2 = false;
         mutex2.unlock();
@@ -216,7 +216,7 @@ public:
         mutex2.lock();
         while (!cond2)
         {
-            cv2.wait(&mutex2);
+            cv2.wait(mutex2);
         }
         cond2 = false;
         mutex2.unlock();

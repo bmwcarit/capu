@@ -45,10 +45,9 @@ namespace capu
          * @param mutex The mutex to use for locked access
          * @param millisec Milliseconds to wait (default '0' is infinite)
          * @return CAPU_OK if the condition variable is correctly waited
-         *         CAPU_EINVAL if the given mutex is NULL
          *         CAPU_ERROR otherwise
          */
-        status_t wait(capu::Mutex* mutex, uint32_t millisec = 0);
+        status_t wait(capu::Mutex& mutex, uint32_t millisec = 0);
 
         /**
          * Wake up all threads that is waiting for this condition variable
@@ -64,7 +63,7 @@ namespace capu
         return os::arch::CondVar::signal();
     }
 
-    inline status_t CondVar::wait(capu::Mutex* mutex, uint32_t millisec)
+    inline status_t CondVar::wait(capu::Mutex& mutex, uint32_t millisec)
     {
         return os::arch::CondVar::wait(mutex, millisec);
     }

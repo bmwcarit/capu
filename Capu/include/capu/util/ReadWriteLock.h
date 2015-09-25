@@ -96,7 +96,7 @@ namespace capu
         while (m_readerCount > 0)
         {
             // block writer until all readers are finished
-            m_readerLeftArea.wait(&m_readerLock);
+            m_readerLeftArea.wait(m_readerLock);
         }
     }
 }
