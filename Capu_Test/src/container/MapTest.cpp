@@ -297,7 +297,7 @@ namespace capu
 
         List<KeyValue> m_list;
 
-        for (uint32_t i = 0; i < 5000; i++)
+        for (uint32_t i = 0; i < 1000; i++)
         {
             KeyValue element(rand(), Value(i));
 
@@ -330,7 +330,7 @@ namespace capu
     {
         List<KeyValue> m_list;
 
-        for (uint32_t i = 0; i < 5000; i++)
+        for (uint32_t i = 0; i < 1000; i++)
         {
             KeyValue element(rand() % 1000, Value(i));
 
@@ -689,7 +689,7 @@ namespace capu
     {
         List<KeyValue> m_list;
 
-        uint32_t nElements = 5000;
+        uint32_t nElements = 1000;
         for (uint32_t i = 0; i < nElements; i++)
         {
             KeyValue element(rand(), Value(i));
