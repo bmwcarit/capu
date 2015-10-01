@@ -327,7 +327,14 @@ namespace capu
          * @param index of the element to access
          * @return reference to the element
          */
-        T& operator[](const uint_t index) const;
+        T& operator[](const uint_t index);
+
+        /**
+        * Operator to access internal data with index
+        * @param index of the element to access
+        * @return constant reference to the element
+        */
+        const T& operator[](const uint_t index) const;
 
         /**
          * Compares the content of two Vectors
@@ -709,6 +716,14 @@ namespace capu
     template<typename T>
     inline
     T&
+    Vector<T>::operator[](const uint_t index)
+    {
+        return *(m_data + index);
+    }
+
+    template<typename T>
+    inline
+    const T&
     Vector<T>::operator[](const uint_t index) const
     {
         return *(m_data + index);
