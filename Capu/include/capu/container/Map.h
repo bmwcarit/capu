@@ -1413,9 +1413,6 @@ namespace capu
             height = ((leftHeight > rightHeight) ? leftHeight : rightHeight) + 1;
             int32_t balance = rightHeight - leftHeight;
 
-            EXPECT_EQ(balance, m_balance);
-            EXPECT_TRUE(balance >= -1 && balance <= 1);
-
             return (balance == m_balance) && (balance >= -1) && (balance <= 1);
         }
 
