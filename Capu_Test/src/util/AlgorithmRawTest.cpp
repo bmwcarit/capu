@@ -177,11 +177,12 @@ namespace capu
         c[2] = 1;
         c[3] = 1;
 
-        fill_n_raw(c.begin(), 3, 99);
-        EXPECT_EQ(99u, c[0]);
-        EXPECT_EQ(99u, c[1]);
-        EXPECT_EQ(99u, c[2]);
-        EXPECT_NE(99u, c[3]);
+        const uint_t fillValue = 99u;
+        fill_n_raw(c.begin(), 3, fillValue);
+        EXPECT_EQ(fillValue, c[0]);
+        EXPECT_EQ(fillValue, c[1]);
+        EXPECT_EQ(fillValue, c[2]);
+        EXPECT_NE(fillValue, c[3]);
     }
 
     TEST(AlgorithmRawTest, FillRawBidirectionalContainerComplexType)
@@ -192,11 +193,12 @@ namespace capu
         c[2].value = 1;
         c[3].value = 1;
 
-        fill_n_raw(c.begin(), 3, 99);
-        EXPECT_EQ(99u, c[0].value);
-        EXPECT_EQ(99u, c[1].value);
-        EXPECT_EQ(99u, c[2].value);
-        EXPECT_NE(99u, c[3].value);
+        const uint_t fillValue = 99u;
+        fill_n_raw(c.begin(), 3, fillValue);
+        EXPECT_EQ(fillValue, c[0].value);
+        EXPECT_EQ(fillValue, c[1].value);
+        EXPECT_EQ(fillValue, c[2].value);
+        EXPECT_NE(fillValue, c[3].value);
     }
 
     TEST(AlgorithmRawTest, DestructRawComplexType)
