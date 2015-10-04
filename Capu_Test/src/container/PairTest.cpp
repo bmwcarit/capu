@@ -20,6 +20,14 @@
 #include "capu/Config.h"
 
 
+TEST(Pair, DefaultInitialized)
+{
+    capu::Pair<int, int> p;
+
+    EXPECT_EQ(0, p.first);
+    EXPECT_EQ(0, p.second);
+}
+
 TEST(Pair, Functionality)
 {
     capu::Pair<int, int> p(1, 2);

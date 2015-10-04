@@ -44,6 +44,8 @@ namespace capu
         }
 
         Pair()
+            : first()
+            , second()
         {
 
         }
