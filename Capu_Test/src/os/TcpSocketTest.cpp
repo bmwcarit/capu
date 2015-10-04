@@ -118,9 +118,9 @@ public:
     {
         int32_t communication_variable;
         int32_t numBytes = 0;
-        capu::TcpSocket* cli_socket = new capu::TcpSocket();
+        capu::TcpSocket cli_socket;
 
-        cli_socket->setTimeout(2);
+        cli_socket.setTimeout(2);
 
         //connects to he given id
         capu::status_t result = capu::CAPU_ERROR;
@@ -136,17 +136,17 @@ public:
         }
         cond = false;
         mutex.unlock();
-        result = cli_socket->connect("localhost", port);
+        result = cli_socket.connect("localhost", port);
         ASSERT_TRUE(result == capu::CAPU_OK);
 
         int32_t i = 5;
 
         int32_t sentBytes;
         //send data
-        EXPECT_EQ(capu::CAPU_OK, cli_socket->send((char*) &i, sizeof(int32_t), sentBytes));
+        EXPECT_EQ(capu::CAPU_OK, cli_socket.send((char*) &i, sizeof(int32_t), sentBytes));
 
         //receive
-        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket->receive((char*) &communication_variable, sizeof(int32_t), numBytes));
+        EXPECT_EQ(capu::CAPU_ETIMEOUT, cli_socket.receive((char*) &communication_variable, sizeof(int32_t), numBytes));
 
         //client has received timeout, server can close socket
         mutex.lock();
@@ -154,9 +154,7 @@ public:
         cv.signal();
         mutex.unlock();
         //socket close
-        EXPECT_EQ(capu::CAPU_OK, cli_socket->close());
-        //deallocating
-        delete cli_socket;
+        EXPECT_EQ(capu::CAPU_OK, cli_socket.close());
     }
 };
 
