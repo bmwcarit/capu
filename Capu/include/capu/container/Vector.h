@@ -487,11 +487,12 @@ namespace capu
     template <typename InputIt>
     status_t capu::Vector<T>::insert(const Iterator& iterator, InputIt first, InputIt last)
     {
-        const uint_t numberOfNewElements = distance(first, last);
+        typedef typename capu::iterator_traits<InputIt>::difference_type distanceType;
+        const distanceType numberOfNewElements = distance(first, last);
         const uint_t insertOffset = (iterator.m_current - m_data);
         reserve(size() + numberOfNewElements);
 
-        const uint_t numberOfExistingElementsThatNeedToBeMoved = size() - insertOffset;
+        const distanceType numberOfExistingElementsThatNeedToBeMoved = size() - insertOffset;
         if (numberOfExistingElementsThatNeedToBeMoved > numberOfNewElements)
         {
             // existing elements move must be split
@@ -505,7 +506,7 @@ namespace capu
             // insert new elements must be split
             copy_to_raw(m_data + insertOffset, m_dataEnd, m_dataEnd + numberOfNewElements - numberOfExistingElementsThatNeedToBeMoved);
 
-            const uint_t numberOfElementsToInsertDirectly = numberOfExistingElementsThatNeedToBeMoved;
+            const distanceType numberOfElementsToInsertDirectly = numberOfExistingElementsThatNeedToBeMoved;
             InputIt insertDirectlyEnd = first;
             advance(insertDirectlyEnd, numberOfElementsToInsertDirectly);
 
