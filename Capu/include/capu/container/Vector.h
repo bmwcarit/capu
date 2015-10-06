@@ -157,7 +157,7 @@ namespace capu
              * @param value to add to the internal pointer
              * @return InternalIterator with the new pointer
              */
-            InternalIterator operator+(const uint_t value) const
+            InternalIterator operator+(const int_t value) const
             {
                 return InternalIterator(m_current + value);
             }
@@ -167,7 +167,7 @@ namespace capu
              * @param value to substract from the internal pointer
              * @return InternalIterator with the new pointer
              */
-            InternalIterator operator-(const uint_t value) const
+            InternalIterator operator-(const int_t value) const
             {
                 return InternalIterator(m_current - value);
             }
