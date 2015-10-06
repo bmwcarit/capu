@@ -431,7 +431,7 @@ namespace capu
         /**
          * Internal method to double the current memory
          */
-        void grow();
+        void grow(uint_t requiredCapacity);
     };
 
     /**
@@ -478,7 +478,7 @@ namespace capu
         {
             /*status = */
             // todo: should check status of grow here
-            grow();
+            grow(size() + 1);
         }
 
         // move back
@@ -497,7 +497,7 @@ namespace capu
         typedef typename capu::iterator_traits<InputIt>::difference_type distanceType;
         const distanceType numberOfNewElements = distance(first, last);
         const uint_t insertOffset = (iterator.m_current - m_data);
-        reserve(size() + numberOfNewElements);
+        grow(size() + numberOfNewElements);
 
         const distanceType numberOfExistingElementsThatNeedToBeMoved = size() - insertOffset;
         if (numberOfExistingElementsThatNeedToBeMoved > numberOfNewElements)
@@ -602,7 +602,7 @@ namespace capu
         {
             /*status = */
             // todo: should check status of grow here
-            grow();
+            grow(size() + 1);
         }
 
         T* thing = reinterpret_cast<T*>(m_dataEnd);
@@ -642,16 +642,18 @@ namespace capu
     template<typename T>
     inline
     void
-    Vector<T>::grow()
+    Vector<T>::grow(uint_t requiredCapacity)
     {
-        const uint_t currentNumberOfElements = size();
-        uint_t newSize = 2 * currentNumberOfElements;
-        if(0 == newSize)
+        // try double current capacity: exponential growth
+        uint_t newCapacity = capacity() * 2;
+
+        // if not enough, use requiredCapacity directly
+        if (newCapacity < requiredCapacity)
         {
-            newSize = 1;
+            newCapacity = requiredCapacity;
         }
 
-        reserve(newSize);
+        reserve(newCapacity);
     }
 
     template<typename T>
@@ -670,7 +672,7 @@ namespace capu
             if (newSize > capacity())
             {
                 // new size does not fit, must grow first
-                reserve(newSize);
+                grow(newSize);
             }
             // initialize new objects
             const uint_t numberOfNewObjects = newSize - previousNumberOfElements;

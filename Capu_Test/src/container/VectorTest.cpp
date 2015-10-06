@@ -1223,3 +1223,77 @@
         EXPECT_EQ(2u, vec[1]);
         EXPECT_EQ(3u, vec[2]);
     }
+
+    TEST(VectorTest, ExponentialGrowOnPushBack)
+    {
+        capu::Vector<capu::uint_t> vec(0);
+        EXPECT_EQ(0u, vec.capacity());
+        vec.push_back(0);
+        EXPECT_EQ(1u, vec.capacity());
+        vec.push_back(0);
+        EXPECT_EQ(2u, vec.capacity());
+        vec.push_back(0);
+        EXPECT_EQ(4u, vec.capacity());
+        vec.push_back(0);
+        vec.push_back(0);
+        EXPECT_EQ(8u, vec.capacity());
+    }
+
+    TEST(VectorTest, ExponentialGrowOnSmallResize)
+    {
+        capu::Vector<capu::uint_t> vec(0);
+        EXPECT_EQ(0u, vec.capacity());
+        vec.resize(vec.size() + 1);
+        EXPECT_EQ(1u, vec.capacity());
+        vec.resize(vec.size() + 1);
+        EXPECT_EQ(2u, vec.capacity());
+        vec.resize(vec.size() + 1);
+        EXPECT_EQ(4u, vec.capacity());
+        vec.resize(vec.size() + 2);
+        EXPECT_EQ(8u, vec.capacity());
+    }
+
+    TEST(VectorTest, ExponentialGrowOnInsertSingle)
+    {
+        capu::Vector<capu::uint_t> vec(0);
+        EXPECT_EQ(0u, vec.capacity());
+        vec.insert(vec.end(), 0);
+        EXPECT_EQ(1u, vec.capacity());
+        vec.insert(vec.end(), 0);
+        EXPECT_EQ(2u, vec.capacity());
+        vec.insert(vec.end(), 0);
+        EXPECT_EQ(4u, vec.capacity());
+        vec.insert(vec.end(), 0);
+        vec.insert(vec.end(), 0);
+        EXPECT_EQ(8u, vec.capacity());
+    }
+
+    TEST(VectorTest, MixedGrowthBehaviorOnResize)
+    {
+        capu::Vector<capu::uint_t> vec(0);
+        EXPECT_EQ(0u, vec.capacity());
+        vec.resize(1);
+        EXPECT_EQ(1u, vec.capacity());
+        vec.resize(3);
+        EXPECT_EQ(3u, vec.capacity());
+        vec.resize(4);
+        EXPECT_EQ(6u, vec.capacity());
+        vec.resize(15);
+        EXPECT_EQ(15u, vec.capacity());
+    }
+
+    TEST(VectorTest, MixedGrowthBehaviorOnInsertRange)
+    {
+        capu::Vector<capu::uint_t> vec(0);
+        capu::Vector<capu::uint_t> rangeVec(11);
+
+        EXPECT_EQ(0u, vec.capacity());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.begin() + 1);
+        EXPECT_EQ(1u, vec.capacity());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.begin() + 2);
+        EXPECT_EQ(3u, vec.capacity());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.begin() + 1);
+        EXPECT_EQ(6u, vec.capacity());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.end());
+        EXPECT_EQ(15u, vec.capacity());
+    }
