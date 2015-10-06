@@ -543,9 +543,9 @@ namespace capu
     template<typename T>
     inline
     Vector<T>::Vector()
-        : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * 16]))
-        , m_dataEnd(m_data)
-        , m_capacityEnd(m_data + 16)
+        : m_data(0)
+        , m_dataEnd(0)
+        , m_capacityEnd(0)
     {
     }
 
