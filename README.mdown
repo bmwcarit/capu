@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/bmwcarit/capu.svg?branch=master)](https://travis-ci.org/bmwcarit/capu)
+[![Coverity Status](https://scan.coverity.com/projects/4154/badge.svg)](https://scan.coverity.com/projects/bmwcarit-capu)
+
 Introduction
 ---------------------------
 
