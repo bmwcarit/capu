@@ -65,15 +65,18 @@ public:
 
     void acceptConnectionCallback(const capu::os::SocketDescription& socketDescription)
     {
+        m_socketLock.lock();
         UNUSED(socketDescription);
         capu::TcpSocket* clientSocket = m_serverSocket.accept();
         EXPECT_TRUE(0 != clientSocket);
         m_clientSockets.put(clientSocket->getSocketDescription(), clientSocket);
         m_socketInfos.push_back(capu::os::SocketInfoPair(clientSocket->getSocketDescription(), capu::os::SocketDelegate::Create<AsyncSocketHandler, &AsyncSocketHandler::receiveDataCallback>(*this)));
+        m_socketLock.unlock();
     }
 
     void sendSomeData()
     {
+        m_socketLock.lock();
         capu::HashTable<capu::os::SocketDescription, capu::TcpSocket*>::Iterator current = m_clientSockets.begin();
         capu::HashTable<capu::os::SocketDescription, capu::TcpSocket*>::Iterator end = m_clientSockets.end();
 
@@ -83,10 +86,12 @@ public:
             int32_t sendBytes;
             current->value->send(reinterpret_cast<char*>(&sendValue), sizeof(sendValue), sendBytes);
         }
+        m_socketLock.unlock();
     }
 
     void receiveDataCallback(const capu::os::SocketDescription& socketDescription)
     {
+        m_socketLock.lock();
         int32_t data;
         int32_t numbytes = 0;
 
@@ -100,10 +105,28 @@ public:
                 ++m_receiveCount;
             }
         }
+        m_socketLock.unlock();
+    }
+
+    capu::uint_t getNumberOfClientSockets()
+    {
+        m_socketLock.lock();
+        const capu::uint_t num = m_clientSockets.count();
+        m_socketLock.unlock();
+        return num;
+    }
+
+    capu::Vector<capu::os::SocketInfoPair> getSocketInfoCopy()
+    {
+        m_socketLock.lock();
+        const capu::Vector<capu::os::SocketInfoPair> copy = m_socketInfos;
+        m_socketLock.unlock();
+        return copy;
     }
 
     capu::Vector<capu::os::SocketInfoPair> m_socketInfos;
     capu::HashTable<capu::os::SocketDescription, capu::TcpSocket*> m_clientSockets;
+    capu::Mutex m_socketLock;
     capu::TcpServerSocket m_serverSocket;
     uint32_t m_receiveCount;
 };
@@ -197,9 +220,10 @@ TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
 
     uint64_t startTime = capu::Time::GetMilliseconds();
     bool timeout = false;
-    while (asyncSocketHandler.m_clientSockets.count() < clientcount && !timeout)
+    while (asyncSocketHandler.getNumberOfClientSockets() < clientcount && !timeout)
     {
-        capu::NonBlockSocketChecker::CheckSocketsForIncomingData(asyncSocketHandler.m_socketInfos, 10);
+        capu::Vector<capu::os::SocketInfoPair> sockets = asyncSocketHandler.getSocketInfoCopy();
+        capu::NonBlockSocketChecker::CheckSocketsForIncomingData(sockets, 10);
         timeout = ((capu::Time::GetMilliseconds() - startTime) > testtimeout);
     }
 
