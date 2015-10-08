@@ -802,7 +802,7 @@ namespace capu
         entry->next->previous = entry->previous;
         if (mBuckets[hashValue] == entry)
         {
-            mBuckets[hashValue] = entry->next && entry->next->isChainElement ? entry->next : 0;
+            mBuckets[hashValue] = entry->next->isChainElement ? entry->next : 0;
             entry->next->isChainElement = 0;
         }
 
