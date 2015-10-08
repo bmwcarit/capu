@@ -276,7 +276,9 @@ TEST(UdpSocket, SetAndGetPropertiesTest)
 
 TEST(UdpSocketAndUdpServerSocket, CommunicationTest)
 {
+    mutex2.lock();
     cond2 = false;
+    mutex2.unlock();
     uint16_t port = RandomPort::get();
     ThreadServerUdpTest server(port);
     ThreadClientUdpTest client(port);
@@ -294,7 +296,9 @@ TEST(UdpSocketAndUdpServerSocket, CommunicationTest)
 
 TEST(UdpSocketAndUdpServerSocket, TimeoutTest)
 {
+    mutex2.lock();
     cond2 = false;
+    mutex2.unlock();
     uint16_t port = RandomPort::get();
     ThreadTimeoutServerUdpTest server(port);
     ThreadTimeoutClientUdpTest client(port);
