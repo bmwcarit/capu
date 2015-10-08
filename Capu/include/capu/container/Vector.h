@@ -644,16 +644,20 @@ namespace capu
     void
     Vector<T>::grow(uint_t requiredCapacity)
     {
-        // try double current capacity: exponential growth
-        uint_t newCapacity = capacity() * 2;
-
-        // if not enough, use requiredCapacity directly
-        if (newCapacity < requiredCapacity)
+        const uint_t currentCapacity = capacity();
+        if (requiredCapacity > currentCapacity)
         {
-            newCapacity = requiredCapacity;
-        }
+            // try double current capacity: exponential growth
+            uint_t newCapacity = currentCapacity * 2;
 
-        reserve(newCapacity);
+            // if not enough, use requiredCapacity directly
+            if (newCapacity < requiredCapacity)
+            {
+                newCapacity = requiredCapacity;
+            }
+
+            reserve(newCapacity);
+        }
     }
 
     template<typename T>

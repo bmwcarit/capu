@@ -1268,6 +1268,23 @@
         EXPECT_EQ(8u, vec.capacity());
     }
 
+    TEST(VectorTest, ExponentialGrowOnInsertSmallRange)
+    {
+        capu::Vector<capu::uint_t> vec;
+        capu::Vector<capu::uint_t> rangeVec(1);
+
+        EXPECT_EQ(0u, vec.capacity());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.end());
+        EXPECT_EQ(1u, vec.capacity());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.end());
+        EXPECT_EQ(2u, vec.capacity());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.end());
+        EXPECT_EQ(4u, vec.capacity());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.end());
+        vec.insert(vec.end(), rangeVec.begin(), rangeVec.end());
+        EXPECT_EQ(8u, vec.capacity());
+    }
+
     TEST(VectorTest, MixedGrowthBehaviorOnResize)
     {
         capu::Vector<capu::uint_t> vec(0);
