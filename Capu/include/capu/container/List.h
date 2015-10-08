@@ -31,7 +31,8 @@ namespace capu
     public:
 
         GenericListNode()
-            : mNext(0)
+            : mData()
+            , mNext(0)
             , mPrev(0)
         {
         }
