@@ -58,6 +58,14 @@ namespace capu
         EXPECT_EQ(2U + 45U, outputStream.length()); // '0.' + precision
     }
 
+    TEST_F(StringOutputStreamTest, WriteFloatZeroWithCappedToMaximumPrecision)
+    {
+        outputStream.setDecimalDigits(46);
+        outputStream << 0.f;
+        outputStream.flush();
+        EXPECT_EQ(2U + 45U, outputStream.length()); // '0.' + precision
+    }
+
     TEST_F(StringOutputStreamTest, WriteFloatSmallestNegativeWithMaximumPrecision)
     {
         outputStream.setDecimalDigits(45);
