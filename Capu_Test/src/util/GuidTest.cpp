@@ -57,6 +57,12 @@ TEST(GuidTest, TestParseInvalidGuid2)
     EXPECT_TRUE(id1.isInvalid());
 }
 
+TEST(GuidTest, TestParseInvalidGuid3)
+{
+    capu::Guid id1("D92BB305XD8B2X4B60XA3A3XA3CFDA57678F");
+    EXPECT_TRUE(id1.isInvalid());
+}
+
 TEST(GuidTest, TestParseToString1)
 {
     capu::Guid id1("D92BB305-D8B2-4B60-A3A3-A3CFDA57678F");
