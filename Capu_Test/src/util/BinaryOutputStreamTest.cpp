@@ -67,6 +67,19 @@ namespace capu
         EXPECT_EQ(7, *reinterpret_cast<const uint16_t*>(data));
     }
 
+   TEST_F(BinaryOutputStreamTest, InsertBool)
+    {
+        BinaryOutputStream outStream;
+
+        outStream << true << false << true;
+
+        const char* data = outStream.getData();
+        EXPECT_TRUE(*reinterpret_cast<const bool*>(data));
+        data += sizeof(bool);
+        EXPECT_FALSE(*reinterpret_cast<const bool*>(data));
+        data += sizeof(bool);
+        EXPECT_TRUE(*reinterpret_cast<const bool*>(data));
+    }
 
     TEST_F(BinaryOutputStreamTest, InsertInt)
     {
