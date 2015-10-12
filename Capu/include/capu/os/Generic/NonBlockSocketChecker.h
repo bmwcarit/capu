@@ -18,7 +18,7 @@
 #define CAPU_GENERIC_NONBLOCKSOCKETCHECKER_H
 
 #include <capu/os/Socket.h>
-#include <capu/container/Vector.h>
+#include <capu/container/vector.h>
 
 namespace capu
 {
@@ -27,19 +27,19 @@ namespace capu
         class NonBlockSocketChecker
         {
         public:
-            static status_t CheckSocketsForIncomingData(const Vector<capu::os::SocketInfoPair>& socketsToCheck);
-            static status_t CheckSocketsForIncomingData(const Vector<capu::os::SocketInfoPair>& socketsToCheck, uint32_t timeoutMillis);
+            static status_t CheckSocketsForIncomingData(const vector<capu::os::SocketInfoPair>& socketsToCheck);
+            static status_t CheckSocketsForIncomingData(const vector<capu::os::SocketInfoPair>& socketsToCheck, uint32_t timeoutMillis);
 
         private:
-            static status_t CheckSocketsForIncomingDataInternal(const Vector<capu::os::SocketInfoPair>& socketsToCheck, timeval* timeout);
+            static status_t CheckSocketsForIncomingDataInternal(const vector<capu::os::SocketInfoPair>& socketsToCheck, timeval* timeout);
         };
 
-        inline status_t NonBlockSocketChecker::CheckSocketsForIncomingData(const Vector<capu::os::SocketInfoPair>& socketsToCheck)
+        inline status_t NonBlockSocketChecker::CheckSocketsForIncomingData(const vector<capu::os::SocketInfoPair>& socketsToCheck)
         {
             return CheckSocketsForIncomingDataInternal(socketsToCheck, 0);
         }
 
-        inline status_t NonBlockSocketChecker::CheckSocketsForIncomingData(const Vector<capu::os::SocketInfoPair>& socketsToCheck, uint32_t timeoutMillis)
+        inline status_t NonBlockSocketChecker::CheckSocketsForIncomingData(const vector<capu::os::SocketInfoPair>& socketsToCheck, uint32_t timeoutMillis)
         {
             timeval timeout;
 
@@ -49,13 +49,13 @@ namespace capu
             return CheckSocketsForIncomingDataInternal(socketsToCheck, &timeout);
         }
 
-        inline status_t NonBlockSocketChecker::CheckSocketsForIncomingDataInternal(const Vector<capu::os::SocketInfoPair>& socketsToCheck, timeval* timeout)
+        inline status_t NonBlockSocketChecker::CheckSocketsForIncomingDataInternal(const vector<capu::os::SocketInfoPair>& socketsToCheck, timeval* timeout)
         {
             fd_set fdset;
             FD_ZERO(&fdset);
 
-            Vector<capu::os::SocketInfoPair>::ConstIterator current = socketsToCheck.begin();
-            const Vector<capu::os::SocketInfoPair>::ConstIterator end = socketsToCheck.end();
+            vector<capu::os::SocketInfoPair>::ConstIterator current = socketsToCheck.begin();
+            const vector<capu::os::SocketInfoPair>::ConstIterator end = socketsToCheck.end();
 
             int_t maxfd = -1;
             for (; current != end; ++current)

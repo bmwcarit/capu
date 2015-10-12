@@ -17,7 +17,7 @@
 #ifndef CAPU_COMPLEXTESTTYPE_H
 #define CAPU_COMPLEXTESTTYPE_H
 
-#include "capu/container/Vector.h"
+#include "capu/container/vector.h"
 #include "capu/Config.h"
 
 class ComplexTestType

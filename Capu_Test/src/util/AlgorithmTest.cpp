@@ -15,7 +15,7 @@
 */
 
 #include "capu/util/Algorithm.h"
-#include "capu/container/Vector.h"
+#include "capu/container/vector.h"
 #include "capu/container/String.h"
 #include "capu/Config.h"
 #include "gmock/gmock.h"
@@ -39,13 +39,13 @@ namespace capu
 
     TEST(AlgorithmTest, CopyVector)
     {
-        Vector<uint_t> src(3, 0);
+        vector<uint_t> src(3, 0);
         src[0] = 2;
         src[1] = 3;
         src[2] = 4;
-        Vector<uint_t> dst(4, 0);
+        vector<uint_t> dst(4, 0);
 
-        const Vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
+        const vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
         EXPECT_EQ(dst.begin() + 3u, result);
         EXPECT_EQ(2u, dst[0]);
         EXPECT_EQ(3u, dst[1]);
@@ -56,13 +56,13 @@ namespace capu
     TEST(AlgorithmTest, CopyVectorWithSmallElementSizeAndOverlap)
     {
         // Try to trigger problems with optimized overlapped copying with random access iterators
-        Vector<uint8_t> vec(80);
+        vector<uint8_t> vec(80);
         for (uint_t i = 0; i < vec.size(); ++i)
         {
             vec[i] = static_cast<uint8_t>(i + 1);
         }
 
-        Vector<uint8_t>::Iterator result = copy(vec.begin() + 1, vec.end(), vec.begin());
+        vector<uint8_t>::Iterator result = copy(vec.begin() + 1, vec.end(), vec.begin());
         EXPECT_EQ(vec.end() - 1, result);
         for (uint_t i = 0; i < vec.size() - 1; ++i)
         {
@@ -78,9 +78,9 @@ namespace capu
         src[0] = 2;
         src[1] = 3;
         src[2] = 4;
-        Vector<uint_t> dst(4, 0);
+        vector<uint_t> dst(4, 0);
 
-        const Vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
+        const vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
         EXPECT_EQ(dst.begin() + 3u, result);
         EXPECT_EQ(2u, dst[0]);
         EXPECT_EQ(3u, dst[1]);
@@ -94,9 +94,9 @@ namespace capu
         src[0] = 2;
         src[1] = 3;
         src[2] = 4;
-        Vector<ComplexTestType> dst(4, 0);
+        vector<ComplexTestType> dst(4, 0);
 
-        const Vector<ComplexTestType>::Iterator result = copy(src.begin(), src.end(), dst.begin());
+        const vector<ComplexTestType>::Iterator result = copy(src.begin(), src.end(), dst.begin());
         EXPECT_EQ(dst.begin() + 3u, result);
         EXPECT_EQ(ComplexTestType(2u), dst[0]);
         EXPECT_EQ(ComplexTestType(3u), dst[1]);
@@ -116,10 +116,10 @@ namespace capu
 
     TEST(AlgorithmTest, CopyEmptyVector)
     {
-        Vector<uint_t> src;
-        Vector<uint_t> dst(2, 0);
+        vector<uint_t> src;
+        vector<uint_t> dst(2, 0);
 
-        Vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
+        vector<uint_t>::Iterator result = copy(src.begin(), src.end(), dst.begin());
         EXPECT_EQ(dst.begin(), result);
         EXPECT_EQ(0u, dst[0]);
     }
@@ -142,9 +142,9 @@ namespace capu
         src[0] = 2;
         src[1] = 3;
         src[2] = 4;
-        Vector<uint_t> dst(4, 0);
+        vector<uint_t> dst(4, 0);
 
-        Vector<uint_t>::Iterator result = copy_backward(src.begin(), src.end(), dst.end()-1u);
+        vector<uint_t>::Iterator result = copy_backward(src.begin(), src.end(), dst.end()-1u);
         EXPECT_EQ(dst.begin(), result);
         EXPECT_EQ(2u, dst[0]);
         EXPECT_EQ(3u, dst[1]);
@@ -158,9 +158,9 @@ namespace capu
         src[0] = 2;
         src[1] = 3;
         src[2] = 4;
-        Vector<ComplexTestType> dst(4, 0);
+        vector<ComplexTestType> dst(4, 0);
 
-        Vector<ComplexTestType>::Iterator result = copy_backward(src.begin(), src.end(), dst.end() - 1u);
+        vector<ComplexTestType>::Iterator result = copy_backward(src.begin(), src.end(), dst.end() - 1u);
         EXPECT_EQ(dst.begin(), result);
         EXPECT_EQ(ComplexTestType(2u), dst[0]);
         EXPECT_EQ(ComplexTestType(3u), dst[1]);
@@ -190,8 +190,8 @@ namespace capu
 
     TEST(AlgorithmTest, FillVector)
     {
-        Vector<uint_t> v(3, 0);
-        Vector<uint_t>::Iterator result = fill_n(v.begin(), 2, 1u);
+        vector<uint_t> v(3, 0);
+        vector<uint_t>::Iterator result = fill_n(v.begin(), 2, 1u);
         EXPECT_EQ(v.begin() + 2u, result);
         EXPECT_EQ(1u, v[0]);
         EXPECT_EQ(1u, v[1]);
@@ -215,7 +215,7 @@ namespace capu
 
     TEST(AlgorithmTest, FindInVector)
     {
-        Vector<uint_t> v(5);
+        vector<uint_t> v(5);
         v[0] = 6;
         v[1] = 5;
         v[2] = 1;
@@ -239,8 +239,8 @@ namespace capu
 
     TEST(AlgorithmTest, FillVectorWithZeroElements)
     {
-        Vector<uint_t> v(3, 99);
-        Vector<uint_t>::Iterator result = fill_n(v.begin(), 0, 1u);
+        vector<uint_t> v(3, 99);
+        vector<uint_t>::Iterator result = fill_n(v.begin(), 0, 1u);
         EXPECT_EQ(v.begin(), result);
         EXPECT_EQ(99u, v[0]);
         EXPECT_EQ(99u, v[1]);

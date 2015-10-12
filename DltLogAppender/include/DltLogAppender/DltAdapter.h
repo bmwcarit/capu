@@ -18,7 +18,7 @@
 #define CAPU_DLTADAPTER_H
 
 #include "capu/container/String.h"
-#include "capu/container/Vector.h"
+#include "capu/container/vector.h"
 #include "capu/container/HashSet.h"
 
 #include "capu/util/LogContext.h"
@@ -216,7 +216,7 @@ namespace capu
         /**
          * Vector of all created contexts.
          */
-        Vector<void*> m_dltContextList;
+        vector<void*> m_dltContextList;
     };
 }
 #endif // RAMSES_DLTADAPTER_H

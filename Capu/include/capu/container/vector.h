@@ -34,7 +34,7 @@ namespace capu
      * The internal memory is doubled if the vector is full
      */
     template<typename T>
-    class Vector
+    class vector
     {
     private:
 
@@ -42,10 +42,10 @@ namespace capu
          * Iterator for Vector
          */
         template<typename TYPE>
-        class InternalIterator : public iterator<random_access_iterator_tag, TYPE>
+        class InternalIterator : public capu::iterator<random_access_iterator_tag, TYPE>
         {
         public:
-            friend class Vector<T>;
+            friend class vector<T>;
 
             /**
              * Sets the current position to the next element
@@ -202,20 +202,33 @@ namespace capu
 
     public:
 
+        /// Iterator
+        typedef InternalIterator<T> iterator;
+        /// constant iterator
+        typedef InternalIterator<const T> const_iterator;
+
+        /**
+         * Iterator
+         * @deprecated this form is deprecated
+         */
         typedef InternalIterator<T> Iterator;
+        /**
+        * constant iterator
+        * @deprecated this form is deprecated
+        */
         typedef InternalIterator<const T> ConstIterator;
 
         /**
          * Creates a new vector. The initial capacity is 16
          */
-        Vector();
+        vector();
 
         /**
          * Creates a new vector with a given initial size
          * and initializes elements with default values
          * @param initialSize for the Vector
          */
-        Vector(const uint_t initialSize);
+        vector(const uint_t initialSize);
 
         /**
          * Initializes the vector with the given size and sets all elements
@@ -223,24 +236,24 @@ namespace capu
          * @param initialSize for the Vector
          * @param value to set for all elements
          */
-        Vector(const uint_t initialSize, const T& value);
+        vector(const uint_t initialSize, const T& value);
 
         /**
          * Initializes the vector from another vector
          */
-        Vector(const Vector& other);
+        vector(const vector& other);
 
         /**
          * Assignment operator for vector
          * @param Vector to copy from
          * @return reference to Vector with copied data
          */
-        Vector& operator=(const Vector& other);
+        vector& operator=(const vector& other);
 
         /**
          * Destructor
          */
-        ~Vector();
+        ~vector();
 
         /**
          * Adds an Element to the end of the vector
@@ -341,7 +354,7 @@ namespace capu
          * @param other Vector to compare with
          * @return true if both vectors are identical
          */
-        bool operator==(const Vector<T>& other) const;
+        bool operator==(const vector<T>& other) const;
 
         /**
          * Returns a new Iterator to the start of the Vector
@@ -409,7 +422,7 @@ namespace capu
          * Exchange the content of this vector with other
          * @param other the other vector
          */
-        void swap(Vector<T>& other);
+        void swap(vector<T>& other);
 
     protected:
     private:
@@ -441,37 +454,37 @@ namespace capu
      */
     template <typename T>
     inline
-    void swap(Vector<T>& first, Vector<T>& second)
+    void swap(vector<T>& first, vector<T>& second)
     {
         first.swap(second);
     }
 
     template<typename T>
-    T& capu::Vector<T>::front()
+    T& capu::vector<T>::front()
     {
         return *m_data;
     }
 
     template<typename T>
-    const T& capu::Vector<T>::front() const
+    const T& capu::vector<T>::front() const
     {
         return *m_data;
     }
 
     template<typename T>
-    T& capu::Vector<T>::back()
+    T& capu::vector<T>::back()
     {
         return *(m_dataEnd -1);
     }
 
     template<typename T>
-    const T& capu::Vector<T>::back() const
+    const T& capu::vector<T>::back() const
     {
         return *(m_dataEnd - 1);
     }
 
     template<typename T>
-    status_t capu::Vector<T>::insert(const Iterator& iterator, const T& value)
+    status_t capu::vector<T>::insert(const Iterator& iterator, const T& value)
     {
         const uint_t numberFromBeginning = (iterator.m_current - m_data);
         if (m_dataEnd == m_capacityEnd)
@@ -492,7 +505,7 @@ namespace capu
 
     template <typename T>
     template <typename InputIt>
-    status_t capu::Vector<T>::insert(const Iterator& iterator, InputIt first, InputIt last)
+    status_t capu::vector<T>::insert(const Iterator& iterator, InputIt first, InputIt last)
     {
         typedef typename capu::iterator_traits<InputIt>::difference_type distanceType;
         const distanceType numberOfNewElements = distance(first, last);
@@ -526,13 +539,13 @@ namespace capu
     }
 
     template<typename T>
-    bool capu::Vector<T>::empty() const
+    bool capu::vector<T>::empty() const
     {
         return m_data == m_dataEnd;
     }
 
     template<typename T>
-    capu::Vector<T>::Vector(const Vector& other)
+    capu::vector<T>::vector(const vector& other)
         : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * other.capacity()]))
         , m_dataEnd( m_data + other.size())
         , m_capacityEnd( m_data + other.capacity())
@@ -542,7 +555,7 @@ namespace capu
 
     template<typename T>
     inline
-    Vector<T>::Vector()
+    vector<T>::vector()
         : m_data(0)
         , m_dataEnd(0)
         , m_capacityEnd(0)
@@ -551,7 +564,7 @@ namespace capu
 
     template<typename T>
     inline
-    Vector<T>::Vector(const uint_t initialSize, const T& value)
+    vector<T>::vector(const uint_t initialSize, const T& value)
         : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
@@ -561,7 +574,7 @@ namespace capu
 
     template<typename T>
     inline
-    Vector<T>::Vector(const uint_t initialSize)
+    vector<T>::vector(const uint_t initialSize)
         : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
@@ -571,8 +584,8 @@ namespace capu
 
     template<typename T>
     inline
-    Vector<T>&
-    Vector<T>::operator=(const Vector<T>& other)
+    vector<T>&
+    vector<T>::operator=(const vector<T>& other)
     {
         clear();
         const uint_t numberOfElementsInOther = other.size();
@@ -585,7 +598,7 @@ namespace capu
     }
 
     template<typename T>
-    inline Vector<T>::~Vector()
+    inline vector<T>::~vector()
     {
         clear();
         const uint8_t* untypedMemory = reinterpret_cast<uint8_t*>(m_data);
@@ -595,7 +608,7 @@ namespace capu
     template<typename T>
     inline
     status_t
-    Vector<T>::push_back(const T& value)
+    vector<T>::push_back(const T& value)
     {
         status_t status = CAPU_OK;
         if (m_dataEnd == m_capacityEnd)
@@ -616,7 +629,7 @@ namespace capu
     template<typename T>
     inline
     status_t
-    Vector<T>::pop_back()
+    vector<T>::pop_back()
     {
         if (m_dataEnd > m_data)
         {
@@ -633,7 +646,7 @@ namespace capu
     template<typename T>
     inline
     void
-    Vector<T>::clear()
+    vector<T>::clear()
     {
         destruct_raw(m_data, m_dataEnd);
         m_dataEnd = m_data;
@@ -642,7 +655,7 @@ namespace capu
     template<typename T>
     inline
     void
-    Vector<T>::grow(uint_t requiredCapacity)
+    vector<T>::grow(uint_t requiredCapacity)
     {
         const uint_t currentCapacity = capacity();
         if (requiredCapacity > currentCapacity)
@@ -663,7 +676,7 @@ namespace capu
     template<typename T>
     inline
     void
-    Vector<T>::resize(const uint_t newSize)
+    vector<T>::resize(const uint_t newSize)
     {
         const uint_t previousNumberOfElements = size();
         if (newSize < previousNumberOfElements)
@@ -689,7 +702,7 @@ namespace capu
     template<typename T>
     inline
     void
-    Vector<T>::reserve(const uint_t newSize)
+    vector<T>::reserve(const uint_t newSize)
     {
         if (newSize > capacity())
         {
@@ -712,9 +725,9 @@ namespace capu
     template<typename T>
     inline
     void
-    Vector<T>::shrink_to_fit()
+    vector<T>::shrink_to_fit()
     {
-        Vector<T> tmp(0);
+        vector<T> tmp(0);
         tmp.insert(tmp.begin(), this->begin(), this->end());
         this->swap(tmp);
     }
@@ -722,7 +735,7 @@ namespace capu
     template<typename T>
     inline
     T&
-    Vector<T>::operator[](const uint_t index)
+    vector<T>::operator[](const uint_t index)
     {
         return *(m_data + index);
     }
@@ -730,7 +743,7 @@ namespace capu
     template<typename T>
     inline
     const T&
-    Vector<T>::operator[](const uint_t index) const
+    vector<T>::operator[](const uint_t index) const
     {
         return *(m_data + index);
     }
@@ -738,7 +751,7 @@ namespace capu
     template<typename T>
     inline
     uint_t
-    Vector<T>::size() const
+    vector<T>::size() const
     {
         const uint_t numberOfElements = (m_dataEnd - m_data);
         return numberOfElements;
@@ -746,45 +759,45 @@ namespace capu
 
     template<typename T>
     inline
-    uint_t Vector<T>::capacity() const
+    uint_t vector<T>::capacity() const
     {
         return (m_capacityEnd - m_data);
     }
 
     template <typename T>
     inline
-    typename Vector<T>::Iterator Vector<T>::begin()
+    typename vector<T>::Iterator vector<T>::begin()
     {
         return Iterator(m_data);
     }
 
     template<typename T>
     inline
-    typename Vector<T>::ConstIterator
-    Vector<T>::begin() const
+    typename vector<T>::ConstIterator
+    vector<T>::begin() const
     {
         return ConstIterator(m_data);
     }
 
     template<typename T>
     inline
-    typename Vector<T>::Iterator
-    Vector<T>::end()
+    typename vector<T>::Iterator
+    vector<T>::end()
     {
         return Iterator(m_dataEnd);
     }
 
     template<typename T>
     inline
-    typename Vector<T>::ConstIterator
-    Vector<T>::end() const
+    typename vector<T>::ConstIterator
+    vector<T>::end() const
     {
         return ConstIterator(m_dataEnd);
     }
 
     template<typename T>
     inline
-    status_t Vector<T>::erase(const uint_t index, T* elementOld)
+    status_t vector<T>::erase(const uint_t index, T* elementOld)
     {
         const Iterator current = Iterator(m_data + index);
         return erase(current, elementOld);
@@ -792,7 +805,7 @@ namespace capu
 
     template<typename T>
     inline
-    status_t Vector<T>::erase(const Iterator& iterator, T* elementOld)
+    status_t vector<T>::erase(const Iterator& iterator, T* elementOld)
     {
         if(iterator.m_current >= m_dataEnd)
         {
@@ -813,7 +826,7 @@ namespace capu
     template<typename T>
     inline
     bool
-    Vector<T>::operator==(const Vector<T>& other) const
+    vector<T>::operator==(const vector<T>& other) const
     {
         if (size() != other.size())
         {
@@ -824,7 +837,7 @@ namespace capu
 
     template<typename T>
     inline
-    void Vector<T>::swap(Vector<T>& other)
+    void vector<T>::swap(vector<T>& other)
     {
         using capu::swap;
         swap(m_data, other.m_data);

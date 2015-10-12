@@ -41,7 +41,7 @@ namespace capu
         *
         *@param vector with SocketInfoPairs to track
         */
-        static status_t CheckSocketsForIncomingData(const Vector<capu::os::SocketInfoPair>& sockets);
+        static status_t CheckSocketsForIncomingData(const vector<capu::os::SocketInfoPair>& sockets);
 
         /**
         * Checks if data is available for read in a vector of sockets. If data is available the
@@ -51,19 +51,19 @@ namespace capu
         * @param vector with SocketInfoPairs to track
         * @param milliseconds to wait until the call returns if no data is available in all of the given sockets
         */
-        static status_t CheckSocketsForIncomingData(const Vector<capu::os::SocketInfoPair>& sockets, uint32_t milliseconds);
+        static status_t CheckSocketsForIncomingData(const vector<capu::os::SocketInfoPair>& sockets, uint32_t milliseconds);
     };
 
     inline
     status_t
-    NonBlockSocketChecker::CheckSocketsForIncomingData(const Vector<capu::os::SocketInfoPair>& sockets, uint32_t milliseconds)
+    NonBlockSocketChecker::CheckSocketsForIncomingData(const vector<capu::os::SocketInfoPair>& sockets, uint32_t milliseconds)
     {
         return capu::os::arch::NonBlockSocketChecker::CheckSocketsForIncomingData(sockets, milliseconds);
     }
 
     inline
     status_t
-    NonBlockSocketChecker::CheckSocketsForIncomingData(const Vector<capu::os::SocketInfoPair>& sockets)
+    NonBlockSocketChecker::CheckSocketsForIncomingData(const vector<capu::os::SocketInfoPair>& sockets)
     {
         return capu::os::arch::NonBlockSocketChecker::CheckSocketsForIncomingData(sockets);
     }

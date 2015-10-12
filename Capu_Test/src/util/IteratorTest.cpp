@@ -15,7 +15,7 @@
 */
 
 #include "capu/util/Iterator.h"
-#include "capu/container/Vector.h"
+#include "capu/container/vector.h"
 #include "capu/Config.h"
 #include "BidirectionalTestContainer.h"
 #include "gmock/gmock.h"
@@ -45,22 +45,22 @@ namespace capu
 
     TEST(IteratorTest, DistanceOnVector)
     {
-        Vector<uint_t> v(3, 0);
+        vector<uint_t> v(3, 0);
         int_t result = distance(v.begin(), v.end());
         EXPECT_EQ(3, result);
     }
 
     TEST(IteratorTest, DistanceOnVectorSameIterator)
     {
-        Vector<uint_t> v(3, 0);
+        vector<uint_t> v(3, 0);
         int_t result = distance(v.begin(), v.begin());
         EXPECT_EQ(0, result);
     }
 
     TEST(IteratorTest, DistanceOnVectorNegative)
     {
-        Vector<uint_t> v(3, 0);
-        int_t result = distance(Vector<uint_t>::Iterator(v.begin() + 2u), v.begin());
+        vector<uint_t> v(3, 0);
+        int_t result = distance(vector<uint_t>::Iterator(v.begin() + 2u), v.begin());
         EXPECT_EQ(-2, result);
     }
 
@@ -104,34 +104,34 @@ namespace capu
 
     TEST(IteratorTest, AdvanceOnVector)
     {
-        Vector<uint_t> v(4, 0);
+        vector<uint_t> v(4, 0);
         v[0] = 1;
         v[1] = 2;
         v[2] = 3;
         v[3] = 4;
-        Vector<uint_t>::Iterator it = v.begin();
+        vector<uint_t>::Iterator it = v.begin();
         advance(it, 2);
         EXPECT_EQ(3u, *it);
     }
 
     TEST(IteratorTest, AdvanceZeroOnVector)
     {
-        Vector<uint_t> v(2, 0);
+        vector<uint_t> v(2, 0);
         v[0] = 1;
         v[1] = 2;
-        Vector<uint_t>::Iterator it = v.begin();
+        vector<uint_t>::Iterator it = v.begin();
         advance(it, 0);
         EXPECT_EQ(1u, *it);
     }
 
     TEST(IteratorTest, AdvanceNegativeOnVector)
     {
-        Vector<uint_t> v(4, 0);
+        vector<uint_t> v(4, 0);
         v[0] = 1;
         v[1] = 2;
         v[2] = 3;
         v[3] = 4;
-        Vector<uint_t>::Iterator it = v.begin() + 3u;
+        vector<uint_t>::Iterator it = v.begin() + 3u;
         advance(it, -3);
         EXPECT_EQ(1u, *it);
     }

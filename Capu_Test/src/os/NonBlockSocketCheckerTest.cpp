@@ -116,15 +116,15 @@ public:
         return num;
     }
 
-    capu::Vector<capu::os::SocketInfoPair> getSocketInfoCopy()
+    capu::vector<capu::os::SocketInfoPair> getSocketInfoCopy()
     {
         m_socketLock.lock();
-        const capu::Vector<capu::os::SocketInfoPair> copy = m_socketInfos;
+        const capu::vector<capu::os::SocketInfoPair> copy = m_socketInfos;
         m_socketLock.unlock();
         return copy;
     }
 
-    capu::Vector<capu::os::SocketInfoPair> m_socketInfos;
+    capu::vector<capu::os::SocketInfoPair> m_socketInfos;
     capu::HashTable<capu::os::SocketDescription, capu::TcpSocket*> m_clientSockets;
     capu::Mutex m_socketLock;
     capu::TcpServerSocket m_serverSocket;
@@ -198,7 +198,7 @@ public:
     bool m_send;
     capu::TcpSocket m_clientSocket;
     capu::Thread m_thread;
-    capu::Vector<capu::os::SocketInfoPair> m_socketInfos;
+    capu::vector<capu::os::SocketInfoPair> m_socketInfos;
     uint32_t m_receiveCount;
 };
 
@@ -222,7 +222,7 @@ TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
     bool timeout = false;
     while (asyncSocketHandler.getNumberOfClientSockets() < clientcount && !timeout)
     {
-        capu::Vector<capu::os::SocketInfoPair> sockets = asyncSocketHandler.getSocketInfoCopy();
+        capu::vector<capu::os::SocketInfoPair> sockets = asyncSocketHandler.getSocketInfoCopy();
         capu::NonBlockSocketChecker::CheckSocketsForIncomingData(sockets, 10);
         timeout = ((capu::Time::GetMilliseconds() - startTime) > testtimeout);
     }

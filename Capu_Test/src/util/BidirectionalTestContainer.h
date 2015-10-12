@@ -17,7 +17,7 @@
 #ifndef CAPU_BIDIRECTIONALTESTCONTAINER_H
 #define CAPU_BIDIRECTIONALTESTCONTAINER_H
 
-#include "capu/container/Vector.h"
+#include "capu/container/vector.h"
 #include "capu/Config.h"
 
 namespace capu
@@ -30,7 +30,7 @@ namespace capu
             T value;
             char padding[32];
         };
-        Vector<TWithPadding> vec;
+        vector<TWithPadding> vec;
 
     public:
         BidirectionalTestContainer(uint_t initial_size)
@@ -46,7 +46,7 @@ namespace capu
         class Iterator : public iterator<bidirectional_iterator_tag, T>
         {
         public:
-            Iterator(Vector<TWithPadding>& v_, uint_t idx_)
+            Iterator(vector<TWithPadding>& v_, uint_t idx_)
                 : v(v_), idx(idx_)
             {
             }
@@ -79,7 +79,7 @@ namespace capu
             }
 
         private:
-            Vector<TWithPadding>& v;
+            vector<TWithPadding>& v;
             uint_t idx;
         };
 

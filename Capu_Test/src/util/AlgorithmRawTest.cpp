@@ -15,7 +15,7 @@
 */
 
 #include "capu/util/AlgorithmRaw.h"
-#include "capu/container/Vector.h"
+#include "capu/container/vector.h"
 #include "capu/Config.h"
 #include "BidirectionalTestContainer.h"
 #include "gmock/gmock.h"

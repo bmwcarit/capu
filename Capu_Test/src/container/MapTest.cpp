@@ -15,7 +15,7 @@
  */
 #include <gtest/gtest.h>
 #include "capu/container/Map.h"
-#include "capu/container/Vector.h"
+#include "capu/container/vector.h"
 #include "capu/container/List.h"
 #include "capu/Error.h"
 #include "capu/Config.h"
@@ -251,8 +251,8 @@ namespace capu
     {
         m_i = m_map1.begin();
 
-        Vector<int32_t> keys;
-        Vector<uint32_t> values;
+        vector<int32_t> keys;
+        vector<uint32_t> values;
 
         BEGIN_CHECK()
         END_CHECK()
@@ -778,8 +778,8 @@ namespace capu
 
     TEST_F(MapTest, eraseByKeyTest)
     {
-        Vector<int32_t> keys;
-        Vector<uint32_t> values;
+        vector<int32_t> keys;
+        vector<uint32_t> values;
 
         m_map1[16] = 1;
         m_map1[2] = 5;
