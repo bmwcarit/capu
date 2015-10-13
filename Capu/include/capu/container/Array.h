@@ -220,7 +220,7 @@ namespace capu
     Array<T>::Array(const T other[], uint_t size)
         : mSize(size), mInternalArray(size)
     {
-        Memory::CopyObject(mInternalArray.getRawData(), other, size);
+        Memory::CopyObject(mInternalArray.get(), other, size);
     }
 
 
@@ -228,7 +228,7 @@ namespace capu
     Array<T>::Array(const Array<T>& other)
         : mSize(other.mSize), mInternalArray(other.mSize)
     {
-        Memory::CopyObject(mInternalArray.getRawData(), other.getRawData(), other.size());
+        Memory::CopyObject(mInternalArray.get(), other.getRawData(), other.size());
     }
 
 
@@ -282,7 +282,7 @@ namespace capu
         {
             return CAPU_ERANGE;
         }
-        Memory::MoveObject(mInternalArray.getRawData() + dst, mInternalArray.getRawData() + start, count);
+        Memory::MoveObject(mInternalArray.get() + dst, mInternalArray.get() + start, count);
 
         return CAPU_OK;
     }
@@ -295,7 +295,7 @@ namespace capu
             return CAPU_ERANGE;
         }
 
-        Memory::CopyObject(mInternalArray.getRawData(), other, size);
+        Memory::CopyObject(mInternalArray.get(), other, size);
 
         return CAPU_OK;
     }
@@ -379,19 +379,19 @@ namespace capu
     template<typename T>
     void Array<T>::setRawData(const int32_t value)
     {
-        Memory::Set(mInternalArray.getRawData(), value, sizeof(T) * mSize);
+        Memory::Set(mInternalArray.get(), value, sizeof(T) * mSize);
     }
 
     template<typename T>
     const T* Array<T>::getRawData() const
     {
-        return mInternalArray.getRawData();
+        return mInternalArray.get();
     }
 
     template<typename T>
     T* Array<T>::getRawData()
     {
-        return mInternalArray.getRawData();
+        return mInternalArray.get();
     }
 
     template<typename T>

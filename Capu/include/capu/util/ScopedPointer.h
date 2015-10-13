@@ -63,7 +63,7 @@ namespace capu
          *
          * @param resource the resource to handle. If no resource is passed, a new one will get created as default value.
          */
-        explicit ScopedPointer<T, DELETER>(T* resource = new T());
+        explicit ScopedPointer<T, DELETER>(T* resource);
 
         /**
          * Destructor to take care of destroying the data.
@@ -90,12 +90,24 @@ namespace capu
         /**
          * Non const access to the underlying raw data.
          */
-        T* getRawData();
+        T* get();
 
         /**
          * Const access to the underlying raw data.
          */
-        const T* getRawData() const;
+        const T* get() const;
+
+        /**
+        * Calls DELETER for the current object and replaces it with a new one
+        * @param ptr pointer to the new object
+        */
+        void reset(T* ptr = 0);
+
+        /**
+        * Releases the ownership without calling DELTER.
+        * @return the currently owned object or 0 if none owned
+        */
+        T* release();
 
     protected:
         T* mRawData;
@@ -146,7 +158,9 @@ namespace capu
          */
         void swap(ScopedArray<T, DELETER>& other);
 
-        using ScopedPointer<T, DELETER>::getRawData;
+        using ScopedPointer<T, DELETER>::get;
+        using ScopedPointer<T, DELETER>::reset;
+        using ScopedPointer<T, DELETER>::release;
 
     private:
 
@@ -200,19 +214,38 @@ namespace capu
     template<typename T, typename DELETER>
     void ScopedPointer<T, DELETER>::swap(ScopedPointer<T, DELETER>& other)
     {
-        capu::swap(mRawData, other.mRawData);
+        using capu::swap;
+        swap(mRawData, other.mRawData);
     }
 
     template<typename T, typename DELETER>
-    inline T* ScopedPointer<T, DELETER>::getRawData()
+    inline T* ScopedPointer<T, DELETER>::get()
     {
         return mRawData;
     }
 
     template<typename T, typename DELETER>
-    inline const T* ScopedPointer<T, DELETER>::getRawData() const
+    inline const T* ScopedPointer<T, DELETER>::get() const
     {
         return mRawData;
+    }
+
+    template<typename T, typename DELETER>
+    inline void ScopedPointer<T, DELETER>::reset(T* ptr)
+    {
+        if (mRawData)
+        {
+            DELETER::performDelete(mRawData);
+        }
+        mRawData = ptr;
+    }
+
+    template<typename T, typename DELETER>
+    inline T* ScopedPointer<T, DELETER>::release()
+    {
+        T* ptr = mRawData;
+        mRawData = 0;
+        return ptr;
     }
 
     template<typename T, typename DELETER>

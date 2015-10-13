@@ -65,7 +65,7 @@ TEST(ScopedArrayTest, NoResource)
     {
         capu::ScopedArray<Resource> handler(0);
         EXPECT_EQ(0, Resource::refCount);
-        EXPECT_EQ(0, handler.getRawData());
+        EXPECT_EQ(0, handler.get());
     }
 
     EXPECT_EQ(0, Resource::refCount);
@@ -127,20 +127,20 @@ TEST(ScopedArrayTest, Swap)
         capu::ScopedArray<Resource> handler1(50);
         EXPECT_EQ(50, Resource::refCount);
 
-        Resource* firstOfHandler1 = handler1.getRawData();
+        Resource* firstOfHandler1 = handler1.get();
         {
             capu::ScopedArray<Resource> handler2(100);
             EXPECT_EQ(150, Resource::refCount);
 
-            Resource* firstOfHandler2 = handler2.getRawData();
+            Resource* firstOfHandler2 = handler2.get();
 
             capu::swap(handler1, handler2);
-            EXPECT_EQ(firstOfHandler1, handler2.getRawData());
-            EXPECT_EQ(firstOfHandler2, handler1.getRawData());
+            EXPECT_EQ(firstOfHandler1, handler2.get());
+            EXPECT_EQ(firstOfHandler2, handler1.get());
 
             handler1.swap(handler2);
-            EXPECT_EQ(firstOfHandler1, handler1.getRawData());
-            EXPECT_EQ(firstOfHandler2, handler2.getRawData());
+            EXPECT_EQ(firstOfHandler1, handler1.get());
+            EXPECT_EQ(firstOfHandler2, handler2.get());
 
             // another swap for checking resource count
             capu::swap(handler1, handler2);
@@ -179,7 +179,7 @@ TEST(ScopedPointerTest, DereferencingOperator)
         capu::ScopedPointer<Resource> handler(resource);
 
         Resource* dereferencedResource = &(*handler);
-        Resource* rawData = handler.getRawData();
+        Resource* rawData = handler.get();
 
         EXPECT_EQ(resource, dereferencedResource);
         EXPECT_EQ(resource, rawData);
@@ -215,22 +215,22 @@ TEST(ScopedPointerTest, Swap)
             resource2->mData = 5;
             capu::ScopedPointer<Resource> handler2(resource2);
 
-            Resource* resourceOfHandler1 = handler1.getRawData();
-            Resource* resourceOfHandler2 = handler2.getRawData();
+            Resource* resourceOfHandler1 = handler1.get();
+            Resource* resourceOfHandler2 = handler2.get();
             EXPECT_EQ(resource1, resourceOfHandler1);
             EXPECT_EQ(resource2, resourceOfHandler2);
 
             capu::swap(handler1, handler2);
-            EXPECT_EQ(resource1, handler2.getRawData());
-            EXPECT_EQ(resource2, handler1.getRawData());
+            EXPECT_EQ(resource1, handler2.get());
+            EXPECT_EQ(resource2, handler1.get());
             EXPECT_EQ(resource1->mData, handler2->mData);
             EXPECT_EQ(resource2->mData, handler1->mData);
             EXPECT_EQ(5, handler1->mData);
             EXPECT_EQ(42, handler2->mData);
 
             handler1.swap(handler2);
-            EXPECT_EQ(resource1, handler1.getRawData());
-            EXPECT_EQ(resource2, handler2.getRawData());
+            EXPECT_EQ(resource1, handler1.get());
+            EXPECT_EQ(resource2, handler2.get());
             EXPECT_EQ(resource1->mData, handler1->mData);
             EXPECT_EQ(resource2->mData, handler2->mData);
             EXPECT_EQ(42, handler1->mData);
@@ -251,9 +251,38 @@ TEST(ScopedPointerTest, CustomDeleter)
     EXPECT_EQ(1u, CustomDeleter::count);
 }
 
-TEST(ScopedPointerTest, DefaultConstructorValue)
+TEST(ScopedPointerTest, ResetFromNullToValue)
 {
-    capu::ScopedPointer<Resource> ptr; // will automatically create a resource object
-    int32_t val = ptr->mData;
-    EXPECT_EQ(0, val);
+    CustomDeleter::count = 0;
+    capu::ScopedPointer<int32_t, CustomDeleter> ptr(0);
+    ptr.reset(new int32_t);
+    EXPECT_EQ(0u, CustomDeleter::count);
+    EXPECT_TRUE(ptr.get() != 0);
+}
+
+TEST(ScopedPointerTest, ResetFromValueToNull)
+{
+    CustomDeleter::count = 0;
+    capu::ScopedPointer<int32_t, CustomDeleter> ptr(new int32_t);
+    ptr.reset();
+    EXPECT_EQ(1u, CustomDeleter::count);
+    EXPECT_TRUE(ptr.get() == 0);
+}
+
+TEST(ScopedPointerTest, ReleaseOnEmpty)
+{
+    CustomDeleter::count = 0;
+    capu::ScopedPointer<int32_t, CustomDeleter> ptr(0);
+    EXPECT_TRUE(ptr.release() == 0);
+}
+
+TEST(ScopedPointerTest, ReleaseOwnedPtr)
+{
+    CustomDeleter::count = 0;
+    capu::ScopedPointer<int32_t, CustomDeleter> ptr(new int32_t);
+    int32_t *raw = ptr.release();
+    EXPECT_TRUE(raw != 0);
+    EXPECT_TRUE(ptr.get() == 0);
+    EXPECT_EQ(0u, CustomDeleter::count);
+    delete raw;
 }
