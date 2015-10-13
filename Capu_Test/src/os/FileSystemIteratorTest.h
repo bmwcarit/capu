@@ -20,7 +20,7 @@
 #include "gmock/gmock.h"
 #include "capu/os/File.h"
 #include "capu/container/List.h"
-#include "capu/util/SmartPointer.h"
+#include "capu/util/shared_ptr.h"
 
 namespace capu
 {
@@ -28,8 +28,8 @@ namespace capu
 
     class TestDirectory;
 
-    typedef SmartPointer<TestFile> TestFilePtr;
-    typedef SmartPointer<TestDirectory> TestDirectoryPtr;
+    typedef shared_ptr<TestFile> TestFilePtr;
+    typedef shared_ptr<TestDirectory> TestDirectoryPtr;
 
     class TestFile
     {
@@ -56,14 +56,14 @@ namespace capu
 
         TestDirectory* addFile(String name)
         {
-            TestFilePtr file = new TestFile(File(mFile, name));
+            TestFilePtr file(new TestFile(File(mFile, name)));
             mContainingFiles.insert(file);
             return this;
         }
 
         TestDirectoryPtr addDirectory(String name)
         {
-            TestDirectoryPtr dir = new TestDirectory(File(mFile, name));
+            TestDirectoryPtr dir(new TestDirectory(File(mFile, name)));
             mContainingDirectories.insert(dir);
             return dir;
         }

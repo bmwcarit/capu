@@ -48,7 +48,7 @@ capu::ThreadPool::~ThreadPool()
     close();
 }
 
-capu::status_t capu::ThreadPool::add(capu::SmartPointer<capu::Runnable> runnable)
+capu::status_t capu::ThreadPool::add(capu::shared_ptr<capu::Runnable> runnable)
 {
     if (runnable.get() == NULL || mClosed || mCloseRequested)
     {
@@ -139,7 +139,7 @@ void capu::ThreadPool::PoolRunnable::run()
     while (!isCancelRequested())
     {
         status_t result;
-        SmartPointer<Runnable> r = NULL;
+        shared_ptr<Runnable> r;
         {
             ScopedMutexLock lock(mPool.mMutex);
             while (mPool.mRunnableQueue.empty() && !mPool.isClosed())

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 BMW Car IT GmbH
+ * Copyright (C) 2015 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,7 +93,7 @@ TEST(ThreadPool, AddCloseTest)
     capu::ThreadPool* pool = new capu::ThreadPool(capu::ThreadPool::MAX_THREAD_POOL_THREADS);
     for (int32_t i = 0; i < 1000; i++)
     {
-        capu::SmartPointer<WorkToDo> w = new WorkToDo();
+        capu::shared_ptr<WorkToDo> w(new WorkToDo());
         EXPECT_EQ(capu::CAPU_OK, pool->add(w));
     }
     EXPECT_EQ(capu::CAPU_OK, pool->close());
@@ -101,7 +101,7 @@ TEST(ThreadPool, AddCloseTest)
     EXPECT_EQ(5000u, Globals::var);
 
     //make sure adding is no more supported after pool has been closed
-    capu::SmartPointer<WorkToDo> w = new WorkToDo();
+    capu::shared_ptr<WorkToDo> w(new WorkToDo());
     EXPECT_EQ(capu::CAPU_ERROR, pool->add(w));
 
     EXPECT_TRUE(pool->isClosed());
@@ -120,7 +120,7 @@ TEST(ThreadPool, AddCloseCancelTest)
     // a worker will increase the counter and then stay active
     for (int32_t i = 0; i < 10000; i++)
     {
-        capu::SmartPointer<WorkToDoCancelable> w = new WorkToDoCancelable(waiter);
+        capu::shared_ptr<WorkToDoCancelable> w(new WorkToDoCancelable(waiter));
         EXPECT_EQ(capu::CAPU_OK, pool->add(w));
     }
 
@@ -155,13 +155,13 @@ TEST(ThreadPool, CloseTest)
     Globals::var = 0;
     capu::ThreadPool pool(1);
 
-    pool.add(new WorkToDo());
-    pool.add(new WorkToDo());
-    pool.add(new WorkToDo());
+    pool.add(capu::shared_ptr<capu::Runnable>(new WorkToDo()));
+    pool.add(capu::shared_ptr<capu::Runnable>(new WorkToDo()));
+    pool.add(capu::shared_ptr<capu::Runnable>(new WorkToDo()));
 
     EXPECT_EQ(capu::CAPU_OK, pool.close());
 
-    EXPECT_EQ(capu::CAPU_ERROR, pool.add(new WorkToDo()));
+    EXPECT_EQ(capu::CAPU_ERROR, pool.add(capu::shared_ptr<capu::Runnable>(new WorkToDo())));
 
     EXPECT_EQ(15u, Globals::var);
 

@@ -24,7 +24,7 @@
 #include "capu/os/Mutex.h"
 #include "capu/os/Thread.h"
 #include "capu/util/Runnable.h"
-#include "capu/util/SmartPointer.h"
+#include "capu/util/shared_ptr.h"
 
 namespace capu
 {
@@ -55,7 +55,7 @@ namespace capu
          * Adds a runnable to the threadpool.
          * @param runnable The runnable which should be executed by the threadpool
          */
-        status_t add(SmartPointer<Runnable> runnable);
+        status_t add(shared_ptr<Runnable> runnable);
 
         /**
          * Waits until every thread has been terminated.
@@ -112,11 +112,11 @@ namespace capu
             PoolWorker operator=(const PoolWorker pw);
         };
 
-        typedef SmartPointer<PoolWorker> PoolWorkerPtr;
+        typedef shared_ptr<PoolWorker> PoolWorkerPtr;
 
         bool mClosed;
         bool mCloseRequested;
-        Queue<SmartPointer<Runnable> > mRunnableQueue;
+        Queue<shared_ptr<Runnable> > mRunnableQueue;
         CondVar mCV;
         Mutex mMutex;
         List<PoolWorkerPtr> mWorkerList;

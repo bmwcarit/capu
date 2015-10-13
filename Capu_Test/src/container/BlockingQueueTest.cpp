@@ -135,13 +135,13 @@ TEST(BlockingQueue, PushPopMultiThread)
 
     for (int32_t i = 0; i < countConsumer; ++i)
     {
-        consumer.add(new Consumer(queue, countPerConsumer, i + 20));
+        consumer.add(capu::shared_ptr<capu::Runnable>(new Consumer(queue, countPerConsumer, i + 20)));
     }
 
     capu::ThreadPool producer(countProducer);
     for (int32_t i = 0; i < countProducer; ++i)
     {
-        producer.add(new Producer(queue, countPerProducer, i + 10));
+        producer.add(capu::shared_ptr<capu::Runnable>(new Producer(queue, countPerProducer, i + 10)));
     }
 
     producer.close();
