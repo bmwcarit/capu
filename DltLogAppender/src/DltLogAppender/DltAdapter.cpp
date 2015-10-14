@@ -191,6 +191,15 @@ namespace capu
             return;
         }
 
+        // As the two strings are cleared when unregisterApplication is called this either means:
+        //-that registerApplication has never been called before
+        //-that unregisterApplication has already been called before
+        //In both cases do not continue with destruction
+        if(m_appName.getLength()==0 && m_appDesc.getLength()==0)
+        {
+            return;
+        }
+
         if(s_fileContext)
         {
             status = dlt_unregister_context(static_cast<DltContext*>(s_fileContext));
