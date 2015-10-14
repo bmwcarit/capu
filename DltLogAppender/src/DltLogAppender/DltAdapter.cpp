@@ -177,7 +177,7 @@ namespace capu
         m_appDesc = description;
 
         s_fileContext = new DltContext;
-        m_dltContextList.push_back(s_fileContext);
+
         status = dlt_register_context(static_cast<DltContext*>(s_fileContext),"FILE","File Transfer Context");
         DLT_CHECK_ERROR(DLT_ERROR_REGISTER_CONTEXT_FAILED)
     }
@@ -200,6 +200,9 @@ namespace capu
         {
             delete (DltContext*)m_dltContextList[i];
         }
+
+        delete (DltContext*)s_fileContext;
+        s_fileContext=0;
 
         DLT_CHECK_ERROR(DLT_ERROR_UNREGISTER_CONTEXT_FAILED)
 
@@ -258,6 +261,15 @@ namespace capu
             ctx->setUserData((void*)0);
 
             dlt_unregister_context(dltContext);
+            for(uint32_t i = 0; i < m_dltContextList.size();i++)
+            {
+                if(m_dltContextList[i] == dltContext)
+                {
+                    m_dltContextList.erase(i);
+                }
+                break;
+            }
+
             DLT_CHECK_ERROR(DLT_ERROR_UNREGISTER_CONTEXT_FAILED)
             delete dltContext;
         }
