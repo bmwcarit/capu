@@ -32,7 +32,7 @@ namespace capu
 
     void BinaryFileInputStreamTest::SetUp()
     {
-        mFile.open(WRITE_EXISTING_BINARY);
+        mFile.open(WRITE_NEW_BINARY);
 
         int32_t intVal = 10;
         float floatVal = 20.f;
@@ -64,13 +64,13 @@ namespace capu
         capu::String  stringVal = "";
 
         inputStream >> intVal;
-        
+
         EXPECT_EQ(CAPU_OK, inputStream.getState());
-        
+
         inputStream >> floatVal;
-        
+
         EXPECT_EQ(CAPU_OK, inputStream.getState());
-       
+
         inputStream >> stringVal;
 
         EXPECT_EQ(CAPU_OK, inputStream.getState());
@@ -79,7 +79,7 @@ namespace capu
         inputStream >> errorIntVal;
 
         EXPECT_EQ(CAPU_EOF, inputStream.getState());
-        
+
         EXPECT_EQ(10, intVal);
         EXPECT_EQ(20.0f, floatVal);
         EXPECT_STREQ("Dies ist ein Text", stringVal.c_str());

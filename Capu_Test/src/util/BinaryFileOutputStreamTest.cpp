@@ -48,7 +48,7 @@ namespace capu
 
     TEST_F(BinaryFileOutputStreamTest, WriteSomeData)
     {
-        EXPECT_EQ(capu::CAPU_OK, mFile.open(READ_EXISTING_BINARY));
+        EXPECT_EQ(capu::CAPU_OK, mFile.open(READ_ONLY_BINARY));
 
         char buffer[64];
         capu::uint_t numBytes = 0;
@@ -71,7 +71,7 @@ namespace capu
 
         EXPECT_EQ(capu::CAPU_OK, mFile.read(buffer, sizeof(float), numBytes));
         EXPECT_EQ(sizeof(float), numBytes);
-        
+
 
         union
         {

@@ -24,12 +24,14 @@ namespace capu
      */
     enum FileMode
     {
-        READ_ONLY,                // opens file for reading
-        WRITE_NEW,                // opens file as an empty file for writing
-        READ_WRITE_EXISTING,      // opens file for reading and writing. The file must exist
-        READ_WRITE_OVERWRITE_OLD, // opens file for reading and writing. Create a new file also of old one exists
-        WRITE_EXISTING_BINARY,    // opens file for writing in binary mode
-        READ_EXISTING_BINARY      // opens file for reading in binary mode
+        READ_ONLY,                      // opens file for reading
+        WRITE_NEW,                      // opens file as an empty file for writing
+        READ_WRITE_EXISTING,            // opens file for reading and writing. The file must exist
+        READ_WRITE_OVERWRITE_OLD,       // opens file for reading and writing. Create a new file also if old one exists
+        READ_ONLY_BINARY,               // opens file for reading in binary mode
+        WRITE_NEW_BINARY,               // opens file as an empty file for writing in binary mode
+        READ_WRITE_EXISTING_BINARY,     // opens file for writing in binary mode. The file must exist
+        READ_WRITE_OVERWRITE_OLD_BINARY // opens file for reading in binary mode. The file must exist
     };
 }
 

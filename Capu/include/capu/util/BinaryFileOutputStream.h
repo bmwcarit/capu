@@ -51,7 +51,7 @@ namespace capu
         : m_file(file)
         , m_fileState(CAPU_OK)
     {
-        m_fileState = m_file.open(WRITE_EXISTING_BINARY);
+        m_fileState = m_file.open(WRITE_NEW_BINARY);
     }
 
     inline
