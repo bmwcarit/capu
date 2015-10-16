@@ -50,7 +50,7 @@ namespace capu
         : BinaryInputStream(0)  // no buffer is needed to read from since we read direct from file
         , m_file(file)
     {
-        setState(m_file.open(READ_EXISTING_BINARY));
+        setState(m_file.open(READ_ONLY_BINARY));
     }
 
     inline

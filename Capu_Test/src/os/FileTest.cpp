@@ -20,17 +20,13 @@
 
 TEST(File, ConstructorTest)
 {
-    capu::File* f1 = new capu::File("foobar.txt");
-    f1->open(capu::READ_ONLY);
-    EXPECT_TRUE(f1 != NULL);
-    EXPECT_FALSE(f1->isOpen());
-    delete f1;
+    capu::File f1("foobar.txt");
+    f1.open(capu::READ_ONLY);
+    EXPECT_FALSE(f1.isOpen());
 
-    capu::File* f2 = new capu::File(capu::String("test.txt"));
-    f2->open(capu::READ_WRITE_OVERWRITE_OLD);
-    EXPECT_TRUE(f2 != NULL);
-    EXPECT_TRUE(f2->isOpen());
-    delete f2;
+    capu::File f2(capu::String("test.txt"));
+    f2.open(capu::READ_WRITE_OVERWRITE_OLD);
+    EXPECT_TRUE(f2.isOpen());
 }
 
 TEST(File, ConstructorParentTest)
@@ -44,20 +40,16 @@ TEST(File, ConstructorParentTest)
 
 TEST(File, CantOpenNonExistingFile)
 {
-    capu::File* f1 = new capu::File("foobar.txt");
-    ASSERT_TRUE(f1 != NULL);
-    f1->open(capu::READ_ONLY);
-    EXPECT_FALSE(f1->isOpen());
-    delete f1;
+    capu::File f1("foobar.txt");
+    f1.open(capu::READ_ONLY);
+    EXPECT_FALSE(f1.isOpen());
 }
 
 TEST(File, ReadableFileCanBeOpened)
 {
-    capu::File* f2 = new capu::File("test.txt");
-    f2->open(capu::READ_WRITE_OVERWRITE_OLD);
-    EXPECT_TRUE(f2 != NULL);
-    EXPECT_TRUE(f2->isOpen());
-    delete f2;
+    capu::File f2("test.txt");
+    f2.open(capu::READ_WRITE_OVERWRITE_OLD);
+    EXPECT_TRUE(f2.isOpen());
 }
 
 TEST(File, WriteTest)
@@ -65,23 +57,20 @@ TEST(File, WriteTest)
     char buf1[15] = "This is a test";
     capu::status_t status;
 
-    capu::File* f1 = new capu::File("test.txt");
-    f1->open(capu::READ_WRITE_OVERWRITE_OLD);
-    EXPECT_TRUE(f1 != NULL);
-    EXPECT_TRUE(f1->isOpen());
+    capu::File f1("test.txt");
+    f1.open(capu::READ_WRITE_OVERWRITE_OLD);
+    EXPECT_TRUE(f1.isOpen());
 
     // invalid params
-    status = f1->write(NULL, 0);
+    status = f1.write(NULL, 0);
     EXPECT_EQ(capu::CAPU_EINVAL, status);
 
     // write data
-    status = f1->write(buf1, sizeof(buf1) - 1);
+    status = f1.write(buf1, sizeof(buf1) - 1);
     EXPECT_EQ(capu::CAPU_OK, status);
 
-    EXPECT_EQ(capu::CAPU_OK, f1->close());
-    EXPECT_EQ(capu::CAPU_OK, f1->remove());
-
-    delete f1;
+    EXPECT_EQ(capu::CAPU_OK, f1.close());
+    EXPECT_EQ(capu::CAPU_OK, f1.remove());
 }
 
 TEST(File, WriteSubstring)
@@ -91,24 +80,23 @@ TEST(File, WriteSubstring)
     capu::uint_t substringSize = 20;
     capu::status_t status;
 
-    capu::File* f1 = new capu::File("test.txt");
-    ASSERT_TRUE(f1 != NULL);
-    f1->open(capu::READ_WRITE_OVERWRITE_OLD);
-    EXPECT_TRUE(f1->isOpen());
+    capu::File f1("test.txt");
+    f1.open(capu::READ_WRITE_OVERWRITE_OLD);
+    EXPECT_TRUE(f1.isOpen());
 
     // write data
-    status = f1->write(bufWrite, substringSize);
+    status = f1.write(bufWrite, substringSize);
     EXPECT_EQ(capu::CAPU_OK, status);
 
     //reopen the file
-    f1->close();
-    status = f1->open(capu::READ_ONLY);
+    f1.close();
+    status = f1.open(capu::READ_ONLY);
     EXPECT_EQ(capu::CAPU_OK, status);
 
     //read data back
     memset(bufRead, 0, sizeof(bufRead));
     capu::uint_t read;
-    status = f1->read(bufRead, substringSize, read);
+    status = f1.read(bufRead, substringSize, read);
     EXPECT_EQ(capu::CAPU_OK, status);
     EXPECT_EQ(substringSize, read);
 
@@ -118,9 +106,8 @@ TEST(File, WriteSubstring)
 
     EXPECT_STREQ(subString, bufRead);
 
-    EXPECT_EQ(capu::CAPU_OK, f1->close());
-    EXPECT_EQ(capu::CAPU_OK, f1->remove());
-    delete f1;
+    EXPECT_EQ(capu::CAPU_OK, f1.close());
+    EXPECT_EQ(capu::CAPU_OK, f1.remove());
 }
 
 TEST(File, CantWriteToFileOpenedReadOnly)
@@ -158,58 +145,55 @@ TEST(File, ReadTest)
     capu::status_t status;
     capu::uint_t read = 0;
 
-    // write data
-    capu::File* f2 = new capu::File("test.txt");
-    f2->open(capu::READ_WRITE_OVERWRITE_OLD);
-    EXPECT_TRUE(f2 != NULL);
-    EXPECT_TRUE(f2->isOpen());
+    {
+        // write data
+        capu::File f2("test.txt");
+        f2.open(capu::READ_WRITE_OVERWRITE_OLD);
+        EXPECT_TRUE(f2.isOpen());
 
-    status = f2->write(buf1, strlen(buf1));
-    EXPECT_EQ(capu::CAPU_OK, status);
-    delete f2;
+        status = f2.write(buf1, strlen(buf1));
+        EXPECT_EQ(capu::CAPU_OK, status);
+    }
+    {
+        // read data
+        capu::File f3("test.txt");
+        f3.open(capu::READ_ONLY);
+        EXPECT_TRUE(f3.isOpen());
 
-    // read data
-    capu::File* f3 = new capu::File("test.txt");
-    f3->open(capu::READ_ONLY);
-    EXPECT_TRUE(f3 != NULL);
-    EXPECT_TRUE(f3->isOpen());
+        // invalid params
+        status = f3.read(NULL, 0, read);
+        EXPECT_EQ(capu::CAPU_EINVAL, status);
 
-    // invalid params
-    status = f3->read(NULL, 0, read);
-    EXPECT_EQ(capu::CAPU_EINVAL, status);
+        read = 0;
+        memset(buf2, 0, sizeof(buf2));
+        status = f3.read(buf2, strlen(buf1), read);
+        EXPECT_EQ(capu::CAPU_OK, status);
+        EXPECT_EQ((capu::uint_t)strlen(buf1), read);
+    }
+    {
+        // read data
+        capu::File f4("test.txt");
+        f4.open(capu::READ_ONLY);
+        EXPECT_TRUE(f4.isOpen());
 
-    read = 0;
-    memset(buf2, 0, sizeof(buf2));
-    status = f3->read(buf2, strlen(buf1), read);
-    EXPECT_EQ(capu::CAPU_OK, status);
-    EXPECT_EQ((capu::uint_t)strlen(buf1), read);
-    delete f3;
+        memset(buf2, 0, sizeof(buf2));
+        status = f4.read(buf2, strlen(buf1), read);
+        EXPECT_EQ(capu::CAPU_OK, status);
+        EXPECT_EQ((capu::uint_t)strlen(buf1), read);
+    }
+    {
+        // read data Eof
+        capu::File f5("test.txt");
+        f5.open(capu::READ_ONLY);
+        EXPECT_TRUE(f5.isOpen());
 
-    // read data
-    capu::File* f4 = new capu::File("test.txt");
-    f4->open(capu::READ_ONLY);
-    EXPECT_TRUE(f4 != NULL);
-    EXPECT_TRUE(f4->isOpen());
-
-    memset(buf2, 0, sizeof(buf2));
-    status = f4->read(buf2, strlen(buf1), read);
-    EXPECT_EQ(capu::CAPU_OK, status);
-    EXPECT_EQ((capu::uint_t)strlen(buf1), read);
-    delete f4;
-
-    // read data Eof
-    capu::File* f5 = new capu::File("test.txt");
-    f5->open(capu::READ_ONLY);
-    EXPECT_TRUE(f5 != NULL);
-    EXPECT_TRUE(f5->isOpen());
-
-    read = 0;
-    memset(buf2, 0, sizeof(buf2));
-    status = f5->read(buf2, sizeof(buf2), read);
-    EXPECT_EQ(capu::CAPU_EOF, status);
-    EXPECT_EQ((capu::uint_t)strlen(buf1), read);
-    EXPECT_EQ(0, strcmp(buf1, buf2));
-    delete f5;
+        read = 0;
+        memset(buf2, 0, sizeof(buf2));
+        status = f5.read(buf2, sizeof(buf2), read);
+        EXPECT_EQ(capu::CAPU_EOF, status);
+        EXPECT_EQ((capu::uint_t)strlen(buf1), read);
+        EXPECT_EQ(0, strcmp(buf1, buf2));
+    }
 }
 
 TEST(File, ReadWriteBinaryTest)
@@ -225,7 +209,7 @@ TEST(File, ReadWriteBinaryTest)
 
     // write data
     capu::File f2("test.txt");
-    f2.open(capu::WRITE_EXISTING_BINARY);
+    f2.open(capu::READ_WRITE_EXISTING_BINARY);
     EXPECT_TRUE(f2.isOpen());
 
     status = f2.write(buf1, sizeof(buf1));
@@ -234,7 +218,7 @@ TEST(File, ReadWriteBinaryTest)
 
     // read data
     capu::File f3("test.txt");
-    f3.open(capu::READ_EXISTING_BINARY);
+    f3.open(capu::READ_WRITE_EXISTING_BINARY);
     capu::uint_t bytes;
     status = f3.read(buf2, sizeof(buf2), bytes);
     EXPECT_EQ(capu::CAPU_OK, status);
@@ -245,6 +229,17 @@ TEST(File, ReadWriteBinaryTest)
     {
         EXPECT_EQ(buf1[i], buf2[i]);
     }
+}
+
+TEST(File, OpenBinaryFileCanBeOpenedForReadAgain)
+{
+    capu::File f1("test.txt");
+    f1.open(capu::READ_ONLY_BINARY);
+    EXPECT_TRUE(f1.isOpen());
+
+    capu::File f2("test.txt");
+    f2.open(capu::READ_ONLY_BINARY);
+    EXPECT_TRUE(f2.isOpen());
 }
 
 TEST(File, TestCreateAndDelete)
@@ -308,11 +303,11 @@ TEST(File, TestCopyOnExisitingFile)
     capu::File fileDest("something3");
     EXPECT_EQ(capu::CAPU_OK, file.createFile());
     EXPECT_EQ(capu::CAPU_OK, fileDest.createFile());
-    fileDest.open(capu::WRITE_EXISTING_BINARY);
+    fileDest.open(capu::READ_WRITE_EXISTING_BINARY);
     fileDest.write("hello", 5u);
     fileDest.close();
 
-    file.open(capu::WRITE_EXISTING_BINARY);
+    file.open(capu::READ_WRITE_EXISTING_BINARY);
     file.write("overridden", 10u);
     file.close();
 

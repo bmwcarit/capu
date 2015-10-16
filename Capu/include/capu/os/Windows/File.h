@@ -218,11 +218,17 @@ namespace capu
             case READ_WRITE_OVERWRITE_OLD:
                 flags = "w+";
                 break;
-            case WRITE_EXISTING_BINARY:
-                flags = "w+b";
+            case READ_ONLY_BINARY:
+                flags = "rb";
                 break;
-            case READ_EXISTING_BINARY:
+            case WRITE_NEW_BINARY:
+                flags = "wb";
+                break;
+            case READ_WRITE_EXISTING_BINARY:
                 flags = "r+b";
+                break;
+            case READ_WRITE_OVERWRITE_OLD_BINARY:
+                flags = "w+b";
                 break;
             default:
                 flags = "";
