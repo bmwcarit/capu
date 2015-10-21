@@ -19,21 +19,20 @@
 
 TEST(EnvironmentVariables, getAllTest)
 {
-    capu::EnvironmentVariables myEnv;
-    const capu::HashTable<capu::String, capu::String>& env = myEnv.getAll();
+    const capu::HashTable<capu::String, capu::String>& env = capu::EnvironmentVariables::getAll();
     EXPECT_TRUE(env.count() > 0);
 }
 
 TEST(EnvironmentVariables, getTest)
 {
-    capu::EnvironmentVariables myEnv;
-    capu::String tmp;
-    capu::HashTable<capu::String, capu::String>::ConstIterator it = myEnv.getAll().begin();
-    const capu::HashTable<capu::String, capu::String>::ConstIterator end = myEnv.getAll().end();
+    const capu::HashTable<capu::String, capu::String> allEnvironmentVariables = capu::EnvironmentVariables::getAll();
+    capu::HashTable<capu::String, capu::String>::ConstIterator it = allEnvironmentVariables.begin();
+    const capu::HashTable<capu::String, capu::String>::ConstIterator end = allEnvironmentVariables.end();
 
     for(; it != end; ++it)
     {
-        EXPECT_TRUE(myEnv.get(it->key, tmp));
+        capu::String tmp;
+        EXPECT_TRUE(capu::EnvironmentVariables::get(it->key, tmp));
         EXPECT_EQ(tmp, it->value);
     }
 }

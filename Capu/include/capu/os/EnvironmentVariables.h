@@ -21,25 +21,23 @@
 #include "capu/container/String.h"
 #include "capu/container/Pair.h"
 #include "capu/container/HashTable.h"
+#include <capu/os/PlatformInclude.h>
 
-#ifndef environ
-extern "C" char** environ;
-#endif
+#include CAPU_PLATFORM_INCLUDE(EnvironmentVariables)
 
 namespace capu
 {
     /**
      * Class for accessing environment variables of the operating system.
      */
-    class EnvironmentVariables
+    class EnvironmentVariables : private capu::os::arch::EnvironmentVariables
     {
     public:
-        EnvironmentVariables();
         /**
          * Obtain all environment variables
-         * @return A table containing all enviroment variables
+         * @return A table containing all environment variables
          */
-        const HashTable<String, String>& getAll() const;
+        static HashTable<String, String> getAll();
 
         /**
          * Obtain the value of an environment variable
@@ -47,49 +45,17 @@ namespace capu
          * @param value Reference to string which will contain the requested value
          * @return CAPU_OK if variable was successfully queried
          */
-        bool get(const String& key, String& value) const;
-
-    private:
-        HashTable<String, String> m_env;
+        static bool get(const String& key, String& value);
     };
 
-    inline EnvironmentVariables::EnvironmentVariables()
+    inline bool EnvironmentVariables::get(const String& key, String& value)
     {
-        uint_t i = 0;
-        char* envvar = 0;
-        do
-        {
-            // "environ" is a globally defined symbol which holds the current environment variables
-            envvar = *(environ + i);
-            if (envvar)
-            {
-                const uint32_t index = static_cast<uint32_t>(StringUtils::IndexOf(envvar, '='));
-                if (index > 0)
-                {
-                    const String name(envvar, 0, index - 1);
-                    const String value(envvar, index + 1);
-                    m_env.put(name, value);
-                }
-                i++;
-            }
-        }
-        while (envvar);
+        return capu::os::arch::EnvironmentVariables::get(key, value);
     }
 
-    inline bool EnvironmentVariables::get(const String& key, String& value) const
+    inline HashTable<String, String> EnvironmentVariables::getAll()
     {
-        HashTable<String, String>::ConstIterator it = m_env.find(key);
-        if (it != m_env.end())
-        {
-            value = (*it).value;
-            return true;
-        }
-        return false;
-    }
-
-    inline const HashTable<String, String>& EnvironmentVariables::getAll() const
-    {
-        return m_env;
+        return capu::os::arch::EnvironmentVariables::getAll();
     }
 }
 
