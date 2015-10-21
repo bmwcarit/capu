@@ -31,7 +31,7 @@ namespace capu
         READ_ONLY_BINARY,               // opens file for reading in binary mode
         WRITE_NEW_BINARY,               // opens file as an empty file for writing in binary mode
         READ_WRITE_EXISTING_BINARY,     // opens file for writing in binary mode. The file must exist
-        READ_WRITE_OVERWRITE_OLD_BINARY // opens file for reading in binary mode. The file must exist
+        READ_WRITE_OVERWRITE_OLD_BINARY /// opens file for reading and writing in binary mode. Create a new file also if old one exists
     };
 }
 
