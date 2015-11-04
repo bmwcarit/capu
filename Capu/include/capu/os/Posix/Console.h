@@ -84,6 +84,7 @@ namespace capu
         status_t Console::ReadChar(char& buffer)
         {
             struct termios oldTerminalSettings, temporaryWithoutEcho;
+            bool ttyConnected = true;
 
             // save previous settings
             if (0 != tcgetattr(fileno(stdin), &oldTerminalSettings))
@@ -92,16 +93,24 @@ namespace capu
                 {
                     return CAPU_EOF;
                 }
+                if (errno == ENOTTY)
+                {
+                    ttyConnected = false;
+                }
             }
 
-            // create new settings on top of previous settings
-            Memory::Copy(&temporaryWithoutEcho, &oldTerminalSettings, sizeof(struct termios));
-            temporaryWithoutEcho.c_lflag &= ~(ECHO | ICANON);
-            temporaryWithoutEcho.c_cc[VTIME] = 0;
-            temporaryWithoutEcho.c_cc[VMIN] = 1;
+            if (ttyConnected)
+            {
+                // create new settings on top of previous settings
+                Memory::Copy(&temporaryWithoutEcho, &oldTerminalSettings, sizeof(struct termios));
+                temporaryWithoutEcho.c_lflag &= ~(ECHO | ICANON);
+                temporaryWithoutEcho.c_cc[VTIME] = 0;
+                temporaryWithoutEcho.c_cc[VMIN] = 1;
 
-            // use new settings
-            tcsetattr(fileno(stdin), TCSANOW, &temporaryWithoutEcho);
+                // use new settings
+                tcsetattr(fileno(stdin), TCSANOW, &temporaryWithoutEcho);
+            }
+
             ssize_t bytesRead = 0;
             interruptMutex.lock();
             const int32_t ret = initializePipe();
@@ -167,7 +176,10 @@ namespace capu
                 status = CAPU_ERROR;
             }
 
-            tcsetattr(fileno(stdin), TCSANOW, &oldTerminalSettings);
+            if (ttyConnected)
+            {
+                tcsetattr(fileno(stdin), TCSANOW, &oldTerminalSettings);
+            }
             return status;
         }
 
