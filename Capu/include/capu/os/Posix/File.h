@@ -55,18 +55,17 @@ namespace capu
             ~File();
         protected:
             using generic::File::mPath;
+            using generic::File::mHandle;
         private:
             static String GetParentPathPrivate(String path, bool& success);
             static String StripLastPathComponent(const String& path);
             bool  mIsOpen;
-            FILE*   mHandle;
         };
 
         inline
         File::File(const String& path)
             : generic::File(path)
             , mIsOpen(false)
-            , mHandle(NULL)
         {
         }
 
@@ -74,7 +73,6 @@ namespace capu
         File::File(const File& parent, const capu::String& path)
             : generic::File(parent, path)
             , mIsOpen(false)
-            , mHandle(NULL)
         {
         }
 

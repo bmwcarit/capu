@@ -62,8 +62,8 @@ namespace capu
 
         protected:
             using generic::File::mPath;
+            using generic::File::mHandle;
         private:
-            FILE*   mHandle;
             bool  mIsOpen;
             static String removeTrailingBackslash(String path);
         };
@@ -71,7 +71,6 @@ namespace capu
         inline
         File::File(const String& path)
             : generic::File(removeTrailingBackslash(path))
-            , mHandle(NULL)
             , mIsOpen(false)
         {
         }
@@ -79,7 +78,6 @@ namespace capu
         inline
         File::File(const File& parent, const capu::String& path)
             : generic::File(parent, removeTrailingBackslash(path))
-            , mHandle(NULL)
             , mIsOpen(false)
         {
         }

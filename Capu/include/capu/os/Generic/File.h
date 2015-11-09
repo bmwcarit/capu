@@ -35,17 +35,20 @@ namespace capu
 
         protected:
             String mPath;
+            FILE* mHandle;
         };
 
         inline
         File::File(const String& path)
             : mPath(path)
+            , mHandle(NULL)
         {
         }
 
         inline
-        File::File(const File& parent, const capu::String& path) :
-            mPath(parent.getPath())
+        File::File(const File& parent, const capu::String& path)
+            : mPath(parent.getPath())
+            , mHandle(NULL)
         {
             mPath.append("/").append(path);
         }
