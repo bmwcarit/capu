@@ -26,7 +26,7 @@ namespace capu
     class BinaryFileOutputStream: public BinaryOutputStream
     {
     public:
-        BinaryFileOutputStream(File& file);
+        BinaryFileOutputStream(File& file, FileMode mode = WRITE_NEW_BINARY);
         ~BinaryFileOutputStream();
 
         /**
@@ -47,11 +47,11 @@ namespace capu
     };
 
     inline
-    BinaryFileOutputStream::BinaryFileOutputStream(File& file)
+    BinaryFileOutputStream::BinaryFileOutputStream(File& file, FileMode mode)
         : m_file(file)
         , m_fileState(CAPU_OK)
     {
-        m_fileState = m_file.open(WRITE_NEW_BINARY);
+        m_fileState = m_file.open(mode);
     }
 
     inline
