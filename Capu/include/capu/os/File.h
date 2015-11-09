@@ -21,6 +21,7 @@
 #include "capu/Error.h"
 #include "capu/os/PlatformInclude.h"
 #include "capu/os/FileMode.h"
+#include "capu/os/FileSeekOrigin.h"
 
 #include CAPU_PLATFORM_INCLUDE(File)
 
@@ -133,6 +134,15 @@ namespace capu
          *        CAPU_ERROR otherwise
          */
         status_t write(const char* buffer, uint_t length);
+
+        /**
+         * Moves the position within the file used for reading and writing.
+         * @param offset number of bytes to move the position
+         * @param origin Origin where to seek from
+         * @return CAPU_OK seek was successful
+         *        CAPU_ERROR otherwise
+         */
+        status_t seek(int_t offset, FileSeekOrigin origin);
 
         /**
          * Writes any unwritten data to the file.
@@ -318,6 +328,13 @@ namespace capu
     {
         return capu::os::arch::File::isDirectory();
     }
+
+    inline
+    status_t File::seek(int_t offset, FileSeekOrigin origin)
+    {
+        return capu::os::arch::File::seek(offset, origin);
+    }
+
 }
 
 #endif // CAPU_FILE_H

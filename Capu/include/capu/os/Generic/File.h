@@ -31,6 +31,7 @@ namespace capu
             const capu::String getFileName() const;
             const capu::String getExtension() const;
             const capu::String& getPath() const;
+            status_t seek(int_t offset, FileSeekOrigin origin);
             ~File();
 
         protected:
@@ -92,6 +93,32 @@ namespace capu
             {
                 return mPath;
             }
+        }
+
+        inline
+        status_t File::seek(int_t offset, FileSeekOrigin origin)
+        {
+            if (mHandle == NULL)
+            {
+                return CAPU_ERROR;
+            }
+
+            int nativeOrigin = 0;
+            switch (origin)
+            {
+            case FROM_BEGINNING: nativeOrigin = SEEK_SET;
+                break;
+            case FROM_CURRENT_POSITION: nativeOrigin = SEEK_CUR;
+                break;
+            }
+            size_t result = fseek(mHandle, static_cast<long>(offset), nativeOrigin);
+
+            if (0 == result)
+            {
+                return CAPU_OK;
+            }
+
+            return CAPU_ERROR;
         }
     }
 }

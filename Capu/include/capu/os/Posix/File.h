@@ -38,6 +38,7 @@ namespace capu
             bool isEof();
             status_t read(char* buffer, uint_t length, uint_t& numBytes);
             status_t write(const char* buffer, uint_t length);
+            using generic::File::seek;
             status_t flush();
             status_t close();
             status_t renameTo(const capu::String& newName);

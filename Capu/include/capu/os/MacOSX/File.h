@@ -33,6 +33,7 @@ namespace capu
             using capu::posix::File::isEof;
             using capu::posix::File::read;
             using capu::posix::File::write;
+            using capu::posix::File::seek;
             using capu::posix::File::flush;
             using capu::posix::File::close;
             using capu::posix::File::createFile;

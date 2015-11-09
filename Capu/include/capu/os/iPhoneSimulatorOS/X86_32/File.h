@@ -35,6 +35,7 @@ namespace capu
                 using capu::iphoneos::File::isEof;
                 using capu::iphoneos::File::read;
                 using capu::iphoneos::File::write;
+                using capu::iphoneos::File::seek;
                 using capu::iphoneos::File::flush;
                 using capu::iphoneos::File::close;
                 using capu::iphoneos::File::createFile;

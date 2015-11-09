@@ -34,6 +34,7 @@ namespace capu
                 using capu::os::File::isOpen;
                 using capu::os::File::isEof;
                 using capu::os::File::read;
+                using capu::os::File::seek;
                 using capu::os::File::write;
                 using capu::os::File::flush;
                 using capu::os::File::close;

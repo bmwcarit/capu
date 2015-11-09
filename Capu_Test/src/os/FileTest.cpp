@@ -17,6 +17,7 @@
 #include <gtest/gtest.h>
 #include "capu/Config.h"
 #include "capu/os/File.h"
+#include "capu/os/Memory.h"
 
 TEST(File, ConstructorTest)
 {
@@ -229,6 +230,44 @@ TEST(File, ReadWriteBinaryTest)
     {
         EXPECT_EQ(buf1[i], buf2[i]);
     }
+}
+
+TEST(File, Seek)
+{
+    char buf1[7] = "hello ";
+    char buf2[6] = "world";
+    char buf3[2] = "!";
+    capu::status_t status;
+
+    // write data
+    capu::File writeFile("seektest.txt");
+    writeFile.open(capu::WRITE_NEW_BINARY);
+
+    status = writeFile.seek(6, capu::FROM_BEGINNING);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    status = writeFile.write(buf2, sizeof(buf2) - 1);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    // seek back (negative) to beginning of file
+    status = writeFile.seek(-6-5, capu::FROM_CURRENT_POSITION);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    status = writeFile.write(buf1, sizeof(buf1)-1);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    // seek forwards to end of file
+    status = writeFile.seek(5, capu::FROM_CURRENT_POSITION);
+    status = writeFile.write(buf3, 1);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    writeFile.close();
+
+    // read data
+    char readBuffer[12];
+    capu::File readFile("seektest.txt");
+    readFile.open(capu::READ_ONLY_BINARY);
+    capu::uint_t bytes;
+    status = readFile.read(readBuffer, sizeof(readBuffer), bytes);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    readFile.close();
+
+    EXPECT_EQ(0, capu::Memory::Compare("hello world!", readBuffer, sizeof(readBuffer)));
 }
 
 TEST(File, OpenBinaryFileCanBeOpenedForReadAgain)
