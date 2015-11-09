@@ -39,6 +39,7 @@ namespace capu
             status_t read(char* buffer, uint_t length, uint_t& numBytes);
             status_t write(const char* buffer, uint_t length);
             using generic::File::seek;
+            status_t getCurrentPosition(uint_t& position);
             status_t flush();
             status_t close();
             status_t renameTo(const capu::String& newName);
@@ -423,6 +424,19 @@ namespace capu
             }
             tmp.truncate(lastSlashIndex);
             return tmp;
+        }
+
+        inline
+        status_t File::getCurrentPosition(uint_t& position)
+        {
+            const off_t pos = ftello(mHandle);
+            if (pos >= 0)
+            {
+                position = pos;
+                return CAPU_OK;
+    }
+
+            return CAPU_ERROR;
         }
     }
 }

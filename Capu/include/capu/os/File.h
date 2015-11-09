@@ -145,6 +145,14 @@ namespace capu
         status_t seek(int_t offset, FileSeekOrigin origin);
 
         /**
+         * Get current position within the file.
+         * @param position Variable to write current number of bytes from beginning of file to
+         * @return CAPU_OK if call was successful
+         *        CAPU_ERROR otherwise
+         */
+        status_t getCurrentPosition(uint_t& position);
+
+        /**
          * Writes any unwritten data to the file.
          */
         status_t flush();
@@ -333,6 +341,12 @@ namespace capu
     status_t File::seek(int_t offset, FileSeekOrigin origin)
     {
         return capu::os::arch::File::seek(offset, origin);
+    }
+
+    inline
+    status_t File::getCurrentPosition(uint_t& position)
+    {
+        return capu::os::arch::File::getCurrentPosition(position);
     }
 
 }

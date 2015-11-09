@@ -270,6 +270,26 @@ TEST(File, Seek)
     EXPECT_EQ(0, capu::Memory::Compare("hello world!", readBuffer, sizeof(readBuffer)));
 }
 
+TEST(File, getCurrentPositionWithinFile)
+{
+    char buffer[12] = "hello world";
+    const capu::uint_t numberOfBytesToWrite = sizeof(buffer) - 1;
+
+    // write data
+    capu::File file("getCurrentFilePosition.txt");
+    file.open(capu::WRITE_NEW_BINARY);
+
+    file.seek(6, capu::FROM_BEGINNING);
+    capu::uint_t filePosition = 0;
+    EXPECT_EQ(capu::CAPU_OK, file.getCurrentPosition(filePosition));
+    EXPECT_EQ(6u, filePosition);
+
+    file.write(buffer, numberOfBytesToWrite);
+    EXPECT_EQ(capu::CAPU_OK, file.getCurrentPosition(filePosition));
+    EXPECT_EQ(6u+numberOfBytesToWrite, filePosition);
+    file.close();
+}
+
 TEST(File, OpenBinaryFileCanBeOpenedForReadAgain)
 {
     capu::File f1("test.txt");

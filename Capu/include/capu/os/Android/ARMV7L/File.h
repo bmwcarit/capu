@@ -36,6 +36,7 @@ namespace capu
                 using capu::os::File::read;
                 using capu::os::File::write;
                 using capu::os::File::seek;
+                using capu::os::File::getCurrentPosition;
                 using capu::os::File::flush;
                 using capu::os::File::close;
                 using capu::os::File::copyTo;
