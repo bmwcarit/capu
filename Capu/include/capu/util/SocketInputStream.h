@@ -27,15 +27,15 @@ namespace capu
 {
 
     inline
-    uint64_t 
+    uint64_t
     _ntohll(uint64_t & value)
     {
         int_t checkNumber = 42;
-        if(*(char*)&checkNumber == 42)
+        if(*reinterpret_cast<char*>(&checkNumber) == 42)
         {
             // Little endian
-            const uint64_t lowbits  = (uint64_t)(ntohl(value & 0xFFFFFFFF)) << 32LL;
-            const uint64_t highbits = (uint64_t)ntohl(value >> 32);
+            const uint64_t lowbits  = static_cast<uint64_t>(ntohl(value & 0xFFFFFFFF)) << 32LL;
+            const uint64_t highbits = static_cast<uint64_t>(ntohl(value >> 32));
             return lowbits | highbits;
         }
         else

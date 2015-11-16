@@ -80,7 +80,7 @@ namespace capu
 
             int32_t clientAddrSize = sizeof(sockaddr_in);
             struct sockaddr_in serverAddr;
-            int32_t socket = ::accept(mServerSock, (sockaddr*) &serverAddr, (socklen_t*) & clientAddrSize);
+            int32_t socket = ::accept(mServerSock, reinterpret_cast<sockaddr*>(&serverAddr), reinterpret_cast<socklen_t*>(&clientAddrSize));
 
             if (socket < 0)
             {
@@ -133,7 +133,7 @@ namespace capu
 
             int32_t optval = 1;
             setsockopt(mServerSock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-            Memory::Set((char*) &serverAddress, 0x00, sizeof(serverAddress));
+            Memory::Set(reinterpret_cast<char*>(&serverAddress), 0x00, sizeof(serverAddress));
             serverAddress.sin_family = AF_INET;
             if (addr == NULL)
             {
@@ -145,7 +145,7 @@ namespace capu
             }
             serverAddress.sin_port = htons(port);
 
-            int32_t res = ::bind(mServerSock, (sockaddr*) & serverAddress, sizeof(struct sockaddr_in));
+            int32_t res = ::bind(mServerSock, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(struct sockaddr_in));
             if (res < 0)
             {
                 return CAPU_SOCKET_EBIND;
@@ -155,8 +155,8 @@ namespace capu
             if (0 == mPort)
             {
                 socklen_t size = sizeof(struct sockaddr_in);
-                Memory::Set((char*) &serverAddress, 0x00, sizeof(serverAddress));
-                res = ::getsockname(mServerSock, (sockaddr*) &serverAddress, &size);
+                Memory::Set(reinterpret_cast<char*>(&serverAddress), 0x00, sizeof(serverAddress));
+                res = ::getsockname(mServerSock, reinterpret_cast<sockaddr*>(&serverAddress), &size);
                 if (res < 0)
                 {
                     return CAPU_SOCKET_EBIND;

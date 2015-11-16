@@ -192,12 +192,12 @@ namespace capu
 
                 struct sockaddr_in serverAddress;
                 status = getSocketAddr(dest_addr, port, serverAddress);
-                if (status != CAPU_OK) 
+                if (status != CAPU_OK)
                 {
                     return status;
                 }
 
-                int32_t res = ::connect(mSocket, (const sockaddr*) &serverAddress, sizeof(serverAddress));
+                int32_t res = ::connect(mSocket, reinterpret_cast<const sockaddr*>(&serverAddress), sizeof(serverAddress));
                 if (res == -1)
                 {
                     close();

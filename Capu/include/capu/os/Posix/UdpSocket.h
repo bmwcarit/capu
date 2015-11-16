@@ -105,7 +105,7 @@ namespace capu
             }
 
             struct sockaddr_in mServerAddress;
-            memset((char*) &mServerAddress, 0x00, sizeof(mServerAddress));
+            memset(reinterpret_cast<char*>(&mServerAddress), 0x00, sizeof(mServerAddress));
             mServerAddress.sin_family = AF_INET;
             if (addr == NULL)
             {
@@ -117,7 +117,7 @@ namespace capu
             }
             mServerAddress.sin_port = htons(port);
 
-            int32_t res = ::bind(mSocket, (sockaddr*) &mServerAddress, sizeof(struct sockaddr_in));
+            int32_t res = ::bind(mSocket, reinterpret_cast<sockaddr*>(&mServerAddress), sizeof(struct sockaddr_in));
             if (res < 0)
             {
                 return CAPU_SOCKET_EBIND;
@@ -125,7 +125,7 @@ namespace capu
 
             struct sockaddr_in sin;
             socklen_t len = sizeof(sin);
-            if (getsockname(mSocket, (struct sockaddr*)&sin, &len) != -1)
+            if (getsockname(mSocket, reinterpret_cast<struct sockaddr*>(&sin), &len) != -1)
             {
                 char str[INET_ADDRSTRLEN];
                 inet_ntop(AF_INET, &(sin.sin_addr.s_addr), str, INET_ADDRSTRLEN);
@@ -168,7 +168,7 @@ namespace capu
             receiverSockAddr.sin_port   = htons(receiverPort);
             receiverSockAddr.sin_addr.s_addr = inet_addr(receiverAddr);
 
-            const int32_t result = sendto(mSocket, buffer, length, 0, (sockaddr*) &receiverSockAddr, sizeof(receiverSockAddr));
+            const int32_t result = sendto(mSocket, buffer, length, 0, reinterpret_cast<sockaddr*>(&receiverSockAddr), sizeof(receiverSockAddr));
 
             if (result == -1)
             {
@@ -201,7 +201,7 @@ namespace capu
             sockaddr_in remoteSocketAddr;
             socklen_t remoteSocketAddrSize = sizeof(remoteSocketAddr);
 
-            int32_t result = recvfrom(mSocket, (char*)buffer, length, 0, (sockaddr*) &remoteSocketAddr, &remoteSocketAddrSize);
+            int32_t result = recvfrom(mSocket, buffer, length, 0, reinterpret_cast<sockaddr*>(&remoteSocketAddr), &remoteSocketAddrSize);
             if (result == -1)
             {
                 numBytes = 0;
@@ -267,7 +267,7 @@ namespace capu
                 return CAPU_SOCKET_ESOCKET;
             }
 
-            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char*)&bufferSize, sizeof(bufferSize)) == -1)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, &bufferSize, sizeof(bufferSize)) == -1)
             {
                 return CAPU_ERROR;
             }
@@ -289,7 +289,7 @@ namespace capu
             if (broadcast)
                 allow = 1;
 
-            if (setsockopt(mSocket, SOL_SOCKET, SO_BROADCAST, (char*)&allow, sizeof(int32_t)) == -1)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_BROADCAST, &allow, sizeof(int32_t)) == -1)
             {
                 return CAPU_ERROR;
             }
@@ -310,11 +310,11 @@ namespace capu
             soTimeout.tv_sec = timeout / 1000;
             soTimeout.tv_usec = (timeout % 1000) * 1000;
 
-            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&soTimeout, sizeof(soTimeout)) == -1)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, &soTimeout, sizeof(soTimeout)) == -1)
             {
                 return CAPU_ERROR;
             }
-            if (setsockopt(mSocket, SOL_SOCKET, SO_SNDTIMEO, (char*)&soTimeout, sizeof(soTimeout)) == -1)
+            if (setsockopt(mSocket, SOL_SOCKET, SO_SNDTIMEO, &soTimeout, sizeof(soTimeout)) == -1)
             {
                 return CAPU_ERROR;
             }
@@ -332,7 +332,7 @@ namespace capu
             }
 
             socklen_t len = sizeof(bufferSize);
-            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char*)&bufferSize, &len) == -1)
+            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<char*>(&bufferSize), &len) == -1)
             {
                 return CAPU_ERROR;
             }
@@ -352,7 +352,7 @@ namespace capu
             struct timeval soTimeout;
             socklen_t len = sizeof(soTimeout);
 
-            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&soTimeout, &len) == -1)
+            if (getsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<char*>(&soTimeout), &len) == -1)
             {
                 return CAPU_ERROR;
             }
@@ -363,7 +363,7 @@ namespace capu
         }
 
         inline
-        const capu::os::SocketDescription& 
+        const capu::os::SocketDescription&
         UdpSocket::getSocketDescription() const
         {
             return mSocket;

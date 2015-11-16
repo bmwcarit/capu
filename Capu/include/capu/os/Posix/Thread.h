@@ -65,7 +65,7 @@ namespace capu
         void*
         Thread::run(void* arg)
         {
-            generic::ThreadRunnable* tr = (generic::ThreadRunnable*) arg;
+            generic::ThreadRunnable* tr = static_cast<generic::ThreadRunnable*>(arg);
             tr->thread->setState(TS_RUNNING);
             if (tr->runnable != NULL)
             {

@@ -392,7 +392,7 @@ namespace capu
         */
         static uint64_t Hash(const uint32_t key, uint8_t bitcount)
         {
-            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash((uint64_t)key), bitcount);
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(static_cast<uint64_t>(key)), bitcount);
         }
 
         /**
@@ -400,7 +400,7 @@ namespace capu
         */
         static uint64_t Hash(const int32_t  key, uint8_t bitcount)
         {
-            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash((int64_t)key), bitcount);
+            return Resizer<uint64_t>::Resize(HashFunction<uint64_t>::Hash(static_cast<int64_t>(key)), bitcount);
         }
         /**
          * Hash the given key using the given bitcount

@@ -216,10 +216,10 @@ namespace capu
         const int64_t networkOrder = _htonll(value);
         return write(&networkOrder, sizeof(int64_t));
     }
-    
+
     template<uint16_t SNDBUFSIZE>
     inline
-    IOutputStream& 
+    IOutputStream&
     SocketOutputStream<SNDBUFSIZE>::operator<<( const uint64_t value)
     {
         return operator<<(static_cast<int64_t>(value));
@@ -380,15 +380,15 @@ namespace capu
 
 
     inline
-    uint64_t 
+    uint64_t
     _htonll(const uint64_t value)
     {
         int64_t checkNumber = 42;
-        if(*(char*)&checkNumber == 42)
+        if(*reinterpret_cast<char*>(&checkNumber) == 42)
         {
             // Little endian
-            const uint64_t lowbits  = (uint64_t)(htonl(value & 0xFFFFFFFF)) << 32LL;
-            const uint64_t highbits = (uint64_t)htonl(value >> 32);
+            const uint64_t lowbits  = static_cast<uint64_t>(htonl(value & 0xFFFFFFFF)) << 32LL;
+            const uint64_t highbits = static_cast<uint64_t>(htonl(value >> 32));
             return lowbits | highbits;
         }
         else
