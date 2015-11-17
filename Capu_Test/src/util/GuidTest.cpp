@@ -128,3 +128,8 @@ TEST(GuidTest, CopyConstructor)
 
     EXPECT_STREQ(id1.toString().c_str(), id2.toString().c_str());
 }
+
+TEST(GuidTest, ExpectUuidStructPacked)
+{
+    EXPECT_EQ(16u, sizeof(capu::generic_uuid_t));
+}

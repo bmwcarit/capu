@@ -17,8 +17,10 @@
 #include <gtest/gtest.h>
 #include "capu/container/HashTable.h"
 #include "capu/container/HashSet.h"
+#include "capu/container/Vector.h"
 #include "capu/Error.h"
 #include "capu/os/Time.h"
+#include "capu/util/Guid.h"
 
 #include <container/HashTableTest.h>
 
@@ -770,4 +772,26 @@ TEST_F(HashTableTest, ForEach)
     EXPECT_EQ(44, testHashMap.find(43)->value);
     EXPECT_EQ(45, testHashMap.find(44)->value);
 
+}
+
+TEST_F(HashTableTest, HashTableWithGuidKeys)
+{
+    typedef capu::HashTable<capu::Guid, capu::uint_t> GuidHashTable;
+    GuidHashTable ht;
+    capu::Vector<capu::Guid> vec;
+    for (capu::uint_t i = 0; i < 20; ++i)
+    {
+        capu::Guid guid = capu::Guid(true);
+        ht.put(guid, i);
+        vec.push_back(guid);
+    }
+
+    for (capu::uint_t i = 0; i < vec.size(); ++i)
+    {
+        const capu::Guid& guid = vec[i];
+        GuidHashTable::Iterator it = ht.find(guid);
+        EXPECT_NE(it, ht.end());
+        EXPECT_EQ(it->key, guid);
+        EXPECT_EQ(it->value, i);
+    }
 }

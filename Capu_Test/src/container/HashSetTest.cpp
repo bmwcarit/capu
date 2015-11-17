@@ -16,8 +16,10 @@
 
 #include <gtest/gtest.h>
 #include "capu/container/HashSet.h"
+#include "capu/container/Vector.h"
 #include "capu/Error.h"
 #include "capu/Config.h"
+#include "capu/util/Guid.h"
 
 TEST(HashSet, Constructor_Default)
 {
@@ -323,4 +325,21 @@ TEST(HashSet, canRemoveElementsDuringCycle)
     EXPECT_EQ(0u, set.count());
 }
 
+TEST(HashSet, HashSetWithGuids)
+{
+    typedef capu::HashSet<capu::Guid> GuidSet;
+    GuidSet set;
+    capu::Vector<capu::Guid> vec;
+    for (capu::uint_t i = 0; i < 20; ++i)
+    {
+        capu::Guid guid = capu::Guid(true);
+        set.put(guid);
+        vec.push_back(guid);
+    }
 
+    for (capu::uint_t i = 0; i < vec.size(); ++i)
+    {
+        const capu::Guid& guid = vec[i];
+        EXPECT_TRUE(set.hasElement(guid));
+    }
+}
