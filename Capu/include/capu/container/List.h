@@ -22,6 +22,7 @@
 #include "capu/container/Comparator.h"
 #include "capu/util/Swap.h"
 #include "capu/util/Allocator.h"
+#include "capu/util/Iterator.h"
 
 namespace capu
 {
@@ -59,7 +60,7 @@ namespace capu
         typedef GenericListNode<T> ListNode;
 
         template<typename TYPE>
-        class ListIterator
+        class ListIterator : public iterator<bidirectional_iterator_tag, TYPE>
         {
         public:
             friend class List<T, A , C>;
