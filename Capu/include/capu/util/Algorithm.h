@@ -44,8 +44,12 @@ namespace capu
         static OutputIt copy(InputIt first, InputIt last, OutputIt dest)
         {
             const uint_t distance = (last - first);
-            Memory::Move(&*dest, &*first, distance * sizeof(T));
-            return dest + distance;
+            if (distance > 0u)
+            {
+                Memory::Move(&*dest, &*first, distance * sizeof(T));
+                return dest + distance;
+            }
+            return dest;
         }
     };
 
@@ -86,8 +90,12 @@ namespace capu
         static OutputIt copy_backward(InputIt first, InputIt last, OutputIt lastResult)
         {
             const uint_t distance = (last - first);
-            Memory::Move(&*(lastResult-distance), &*first, distance * sizeof(T));
-            return lastResult - distance;
+            if (distance > 0u)
+            {
+                Memory::Move(&*(lastResult-distance), &*first, distance * sizeof(T));
+                return lastResult - distance;
+            }
+            return lastResult;
         }
     };
 

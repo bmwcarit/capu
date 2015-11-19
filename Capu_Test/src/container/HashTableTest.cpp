@@ -761,16 +761,16 @@ TEST_F(HashTableTest, ForEach)
     hashMap.put(43,44);
     hashMap.put(44,45);
 
-    Int32HashMap testHashMap;
+    Int32HashMap someHashMap;
 
     capu_foreach(Int32HashMap, hashMap, iter)
     {
-        testHashMap.put(iter->key, iter->value);
+        someHashMap.put(iter->key, iter->value);
     }
 
-    EXPECT_EQ(33, testHashMap.find(32)->value);
-    EXPECT_EQ(44, testHashMap.find(43)->value);
-    EXPECT_EQ(45, testHashMap.find(44)->value);
+    EXPECT_EQ(33, someHashMap.find(32)->value);
+    EXPECT_EQ(44, someHashMap.find(43)->value);
+    EXPECT_EQ(45, someHashMap.find(44)->value);
 
 }
 

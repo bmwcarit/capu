@@ -43,10 +43,10 @@ public:
 
 class ThreadClientTest : public capu::Runnable
 {
-    uint16_t port;
+    uint16_t m_port;
 public:
     //client thread to test data exchange between client and server
-    ThreadClientTest(uint16_t port) : port(port) {}
+    ThreadClientTest(uint16_t port) : m_port(port) {}
 
     void run()
     {
@@ -62,22 +62,22 @@ public:
             cv.wait(mutex);
         }
         cond = false;
-        if (0 == port)
+        if (0 == m_port)
         {
-            port = chosenPort;
+            m_port = chosenPort;
         }
         mutex.unlock();
-        EXPECT_LT(0, port);
+        EXPECT_LT(0, m_port);
 
         //TRY TO CONNECT TO IPV6
-        EXPECT_EQ(capu::CAPU_SOCKET_EADDR, cli_socket->connect("::1", port));
+        EXPECT_EQ(capu::CAPU_SOCKET_EADDR, cli_socket->connect("::1", m_port));
 
         //connects to he given id
         capu::status_t result = capu::CAPU_ERROR;
         int32_t attemps = 0;
         while (result != capu::CAPU_OK && attemps < 100)
         {
-            result = cli_socket->connect("localhost", port);
+            result = cli_socket->connect("localhost", m_port);
             attemps++;
             capu::Thread::Sleep(50);
         }
@@ -109,10 +109,10 @@ public:
 
 class ThreadTimeoutOnReceiveClientTest : public capu::Runnable
 {
-    uint16_t port;
+    uint16_t m_port;
 public:
     //timeout test
-    ThreadTimeoutOnReceiveClientTest(uint16_t port) : port(port) {}
+    ThreadTimeoutOnReceiveClientTest(uint16_t port) : m_port(port) {}
 
     void run()
     {
@@ -130,13 +130,13 @@ public:
         {
             cv.wait(mutex);
         }
-        if (0 == port)
+        if (0 == m_port)
         {
-            port = chosenPort;
+            m_port = chosenPort;
         }
         cond = false;
         mutex.unlock();
-        result = cli_socket.connect("localhost", port);
+        result = cli_socket.connect("localhost", m_port);
         ASSERT_TRUE(result == capu::CAPU_OK);
 
         int32_t i = 5;
@@ -160,10 +160,10 @@ public:
 
 class ThreadTimeoutOnSendClientTest : public capu::Runnable
 {
-    uint16_t port;
+    uint16_t m_port;
 public:
     //timeout test
-    ThreadTimeoutOnSendClientTest(uint16_t port) : port(port) {}
+    ThreadTimeoutOnSendClientTest(uint16_t port) : m_port(port) {}
 
 private:
     capu::TcpSocket cli_socket;
@@ -217,16 +217,16 @@ public:
         {
             cv.wait(mutex);
         }
-        if (0 == port)
+        if (0 == m_port)
         {
-            port = chosenPort;
+            m_port = chosenPort;
         }
         cond = false;
         mutex.unlock();
 
         capu::status_t connectStatus = capu::CAPU_ERROR;
         while (connectStatus != capu::CAPU_OK) {
-            connectStatus = cli_socket.connect("localhost", port);
+            connectStatus = cli_socket.connect("localhost", m_port);
             if (connectStatus != capu::CAPU_OK) {
                 capu::Thread::Sleep(100);
             }
@@ -269,10 +269,10 @@ public:
 
 class ThreadServerTest : public capu::Runnable
 {
-    uint16_t port;
+    uint16_t m_port;
 public:
     //SERVER thread to test data exchange between client and server
-    ThreadServerTest(uint16_t port) : port(port) {}
+    ThreadServerTest(uint16_t port) : m_port(port) {}
 
     void run()
     {
@@ -282,12 +282,12 @@ public:
         capu::TcpServerSocket* socket = new capu::TcpServerSocket();
 
         //bind to given address
-        EXPECT_EQ(capu::CAPU_OK, socket->bind(port, "0.0.0.0"));
+        EXPECT_EQ(capu::CAPU_OK, socket->bind(m_port, "0.0.0.0"));
 
-        if (0 == port)
+        if (0 == m_port)
         {
-            port = socket->port();
-            chosenPort = port;
+            m_port = socket->port();
+            chosenPort = m_port;
         }
 
         //start listening

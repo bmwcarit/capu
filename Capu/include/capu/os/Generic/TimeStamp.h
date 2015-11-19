@@ -148,9 +148,9 @@ namespace capu
                     }
                     //if it is acceptable deliminator then append it
                     /*APPEND FUNCTION FOR STRINGS WOULD BE NICE TO INSERT SINGLE CHARACTER*/
-                    char tmp[2] = {'0', '\0'};
-                    tmp[0] = pattern[i];
-                    result = result + tmp;
+                    char singleCharString[2] = {'0', '\0'};
+                    singleCharString[0] = pattern[i];
+                    result = result + singleCharString;
                     parsed = false;
                     continue;
                 }

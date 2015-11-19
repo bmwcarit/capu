@@ -182,9 +182,9 @@ namespace capu
         file.close();
         if (retVal == CAPU_OK || retVal == CAPU_EOF) // read all content
         {
-            String retVal = String(buffer);
+            String result = String(buffer);
             delete[] buffer;
-            return retVal;
+            return result;
         }
         else
         {
