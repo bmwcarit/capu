@@ -45,7 +45,7 @@ namespace capu
         inline uint16_t Random::nextUInt16()
         {
             // RAND_MAX is at least 32767, which are 15 bit, so we need to shift here already
-            return static_cast<uint16_t>((rand() << 8) | rand()); // avoid compiler warnings.
+            return static_cast<uint16_t>(((rand() & 0xFF) << 8) | rand()); // avoid compiler warnings.
         }
 
         inline uint32_t Random::nextUInt32()

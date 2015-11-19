@@ -123,7 +123,7 @@ namespace capu
 
     TEST(AlgorithmRawTest, FillRawComplexType)
     {
-        uint8_t mem[sizeof(ComplexTestType) * 3] = { 0 };
+        uint8_t mem[sizeof(ComplexTestType) * 4] = { 0 };
         ComplexTestType *p = reinterpret_cast<ComplexTestType*>(mem);
 
         ComplexTestType initElement(5u);
