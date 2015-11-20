@@ -36,7 +36,7 @@ script:
 
 before_install:
   - cd ..
-  - wget http://www.cmake.org/files/v2.8/cmake-2.8.10.tar.gz
+  - wget --no-check-certificate http://www.cmake.org/files/v2.8/cmake-2.8.10.tar.gz
   - tar xf cmake-2.8.10.tar.gz
   - cd cmake-2.8.10
 
