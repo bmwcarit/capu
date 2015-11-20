@@ -239,20 +239,29 @@ TEST(HashSetIterator, ForEach)
 
 }
 
-#define COUNT 500000
 
-capu::HashSet<uint32_t> set;
-
-TEST(HashSet, performancePut)
+class HashSetPerformance : public ::testing::Test
 {
-    //capu::HashSet<uint32_t> set;
-    for (uint32_t i = 0; i < COUNT; i++)
+public:
+    HashSetPerformance()
+        : count(500000)
+    {}
+
+    static capu::HashSet<uint32_t> set;
+    uint32_t count;
+};
+
+capu::HashSet<uint32_t> HashSetPerformance::set;
+
+TEST_F(HashSetPerformance, performancePut)
+{
+    for (uint32_t i = 0; i < count; i++)
     {
         set.put(i);
     }
 }
 
-TEST(HashSet, performanceIterate)
+TEST_F(HashSetPerformance, performanceIterate)
 {
     capu::HashSet<uint32_t>::Iterator iter = set.begin();
     while (iter != set.end())
@@ -261,7 +270,7 @@ TEST(HashSet, performanceIterate)
     }
 }
 
-TEST(HashSet, performanceConstIterate)
+TEST_F(HashSetPerformance, performanceConstIterate)
 {
     const capu::HashSet<uint32_t>& setConstRef = set;
     capu::HashSet<uint32_t>::ConstIterator iter = setConstRef.begin();
@@ -271,10 +280,9 @@ TEST(HashSet, performanceConstIterate)
     }
 }
 
-TEST(HashSet, performanceRemove)
+TEST_F(HashSetPerformance, performanceRemove)
 {
-    // capu::HashSet<uint32_t> set;
-    for (uint32_t i = 0; i < COUNT; i++)
+    for (uint32_t i = 0; i < count; i++)
     {
         set.remove(i);
     }
