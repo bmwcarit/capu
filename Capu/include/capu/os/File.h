@@ -150,7 +150,7 @@ namespace capu
          * @return CAPU_OK if call was successful
          *        CAPU_ERROR otherwise
          */
-        status_t getCurrentPosition(uint_t& position);
+        status_t getCurrentPosition(uint_t& position) const;
 
         /**
          * Writes any unwritten data to the file.
@@ -344,7 +344,7 @@ namespace capu
     }
 
     inline
-    status_t File::getCurrentPosition(uint_t& position)
+    status_t File::getCurrentPosition(uint_t& position) const
     {
         return capu::os::arch::File::getCurrentPosition(position);
     }

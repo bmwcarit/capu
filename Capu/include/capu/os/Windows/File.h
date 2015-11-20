@@ -46,7 +46,7 @@ namespace capu
             status_t read(char* buffer, uint_t length, uint_t& numBytes);
             status_t write(const char* buffer, uint_t length);
             using generic::File::seek;
-            status_t getCurrentPosition(uint_t& position);
+            status_t getCurrentPosition(uint_t& position) const;
             status_t flush();
             status_t close();
             status_t renameTo(const capu::String& newPath);
@@ -350,7 +350,7 @@ namespace capu
         }
 
         inline
-        status_t File::getCurrentPosition(uint_t& position)
+        status_t File::getCurrentPosition(uint_t& position) const
         {
             __int64 pos = _ftelli64(mHandle);
             if (pos >= 0)
