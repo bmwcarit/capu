@@ -38,7 +38,7 @@ namespace capu
             static void Print(const char* format, va_list values);
             static void Print(uint32_t color, const char* format, va_list values);
             static status_t ReadChar(char& buffer);
-            static const char* Colors[];
+            static const char Colors[6][8];
             static void Flush();
             static void InterruptReadChar();
         private:
@@ -75,9 +75,10 @@ namespace capu
         void
         Console::Print(uint32_t color, const char* format, va_list values)
         {
-            printf("%s", capu::posix::Console::Colors[color]);
+            fputs(capu::posix::Console::Colors[color], stdout); 
             vprintf(format, values);
-            printf("\e[0m");
+            char ca_end[] = { 0x1b, 0x5b, 0x30, 0x6d, 0x00 }; // hex representation of ansi codes for "\e[0m"
+            fputs(ca_end, stdout);
         }
 
         inline
