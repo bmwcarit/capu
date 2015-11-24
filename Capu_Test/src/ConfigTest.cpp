@@ -61,6 +61,8 @@ namespace capu
 #elif defined (ARCH_ARM64)
         EXPECT_EQ(8u, sizeof(int_t));
         EXPECT_EQ(8u, sizeof(uint_t));
+#else
+#error
 #endif
     }
 }
