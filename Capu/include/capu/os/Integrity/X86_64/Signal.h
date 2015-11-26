@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 BMW Car IT GmbH
+ * Copyright (C) 2015 BMW Car IT GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_THREAD_STATE_H
-#define CAPU_THREAD_STATE_H
+#ifndef CAPU_INTEGRITY_X86_64_SIGNAL_H
+#define CAPU_INTEGRITY_X86_64_SIGNAL_H
+
+#include <capu/os/Linux/Signal.h>
 
 namespace capu
 {
-    /**
-     * Thread states
-     */
-    enum ThreadState
+    namespace os
     {
-        TS_NEW,
-        TS_STARTING,
-        TS_RUNNING,
-        TS_TERMINATED
-    };
+        namespace arch
+        {
+            class Signal: private os::Signal
+            {
+            public:
+                using os::Signal::signal;
+                using os::Signal::raise;
+            };
+        }
+    }
 }
 
-#endif // CAPU_THREAD_STATE_H
-
+#endif // CAPU_INTEGRITY_X86_64_SIGNAL_H

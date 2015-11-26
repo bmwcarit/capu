@@ -490,7 +490,8 @@ namespace capu
         static INTRESULTTYPE Hash(const T key, const uint8_t bitsize)
         {
             // shortcut: a pointer is already a hash, we need only the resizer
-            return Resizer<INTRESULTTYPE>::Resize(reinterpret_cast<uint_t>(key), bitsize);
+            const T *keyPtr = &key;
+            return Resizer<INTRESULTTYPE>::Resize(*reinterpret_cast<const uint_t*>(keyPtr), bitsize);
         }
     };
 

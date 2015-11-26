@@ -59,7 +59,7 @@ namespace capu
         Thread::CurrentThreadId()
         {
             void* id = pthread_self();
-            return reinterpret_cast<uint_t>(id);
+            return *reinterpret_cast<uint_t*>(&id);
         }
     }
 }
