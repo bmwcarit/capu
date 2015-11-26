@@ -16,7 +16,7 @@
 
 #include <gtest/gtest.h>
 #include "capu/container/HashSet.h"
-#include "capu/container/Vector.h"
+#include "capu/container/vector.h"
 #include "capu/Error.h"
 #include "capu/Config.h"
 #include "capu/util/Guid.h"
@@ -337,7 +337,7 @@ TEST(HashSet, HashSetWithGuids)
 {
     typedef capu::HashSet<capu::Guid> GuidSet;
     GuidSet set;
-    capu::Vector<capu::Guid> vec;
+    capu::vector<capu::Guid> vec;
     for (capu::uint_t i = 0; i < 20; ++i)
     {
         capu::Guid guid = capu::Guid(true);
