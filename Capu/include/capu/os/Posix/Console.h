@@ -75,10 +75,17 @@ namespace capu
         void
         Console::Print(uint32_t color, const char* format, va_list values)
         {
-            fputs(capu::posix::Console::Colors[color], stdout); 
-            vprintf(format, values);
-            char ca_end[] = { 0x1b, 0x5b, 0x30, 0x6d, 0x00 }; // hex representation of ansi codes for "\e[0m"
-            fputs(ca_end, stdout);
+            if (color < 6)
+            {
+                fputs(capu::posix::Console::Colors[color], stdout);
+                vprintf(format, values);
+                const char ca_end[] = { 0x1b, 0x5b, 0x30, 0x6d, 0x00 }; // hex representation of ansi codes for "\e[0m"
+                fputs(ca_end, stdout);
+            }
+            else
+            {
+                vprintf(format, values);
+            }
         }
 
         inline
