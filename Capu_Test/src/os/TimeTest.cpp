@@ -40,3 +40,13 @@ TEST(Time, getMicrosecondsTest)
     uint64_t milliSeconds2 = capu::Time::GetMicroseconds();
     EXPECT_TRUE((milliSeconds2 - milliSeconds) > 40000);
 }
+
+TEST(Time, getMicrosecondsTestLongTime)
+{
+    uint64_t milliSeconds = capu::Time::GetMicroseconds();
+    capu::Thread::Sleep(2000);
+    uint64_t milliSeconds2 = capu::Time::GetMicroseconds();
+    uint64_t diff = milliSeconds2 - milliSeconds;
+    EXPECT_GE(diff, 2000000u - 50000u);
+    EXPECT_LE(diff, 2000000u + 50000u);
+}

@@ -53,7 +53,7 @@ namespace capu
             QueryPerformanceFrequency(&frequency);
             QueryPerformanceCounter(&t);
 
-            return (ULONGLONG)t.QuadPart / (frequency.QuadPart / microsecondsPerSecond);
+            return (ULONGLONG)t.QuadPart * microsecondsPerSecond / frequency.QuadPart;
         }
     }
 }
