@@ -15,6 +15,8 @@
 #
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+INCLUDE(CMakePackageConfigHelpers)
+
 SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND LD_LIBRARY_PATH=../DynamicTestLibrary && ${CMAKE_CTEST_COMMAND};--target test -V CACHE STRING "")
 SET(CMAKE_MODULE_PATH
     ${CMAKE_INSTALL_PREFIX}/lib/cmake
@@ -29,6 +31,12 @@ IF(MSVC)
     SET(ACME_ENABLE_PLUGIN_VISUAL_STUDIO_PDB true CACHE BOOL "ACME2 plugin for installing Visual Studio PDB(s)")
 ENDIF()
 
+# version information
+SET(Capu_VERSION_MAJOR 0)
+SET(Capu_VERSION_MINOR 22)
+SET(Capu_VERSION_PATCH 0)
+SET(Capu_VERSION "${Capu_VERSION_MAJOR}.${Capu_VERSION_MINOR}.${Capu_VERSION_PATCH}")
+
 # custom setup for integrating gtest & gmock
 set(gtest_force_shared_crt true CACHE BOOL "Must be enabled for linking our unit tests" FORCE)
 IF(Capu_BUILD_TESTS AND NOT TARGET gmock)
@@ -40,9 +48,9 @@ ACME2_PROJECT(
     # project metadata
     #==========================================================================
     NAME                        Capu
-    VERSION_MAJOR               0
-    VERSION_MINOR               22
-    VERSION_PATCH               0
+    VERSION_MAJOR               ${Capu_VERSION_MAJOR}
+    VERSION_MINOR               ${Capu_VERSION_MINOR}
+    VERSION_PATCH               ${Capu_VERSION_PATCH}
     DESCRIPTION                 "Collections and Platform Utils"
     EMAIL                       "martin.veith@bmw-carit.de"
     COMPANY                     "BMW Car IT GmbH"
@@ -82,11 +90,9 @@ ACME_INFO("G Capu.pc")
 # generate and install CMake Version file
 #==============================================================================
 
-CONFIGURE_FILE(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/CapuConfigVersion.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/CapuConfigVersion.cmake"
-    @ONLY
-)
+WRITE_BASIC_PACKAGE_VERSION_FILE("${CMAKE_CURRENT_BINARY_DIR}/CapuConfigVersion.cmake"
+  VERSION ${Capu_VERSION}
+  COMPATIBILITY AnyNewerVersion)
 INSTALL(
     FILES       ${CMAKE_CURRENT_BINARY_DIR}/CapuConfigVersion.cmake
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
