@@ -1,0 +1,25 @@
+SET(Capu_VERSION @Capu_VERSION@)
+
+@PACKAGE_INIT@
+
+FIND_PATH(Capu_INCLUDE_DIRS capu/Config.h
+    @PACKAGE_PROJECT_INSTALL_HEADER@
+)
+
+FIND_LIBRARY(Capu_LIBRARY
+    NAMES Capu
+    PATHS @PACKAGE_PROJECT_INSTALL_STATIC_LIB@
+)
+
+IF(Capu_INCLUDE_DIRS AND Capu_LIBRARY)
+    SET(Capu_LIBRARIES ${Capu_LIBRARY})
+    SET(Capu_FOUND TRUE)
+    message(STATUS "Found Capu libs: ${Capu_LIBRARIES}")
+    message(STATUS "Found Capu includes: ${Capu_INCLUDE_DIRS}")
+ENDIF()
+
+MARK_AS_ADVANCED(
+    Capu_INCLUDE_DIRS
+    Capu_LIBRARIES
+    Capu_FOUND
+)

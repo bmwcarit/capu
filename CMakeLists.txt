@@ -115,6 +115,22 @@ INSTALL(
 ACME_INFO("G FindCapu.cmake")
 
 #==============================================================================
+# generate and install CMake Config file
+#==============================================================================
+
+CONFIGURE_PACKAGE_CONFIG_FILE(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/CapuConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/CapuConfig.cmake"
+    INSTALL_DESTINATION "${PROJECT_INSTALL_STATIC_LIB}/cmake"
+    PATH_VARS PROJECT_INSTALL_HEADER PROJECT_INSTALL_STATIC_LIB PROJECT_INSTALL_SHARED_LIB
+  )
+INSTALL(
+    FILES       ${CMAKE_CURRENT_BINARY_DIR}/CapuConfig.cmake
+    DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
+)
+ACME_INFO("G CapuConfig.cmake")
+
+#==============================================================================
 # generate and install DltLogAppenderBuildConfig header
 #==============================================================================
 CONFIGURE_FILE(
