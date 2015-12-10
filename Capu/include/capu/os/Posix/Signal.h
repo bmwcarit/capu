@@ -39,12 +39,13 @@ namespace capu
         class Signal
         {
         public:
+            typedef void (*SignalHandlerFunction)(int32_t);
 
             /// Registers a signal handler.
             /** @param sig The signal.
              *  @param func Signal handler function, which is called when the signal happens.
              *  @return Returns the previous installed signal handler. */
-            static void (*signal(ESignal sig, void (*func)(int32_t)))(int32_t)
+            static SignalHandlerFunction signal(ESignal sig, SignalHandlerFunction func)
             {
                 return ::signal(static_cast<int32_t>(sig), (func != 0) ? func : SIG_DFL);
             }
