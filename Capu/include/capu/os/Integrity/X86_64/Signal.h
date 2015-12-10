@@ -17,7 +17,7 @@
 #ifndef CAPU_INTEGRITY_X86_64_SIGNAL_H
 #define CAPU_INTEGRITY_X86_64_SIGNAL_H
 
-#include <capu/os/Linux/Signal.h>
+#include <capu/os/Integrity/Signal.h>
 
 namespace capu
 {

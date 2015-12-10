@@ -17,17 +17,37 @@
 #ifndef CAPU_LINUX_SIGNAL_H
 #define CAPU_LINUX_SIGNAL_H
 
-#include <capu/os/Posix/Signal.h>
-
 namespace capu
 {
+    enum ESignal
+    {
+        CAPU_SIGABRT = SIGABRT,
+        CAPU_SIGFPE = SIGFPE,
+        CAPU_SIGILL = SIGILL,
+        CAPU_SIGINT = SIGINT,
+        CAPU_SIGSEGV = SIGSEGV,
+        CAPU_SIGTERM = SIGTERM
+    };
+
     namespace os
     {
-        class Signal: private capu::posix::Signal
+        class Signal
         {
         public:
-            using os::Signal::signal;
-            using os::Signal::raise;
+            typedef void (*SignalHandlerFunction)(int32_t);
+
+            static SignalHandlerFunction signal(ESignal /*sig*/, SignalHandlerFunction /*func*/)
+            {
+                return SignalHandlerFunction(0);
+            }
+
+            /// Generates a signal.
+            /** @param sig The signal.
+             *  @return Returns CAPU_OK when successful, and CAPU_ERROR otherwise. */
+            static status_t raise(ESignal sig)
+            {
+                return CAPU_ERROR;
+            }
         };
     }
 }
