@@ -133,6 +133,9 @@ namespace capu
 
     public:
 
+        /// defines to amount of bits to use for hash set size
+        static const uint8_t DefaultHashSetBitSize;
+
         /**
          * Iterator for hashsets
          */
@@ -246,6 +249,9 @@ namespace capu
     };
 
     template <class T, class C, class H>
+    const uint8_t HashSet<T, C, H>::DefaultHashSetBitSize = 4u;
+
+    template <class T, class C, class H>
     HashSet<T, C, H>::HashSet(const HashSet& other)
         : m_table(other.m_table) // just copy the inner hash table (which defines a copy constructor)
     {
@@ -253,7 +259,7 @@ namespace capu
 
     template <class T, class C, class H>
     HashSet<T, C, H>::HashSet()
-        : m_table(DEFAULT_HASH_SET_BIT_SIZE)
+        : m_table(DefaultHashSetBitSize)
     {
     }
 
