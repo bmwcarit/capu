@@ -795,3 +795,47 @@ TEST_F(HashTableTest, HashTableWithGuidKeys)
         EXPECT_EQ(it->value, i);
     }
 }
+
+TEST_F(HashTableTest, swapMemberFunction)
+{
+    Int32HashMap first;
+    Int32HashMap second;
+
+    first.put(1, 11);
+    first.put(2, 12);
+    second.put(100, 101);
+
+    first.swap(second);
+    EXPECT_EQ(2u, second.count());
+    EXPECT_EQ(1u, first.count());
+
+    capu::status_t status = capu::CAPU_OK;
+    int32_t v = 0;
+
+    v = second.at(1, &status);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    EXPECT_EQ(11, v);
+
+    v = second.at(2, &status);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    EXPECT_EQ(12, v);
+
+    v = first.at(100, &status);
+    EXPECT_EQ(capu::CAPU_OK, status);
+    EXPECT_EQ(101, v);
+}
+
+TEST_F(HashTableTest, swapGlobal)
+{
+    Int32HashMap first;
+    Int32HashMap second;
+
+    first.put(1, 11);
+    first.put(2, 12);
+    second.put(100, 101);
+
+    using capu::swap;
+    swap(first, second);
+    EXPECT_EQ(2u, second.count());
+    EXPECT_EQ(1u, first.count());
+}

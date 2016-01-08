@@ -17,6 +17,7 @@
 #ifndef CAPU_HASHSET_H
 #define CAPU_HASHSET_H
 
+#include "capu/util/Swap.h"
 #include "capu/container/Hash.h"
 #include "capu/container/HashTable.h"
 
@@ -244,9 +245,26 @@ namespace capu
          */
         ConstIterator end() const;
 
+        /**
+        * Swap this HashSet with another
+        * @param other HashSet to copy from
+        */
+        void swap(HashSet<T, C, H>& other);
+
     private:
         HashTable<T, char, C, H> m_table;
     };
+
+    /**
+     * swap specialization for HashSet<T, C, H>
+     * @param first first HashSet
+     * @param second HashSet to swap with first
+     */
+    template <class Key, class T, class C, class H>
+    inline void swap(HashSet<T, C, H>& first, HashSet<T, C, H>& second)
+    {
+        first.swap(second);
+    }
 
     template <class T, class C, class H>
     const uint8_t HashSet<T, C, H>::DefaultHashSetBitSize = 4u;
@@ -339,6 +357,11 @@ namespace capu
         return ConstIterator(m_table.end());
     }
 
+    template <class T, class C, class H>
+    void HashSet<T, C, H>::swap(HashSet<T, C, H>& other)
+    {
+        m_table.swap(other.m_table);
+    }
 }
 
 #endif /* CAPU_HASHSET_H */

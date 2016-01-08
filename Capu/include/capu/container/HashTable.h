@@ -19,6 +19,7 @@
 
 #include "capu/Error.h"
 #include "capu/Config.h"
+#include "capu/util/Swap.h"
 #include "capu/container/Comparator.h"
 #include "capu/container/Pair.h"
 #include "capu/container/Hash.h"
@@ -451,6 +452,12 @@ namespace capu
          */
         HashTable<Key, T, C, H>& operator=(const HashTable<Key, T, C, H>& other);
 
+        /**
+        * Swap this HashTable with another
+        * @param other HashTable to copy from
+        */
+       void swap(HashTable<Key, T, C, H>& other);
+
     private:
         uint8_t mBitCount; // bit size for the hash function
         uint_t mSize; // the size of the data list
@@ -469,6 +476,17 @@ namespace capu
         void internalPut(HashTableEntry* entry, uint_t hashValue);
         void internalRemove(HashTableEntry* entry, const uint_t hashValue, T* value_old = 0);
     };
+
+    /**
+    * swap specialization for HashTable<Key, T, C, H>
+    * @param first first HashTable
+    * @param second HashTable to swap with first
+    */
+    template <class Key, class T, class C, class H>
+    inline void swap(HashTable<Key, T, C, H>& first, HashTable<Key, T, C, H>& second)
+    {
+        first.swap(second);
+    }
 
     template <class Key, class T, class C, class H>
     const float  HashTable<Key, T, C, H>::DefaultHashTableMaxLoadFactor = 0.8f;
@@ -943,6 +961,22 @@ namespace capu
         // cleanup old data
         delete[] old_buckets;
         delete[] old_data;
+    }
+
+    template <class Key, class T, class C, class H>
+    inline void HashTable<Key, T, C, H>::swap(HashTable<Key, T, C, H>& other)
+    {
+        using capu::swap;
+        swap(mBitCount, other.mBitCount);
+        swap(mSize, other.mSize);
+        swap(mThreshold, other.mThreshold);
+        swap(mBuckets, other.mBuckets);
+        swap(mData, other.mData);
+        swap(mLastHashMapEntry, other.mLastHashMapEntry);
+        swap(mFirstFreeHashMapEntry, other.mFirstFreeHashMapEntry);
+        swap(mCount, other.mCount);
+        swap(const_cast<bool&>(mResizeable), const_cast<bool&>(other.mResizeable)); // make mResizable mutable only for swap
+        // no need to swap mComparator, it must be the same
     }
 }
 

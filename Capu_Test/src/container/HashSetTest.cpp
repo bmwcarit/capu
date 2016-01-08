@@ -351,3 +351,36 @@ TEST(HashSet, HashSetWithGuids)
         EXPECT_TRUE(set.hasElement(guid));
     }
 }
+
+TEST(HashSet, swapMemberFunction)
+{
+    capu::HashSet<uint32_t> first;
+    capu::HashSet<uint32_t> second;
+
+    first.put(1);
+    first.put(2);
+    second.put(3);
+
+    first.swap(second);
+    EXPECT_EQ(2u, second.count());
+    EXPECT_EQ(1u, first.count());
+
+    EXPECT_TRUE(second.hasElement(1));
+    EXPECT_TRUE(second.hasElement(2));
+    EXPECT_TRUE(first.hasElement(3));
+}
+
+TEST(HashSet, swapGlobal)
+{
+    capu::HashSet<uint32_t> first;
+    capu::HashSet<uint32_t> second;
+
+    first.put(1);
+    first.put(2);
+    second.put(3);
+
+    using capu::swap;
+    swap(first, second);
+    EXPECT_EQ(2u, second.count());
+    EXPECT_EQ(1u, first.count());
+}
