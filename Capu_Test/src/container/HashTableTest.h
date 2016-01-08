@@ -53,8 +53,12 @@ public:
 
     void SetUp();
     void TearDown();
+
+    void resetRefCnts();
+    void expectRefCnt(int32_t refCnt);
 protected:
     Int32HashMap testHashMap;
 };
+
 
 #endif // CAPU_HASHTABLETEST_H

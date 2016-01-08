@@ -17,11 +17,11 @@
 #ifndef CAPU_HASHTABLE_H
 #define CAPU_HASHTABLE_H
 
+#include <new>
 #include "capu/Error.h"
 #include "capu/Config.h"
 #include "capu/util/Swap.h"
 #include "capu/container/Comparator.h"
-#include "capu/container/Pair.h"
 #include "capu/container/Hash.h"
 #include "capu/os/Memory.h"
 
@@ -41,6 +41,21 @@ namespace capu
         /// defines to amount of bits to use for hash set size
         static const uint8_t DefaultHashTableBitSize;
 
+
+        class Pair
+        {
+        public:
+            Pair(const Key& key_, const T& value_)
+                : key(key_)
+                , value(value_)
+            {
+            }
+
+            const Key key;
+            T value;
+        };
+
+    private:
         /**
          * Data structure to hold a key/value pair inside the hash table
          */
@@ -48,52 +63,54 @@ namespace capu
         {
         public:
             HashTableEntry()
-                : value()
-                , internalKey()
-                , key(internalKey)
-                , next(0)
+                : next(0)
                 , previous(0)
-                , isChainElement(0)
+                , keyValuePairPtr(0)
+                , isChainElement(false)
 
             {
                 // 'preconnect' free entries
                 next = this + 1;
             }
 
-            HashTableEntry& operator=(const HashTableEntry& other)
+            void constructKeyValue(const Key& key, const T& value)
             {
-                internalKey = other.key;
-                value = other.value;
-                next = other.next;
-                previous = other.previous;
-                isChainElement = other.isChainElement;
-                return *this;
+                // placement new
+                keyValuePairPtr = new (keyValuePairMemory) Pair(key, value);
             }
 
-            HashTableEntry(const HashTableEntry& other)
-                : value(other.value)
-                , internalKey(other.key)
-                , key(internalKey)
-                , next(other.next)
-                , previous(other.previous)
-                , isChainElement(other.isChainElement)
+            void destructKeyValue()
             {
+                // inplace destruction of typed value
+                keyValuePairPtr->~Pair();
+                keyValuePairPtr = 0;
             }
 
-            T value;
+            Pair& getKeyValuePair()
+            {
+                return *keyValuePairPtr;
+            }
 
-        private:
-            Key internalKey; // private non const key
-        public:
-            const Key& key; // public const reference to the key
+            const Pair& getKeyValuePair() const
+            {
+                return *keyValuePairPtr;
+            }
+
         private:
             HashTableEntry* next; // pointer to the next entry (chaining)
             HashTableEntry* previous; // pointer to the previous entry (chaining)
-            uint8_t isChainElement; // true if the element is not the first element in a chain
+            char keyValuePairMemory[sizeof(Pair)];  // memory for key and value, keep right after pointer member for proper alignment
+            Pair* keyValuePairPtr; // currently needed in pre c++11 to prevent UB by ugly struct aliasing violations
+            bool isChainElement; // true if the element is not the first element in a chain
 
             friend class HashTable<Key, T, C, H>;
+
+            // delete copy ctor, assign operator
+            HashTableEntry(const HashTableEntry& other);
+            HashTableEntry& operator=(const HashTableEntry& other);
         };
 
+    public:
         class ConstIterator
         {
         public:
@@ -126,18 +143,18 @@ namespace capu
              * Indirection
              * @return the current value referenced by the iterator
              */
-            const HashTableEntry& operator*()
+            const Pair& operator*()
             {
-                return *mCurrentHashMapEntry;
+                return mCurrentHashMapEntry->getKeyValuePair();
             }
 
             /**
              * Dereference
              * @return a pointer to the current object the iterator points to
              */
-            const HashTableEntry* operator->()
+            const Pair* operator->()
             {
-                return mCurrentHashMapEntry;
+                return &mCurrentHashMapEntry->getKeyValuePair();
             }
 
             /**
@@ -227,18 +244,18 @@ namespace capu
              * Indirection
              * @return the current value referenced by the iterator
              */
-            HashTableEntry& operator*()
+            Pair& operator*()
             {
-                return *mCurrentHashMapEntry;
+                return mCurrentHashMapEntry->getKeyValuePair();
             }
 
             /**
              * Dereference
              * @return a pointer to the current object the iterator points to
              */
-            HashTableEntry* operator->()
+            Pair* operator->()
             {
-                return mCurrentHashMapEntry;
+                return &mCurrentHashMapEntry->getKeyValuePair();
             }
 
             /**
@@ -470,6 +487,8 @@ namespace capu
         const bool mResizeable; // indicates if rehashing will be done
         const C mComparator; // compares keys
 
+        void initializeLastEntry();
+        void destructAll();
         void rehash();
         uint_t calcHashValue(const Key& key) const;
         HashTableEntry* internalGet(const Key& key) const;
@@ -507,8 +526,7 @@ namespace capu
         , mComparator()
     {
         Memory::Set(mBuckets, 0, sizeof(HashTableEntry*) * mSize);
-        mLastHashMapEntry->previous = mLastHashMapEntry;
-        mLastHashMapEntry->next = mLastHashMapEntry;
+        initializeLastEntry();
     }
 
     template <class Key, class T, class C, class H>
@@ -525,8 +543,7 @@ namespace capu
         , mComparator()
     {
         Memory::Set(mBuckets, 0, sizeof(HashTableEntry*) * mSize);
-        mLastHashMapEntry->previous = mLastHashMapEntry;
-        mLastHashMapEntry->next = mLastHashMapEntry;
+        initializeLastEntry();
 
         // right here, we have an empty map with the exact same size as the given other table
         // now we put each entry of the other map into this map (this may be a lot less than the actual size)
@@ -534,8 +551,7 @@ namespace capu
         typename HashTable<Key, T, C, H>::ConstIterator iter = other.begin();
         while (iter != other.end())
         {
-            mFirstFreeHashMapEntry->internalKey = iter->key;
-            mFirstFreeHashMapEntry->value = iter->value;
+            mFirstFreeHashMapEntry->constructKeyValue(iter->key, iter->value);
             internalPut(mFirstFreeHashMapEntry, calcHashValue(iter->key));
             ++iter;
             ++mFirstFreeHashMapEntry;
@@ -556,8 +572,7 @@ namespace capu
         , mComparator()
     {
         Memory::Set(mBuckets, 0, sizeof(HashTableEntry*) * mSize);
-        mLastHashMapEntry->previous = mLastHashMapEntry;
-        mLastHashMapEntry->next = mLastHashMapEntry;
+        initializeLastEntry();
     }
 
     template <class Key, class T, class C, class H>
@@ -573,14 +588,11 @@ namespace capu
             // no modification allowed
             return *this;
         }
-        if (0 != mBuckets)
-        {
-            delete[] mBuckets;
-        }
-        if (0 != mData)
-        {
-            delete[] mData;
-        }
+
+        destructAll();
+
+        delete[] mBuckets;
+        delete[] mData;
 
         mCount = 0;
         mSize = other.mSize;
@@ -592,15 +604,13 @@ namespace capu
         Memory::Set(mBuckets, 0, sizeof(HashTableEntry*) * mSize);
         mFirstFreeHashMapEntry = mData;
         mLastHashMapEntry = mData + mThreshold;
-        mLastHashMapEntry->previous = mLastHashMapEntry;
-        mLastHashMapEntry->next = mLastHashMapEntry;
+        initializeLastEntry();
 
         HashTable::ConstIterator iter = other.begin();
         while (iter != other.end())
         {
-            HashTableEntry entry = *iter;
-            iter++;
-            put(entry.key, entry.value);
+            put(iter->key, iter->value);
+            ++iter;
         }
 
         return *this;
@@ -609,6 +619,7 @@ namespace capu
     template <class Key, class T, class C, class H>
     inline HashTable<Key, T, C, H>::~HashTable()
     {
+        destructAll();
         delete[] mBuckets;
         delete[] mData;
     }
@@ -656,13 +667,13 @@ namespace capu
         {
             do
             {
-                if (mComparator(current->key, key))
+                if (mComparator(current->getKeyValuePair().key, key))
                 {
                     if (oldValue)
                     {
-                        *oldValue = current->value;
+                        *oldValue = current->getKeyValuePair().value;
                     }
-                    current->value = value;
+                    current->getKeyValuePair().value = value;
                     return CAPU_OK;
                 }
                 current = current->next;
@@ -688,8 +699,7 @@ namespace capu
         // adjust the pointer to the next free entry ('preconnected' through constructor)
         mFirstFreeHashMapEntry = mFirstFreeHashMapEntry->next;
 
-        newentry->internalKey = key;   // copy operation
-        newentry->value = value; // copy operation
+        newentry->constructKeyValue(key, value);
 
         internalPut(newentry, hashValue);
 
@@ -707,7 +717,7 @@ namespace capu
             {
                 *returnCode = CAPU_OK;
             }
-            return entry->value;
+            return entry->getKeyValuePair().value;
         }
 
         if (returnCode)
@@ -715,7 +725,7 @@ namespace capu
             *returnCode = CAPU_ENOT_EXIST;
         }
 
-        return mLastHashMapEntry->value;
+        return mLastHashMapEntry->getKeyValuePair().value;
     }
 
     template <class Key, class T, class C, class H>
@@ -728,7 +738,7 @@ namespace capu
             {
                 *returnCode = CAPU_OK;
             }
-            return entry->value;
+            return entry->getKeyValuePair().value;
         }
 
         if (returnCode)
@@ -736,7 +746,7 @@ namespace capu
             *returnCode = CAPU_ENOT_EXIST;
         }
 
-        return mLastHashMapEntry->value;
+        return mLastHashMapEntry->getKeyValuePair().value;
     }
 
     template <class Key, class T, class C, class H>
@@ -776,7 +786,7 @@ namespace capu
         {
             do
             {
-                if (mComparator(current->key, key))
+                if (mComparator(current->getKeyValuePair().key, key))
                 {
                     internalRemove(current, hashValue, value_old);
 
@@ -796,7 +806,7 @@ namespace capu
     inline status_t HashTable<Key, T, C, H>::remove(Iterator& iter, T* value_old)
     {
         HashTableEntry* current = iter.mCurrentHashMapEntry;
-        uint_t hashValue = calcHashValue(current->key);
+        uint_t hashValue = calcHashValue(current->getKeyValuePair().key);
 
         iter.mCurrentHashMapEntry = current->next;
 
@@ -812,8 +822,11 @@ namespace capu
         if (value_old)
         {
             // perform the copy operation into the old value
-            *value_old = entry->value;
+            *value_old = entry->getKeyValuePair().value;
         }
+
+        // destruct the value
+        entry->destructKeyValue();
 
         // change the pointer to point to the next element,
         // so that the current element is taken out of the chain
@@ -822,7 +835,7 @@ namespace capu
         if (mBuckets[hashValue] == entry)
         {
             mBuckets[hashValue] = entry->next->isChainElement ? entry->next : 0;
-            entry->next->isChainElement = 0;
+            entry->next->isChainElement = false;
         }
 
         // connect the unused entries:
@@ -839,18 +852,23 @@ namespace capu
     template <class Key, class T, class C, class H>
     inline void HashTable<Key, T, C, H>::clear()
     {
+        // destruct all valid values
+        destructAll();
+
+        // reset all buckets and link entries to empty list
         Memory::Set(mBuckets, 0, sizeof(HashTableEntry*) * mSize);
         HashTableEntry* entry = mData;
         for (uint32_t i = 0; i < mThreshold + 1; ++i)
         {
             entry->previous = 0;
             entry->next = entry + 1;
-            entry->isChainElement = 0;
+            entry->isChainElement = false;
             ++entry;
         }
+
+        // init free and last
         mFirstFreeHashMapEntry = mData;
-        mLastHashMapEntry->previous = mLastHashMapEntry;
-        mLastHashMapEntry->next = mLastHashMapEntry;
+        initializeLastEntry();
         mCount = 0;
     }
 
@@ -887,7 +905,7 @@ namespace capu
         {
             do
             {
-                if (mComparator(current->key, key))
+                if (mComparator(current->getKeyValuePair().key, key))
                 {
                     return current;
                 }
@@ -907,7 +925,7 @@ namespace capu
         if (entry)
         {
             // chaining
-            entry->isChainElement = 1;
+            entry->isChainElement = true;
         }
         else
         {
@@ -918,7 +936,7 @@ namespace capu
         mBuckets[hashValue]   = newentry;
         newentry->next        = entry;
         newentry->previous    = entry->previous;
-        newentry->isChainElement = 0;
+        newentry->isChainElement = false;
         entry->previous->next = newentry;
         entry->previous       = newentry;
         ++mCount;
@@ -927,40 +945,32 @@ namespace capu
     template <class Key, class T, class C, class H>
     inline void HashTable<Key, T, C, H>::rehash()
     {
-        // remember old values
-        HashTableEntry*  old_data    = mData;
-        HashTableEntry** old_buckets = mBuckets;
-        uint_t old_threshold       = mThreshold;
+        HashTable<Key, T, C, H> tmp(mBitCount + 1, mResizeable);
+        for (Iterator it = begin(); it != end(); ++it)
+        {
+            tmp.put(it->key, it->value);
+        }
+        swap(tmp);
+    }
 
-        // prepare new values for the instance fields
-        mCount                 = 0;
-        mBitCount              = mBitCount + 1;
-        mSize               = static_cast<uint_t>(static_cast<uint_t>(1) << mBitCount);
-        mThreshold             = static_cast<uint_t>(mSize * DefaultHashTableMaxLoadFactor);
-        mBuckets               = new HashTableEntry*[mSize];
-        mData                  = new HashTableEntry[mThreshold + 1];
-
-        mFirstFreeHashMapEntry = mData + old_threshold;
-        mLastHashMapEntry      = mData + mThreshold;
-
-        // prepare new memory
-        Memory::Set(mBuckets, 0, sizeof(HashTableEntry*) * mSize); // clear the new bucket list
-        Memory::CopyObject(mData, old_data, old_threshold);
-
+    template <class Key, class T, class C, class H>
+    inline void HashTable<Key, T, C, H>::initializeLastEntry()
+    {
         mLastHashMapEntry->previous = mLastHashMapEntry;
         mLastHashMapEntry->next = mLastHashMapEntry;
+        mLastHashMapEntry->constructKeyValue(Key(), T()); // last dummy has default value
+    }
 
-        // now perform the rehashing on each entry
-        HashTableEntry* newentry = mData;
-        for (uint_t i = old_threshold; i != 0; --i)
+    template <class Key, class T, class C, class H>
+    inline void HashTable<Key, T, C, H>::destructAll()
+    {
+        // destruct regular values and default value at last
+        HashTableEntry* entry = mLastHashMapEntry;
+        do
         {
-            internalPut(newentry, calcHashValue(newentry->key));
-            ++newentry;
-        }
-
-        // cleanup old data
-        delete[] old_buckets;
-        delete[] old_data;
+            entry->destructKeyValue();
+            entry = entry->next;
+        } while (entry != mLastHashMapEntry);
     }
 
     template <class Key, class T, class C, class H>

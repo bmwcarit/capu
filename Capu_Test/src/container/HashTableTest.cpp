@@ -18,18 +18,80 @@
 #include "capu/container/HashTable.h"
 #include "capu/container/HashSet.h"
 #include "capu/container/vector.h"
+#include "capu/container/Pair.h"
 #include "capu/Error.h"
 #include "capu/os/Time.h"
 #include "capu/util/Guid.h"
 
 #include <container/HashTableTest.h>
 
+namespace {
+    template <typename Tag>
+    class RefCntType
+    {
+    public:
+        RefCntType()
+            : value(-1)
+        {
+            ++refCnt;
+        }
+
+        RefCntType(int32_t value_)
+            : value(value_)
+        {
+            ++refCnt;
+        }
+
+        RefCntType(const RefCntType& o)
+            : value(o.value)
+        {
+            ++refCnt;
+        }
+
+        ~RefCntType()
+        {
+            --refCnt;
+        }
+
+        friend bool operator==(const RefCntType& a, const RefCntType& b)
+        {
+            return a.value == b.value;
+        }
+
+        int32_t value;
+        static int32_t refCnt;
+    };
+
+    template <typename Tag>
+    int32_t RefCntType<Tag>::refCnt = 0;
+
+    struct KeyTag {};
+    typedef RefCntType<KeyTag> RCKey;
+    struct ValueTag {};
+    typedef RefCntType<ValueTag> RCValue;
+
+    typedef capu::HashTable<RCKey, RCValue> RCHashTable;
+}
+
 void HashTableTest::SetUp()
 {
+    resetRefCnts();
 }
 
 void HashTableTest::TearDown()
 {
+}
+
+void HashTableTest::resetRefCnts()
+{
+    RCKey::refCnt = 0;
+    RCValue::refCnt = 0;
+}
+
+void HashTableTest::expectRefCnt(int32_t refCnt)
+{
+    EXPECT_EQ(refCnt, RCKey::refCnt);
+    EXPECT_EQ(refCnt, RCValue::refCnt);
 }
 
 TEST_F(HashTableTest, TestWithEnum)
@@ -505,15 +567,15 @@ TEST_F(HashTableTest, TestIterator1)
 
     // TODO check values
     EXPECT_NE(it, newmap.end());
-    const Int32HashMap::HashTableEntry& entry1 = *(it++);
+    const Int32HashMap::Pair& entry1 = *(it++);
     EXPECT_EQ(entry1.key * 10, entry1.value);
 
     EXPECT_NE(it, newmap.end());
-    const Int32HashMap::HashTableEntry& entry2 = *(it++);
+    const Int32HashMap::Pair& entry2 = *(it++);
     EXPECT_EQ(entry2.key * 10, entry2.value);
 
     EXPECT_NE(it, newmap.end());
-    const Int32HashMap::HashTableEntry& entry3 = *(it++);
+    const Int32HashMap::Pair& entry3 = *(it++);
     EXPECT_EQ(entry3.key * 10, entry3.value);
 
     EXPECT_EQ(it, newmap.end());
@@ -536,7 +598,7 @@ TEST_F(HashTableTest, TestIterator2)
     it++;
 
     EXPECT_TRUE(it != newmap.end());
-    const Int32HashMap::HashTableEntry& entry2 = *it;
+    const Int32HashMap::Pair& entry2 = *it;
     EXPECT_EQ(entry2.key * 10, entry2.value);
     it++;
 
@@ -561,15 +623,15 @@ TEST_F(HashTableTest, TestConstIterator1)
 
     // TODO check values
     EXPECT_NE(it, newmapConstRef.end());
-    const Int32HashMap::HashTableEntry& entry1 = *(it++);
+    const Int32HashMap::Pair& entry1 = *(it++);
     EXPECT_EQ(entry1.key * 10, entry1.value);
 
     EXPECT_NE(it, newmapConstRef.end());
-    const Int32HashMap::HashTableEntry& entry2 = *(it++);
+    const Int32HashMap::Pair& entry2 = *(it++);
     EXPECT_EQ(entry2.key * 10, entry2.value);
 
     EXPECT_NE(it, newmapConstRef.end());
-    const Int32HashMap::HashTableEntry& entry3 = *(it++);
+    const Int32HashMap::Pair& entry3 = *(it++);
     EXPECT_EQ(entry3.key * 10, entry3.value);
 
     EXPECT_EQ(it, newmapConstRef.end());
@@ -593,7 +655,7 @@ TEST_F(HashTableTest, TestConstIterator2)
     it++;
 
     EXPECT_TRUE(it != newmapConstRef.end());
-    const Int32HashMap::HashTableEntry& entry2 = *it;
+    const Int32HashMap::Pair& entry2 = *it;
     EXPECT_EQ(entry2.key * 10, entry2.value);
     it++;
 
@@ -838,4 +900,108 @@ TEST_F(HashTableTest, swapGlobal)
     swap(first, second);
     EXPECT_EQ(2u, second.count());
     EXPECT_EQ(1u, first.count());
+}
+
+TEST_F(HashTableTest, basicRefCountLifecycle)
+{
+    expectRefCnt(0);
+    {
+        RCHashTable ht;
+        // default element
+        expectRefCnt(1);
+
+        // add stuff
+        ht.put(RCKey(1), RCValue(2));
+        expectRefCnt(2);
+        ht.put(RCKey(2), RCValue(3));
+        expectRefCnt(3);
+
+        // overwrite
+        ht.put(RCKey(1), RCValue(4));
+        expectRefCnt(3);
+
+        // get
+        EXPECT_EQ(RCValue(4u), ht.at(RCKey(1)));
+
+        // remove
+        {
+            RCValue v;
+            ht.remove(RCKey(2), &v);
+            EXPECT_EQ(RCValue(3u), v);
+        }
+        expectRefCnt(2);
+    }
+    // destructor destructs all
+    expectRefCnt(0);
+}
+
+TEST_F(HashTableTest, clearDestructsAllElements)
+{
+    RCHashTable ht;
+    ht.put(RCKey(1), RCValue(2));
+    ht.put(RCKey(2), RCValue(3));
+    ht.put(RCKey(3), RCValue(4));
+    expectRefCnt(4);
+    ht.clear();
+    expectRefCnt(1);  // default element remaining
+}
+
+TEST_F(HashTableTest, copyCtorCopyConstructsObjects)
+{
+    RCHashTable ht;
+    ht.put(RCKey(1), RCValue(2));
+    ht.put(RCKey(2), RCValue(3));
+    ht.put(RCKey(3), RCValue(4));
+    expectRefCnt(4);
+
+    RCHashTable ht2(ht);
+    expectRefCnt(8);
+
+    ht.clear();
+    expectRefCnt(4+1);
+}
+
+TEST_F(HashTableTest, assignmentCopiesObjects)
+{
+    RCHashTable ht2;
+    {
+        RCHashTable ht;
+        ht.put(RCKey(1), RCValue(2));
+        ht.put(RCKey(2), RCValue(3));
+        ht.put(RCKey(3), RCValue(4));
+        expectRefCnt(4 + 1);
+
+        ht2 = ht;
+        expectRefCnt(4 + 4);
+    }
+    expectRefCnt(4);
+}
+
+TEST_F(HashTableTest, arrayAccessOperatorConstructsNewElementIfNotExisting)
+{
+    RCHashTable ht;
+    ht.put(RCKey(1), RCValue(2));
+    expectRefCnt(2);
+    ht[RCKey(2)] = RCValue(3);
+    expectRefCnt(3);
+}
+
+TEST_F(HashTableTest, arrayAccessOperatorReusesElementIfExisting)
+{
+    RCHashTable ht;
+    ht.put(RCKey(1), RCValue(2));
+    expectRefCnt(2);
+    ht[RCKey(1)] = RCValue(3);
+    expectRefCnt(2);
+}
+
+TEST_F(HashTableTest, swapKeepsNumberOfObjectsUnchanged)
+{
+    RCHashTable first, second;
+    first.put(RCKey(1), RCValue(2));
+    first.put(RCKey(2), RCValue(3));
+    second.put(RCKey(3), RCValue(4));
+    expectRefCnt(5);
+    first.swap(second);
+    expectRefCnt(5);
 }
