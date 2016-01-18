@@ -15,7 +15,22 @@
  */
 
 #include <gtest/gtest.h>
-#include <capu/Config.h>
+
+#if defined(ARCH_X86_64)
+#   undef ARCH_X86_64
+#   include "capu/Config.h"
+#   ifndef ARCH_X86_64
+#       error "ARCH_X86_64 is missing!"
+#   endif
+#elif defined(ARCH_ARM64) // ARCH_X86_64
+#   undef ARCH_ARM64
+#   include "capu/Config.h"
+#   ifndef ARCH_ARM64
+#       error "ARCH_ARM64 is missing!"
+#   endif        
+#else
+#   include "capu/Config.h"
+#endif // ARCH_ARM64
 
 namespace capu
 {
