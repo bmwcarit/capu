@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-#ifndef CAPU_LINUX_SIGNAL_H
-#define CAPU_LINUX_SIGNAL_H
+#ifndef CAPU_INTEGRITY_SIGNAL_H
+#define CAPU_INTEGRITY_SIGNAL_H
+
+#include "capu/Error.h"
 
 namespace capu
 {
@@ -44,11 +46,11 @@ namespace capu
             /// Generates a signal.
             /** @param sig The signal.
              *  @return Returns CAPU_OK when successful, and CAPU_ERROR otherwise. */
-            static status_t raise(ESignal sig)
+            static capu::status_t raise(ESignal sig)
             {
-                return CAPU_ERROR;
+                return capu::CAPU_ERROR;
             }
         };
     }
 }
-#endif // CAPU_ANDROID_SIGNAL_H
+#endif // CAPU_INTEGRITY_SIGNAL_H
