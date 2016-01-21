@@ -10,6 +10,8 @@ namespace capu
     class SimpleClass
     {
     public:
+        virtual ~SimpleClass() {}
+
         static uint32_t DoStaticStuff(const uint32_t value)
         {
             return value;
@@ -98,7 +100,7 @@ namespace capu
     {
         Delegate<void, uint32_t> delegate = Delegate<void, uint32_t>::Create<&OneParameterVoidFunction>();
         delegate(5);
- 
+
         EXPECT_EQ(5u, g_uint32Parameter);
     }
 
@@ -113,7 +115,7 @@ namespace capu
     {
         Delegate<void, uint32_t, uint32_t> delegate = Delegate<void, uint32_t, uint32_t>::Create<&TwoParameterVoidFunction>();
         delegate(5, 2);
- 
+
         EXPECT_EQ(7u, g_uint32Parameter);
     }
 
@@ -212,5 +214,3 @@ namespace capu
     }
 
 }
-
-

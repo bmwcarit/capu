@@ -189,6 +189,9 @@ namespace capu
             class UnaryFunction
             {
             public:
+                /// Destructor
+                virtual ~UnaryFunction() {}
+
                 /// Evaluates the function for an element in the map.
                 virtual bool operator()(const Iterator& element) = 0;
             };

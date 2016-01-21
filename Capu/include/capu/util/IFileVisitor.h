@@ -30,6 +30,8 @@ namespace capu
     class IFileVisitor
     {
     public:
+        /// Destructor
+        virtual ~IFileVisitor() {}
 
         /**
         * Called every time a file is visited.

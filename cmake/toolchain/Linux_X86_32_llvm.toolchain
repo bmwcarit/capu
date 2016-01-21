@@ -26,7 +26,7 @@ SET(CMAKE_CXX_COMPILER clang++)
 SET(CMAKE_LINKER       llvm-link)
 
 SET(CMAKE_C_FLAGS "-m32 -Wall -Wextra -Wno-missing-field-initializers -Werror -fPIC"  CACHE STRING "")
-SET(CMAKE_CXX_FLAGS "-m32 -Wall -Wextra -Wno-missing-field-initializers -Werror -fPIC"  CACHE STRING "")
+SET(CMAKE_CXX_FLAGS "-m32 -Wall -Wextra -Wno-missing-field-initializers -Werror -fPIC -Wnon-virtual-dtor"  CACHE STRING "")
 
 SET(CMAKE_C_FLAGS_DEBUG "-ggdb -D_DEBUG" CACHE STRING "")
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}" CACHE STRING "")
