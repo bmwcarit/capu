@@ -97,14 +97,20 @@ INSTALL(
     FILES       ${CMAKE_CURRENT_BINARY_DIR}/CapuConfigVersion.cmake
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
 )
-ACME_INFO("G CapuBuildConfig.cmake")
+ACME_INFO("G CapuConfigVersion.cmake")
 
 #==============================================================================
 # generate and install CMake Find Module file
 #==============================================================================
 
+# Use same CapuTemplate.cmake.in as base for Find* and *Config script.
+# (Set manually the pattern variables for Find* that the function for *Config uses)
+
+SET(PACKAGE_INIT)
+SET(PACKAGE_PROJECT_INSTALL_STATIC_LIB "${CMAKE_INSTALL_PREFIX}/${PROJECT_INSTALL_STATIC_LIB}")
+SET(PACKAGE_PROJECT_INSTALL_HEADER "${CMAKE_INSTALL_PREFIX}/${PROJECT_INSTALL_HEADER}")
 CONFIGURE_FILE(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/FindCapu.cmake.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/CapuTemplate.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/FindCapu.cmake"
     @ONLY
 )
@@ -119,11 +125,13 @@ ACME_INFO("G FindCapu.cmake")
 #==============================================================================
 
 CONFIGURE_PACKAGE_CONFIG_FILE(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/CapuConfig.cmake.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/CapuTemplate.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/CapuConfig.cmake"
     INSTALL_DESTINATION "${PROJECT_INSTALL_STATIC_LIB}/cmake"
     PATH_VARS PROJECT_INSTALL_HEADER PROJECT_INSTALL_STATIC_LIB PROJECT_INSTALL_SHARED_LIB
-  )
+    NO_SET_AND_CHECK_MACRO
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
 INSTALL(
     FILES       ${CMAKE_CURRENT_BINARY_DIR}/CapuConfig.cmake
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
