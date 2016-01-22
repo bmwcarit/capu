@@ -147,4 +147,9 @@ CONFIGURE_FILE(
     @ONLY
 )
 
+install(
+    FILES "${CMAKE_BINARY_DIR}/BuildConfig/DltLogAppenderBuildConfig.h"
+    DESTINATION "${PROJECT_INSTALL_HEADER}/DltLogAppender"
+)
+
 ACME_INFO("G DltLogAppenderBuildConfig.h")
