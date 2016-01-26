@@ -25,7 +25,16 @@ SET(CMAKE_MODULE_PATH
 )
 
 FIND_PACKAGE(ACME2)
-FIND_PACKAGE(automotive-dlt)
+
+# Add option to enable/disable DLT usage and try to find it if requested
+if (NOT DEFINED Capu_USE_DLT)
+    ACME_INFO("Capu_USE_DLT flag not set. DLT support will be built if available.")
+    SET(Capu_USE_DLT ON CACHE BOOL "Use DLT if available: ON, OFF" FORCE)
+endif()
+
+IF (Capu_USE_DLT)
+    FIND_PACKAGE(automotive-dlt)
+ENDIF()
 
 IF(MSVC)
     SET(ACME_ENABLE_PLUGIN_VISUAL_STUDIO_PDB true CACHE BOOL "ACME2 plugin for installing Visual Studio PDB(s)")
@@ -141,6 +150,11 @@ ACME_INFO("G CapuConfig.cmake")
 #==============================================================================
 # generate and install DltLogAppenderBuildConfig header
 #==============================================================================
+# ensure variable is always set
+IF (NOT DEFINED automotive-dlt_BUILD_CONFIG)
+    SET(automotive-dlt_BUILD_CONFIG 0)
+ENDIF()
+
 CONFIGURE_FILE(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/DltLogAppenderBuildConfig.h.in"
     "${CMAKE_BINARY_DIR}/BuildConfig/DltLogAppenderBuildConfig.h"
