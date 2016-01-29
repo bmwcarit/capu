@@ -97,10 +97,12 @@ namespace capu
         /**
          * Sets the LogLevel of all contexts
          * @param logLevel for all Contexts
+         * @param filterContext only contexts which has the substring 'filterContext' in their name will change their logLevel, 
+                  if filterContext is empty all contexts of the logger will be modified
          * @{
          */
-        static void SetLogLevel(const ELogLevel logLevel);
-        void setLogLevel(const ELogLevel logLevel);
+        static void SetLogLevel(const ELogLevel logLevel, const String& filterContext = "");
+        void setLogLevel(const ELogLevel logLevel, const String& filterContext = "");
         /**
          *@}
          */
@@ -223,24 +225,30 @@ namespace capu
 
     inline 
     void 
-    Logger::SetLogLevel(const ELogLevel logLevel)
+    Logger::SetLogLevel(const ELogLevel logLevel, const String& filterContext)
     {
         if(0 != DefaultLogger)
         {
-            DefaultLogger->setLogLevel(logLevel);
+            DefaultLogger->setLogLevel(logLevel, filterContext);
         }
     }
 
     inline 
     void 
-    Logger::setLogLevel(const ELogLevel logLevel)
+    Logger::setLogLevel(const ELogLevel logLevel, const String& filterContext)
     {
         ContextSet::Iterator current = m_logContexts.begin();
         const ContextSet::Iterator end = m_logContexts.end();
 
         for(; current != end; ++current)
         {
-            (*current)->setLogLevel(logLevel);
+            LogContext* lc = *current;
+
+            if (filterContext == "" ||
+                lc->getContextName().find(filterContext) >= 0)
+            {
+                lc->setLogLevel(logLevel);
+            }
         }
     }
 
