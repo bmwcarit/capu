@@ -50,6 +50,22 @@ namespace capu
         CAPU_EOF = 16,
         CAPU_INTERRUPTED = 17
     };
+
+    class StatusConversion
+    {
+    public:
+        /**
+         * @brief Get a string representation of the provided status code
+         *
+         * @param status The status code which gets converted
+         * @return A string explaining the status
+         */
+        static const char* GetStatusText(status_t status);
+
+    private:
+
+        static const char* m_statusTexts[];
+    };
 }
 #endif //CAPU_ERROR_H
 
