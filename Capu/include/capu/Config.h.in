@@ -42,7 +42,7 @@
 /**
  * os specific defines
  */
-#ifdef OS_WINDOWS
+#if defined(OS_WINDOWS) && !defined(MINGW)
 #define _WINSOCKAPI_
 #endif // OS_WINDOWS
 
