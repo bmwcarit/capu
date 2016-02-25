@@ -34,14 +34,21 @@ namespace capu
         /**
          * Constructor of LogContext
          * @param name of the context
+         * @param id of the context
          */
-        LogContext(const String& name);
+        LogContext(const String& name, const String& id);
 
         /**
          * Returns the name of the LogContext
          * @return the name of the LogContext
          */
         const String& getContextName() const;
+
+        /**
+        * Returns the id of the LogContext
+        * @return the id of the LogContext
+        */
+        const String& getContextId() const;
 
         /**
          * Enables the LogContext for logging
@@ -88,6 +95,11 @@ namespace capu
         const String m_contextName;
 
         /**
+        * The id of the LogContext
+        */
+        const String m_contextId;
+
+        /**
          * Enabled state of the LogContext
          */
         bool m_enabled;
@@ -125,6 +137,13 @@ namespace capu
     LogContext::getContextName() const
     {
         return m_contextName;
+    }
+
+    inline
+    const String&
+    LogContext::getContextId() const
+    {
+        return m_contextId;
     }
 
     inline

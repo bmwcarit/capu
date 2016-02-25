@@ -34,9 +34,9 @@ namespace capu
     }
 
     LogContext&
-    Logger::createContext(const String& name)
+    Logger::createContext(const String& name, const String& id)
     {
-        LogContext* context = new LogContext(name);
+        LogContext* context = new LogContext(name, id);
         m_logContexts.put(context);
         return *context;
     }

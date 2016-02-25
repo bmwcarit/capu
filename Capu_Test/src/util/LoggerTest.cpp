@@ -9,9 +9,9 @@ namespace capu
 {
     LoggerTest::LoggerTest()
         : defaultLogger(appender)
-        , CAPU_CONTEXT(defaultLogger.createContext("capu.Logger"))
-        , LOGGER_CONTEXT(defaultLogger.createContext("capu.OtherContext"))
-        , HELLO_CAPU_CONTEXT(defaultLogger.createContext("Hello.Capu"))
+        , CAPU_CONTEXT(defaultLogger.createContext("capu.Logger", "CALO"))
+        , LOGGER_CONTEXT(defaultLogger.createContext("capu.OtherContext", "CAOT"))
+        , HELLO_CAPU_CONTEXT(defaultLogger.createContext("Hello.Capu", "HECA"))
     {
         Logger::SetDefaultLogger(defaultLogger);
 
@@ -297,7 +297,7 @@ namespace capu
 
     TEST(LogContextTest, SetAndGetUserData)
     {
-        LogContext context("LogContext name");
+        LogContext context("LogContext name", "LOCO");
         void* someUserData = (void*)0x123;
         context.setUserData(someUserData);
         EXPECT_EQ(someUserData, context.getUserData());
