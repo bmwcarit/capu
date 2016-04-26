@@ -168,24 +168,11 @@ namespace capu
                 return status;
             }
 
-            if (mTimeout == 0)
-            {
-                unsigned long nonblocking = 1;
-                ioctlsocket(mSocket, FIONBIO, &nonblocking);
-            }
-
             if (::connect(mSocket, (sockaddr*) &serverAddress, sizeof(serverAddress)) == SOCKET_ERROR)
             {
                 close();
                 return CAPU_SOCKET_ECONNECT;
             }
-
-            if (mTimeout == 0)
-            {
-                unsigned long nonblocking = 0;
-                ioctlsocket(mSocket, FIONBIO, &nonblocking);
-            }
-
             return CAPU_OK;
         }
 
