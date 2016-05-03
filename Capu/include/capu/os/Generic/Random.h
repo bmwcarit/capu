@@ -18,6 +18,9 @@
 #define CAPU_GENERIC_RANDOM_H
 
 #include "capu/os/Time.h"
+#include "capu/os/Thread.h"
+#include <stdlib.h>
+#include <cstdlib>
 
 namespace capu
 {
@@ -30,11 +33,15 @@ namespace capu
             uint8_t nextUInt8();
             uint16_t nextUInt16();
             uint32_t nextUInt32();
+
+        private:
+            // Type required by rand_r()
+            unsigned int mSeed;
         };
 
         inline Random::Random()
+            : mSeed(static_cast<uint32_t>(Time::GetMicroseconds()))
         {
-            srand(static_cast<uint32_t>(Time::GetMicroseconds()));
         }
 
         inline uint8_t Random::nextUInt8()
@@ -44,8 +51,22 @@ namespace capu
 
         inline uint16_t Random::nextUInt16()
         {
-            // RAND_MAX is at least 32767, which are 15 bit, so we need to shift here already
-            return static_cast<uint16_t>(((rand() & 0xFF) << 8) | rand()); // avoid compiler warnings.
+
+        // RAND_MAX is at least 32767, which are 15 bit, so we need to shift here already
+#if defined(OS_LINUX) || defined(OS_INTEGRITY)
+unsigned int seedCopy = mSeed;
+seedCopy += static_cast<unsigned int>(capu::Thread::CurrentThreadId());
+int r1 = rand_r(&seedCopy);
+int r2 = rand_r(&seedCopy);
+mSeed = seedCopy;
+#else
+//OS_WINDOWS
+//OS_ANDROID
+int r1 = rand();
+int r2 = rand();
+#endif
+
+            return static_cast<uint16_t>(((r1 & 0xFF) << 8) | r2); // avoid compiler warnings.
         }
 
         inline uint32_t Random::nextUInt32()
