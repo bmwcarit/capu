@@ -17,7 +17,7 @@
 #ifndef CAPU_WINDOWS_X86_32_RANDOM_H
 #define CAPU_WINDOWS_X86_32_RANDOM_H
 
-#include "capu/os/Generic/Random.h"
+#include "capu/os/Windows/Random.h"
 
 namespace capu
 {
@@ -25,12 +25,12 @@ namespace capu
     {
         namespace arch
         {
-            class Random: public capu::generic::Random
+            class Random: public capu::os::Random
             {
             public:
-                using capu::generic::Random::nextUInt8;
-                using capu::generic::Random::nextUInt16;
-                using capu::generic::Random::nextUInt32;
+                using capu::os::Random::nextUInt8;
+                using capu::os::Random::nextUInt16;
+                using capu::os::Random::nextUInt32;
             };
         }
     }

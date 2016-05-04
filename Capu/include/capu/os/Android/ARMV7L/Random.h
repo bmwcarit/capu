@@ -17,7 +17,7 @@
 #ifndef CAPU_ANDROID_ARMV7L_RANDOM_H
 #define CAPU_ANDROID_ARMV7L_RANDOM_H
 
-#include "capu/os/Generic/Random.h"
+#include "capu/os/Time.h"
 
 namespace capu
 {
@@ -25,13 +25,36 @@ namespace capu
     {
         namespace arch
         {
-            class Random: public capu::generic::Random
+            class Random
             {
             public:
-                using capu::generic::Random::nextUInt8;
-                using capu::generic::Random::nextUInt16;
-                using capu::generic::Random::nextUInt32;
+                Random();
+                uint8_t nextUInt8();
+                uint16_t nextUInt16();
+                uint32_t nextUInt32();
             };
+
+            inline Random::Random()
+            {
+                srand(static_cast<uint32_t>(Time::GetMicroseconds()));
+            }
+
+            inline uint8_t Random::nextUInt8()
+            {
+                return static_cast<uint8_t>(nextUInt16());
+            }
+
+            inline uint16_t Random::nextUInt16()
+            {
+                // RAND_MAX is at least 32767, which are 15 bit, so we need to shift here already
+                return static_cast<uint16_t>(((rand() & 0xFF) << 8) | rand()); // avoid compiler warnings.
+            }
+
+            inline uint32_t Random::nextUInt32()
+            {
+                // because RAND_MAX is not guarantueed to be bigger than 32767, we do the distribution on ourself.
+                return nextUInt16() | (nextUInt16() << 16);
+            }
         }
     }
 }
