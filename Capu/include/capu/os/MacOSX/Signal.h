@@ -27,8 +27,8 @@ namespace capu
         class Signal: private capu::posix::Signal
         {
         public:
-            using os::Signal::signal;
-            using os::Signal::raise;
+            using posix::Signal::signal;
+            using posix::Signal::raise;
         };
     }
 }
