@@ -26,6 +26,12 @@ SET(CMAKE_MODULE_PATH
 
 FIND_PACKAGE(ACME2)
 
+# if no build configuration is defined, use build config 'Release'
+if (NOT CMAKE_BUILD_TYPE)
+    ACME_INFO("Build type not defined. Using default build type 'Release'.")
+    SET(CMAKE_BUILD_TYPE Release CACHE STRING "Choose build type: Debug, Release." FORCE)
+endif (NOT CMAKE_BUILD_TYPE)
+
 IF(MSVC)
     SET(ACME_ENABLE_PLUGIN_VISUAL_STUDIO_PDB true CACHE BOOL "ACME2 plugin for installing Visual Studio PDB(s)")
 ENDIF()
