@@ -19,6 +19,7 @@
 
 #include "capu/os/Time.h"
 #include "capu/os/Thread.h"
+#include "capu/os/AtomicOperation.h"
 #include <stdlib.h>
 #include <cstdlib>
 
@@ -52,11 +53,11 @@ namespace capu
         inline uint16_t Random::nextUInt16()
         {
             // RAND_MAX is at least 32767, which are 15 bit, so we need to shift here already
-            unsigned int seedCopy = mSeed;
-            seedCopy += static_cast<unsigned int>(capu::Thread::CurrentThreadId());
+            unsigned int threadID = static_cast<unsigned int>(capu::Thread::CurrentThreadId());
+            unsigned int seedCopy = AtomicOperation::AtomicAdd(mSeed,threadID);
+            seedCopy += threadID;
             int r1 = rand_r(&seedCopy);
             int r2 = rand_r(&seedCopy);
-            mSeed = seedCopy;
             return static_cast<uint16_t>(((r1 & 0xFF) << 8) | r2); // avoid compiler warnings.
         }
 
