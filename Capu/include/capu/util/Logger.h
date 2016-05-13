@@ -126,7 +126,7 @@ namespace capu
          * @param id of the LogContext
          * @return the create LogContext
          */
-        LogContext& createContext(const String& name, const String& id);
+        LogContext& createContext(const String& name, const String& id = "");
 
         /**
          * Logs the given LogMessage with all registered LogAppenders of 

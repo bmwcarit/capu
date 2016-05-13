@@ -36,7 +36,7 @@ namespace capu
          * @param name of the context
          * @param id of the context
          */
-        LogContext(const String& name, const String& id);
+        LogContext(const String& name, const String& id = "");
 
         /**
          * Returns the name of the LogContext
