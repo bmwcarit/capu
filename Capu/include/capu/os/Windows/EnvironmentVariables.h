@@ -34,7 +34,8 @@ namespace capu
         bool EnvironmentVariables::get(const String& key, String& value)
         {
             char* envValue = 0;
-            bool found = (0 == _dupenv_s(&envValue, 0, key.c_str()));
+            errno_t err = _dupenv_s(&envValue, 0, key.c_str());
+            bool found = (err == 0 && envValue != 0);
             value = envValue;
             free(envValue);
             return found;
