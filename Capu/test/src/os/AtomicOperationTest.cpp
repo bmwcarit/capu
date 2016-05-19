@@ -20,6 +20,74 @@
 #include "capu/os/Mutex.h"
 #include "capu/util/Runnable.h"
 
+template <typename T>
+class AtomicOperationTest : public ::testing::Test
+{
+protected:
+    T value;
+};
+
+typedef ::testing::Types< uint32_t, int32_t, uint64_t, int64_t > IntegerTypes;
+TYPED_TEST_CASE(AtomicOperationTest, IntegerTypes);
+
+namespace
+{
+    void getHugeValue(uint32_t& value)
+    {
+        value = 0x7350F000;
+    }
+    void getHugeValue(int32_t& value)
+    {
+        value = 0x7350F000;
+    }
+    void getHugeValue(uint64_t& value)
+    {
+        value = 0x7350F000F234F234;
+    }
+    void getHugeValue(int64_t& value)
+    {
+        value = 0x7350F000F234F234;
+    }
+    void getNegativeValue(uint32_t& value)
+    {
+        value = 0xF4127654;
+    }
+    void getNegativeValue(int32_t& value)
+    {
+        value = 0xF4127654;
+    }
+    void getNegativeValue(uint64_t& value)
+    {
+        value = 0xF4127654F234F234;
+    }
+    void getNegativeValue(int64_t& value)
+    {
+        value = 0xF4127654F234F234;
+    }
+}
+
+TYPED_TEST(AtomicOperationTest, CanStoreAndLoadAValue)
+{
+    TypeParam v;
+
+    v = 0;
+    capu::AtomicOperation::AtomicStore(this->value, v);
+    EXPECT_EQ(v, capu::AtomicOperation::AtomicLoad(this->value));
+
+    v = 13;
+    capu::AtomicOperation::AtomicStore(this->value, v);
+    EXPECT_EQ(v, capu::AtomicOperation::AtomicLoad(this->value));
+
+    getHugeValue(v);
+    capu::AtomicOperation::AtomicStore(this->value, v);
+    EXPECT_EQ(v, capu::AtomicOperation::AtomicLoad(this->value));
+
+    getNegativeValue(v);
+    capu::AtomicOperation::AtomicStore(this->value, v);
+    EXPECT_EQ(v, capu::AtomicOperation::AtomicLoad(this->value));
+}
+
+
 struct AtomicGlobals
 {
     static capu::uint_t var;

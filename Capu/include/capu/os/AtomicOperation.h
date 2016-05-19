@@ -31,6 +31,62 @@ namespace capu
     {
     public:
         /**
+         * atomically get the value of an uint32_t
+         * @param mem reference to the object
+         * @return returns the value of mem
+         */
+        static uint32_t AtomicLoad(const volatile uint32_t& mem);
+
+        /**
+         * atomically get the value of an int32_t
+         * @param mem reference to the object
+         * @return returns the value of mem
+         */
+        static int32_t AtomicLoad(const volatile int32_t& mem);
+
+        /**
+         * atomically get the value of an uint64_t
+         * @param mem reference to the object
+         * @return returns the value of mem
+         */
+        static uint64_t AtomicLoad(const volatile uint64_t& mem);
+
+        /**
+         * atomically get the value of an int64_t
+         * @param mem reference to the object
+         * @return returns the value of mem
+         */
+        static int64_t AtomicLoad(const volatile int64_t& mem);
+
+        /**
+         * atomically set the content of an uint32_t
+         * @param mem reference to the object
+         * @param value the value to set
+         */
+        static void AtomicStore(volatile uint32_t& mem, uint32_t value);
+
+        /**
+         * atomically set the content of an int32_t
+         * @param mem reference to the object
+         * @param value the value to set
+         */
+        static void AtomicStore(volatile int32_t& mem, int32_t value);
+
+        /**
+         * atomically set the content of an uint64_t
+         * @param mem reference to the object
+         * @param value the value to set
+         */
+        static void AtomicStore(volatile uint64_t& mem, uint64_t value);
+
+        /**
+         * atomically set the content of an int64_t
+         * @param mem reference to the object
+         * @param value the value to set
+         */
+        static void AtomicStore(volatile int64_t& mem, int64_t value);
+
+        /**
          * atomically add 'summand' to an uint32_t
          * @param mem reference to the object
          * @param summand amount to add
@@ -153,6 +209,61 @@ namespace capu
 
     };
 
+    inline
+    uint32_t 
+    AtomicOperation::AtomicLoad(const volatile uint32_t& mem)
+    {
+        return os::arch::AtomicOperation::AtomicLoad(mem);
+    }
+
+    inline
+    int32_t 
+    AtomicOperation::AtomicLoad(const volatile int32_t& mem)
+    {
+        return os::arch::AtomicOperation::AtomicLoad(mem);
+    }
+
+    inline
+    uint64_t 
+    AtomicOperation::AtomicLoad(const volatile uint64_t& mem)
+    {
+        return os::arch::AtomicOperation::AtomicLoad(mem);
+    }
+
+    inline
+    int64_t 
+    AtomicOperation::AtomicLoad(const volatile int64_t& mem)
+    {
+        return os::arch::AtomicOperation::AtomicLoad(mem);
+    }
+
+    inline
+    void 
+    AtomicOperation::AtomicStore(volatile uint32_t& mem, uint32_t value)
+    {
+        os::arch::AtomicOperation::AtomicStore(mem,value);
+    }
+
+    inline
+    void 
+    AtomicOperation::AtomicStore(volatile int32_t& mem, int32_t value)
+    {
+        os::arch::AtomicOperation::AtomicStore(mem,value);
+    }
+
+    inline
+    void 
+    AtomicOperation::AtomicStore(volatile uint64_t& mem, uint64_t value)
+    {
+        os::arch::AtomicOperation::AtomicStore(mem,value);
+    }
+
+    inline
+    void 
+    AtomicOperation::AtomicStore(volatile int64_t& mem, int64_t value)
+    {
+        os::arch::AtomicOperation::AtomicStore(mem,value);
+    }
 
     inline
     uint32_t

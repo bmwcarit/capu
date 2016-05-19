@@ -27,6 +27,16 @@ namespace capu
         class AtomicOperation
         {
         public:
+            static uint32_t AtomicLoad(volatile const uint32_t& mem);
+            static int32_t  AtomicLoad(volatile const int32_t&  mem);
+            static uint64_t AtomicLoad(volatile const uint64_t& mem);
+            static int64_t  AtomicLoad(volatile const int64_t&  mem);
+
+            static void     AtomicStore(volatile uint32_t& mem, uint32_t value);
+            static void     AtomicStore(volatile int32_t&  mem, int32_t  value);
+            static void     AtomicStore(volatile uint64_t& mem, uint64_t value);
+            static void     AtomicStore(volatile int64_t&  mem, int64_t  value);
+
             static uint32_t AtomicAdd(volatile uint32_t& mem, uint32_t summand);
             static int32_t  AtomicAdd(volatile int32_t& mem, int32_t summand);
             static uint64_t AtomicAdd(volatile uint64_t& mem, uint64_t summand);
@@ -47,6 +57,62 @@ namespace capu
             static uint64_t AtomicDec(volatile uint64_t& mem);
             static int64_t  AtomicDec(volatile int64_t& mem);
         };
+
+        inline
+        uint32_t
+        AtomicOperation::AtomicLoad(volatile const uint32_t& mem)
+        {
+            return InterlockedCompareExchange((long*)&mem, 0, 0);
+        }
+
+        inline
+        int32_t
+        AtomicOperation::AtomicLoad(volatile const int32_t&  mem)
+        {
+            return InterlockedCompareExchange((long*)&mem, 0, 0);
+        }
+
+        inline
+        uint64_t
+        AtomicOperation::AtomicLoad(volatile const uint64_t& mem)
+        {
+            return InterlockedCompareExchange64((long long*)&mem, 0, 0);
+        }
+
+        inline
+        int64_t
+        AtomicOperation::AtomicLoad(volatile const int64_t&  mem)
+        {
+            return InterlockedCompareExchange64((long long*)&mem, 0, 0);
+        }
+
+        inline
+        void
+        AtomicOperation::AtomicStore(volatile uint32_t& mem, uint32_t value)
+        {
+            InterlockedExchange((long*)&mem, value);
+        }
+
+        inline
+        void
+        AtomicOperation::AtomicStore(volatile int32_t&  mem, int32_t  value)
+        {
+            InterlockedExchange((long*)&mem, value);
+        }
+
+        inline
+        void
+        AtomicOperation::AtomicStore(volatile uint64_t& mem, uint64_t value)
+        {
+            InterlockedExchange64((long long*)&mem, value);
+        }
+
+        inline
+        void
+        AtomicOperation::AtomicStore(volatile int64_t&  mem, int64_t  value)
+        {
+            InterlockedExchange64((long long*)&mem, value);
+        }
 
         inline
         uint32_t

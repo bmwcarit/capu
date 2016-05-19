@@ -28,6 +28,8 @@ namespace capu
             class AtomicOperation: private os::AtomicOperation
             {
             public:
+                using os::AtomicOperation::AtomicLoad;
+                using os::AtomicOperation::AtomicStore;
                 using os::AtomicOperation::AtomicAdd;
                 using os::AtomicOperation::AtomicSub;
                 using os::AtomicOperation::AtomicInc;

@@ -19,6 +19,7 @@
 
 #include "capu/Config.h"
 #include <pthread.h>
+#include <assert.h>
 
 namespace capu
 {
@@ -29,6 +30,16 @@ namespace capu
             class AtomicOperation
             {
             public:
+                static uint32_t AtomicLoad(volatile const uint32_t& mem);
+                static int32_t  AtomicLoad(volatile const int32_t&  mem);
+                static uint64_t AtomicLoad(volatile const uint64_t& mem);
+                static int64_t  AtomicLoad(volatile const int64_t&  mem);
+
+                static void     AtomicStore(volatile uint32_t& mem, uint32_t value);
+                static void     AtomicStore(volatile int32_t&  mem, int32_t  value);
+                static void     AtomicStore(volatile uint64_t& mem, uint64_t value);
+                static void     AtomicStore(volatile int64_t&  mem, int64_t  value);
+
                 static uint32_t AtomicAdd(volatile uint32_t& mem, uint32_t summand);
                 static int32_t  AtomicAdd(volatile int32_t& mem, int32_t summand);
                 static uint64_t AtomicAdd(volatile uint64_t& mem, uint64_t summand);
@@ -49,6 +60,95 @@ namespace capu
                 static uint64_t AtomicDec(volatile uint64_t& mem);
                 static int64_t  AtomicDec(volatile int64_t& mem);
             };
+
+
+            inline
+            uint32_t
+            AtomicOperation::AtomicLoad(volatile const uint32_t& mem)
+            {
+                assert(sizeof(Address) >= sizeof(uint32_t));
+                const Address Zero = 0;
+                Address oldValue;
+                AtomicModify((Address*)const_cast<volatile uint32_t*>(&mem), &oldValue, Zero, Zero);
+                return static_cast<uint32_t>(oldValue);
+            }
+
+            inline
+            int32_t
+            AtomicOperation::AtomicLoad(volatile const int32_t&  mem)
+            {
+                assert(sizeof(Address) >= sizeof(int32_t));
+                const Address Zero = 0;
+                Address oldValue;
+                AtomicModify((Address*)const_cast<volatile int32_t*>(&mem), &oldValue, Zero, Zero);
+                return static_cast<int32_t>(oldValue);
+            }
+
+            inline
+            uint64_t
+            AtomicOperation::AtomicLoad(volatile const uint64_t& mem)
+            {
+                assert(sizeof(Address) >= sizeof(uint64_t));
+                const Address Zero = 0;
+                Address oldValue;
+                AtomicModify((Address*)const_cast<volatile uint64_t*>(&mem), &oldValue, Zero, Zero);
+                return static_cast<uint64_t>(oldValue);
+            }
+
+            inline
+            int64_t
+            AtomicOperation::AtomicLoad(volatile const int64_t&  mem)
+            {
+                assert(sizeof(Address) >= sizeof(int64_t));
+                const Address Zero = 0;
+                Address oldValue;
+                AtomicModify((Address*)const_cast<volatile int64_t*>(&mem), &oldValue, Zero, Zero);
+                return static_cast<int64_t>(oldValue);
+            }
+
+            inline
+            void
+            AtomicOperation::AtomicStore(volatile uint32_t& mem, uint32_t value)
+            {
+                assert(sizeof(Address) >= sizeof(uint32_t));
+                const uint32_t smallMask = ~0;
+                const Address  fullMask  =  0 | smallMask;
+                Address oldValue;
+                AtomicModify((Address*)&mem, &oldValue, fullMask, (Address)(value));
+            }
+
+            inline
+            void
+            AtomicOperation::AtomicStore(volatile int32_t&  mem, int32_t  value)
+            {
+                assert(sizeof(Address) >= sizeof(int32_t));
+                const uint32_t smallMask = ~0;
+                const Address  fullMask  =  0 | smallMask;
+                Address oldValue;
+                AtomicModify((Address*)&mem, &oldValue, fullMask, (Address)(value));
+            }
+
+            inline
+            void
+            AtomicOperation::AtomicStore(volatile uint64_t& mem, uint64_t value)
+            {
+                assert(sizeof(Address) >= sizeof(uint64_t));
+                const uint64_t smallMask = ~0;
+                const Address  fullMask  =  0 | smallMask;
+                Address oldValue;
+                AtomicModify((Address*)&mem, &oldValue, fullMask, (Address)(value));
+            }
+
+            inline
+            void
+            AtomicOperation::AtomicStore(volatile int64_t&  mem, int64_t  value)
+            {
+                assert(sizeof(Address) >= sizeof(int64_t));
+                const uint64_t smallMask = ~0;
+                const Address  fullMask  =  0 | smallMask;
+                Address oldValue;
+                AtomicModify((Address*)&mem, &oldValue, fullMask, (Address)(value));
+            }
 
             inline
             uint32_t
@@ -82,7 +182,7 @@ namespace capu
             {
                 return AtomicSub(mem, 1);
             }
-            
+
             inline
             int32_t
             AtomicOperation::AtomicAdd(volatile int32_t& mem, int32_t summand)
@@ -115,7 +215,7 @@ namespace capu
             {
                 return AtomicSub(mem, 1);
             }
-            
+
             inline
             uint64_t
             AtomicOperation::AtomicAdd(volatile uint64_t& mem, uint64_t summand)
@@ -148,7 +248,7 @@ namespace capu
             {
                 return AtomicSub(mem, 1);
             }
-            
+
             inline
             int64_t
             AtomicOperation::AtomicAdd(volatile int64_t& mem, int64_t summand)

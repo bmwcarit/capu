@@ -28,6 +28,8 @@ namespace capu
             class AtomicOperation: private capu::iphoneos::AtomicOperation
             {
             public:
+                using capu::iphoneos::AtomicOperation::AtomicLoad;
+                using capu::iphoneos::AtomicOperation::AtomicStore;
                 using capu::iphoneos::AtomicOperation::AtomicAdd;
                 using capu::iphoneos::AtomicOperation::AtomicSub;
                 using capu::iphoneos::AtomicOperation::AtomicInc;
