@@ -1,6 +1,7 @@
 #include "capu/util/ConsoleLogAppender.h"
 #include "capu/util/LogMessage.h"
 #include "capu/os/Console.h"
+#include "capu/os/Time.h"
 #include <stdio.h>
 
 namespace capu
@@ -12,6 +13,9 @@ namespace capu
     void ConsoleLogAppender::logMessage(const LogMessage& logMessage)
     {
         m_logMutex.lock();
+
+        const uint64_t now = Time::GetMilliseconds();
+        Console::Print(Console::WHITE, "%.3f ", now/1000.0);
 
         switch(logMessage.getLogLevel())
         {
