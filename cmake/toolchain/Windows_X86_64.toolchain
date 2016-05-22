@@ -37,3 +37,4 @@ add_definitions("-D_VARIADIC_MAX=10") #this is needed for compiling gtest with v
 #we need this as some API calls used require this version
 add_definitions("-D_WIN32_WINNT=0x0600")
 add_definitions("-DWINVER=0x0600")
+
