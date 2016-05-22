@@ -42,11 +42,7 @@ SET(Capu_VERSION_MINOR 24)
 SET(Capu_VERSION_PATCH 0)
 SET(Capu_VERSION "${Capu_VERSION_MAJOR}.${Capu_VERSION_MINOR}.${Capu_VERSION_PATCH}")
 
-# custom setup for integrating gtest & gmock
-set(gtest_force_shared_crt true CACHE BOOL "Must be enabled for linking our unit tests" FORCE)
-IF(Capu_BUILD_TESTS AND NOT TARGET gmock)
-    ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/external/gmock)
-ENDIF()
+ADD_SUBDIRECTORY(external)
 
 ACME2_PROJECT(
     #==========================================================================
@@ -140,3 +136,4 @@ INSTALL(
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
 )
 ACME_INFO("G CapuConfig.cmake")
+
