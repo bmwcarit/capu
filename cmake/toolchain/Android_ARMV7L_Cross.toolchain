@@ -20,7 +20,6 @@ SET(CMAKE_SYSTEM_VERSION 1)
 SET(TARGET_OS Android)
 
 SET(TARGET_ARCH ARMV7L)
-SET(TARGET_COMPILER GCC)
 
 SET(ANDROID_STANDALONE_TOOLCHAIN_DIR "/opt/android-ndk-r8e/toolchains/arm-linux-androideabi-4.7/prebuilt/linux-x86_64")
 
