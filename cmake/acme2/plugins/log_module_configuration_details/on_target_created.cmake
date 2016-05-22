@@ -35,8 +35,6 @@ IF(DEFINED ACME_DEPENDENCIES AND TARGET ${ACME_NAME})
 
             IF("${acme_type}" STREQUAL "BINARY")
                 ACME_INFO("                OBJ        obj files from ${ACME_DEPENDENCY}")
-            ELSEIF("${acme_type}" STREQUAL "OBJECT_FILES")
-                ACME_INFO("                OBJ        obj files from ${ACME_DEPENDENCY}")
             ELSE()
                 ACME_INFO("                LIB        ${ACME_DEPENDENCY}")
             ENDIF()
@@ -48,6 +46,30 @@ IF(DEFINED ACME_DEPENDENCIES AND TARGET ${ACME_NAME})
     ENDFOREACH()
 ENDIF()
 
+#==============================================================================================
+# print system dependencies
+#==============================================================================================
+IF(DEFINED ACME_DEPENDENCIES_SYSTEM AND TARGET ${ACME_NAME})
+    FOREACH(ACME_DEPENDENCIES_SYSTEM ${ACME_DEPENDENCIES})
+
+        IF(TARGET ${ACME_DEPENDENCY})
+
+            GET_TARGET_PROPERTY(acme_type           ${ACME_DEPENDENCY} ACME_TYPE)
+            ACME_INFO("  depends on system dep ${ACME_DEPENDENCY} (CMAKE internal)")
+            ACME_INFO("                INCLUDE    ${${ACME_DEPENDENCY}_INCLUDE_DIRS}")
+
+            IF("${acme_type}" STREQUAL "BINARY")
+                ACME_INFO("                OBJ        obj files from ${ACME_DEPENDENCY}")
+            ELSE()
+                ACME_INFO("                LIB        ${ACME_DEPENDENCY}")
+            ENDIF()
+        ELSE()
+            ACME_INFO("  depends on system dep ${ACME_DEPENDENCY} (${CMAKE_MODULE_PATH}/Find${ACME_DEPENDENCY}.cmake)")
+            ACME_INFO("                INCLUDE    ${${ACME_DEPENDENCY}_INCLUDE_DIRS}")
+            ACME_INFO("                LIBS       ${${ACME_DEPENDENCY}_LIBRARIES}")
+        ENDIF()
+    ENDFOREACH()
+ENDIF()
 
 #==============================================================================================
 # print header dependencies

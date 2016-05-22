@@ -16,137 +16,81 @@
 #
 ############################################################################
 
-FUNCTION(ADD_TESTCOVERAGE_TARGETS)
-IF (NOT TARGET CreateTestCoverage)
-	ADD_CUSTOM_COMMAND(OUTPUT DeleteCoverageDirectory
-        COMMAND rm
-            ARGS -rf CodeCoverage
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-            COMMENT "Removing old coverage directory"
-        )
-
-    ADD_CUSTOM_COMMAND(OUTPUT CreateCoverageDirectory
-        COMMAND mkdir
-            ARGS "CodeCoverage"
-            DEPENDS DeleteCoverageDirectory
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-            COMMENT "Creating CodeCoverage directory"
-        )
-
-    ADD_CUSTOM_COMMAND(OUTPUT InitializeCoverageToZero
+FUNCTION(ADD_TESTCOVERAGE_TARGETS name dependency)
+    ADD_CUSTOM_COMMAND(OUTPUT CreateInitialCoverage_${name}
+        COMMAND lcov --zerocounters --directory ${CMAKE_BINARY_DIR} --output-file everything_initial_${name}.info --quiet
+        COMMAND lcov --capture --initial --directory ${CMAKE_BINARY_DIR} --output-file everything_initial_${name}.info --quiet
+        DEPENDS ${dependency}
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
+        COMMENT "Codecoverage (${name}): Initialize everything to 0"
+    )
+    ADD_CUSTOM_COMMAND(OUTPUT RUNTESTS_${name}
+        COMMAND ${ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND_${name}}
+        DEPENDS CreateInitialCoverage_${name}
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+        COMMENT "Codecoverage (${name}): Run tests to gather coverage information"
+    )
+    message(${ACMEPLUGIN_LINUX_TESTCOVERAGE_EXCLUDE_${NAME}}="${ACMEPLUGIN_LINUX_TESTCOVERAGE_EXCLUDE_${NAME}}")
+    ADD_CUSTOM_COMMAND(OUTPUT CreateTestCoverage_Data_${name}
+        COMMAND lcov --capture --directory ${CMAKE_BINARY_DIR} --kernel-directory ${CMAKE_BINARY_DIR} --output-file everything_afterRun_${name}.info
+                 --base-directory ${CMAKE_SOURCE_DIR} --no-external --quiet
+        COMMAND lcov --add-tracefile everything_initial_${name}.info --add-tracefile everything_afterRun_${name}.info --output-file combined_${name}.info  --quiet
         COMMAND lcov
-            ARGS
-                -c
-                -i
-                -d ${CMAKE_BINARY_DIR}
-                -o everything_initial.info
-                -q
-            DEPENDS CreateCoverageDirectory
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
-            COMMENT "Initializing coverage to zero"
+         --remove combined_${name}.info /usr/*.* ${ACMEPLUGIN_LINUX_TESTCOVERAGE_EXCLUDE_${NAME}}
+         --output-file combinedFiltered_${name}.info --quiet --base-directory ${CMAKE_SOURCE_DIR} --no-external
+        DEPENDS RUNTESTS_${name}
+        COMMENT "Codecoverage (${name}): Crunch coverage data"
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
+    )
+
+    ADD_CUSTOM_COMMAND(OUTPUT CreateTestCoverage_${name}
+        COMMAND genhtml -s -l combinedFiltered_${name}.info --quiet --output-directory html_${name}
+        DEPENDS CreateTestCoverage_Data_${name}
+        COMMENT "Codecoverage (${name}): Generate html"
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
+    )
+
+    IF (NOT TARGET CreateTestCoverage${name})
+        ADD_CUSTOM_TARGET(CreateTestCoverage${name}
+            COMMENT "Creating TestCoverage"
+            DEPENDS CreateTestCoverage_${name}
         )
+    ENDIF()
+ENDFUNCTION()
 
-    ADD_CUSTOM_COMMAND(OUTPUT RunTests
-        COMMAND ${ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND}
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-            DEPENDS InitializeCoverageToZero
-            COMMENT "Running tests"
-        )
-
-    ADD_CUSTOM_COMMAND(OUTPUT CollectCoverage
-        COMMAND lcov
-            ARGS -c
-                 -d ${CMAKE_BINARY_DIR}
-                 -k ${CMAKE_BINARY_DIR}
-                 -o everything_afterRun.info
-                 --base-directory ${CMAKE_SOURCE_DIR}
-                 --no-external
-                 -q
-             WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
-             COMMENT "Collecting coverage result"
-             DEPENDS RunTests
-        )
-
-    ADD_CUSTOM_COMMAND(OUTPUT AddZerosToResult
-        COMMAND lcov
-            ARGS -a everything_initial.info
-                 -a everything_afterRun.info
-                 -o combined.info
-                 -q
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
-            COMMENT "Adding zeros to result"
-            DEPENDS CollectCoverage
-        )
-
-    ADD_CUSTOM_COMMAND(OUTPUT FilterCoverageResults
-        COMMAND lcov
-            ARGS -r combined.info ${CMAKE_SOURCE_DIR}/external/*.*
-		 -r combined.info /usr/*.*
-		 -r combined.info */test/*
-		 -r combined.info ${ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_LCOV_ADDITIONAL}
-                 ${ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_LCOV}
-		 -o combinedFiltered.info
-                 -q
-                 --base-directory ${CMAKE_SOURCE_DIR} --no-external
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
-            COMMENT "Filtering coverage results"
-            DEPENDS AddZerosToResult
-        )
-
-    ADD_CUSTOM_COMMAND(OUTPUT GenerateHTML
-        COMMAND genhtml
-            ARGS -s
-                 -l combinedFiltered.info
-                 -q
-                 --output-directory html
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
-            COMMENT "Creating HTML"
-            DEPENDS FilterCoverageResults
-        )
-
-    ADD_CUSTOM_COMMAND(OUTPUT DownloadGcovr
-        COMMAND wget
-            ARGS http://dl.bmw-carit.de/mirror/gcovr-3.1
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
-            COMMENT "Downloading gcovr"
-            DEPENDS RunTests
-        )
-
-    ADD_CUSTOM_COMMAND(OUTPUT MakeGcovrExecutable
-         COMMAND chmod
-             ARGS a+x gcovr-3.1
-             WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/CodeCoverage"
-             COMMENT "Making gcovr executable"
-             DEPENDS DownloadGcovr
-          )
-
-    ADD_CUSTOM_COMMAND(OUTPUT GenerateXML
-        COMMAND CodeCoverage/gcovr-3.1
-                ARGS -x;-r ..;-e '.*/external/';-e '.*/*_Test/';${ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_GCOV}
-                     > coverage.xml
-            WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-            COMMENT "Creating coverage xml"
-            DEPENDS MakeGcovrExecutable
-        )
-
-    ADD_CUSTOM_TARGET(CreateTestCoverageXml
-        DEPENDS
-            GenerateXML
-        COMMENT "Creating TestCoverage"
-        )
-
-    ADD_CUSTOM_TARGET(CreateTestCoverage
-        DEPENDS
-            GenerateHTML
-        COMMENT "Creating TestCoverage"
-        )
-ENDIF()
-ENDFUNCTION(ADD_TESTCOVERAGE_TARGETS)
-
-IF("${TARGET_OS}" STREQUAL "Linux") # only on linux because of gcov/lcov
+IF("${TARGET_OS}" STREQUAL "Linux")
 	IF(NOT LCOV_FOUND)
 		FIND_PROGRAM(LCOV_PATH lcov)
 	ENDIF()
-	ADD_TESTCOVERAGE_TARGETS()
 ENDIF()
 
+ADD_CUSTOM_COMMAND(OUTPUT CreateCoverageDirectory
+    COMMAND rm
+        ARGS -rf CodeCoverage
+    COMMAND mkdir
+        ARGS "CodeCoverage"
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    COMMENT "Creating CodeCoverage directory"
+)
+
+SET(DEPENDENCY CreateCoverageDirectory)
+FOREACH(NAME ${ACMEPLUGIN_LINUX_TESTCOVERAGE_NAMES})
+   IF(ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND_${NAME})
+      IF(ACMEPLUGIN_LINUX_TESTCOVERAGE_EXCLUDE_${NAME})
+        MESSAGE("Adding test coverage run for ${NAME}")
+        ADD_TESTCOVERAGE_TARGETS(${NAME} ${DEPENDENCY})
+        SET(DEPENDENCY CreateTestCoverage${NAME})
+      ELSE()
+        MESSAGE("Must provide ACMEPLUGIN_LINUX_TESTCOVERAGE_EXCLUDE_${NAME}")
+      ENDIF()
+   ELSE()
+       MESSAGE("Must provide ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND_${NAME}")
+  ENDIF()
+ENDFOREACH()
+
+IF (NOT TARGET CreateTestCoverage)
+    ADD_CUSTOM_TARGET(CreateTestCoverage
+        COMMENT "Creating TestCoverage"
+        DEPENDS ${DEPENDENCY}
+    )
+ENDIF()

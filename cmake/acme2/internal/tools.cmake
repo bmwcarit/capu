@@ -98,7 +98,6 @@ MACRO(ARGUMENT_SPLITTER argInput argKeywordList argPrefix)
     
 ENDMACRO(ARGUMENT_SPLITTER)
 
-
 #==============================================================================
 # file list resolver
 #==============================================================================
@@ -110,16 +109,3 @@ MACRO(GET_ALL_FILES var_name directory_list)
     ENDFOREACH()
     SET(${var_name} ${file_list})
 ENDMACRO(GET_ALL_FILES)
-
-
-#==============================================================================
-# set default values, if no value is set
-#==============================================================================
-MACRO(DEFAULT_VALUE var_name value)
-    IF("${${var_name}}" STREQUAL "")
-        SET(${var_name} ${value})
-    ENDIF()
-    IF(NOT ${var_name})
-        SET(${var_name} ${value})
-    ENDIF()
-ENDMACRO()

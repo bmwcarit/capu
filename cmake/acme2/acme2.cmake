@@ -21,6 +21,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 OPTION(ACME_DEBUG_ENABLED            "enable debug output of acme"                        OFF)
 OPTION(ACME_WARNING_AS_ERROR         "treat warnings as errors"                           OFF)
+OPTION(ACME_CREATE_PACKAGE           "include CPack in order to create a 'package' target" ON)
 
 SET(ACME2_BASE_DIR   ${CMAKE_CURRENT_LIST_DIR})
 SET(ACME2_PLUGIN_DIR ${ACME2_BASE_DIR}/plugins)
@@ -30,6 +31,10 @@ INCLUDE(${ACME2_BASE_DIR}/internal/plugins.cmake)
 INCLUDE(${ACME2_BASE_DIR}/internal/api.cmake)
 
 ENABLE_TESTING()    # use CTest
+
+IF (POLICY CMP0054)
+    CMAKE_POLICY(SET CMP0054 NEW)
+ENDIF()
 
 ACME_DEBUG("Using ${ACME2_BASE_DIR}/acme2.cmake")
 ACME_DEBUG("CMAKE_TOOLCHAIN_FILE='${CMAKE_TOOLCHAIN_FILE}'")
@@ -53,7 +58,8 @@ MACRO(ACME2_PROJECT)
 
     ACME_CALL_PLUGIN_HOOK(init)
 
-    OPTION(${PROJECT_NAME}_BUILD_TESTS "build test for project '${PROJECT_NAME}'" OFF)
+    OPTION(${PROJECT_NAME}_BUILD_TESTS "build unit tests for project '${PROJECT_NAME}'" OFF)
+    OPTION(${PROJECT_NAME}_INSTALL_TESTS "install unit tests for project '${PROJECT_NAME}'" ON)
 
     SET(LAST_STATE "ON")
     FOREACH(CONTENT ${PROJECT_CONTENT})
@@ -82,10 +88,15 @@ MACRO(ACME2_PROJECT)
 
     # install project documentation
     FOREACH(DOC ${PROJECT_FILES_DOCUMENTATION})
-        INSTALL(FILES ${DOC} DESTINATION ${PROJECT_INSTALL_DOCUMENTATION})
+        INSTALL(FILES       ${DOC}
+                DESTINATION ${PROJECT_INSTALL_DOCUMENTATION}
+                COMPONENT   ${PROJECT_NAME}-${PROJECT_VERSION}
+        )
     ENDFOREACH()
 
-    INCLUDE(${ACME2_BASE_DIR}/internal/create_package.cmake)
+    IF(ACME_CREATE_PACKAGE)
+        INCLUDE(${ACME2_BASE_DIR}/internal/create_package.cmake)
+    ENDIF()
 
     ACME_CALL_PLUGIN_HOOK(on_project_setup_complete)
 
@@ -102,13 +113,13 @@ MACRO(ACME_MODULE)
 
     SET(MSG "")
     # check, if module contains files
-    IF ("${ACME_FILES_SOURCE}${ACME_FILES_PUBLIC_HEADER}${ACME_FILES_PRIVATE_HEADER}${ACME_FILES_GENERATED}" STREQUAL "")
+    IF ("${ACME_FILES_SOURCE}${ACME_FILES_PUBLIC_HEADER}${ACME_FILES_PRIVATE_HEADER}${ACME_FILES_GENERATED}${ACME_FILES_RESOURCE}" STREQUAL "")
         LIST(APPEND MSG "does not contain files")
         SET(BUILD_ENABLED FALSE)
     ENDIF()
 
     # check, if all dependencies can be resolved
-    FOREACH(ACME_DEPENDENCY ${ACME_DEPENDENCIES} ${ACME_DEPENDENCIES_HEADER})
+    FOREACH(ACME_DEPENDENCY ${ACME_DEPENDENCIES} ${ACME_DEPENDENCIES_HEADER} ${ACME_DEPENDENCIES_SYSTEM})
         IF(TARGET ${ACME_DEPENDENCY})
             SET(${ACME_DEPENDENCY}_FOUND TRUE)
             GET_TARGET_PROPERTY(${ACME_DEPENDENCY}_INCLUDE_DIRS ${ACME_DEPENDENCY} INCLUDE_DIRECTORIES)
@@ -128,16 +139,23 @@ MACRO(ACME_MODULE)
         ENDIF()
     ENDFOREACH()
     
+    IF (POLICY CMP0054)
+        CMAKE_POLICY(SET CMP0054 NEW)
+    ENDIF()
     # check if module is test and disable, if tests are disabled
     IF("${ACME_TYPE}" STREQUAL "TEST" AND NOT ${PROJECT_NAME}_BUILD_TESTS)
         SET(MSG "tests disabled") # overwrite missing dependencies
         SET(BUILD_ENABLED FALSE)
     ENDIF()
 
+    IF("${ACME_TYPE}" STREQUAL "LIBRARY")
+        OPTION(${ACME_NAME}_BUILD_SHARED "build '${ACME_NAME}' from '${PROJECT_NAME}' as a shared library" OFF)
+    ENDIF()
+
     IF(NOT BUILD_ENABLED)
         ACME_INFO("- ${ACME_NAME} [${MSG}]")
     ELSE()
-        ACME_INFO("+ ${ACME_NAME}")
+        ACME_INFO("+ ${ACME_NAME} (${ACME_TYPE})")
 
         # error message(s) created for this module created?
         IF(NOT "${MSG}" STREQUAL "")

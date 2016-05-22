@@ -17,14 +17,7 @@
 #
 ############################################################################
 
-SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND ${CMAKE_CTEST_COMMAND};--target test -V CACHE STRING     "default: run tests with ctest")
+SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_NAMES "" CACHE STRING     "coverage names")
 
-SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_LCOV -r combined.info */gtest/* -r combined.info */gmock/* CACHE STRING     "")
 
-SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_REMOVE_GCOV ;-e '.*/gtest/';-e '.*/gmock/' CACHE STRING     "")
 
-IF("${TARGET_OS}" STREQUAL "Linux")
-	IF(NOT LCOV_FOUND)
-		FIND_PROGRAM(LCOV_PATH lcov)
-	ENDIF()
-ENDIF()

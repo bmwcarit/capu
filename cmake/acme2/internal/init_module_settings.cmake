@@ -20,6 +20,10 @@
 # translate all MODULE_* provided by ACME2 module
 # to checked and preprocessed ACME_* variables
 
+IF (POLICY CMP0054)
+    CMAKE_POLICY(SET CMP0054 NEW)
+ENDIF()
+
 # reset MODULE_<value>
 FOREACH(PROPERTY ${ACME2_API})
     SET(MODULE_${PROPERTY} "")
@@ -40,3 +44,11 @@ ENDFOREACH()
 
 # do not use CONTENT, this is project specific
 SET(MODULE_CONTENT      "")
+
+# if project has ${PROJECT_NAME}_INSTALL_TESTS set,
+# force install of unit tests for this module
+IF("${MODULE_TYPE}" STREQUAL "TEST")
+    IF(${${PROJECT_NAME}_INSTALL_TESTS})
+        SET(MODULE_ENABLE_INSTALL TRUE)
+    ENDIF()
+ENDIF()

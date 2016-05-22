@@ -32,7 +32,7 @@ FUNCTION(ACMEPLUGIN_BUILD_DOCUMENTATION)
 		ENDIF()
 
 		# configure doxyfile with cmake variables
-		configure_file(${CMAKE_SOURCE_DIR}/doc/Doxyfile.in ${CMAKE_BINARY_DIR}/Doxyfile @ONLY)
+		configure_file(${CMAKE_SOURCE_DIR}/doc/doxygen/Doxyfile.in ${CMAKE_BINARY_DIR}/Doxyfile @ONLY)
 
 		ADD_CUSTOM_COMMAND(OUTPUT CreateDocumentationDirectory
         COMMAND ${CMAKE_COMMAND}

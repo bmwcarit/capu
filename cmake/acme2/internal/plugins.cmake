@@ -20,15 +20,20 @@
 MACRO(ACME_CALL_PLUGIN_HOOK name)
 
     STRING(TOLOWER "${name}" name_lower)
-    FILE(GLOB plugins ${ACME2_PLUGIN_DIR}/*/${name_lower}*.cmake)
+    FILE(GLOB_RECURSE plugins ${ACME2_PLUGIN_DIR}/${name_lower}*.cmake)
 
     FOREACH(plugin ${plugins})
 
-        STRING(REGEX REPLACE "${ACME2_PLUGIN_DIR}/" "" plugin_file "${plugin}")
-        STRING(REGEX REPLACE "//" "/" list_file "${plugin_file}")
+        FILE(RELATIVE_PATH plugin_file ${ACME2_PLUGIN_DIR} ${plugin})
 
-        STRING(REGEX REPLACE "([^/]*)/.*" "\\1" plugin_name "${plugin_file}")
-        STRING(REGEX REPLACE ".*/(.*)\\.cmake" "\\1" file_name "${plugin_file}")
+        # Let's make sure we have the right separator
+        FILE(TO_CMAKE_PATH ${plugin_file} plugin_file_cmake)
+        # Put the path into a list to be able to manipulate it
+        STRING(REPLACE "/" ";" plist "${plugin_file_cmake}")
+        # Get the leftmost element and set it as plugin name
+        LIST(GET plist 0 plugin_name)
+
+        get_filename_component(file_name ${plugin_file} NAME_WE)
 
         STRING(TOUPPER "${plugin_name}" plugin_name_upper)
         OPTION(ACME_ENABLE_PLUGIN_${plugin_name_upper} "Enable ACME 2 plugin '${plugin_name}'" OFF)
@@ -40,4 +45,3 @@ MACRO(ACME_CALL_PLUGIN_HOOK name)
 
     ENDFOREACH()
 ENDMACRO()
-

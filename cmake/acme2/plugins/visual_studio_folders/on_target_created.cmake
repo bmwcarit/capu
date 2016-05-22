@@ -34,6 +34,14 @@ IF (NOT "${relative_path}" STREQUAL "")
     ENDIF()
 ENDIF()
 
+IF(TARGET ACME2_COPY_RESOURCES_${ACME_NAME})
+    SET_PROPERTY(TARGET ACME2_COPY_RESOURCES_${ACME_NAME} PROPERTY FOLDER "CMakePredefinedTargets/ACME2_COPY_RESOURCES")
+ENDIF()
+
+IF(TARGET ACME2_CPDLL_${ACME_NAME})
+    SET_PROPERTY(TARGET ACME2_CPDLL_${ACME_NAME} PROPERTY FOLDER "CMakePredefinedTargets/ACME2_COPY_SHARED_LIBS")
+ENDIF()
+
 #==========================================================================
 # configure project internal structure
 #==========================================================================

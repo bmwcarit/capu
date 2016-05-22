@@ -44,6 +44,7 @@ SET(ACME2_DEFAULT_VALUES
     # dependencies
     DEPENDENCIES            
     DEPENDENCIES_HEADER     
+    DEPENDENCIES_SYSTEM     
     
     # install module: boolean
     ENABLE_INSTALL          ON
@@ -51,6 +52,8 @@ SET(ACME2_DEFAULT_VALUES
     # install paths
     INSTALL_HEADER          include
     INSTALL_BINARY          bin
+    INSTALL_TEST            bin
+    INSTALL_TEST_RESOURCE   bin/res
     INSTALL_STATIC_LIB      lib
     INSTALL_SHARED_LIB      lib
     INSTALL_PLUGIN          bin

@@ -1,0 +1,23 @@
+//  -------------------------------------------------------------------------
+//  Copyright (C) 2014 BMW Car IT GmbH
+//  All rights reserved.
+//  -------------------------------------------------------------------------
+//  This document contains proprietary information belonging to BMW Car IT.
+//  Passing on and copying of this document, use and communication of its
+//  contents is not permitted without prior written authorization.
+//  -------------------------------------------------------------------------
+
+// this file is auto-generated - do not modify it
+
+#ifndef @PROJECT_NAME_CAPITAL@BUILDCONFIG_H
+#define @PROJECT_NAME_CAPITAL@BUILDCONFIG_H
+
+namespace ramses_internal
+{
+@EXPORTED_ACME2_SYMBOLS@
+
+const char* const @PROJECT_NAME_CAPITAL@_BUILD_CONFIG = @EXPORTED_FULL_STRING@
+
+} // namespace ramses_internal
+
+#endif // @PROJECT_NAME_CAPITAL@BUILDCONFIG_H
