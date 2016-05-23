@@ -17,7 +17,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 INCLUDE(CMakePackageConfigHelpers)
 
-SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND LD_LIBRARY_PATH=../DynamicTestLibrary && ${CMAKE_CTEST_COMMAND};--target test -V CACHE STRING "")
+SET(ACMEPLUGIN_LINUX_TESTCOVERAGE_TESTCOMMAND LD_LIBRARY_PATH=. && ${CMAKE_CTEST_COMMAND};--target test -V CACHE STRING "")
 SET(CMAKE_MODULE_PATH
     ${CMAKE_INSTALL_PREFIX}/lib/cmake
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
@@ -66,8 +66,6 @@ ACME2_PROJECT(
     # project content
     #==========================================================================
     CONTENT                     ON ./Capu
-                                ON ./DynamicTestLibrary
-                                ON ./Capu_Test
 )
 
 #==============================================================================

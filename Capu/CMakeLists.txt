@@ -113,3 +113,66 @@ ACME_MODULE(
                             psapi
                             Pipe
 )
+
+IF(Capu_BUILD_TESTS AND NOT "${TARGET_OS}" STREQUAL "Integrity")
+
+    ACME_MODULE(
+
+        #==========================================================================
+        # general module information
+        #==========================================================================
+        NAME                    DynamicTestLibrary
+        TYPE                    SHARED_LIBRARY
+
+        #==========================================================================
+        # files of this module
+        #==========================================================================
+        INCLUDE_BASE            test/DynamicTestLibrary/include
+        FILES_PRIVATE_HEADER    test/DynamicTestLibrary/include/*.h
+
+        FILES_SOURCE            test/DynamicTestLibrary/src/*.cpp
+
+        #==========================================================================
+        # dependencies
+        #==========================================================================
+        DEPENDENCIES_HEADER     Capu
+    )
+
+    ACME_MODULE(
+
+        #==========================================================================
+        # general module information
+        #==========================================================================
+        NAME                    Capu_Test
+        TYPE                    TEST
+
+        #==========================================================================
+        # files of this module
+        #==========================================================================
+        INCLUDE_BASE            test/src
+        FILES_SOURCE            test/src/*.h
+                                test/src/*.cpp
+                                test/src/container/*.h
+                                test/src/container/*.cpp
+                                test/src/os/*.h
+                                test/src/os/*.cpp
+                                test/src/util/*.h
+                                test/src/util/*.cpp
+
+        #==========================================================================
+        # dependencies
+        #==========================================================================
+        DEPENDENCIES            Capu
+                                gmock_main
+        DEPENDENCIES_HEADER     DynamicTestLibrary
+    )
+
+    IF(TARGET Capu_Test AND "${TARGET_OS}" STREQUAL "Integrity")
+        GET_TARGET_PROPERTY(PREVIOUSFLAGS Capu_Test COMPILE_FLAGS )
+        IF(NOT "${PREVIOUSFLAGS}")
+            SET(PREVIOUSFLAGS "")
+        ENDIF()
+        SET_TARGET_PROPERTIES(Capu_Test PROPERTIES COMPILE_FLAGS "${PREVIOUSFLAGS} -no_misalign_pack")
+    ENDIF()
+
+ENDIF()
