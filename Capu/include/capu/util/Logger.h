@@ -22,6 +22,7 @@
 #include "capu/os/Mutex.h"
 #include "capu/util/LogLevel.h"
 #include "capu/util/LogMessage.h"
+#include "capu/util/ScopedLock.h"
 
 namespace capu
 {
@@ -216,6 +217,9 @@ namespace capu
          */
         void releaseStream();
 
+        Mutex m_appenderLock;
+        typedef ScopedLock<Mutex> MutexLocker;
+
     };
 
     inline
@@ -267,6 +271,7 @@ namespace capu
     void 
     Logger::addAppender(ILogAppender& appender)
     {
+        MutexLocker lock(m_appenderLock);
         m_appenders.put(&appender);
     }
 
@@ -275,6 +280,7 @@ namespace capu
     void
     Logger::removeAppender(ILogAppender& appender)
     {
+        MutexLocker lock(m_appenderLock);
         m_appenders.remove(&appender);
     }
 

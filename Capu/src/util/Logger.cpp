@@ -53,6 +53,8 @@ namespace capu
     void
     Logger::log(const LogMessage& message)
     {
+        MutexLocker lock(m_appenderLock);
+
         AppenderSet::Iterator current = m_appenders.begin();
         const AppenderSet::Iterator end = m_appenders.end();
 
