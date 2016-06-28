@@ -6,6 +6,8 @@
 
 namespace capu
 {
+    Mutex ConsoleLogAppender::m_logMutex;
+
     ConsoleLogAppender::~ConsoleLogAppender()
     {
     }
@@ -13,7 +15,6 @@ namespace capu
     void ConsoleLogAppender::logMessage(const LogMessage& logMessage)
     {
         m_logMutex.lock();
-
         const uint64_t now = Time::GetMilliseconds();
         Console::Print(Console::WHITE, "%.3f ", now/1000.0);
 

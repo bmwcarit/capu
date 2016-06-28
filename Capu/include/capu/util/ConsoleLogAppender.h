@@ -43,7 +43,7 @@ namespace capu
         /**
          * Mutex to make messages to console atomic
          */
-        Mutex m_logMutex;
+        static Mutex m_logMutex;
     };
 }
 
