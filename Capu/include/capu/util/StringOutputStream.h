@@ -38,6 +38,13 @@ namespace capu
             FIXED
         };
 
+        enum HexadecimalType
+        {
+            NO_HEXADECIMAL,
+            HEXADECIMAL_NO_LEADING_ZEROS,
+            HEXADECIMAL_LEADING_ZEROS
+        };
+
         StringOutputStream();
 
         /**
@@ -105,6 +112,13 @@ namespace capu
         */
         void setDecimalDigits(uint32_t digits);
 
+        /**
+        * Tells StringOutputStream to print hex according to integer size.
+        * 4 hex digits for u/int32, 8 hex digits for u/int64_t and 2 hex digits for u/int16.
+        * @param hexFormat Kind of hexadecimal format to use for printing.
+        */
+        void setHexadecimalOutputFormat(HexadecimalType hexFormat);
+
     protected:
     private:
 
@@ -119,6 +133,11 @@ namespace capu
         uint32_t      mSize;
 
         FloatingPointType mFloatingPointType;
+
+        /**
+         * Format of integer numbers
+         */
+        HexadecimalType mHexadecimalFormat;
 
         uint32_t mDecimalDigits;
 
@@ -194,8 +213,17 @@ namespace capu
     StringOutputStream::operator<<(const int32_t value)
     {
         char buffer[12];
-        StringUtils::Sprintf(buffer, sizeof(buffer), "%d", value);
-        return operator<<(buffer);
+
+        if(mHexadecimalFormat != NO_HEXADECIMAL)
+        {
+            uint32_t conv = static_cast<uint32_t>(value);
+            return operator<<(conv);
+        }
+        else
+        {
+            StringUtils::Sprintf(buffer, sizeof(buffer), "%d", value);
+            return operator<<(buffer);
+        }
     }
 
     inline
@@ -203,7 +231,21 @@ namespace capu
     StringOutputStream::operator<<(const uint32_t value)
     {
         char buffer[11];
-        StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
+
+        switch(mHexadecimalFormat)
+        {
+            case HEXADECIMAL_NO_LEADING_ZEROS:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "0x%X", value);
+                break;
+            case HEXADECIMAL_LEADING_ZEROS:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "0x%08X", value);
+                break;
+            case NO_HEXADECIMAL:
+            default:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
+                break;
+        }
+
         return operator<<(buffer);
     }
 
@@ -212,8 +254,17 @@ namespace capu
     StringOutputStream::operator<<(const int64_t value)
     {
         char buffer[21];
-        StringUtils::Sprintf(buffer, sizeof(buffer), "%lld", value);
-        return operator<<(buffer);
+
+        if(mHexadecimalFormat != NO_HEXADECIMAL)
+        {
+            uint64_t conv = static_cast<uint64_t>(value);
+            return operator<<(conv);
+        }
+        else
+        {
+            StringUtils::Sprintf(buffer, sizeof(buffer), "%lld", value);
+            return operator<<(buffer);
+        }
     }
 
     inline
@@ -221,7 +272,21 @@ namespace capu
     StringOutputStream::operator<<(const uint64_t value)
     {
         char buffer[21];
-        StringUtils::Sprintf(buffer, sizeof(buffer), "%llu", value);
+
+        switch(mHexadecimalFormat)
+        {
+            case HEXADECIMAL_NO_LEADING_ZEROS:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "0x%llX", value);
+                break;
+            case HEXADECIMAL_LEADING_ZEROS:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "0x%016llX", value);
+                break;
+            case NO_HEXADECIMAL:
+            default:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "%llu", value);
+                break;
+        }
+
         return operator<<(buffer);
     }
 
@@ -261,8 +326,21 @@ namespace capu
     StringOutputStream&
     StringOutputStream::operator<<(const uint16_t value)
     {
-        char buffer[6];
-        StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
+        char buffer[7];
+        switch(mHexadecimalFormat)
+        {
+            case HEXADECIMAL_NO_LEADING_ZEROS:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "0x%hX", value);
+                break;
+            case HEXADECIMAL_LEADING_ZEROS:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "0x%04hX", value);
+                break;
+            case NO_HEXADECIMAL:
+            default:
+                StringUtils::Sprintf(buffer, sizeof(buffer), "%u", value);
+                break;
+        }
+
         return operator<<(buffer);
     }
 
@@ -346,6 +424,13 @@ namespace capu
     {
         outputStream.setFloatingPointType(StringOutputStream::FIXED);
         return outputStream;
+    }
+
+    inline
+    void
+    StringOutputStream::setHexadecimalOutputFormat(StringOutputStream::HexadecimalType hexFormat)
+    {
+        mHexadecimalFormat = hexFormat;
     }
 }
 

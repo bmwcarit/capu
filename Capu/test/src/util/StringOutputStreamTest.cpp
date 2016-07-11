@@ -238,4 +238,124 @@ namespace capu
         const StringOutputStream& constStream = outputStream;
         EXPECT_STREQ("a", constStream.c_str());
     }
+
+    TEST_F(StringOutputStreamTest, WriteUInt32HexNoLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_NO_LEADING_ZEROS);
+        uint32_t value = 4446222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x43D80E", outputStream.c_str());
+        EXPECT_EQ(8U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteUInt32HexLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        uint32_t value = 4446222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x0043D80E", outputStream.c_str());
+        EXPECT_EQ(10U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteInt32HexNoLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_NO_LEADING_ZEROS);
+        int32_t value = 4446222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x43D80E", outputStream.c_str());
+        EXPECT_EQ(8U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteInt32HexLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        int32_t value = 4446222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x0043D80E", outputStream.c_str());
+        EXPECT_EQ(10U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteInt32HexNegativeValue)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        int32_t value = -4446222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0xFFBC27F2", outputStream.c_str());//uint32_max - value
+        EXPECT_EQ(10U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteUInt64HexNoLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_NO_LEADING_ZEROS);
+        uint64_t value = 353544462511222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x1418BFC19AC76", outputStream.c_str());
+        EXPECT_EQ(15U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteUInt64HexLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        uint64_t value = 353544462511222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x0001418BFC19AC76", outputStream.c_str());
+        EXPECT_EQ(18U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteInt64HexNoLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_NO_LEADING_ZEROS);
+        int64_t value = 353544462511222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x1418BFC19AC76", outputStream.c_str());
+        EXPECT_EQ(15U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteInt64HexLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        int64_t value = 353544462511222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x0001418BFC19AC76", outputStream.c_str());
+        EXPECT_EQ(18U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteInt64HexNegativeValue)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        int64_t value = -353544462511222;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0xFFFEBE7403E6538A", outputStream.c_str());//uint64_max - value
+        EXPECT_EQ(18U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteUInt16HexLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        uint16_t value = 1337;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x0539", outputStream.c_str());
+        EXPECT_EQ(6U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteUInt16HexNoLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_NO_LEADING_ZEROS);
+        uint16_t value = 1337;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x539", outputStream.c_str());
+        EXPECT_EQ(5U, outputStream.length());
+    }
 }
