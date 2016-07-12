@@ -358,4 +358,34 @@ namespace capu
         EXPECT_STREQ("0x539", outputStream.c_str());
         EXPECT_EQ(5U, outputStream.length());
     }
+
+    TEST_F(StringOutputStreamTest, WriteInt16HexLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        uint16_t value = 1337;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x0539", outputStream.c_str());
+        EXPECT_EQ(6U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteInt16HexNoLeadingZero)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_NO_LEADING_ZEROS);
+        uint16_t value = 1337;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0x539", outputStream.c_str());
+        EXPECT_EQ(5U, outputStream.length());
+    }
+
+    TEST_F(StringOutputStreamTest, WriteInt16HexNegativeValue)
+    {
+        outputStream.setHexadecimalOutputFormat(StringOutputStream::HEXADECIMAL_LEADING_ZEROS);
+        int16_t value = -1337;
+        outputStream << value;
+        outputStream.flush();
+        EXPECT_STREQ("0xFAC7", outputStream.c_str());//uint16_max - value
+        EXPECT_EQ(6U, outputStream.length());
+    }
 }

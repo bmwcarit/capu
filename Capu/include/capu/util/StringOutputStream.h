@@ -62,6 +62,7 @@ namespace capu
         virtual StringOutputStream& operator<<(const char* value);
         virtual StringOutputStream& operator<<(const char value);
         virtual StringOutputStream& operator<<(const uint16_t value);
+        virtual StringOutputStream& operator<<(const int16_t value);
         virtual StringOutputStream& operator<<(const Guid& value);
 
         virtual StringOutputStream& write(const void* data, const uint32_t size);
@@ -342,6 +343,24 @@ namespace capu
         }
 
         return operator<<(buffer);
+    }
+
+    inline
+    StringOutputStream&
+    StringOutputStream::operator<<(const int16_t value)
+    {
+        char buffer[7];
+
+        if(mHexadecimalFormat != NO_HEXADECIMAL)
+        {
+            uint16_t conv = static_cast<uint16_t>(value);
+            return operator<<(conv);
+        }
+        else
+        {
+            StringUtils::Sprintf(buffer, sizeof(buffer), "%d", value);
+            return operator<<(buffer);
+        }
     }
 
     inline

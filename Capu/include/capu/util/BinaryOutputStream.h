@@ -91,6 +91,12 @@ namespace capu
         IOutputStream& operator<<(const uint16_t value);
 
         /**
+         * Write a int16_t into the stream
+         * @param value The variable to write to the stream
+         */
+        IOutputStream& operator<<(const int16_t value);
+
+        /**
          * Write a guid into the stream
          * @param value The variable to write to the stream
          */
@@ -198,6 +204,13 @@ namespace capu
     BinaryOutputStream::operator<<(const uint16_t value)
     {
         return write(&value, sizeof(uint16_t));
+    }
+
+    inline
+    IOutputStream&
+    BinaryOutputStream::operator<<(const int16_t value)
+    {
+        return write(&value, sizeof(int16_t));
     }
 
     inline

@@ -99,6 +99,13 @@ namespace capu
         virtual IOutputStream& operator<<(const uint16_t value) = 0;
 
         /**
+         * Operator for writing int16_t values to a stream
+         * @param value the value which will be written to the stream
+         * @return a reference to the IOutputStream for further processing of data
+         */
+        virtual IOutputStream& operator<<(const int16_t value) = 0;
+
+        /**
          * Operator for writing a guid value to a stream
          * @param value the value which will be written to the stream
          * @return a reference to the IOutputStream for further processing of data
