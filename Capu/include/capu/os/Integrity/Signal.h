@@ -18,6 +18,7 @@
 #define CAPU_INTEGRITY_SIGNAL_H
 
 #include "capu/Error.h"
+#include <signal.h>
 
 namespace capu
 {
