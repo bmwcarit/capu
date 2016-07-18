@@ -525,13 +525,13 @@ namespace capu
             {
                 position = LEFT;
             }
-            else if (key == node->first)
+            else if (node->first < key)
             {
-                position = EQUAL;
+                position = RIGHT;
             }
             else
             {
-                position = RIGHT;
+                position = EQUAL;
             }
         }
 
