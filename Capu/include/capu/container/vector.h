@@ -587,12 +587,15 @@ namespace capu
     vector<T>&
     vector<T>::operator=(const vector<T>& other)
     {
-        clear();
-        const uint_t numberOfElementsInOther = other.size();
-        reserve(numberOfElementsInOther);
+        if (this != &other)
+        {
+            clear();
+            const uint_t numberOfElementsInOther = other.size();
+            reserve(numberOfElementsInOther);
 
-        copy_to_raw(other.m_data, other.m_dataEnd, m_data);
-        m_dataEnd = m_data + numberOfElementsInOther;
+            copy_to_raw(other.m_data, other.m_dataEnd, m_data);
+            m_dataEnd = m_data + numberOfElementsInOther;
+        }
 
         return *this;
     }
