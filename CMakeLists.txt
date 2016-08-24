@@ -32,6 +32,12 @@ if (NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Release CACHE STRING "Choose build type: Debug, Release." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
+# option to enable or disable installation of capu files, default on
+if (NOT DEFINED Capu_ENABLE_INSTALL)
+    ACME_INFO("ENABLE_INSTALL flag not set. Install will be enabled.")
+    SET(Capu_ENABLE_INSTALL ON CACHE BOOL "Enable install: ON, OFF" FORCE)
+endif ()
+
 IF(MSVC)
     SET(ACME_ENABLE_PLUGIN_VISUAL_STUDIO_PDB true CACHE BOOL "ACME2 plugin for installing Visual Studio PDB(s)")
 ENDIF()
@@ -56,6 +62,8 @@ ACME2_PROJECT(
     EMAIL                       "martin.veith@bmw-carit.de"
     COMPANY                     "BMW Car IT GmbH"
 
+    ENABLE_INSTALL              ${Capu_ENABLE_INSTALL}
+
     #==========================================================================
     # documentation files, will be installed and packaged
     #==========================================================================
@@ -77,10 +85,12 @@ CONFIGURE_FILE(
     "${CMAKE_CURRENT_BINARY_DIR}/Capu.pc"
     @ONLY
 )
-INSTALL(
+IF (Capu_ENABLE_INSTALL)
+  INSTALL(
     FILES       ${CMAKE_CURRENT_BINARY_DIR}/Capu.pc
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/pkgconfig
-)
+    )
+ENDIF()
 ACME_INFO("G Capu.pc")
 
 #==============================================================================
@@ -90,10 +100,12 @@ ACME_INFO("G Capu.pc")
 WRITE_BASIC_PACKAGE_VERSION_FILE("${CMAKE_CURRENT_BINARY_DIR}/CapuConfigVersion.cmake"
   VERSION ${Capu_VERSION}
   COMPATIBILITY AnyNewerVersion)
-INSTALL(
+IF (Capu_ENABLE_INSTALL)
+  INSTALL(
     FILES       ${CMAKE_CURRENT_BINARY_DIR}/CapuConfigVersion.cmake
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
-)
+    )
+ENDIF()
 ACME_INFO("G CapuConfigVersion.cmake")
 
 #==============================================================================
@@ -111,10 +123,12 @@ CONFIGURE_FILE(
     "${CMAKE_CURRENT_BINARY_DIR}/FindCapu.cmake"
     @ONLY
 )
-INSTALL(
+IF (Capu_ENABLE_INSTALL)
+  INSTALL(
     FILES       ${CMAKE_CURRENT_BINARY_DIR}/FindCapu.cmake
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
-)
+    )
+ENDIF()
 ACME_INFO("G FindCapu.cmake")
 
 #==============================================================================
@@ -128,10 +142,12 @@ CONFIGURE_PACKAGE_CONFIG_FILE(
     PATH_VARS PROJECT_INSTALL_HEADER PROJECT_INSTALL_STATIC_LIB PROJECT_INSTALL_SHARED_LIB
     NO_SET_AND_CHECK_MACRO
     NO_CHECK_REQUIRED_COMPONENTS_MACRO
-)
-INSTALL(
+    )
+
+IF (Capu_ENABLE_INSTALL)
+  INSTALL(
     FILES       ${CMAKE_CURRENT_BINARY_DIR}/CapuConfig.cmake
     DESTINATION ${PROJECT_INSTALL_STATIC_LIB}/cmake
-)
+    )
+ENDIF()
 ACME_INFO("G CapuConfig.cmake")
-
