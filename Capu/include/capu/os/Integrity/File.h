@@ -78,7 +78,7 @@ namespace capu
         status_t File::open(const FileMode& mode)
         {
             status_t status = capu::posix::File::open(mode);
-            if (status == CAPU_OK)
+            if (status == CAPU_OK && mStreamBuffer == NULL)
             {
                 //the stream buffer is a block of data that acts as intermediary between the i/o operations and the physical file associated to the stream
                 //activating it here in order to improve file operation performance
@@ -100,6 +100,7 @@ namespace capu
             if (NULL != mStreamBuffer)
             {
                 free(mStreamBuffer);
+                mStreamBuffer = NULL;
             }
             return status;
         }
