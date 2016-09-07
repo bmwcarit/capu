@@ -54,6 +54,16 @@ SET(Capu_VERSION "${Capu_VERSION_MAJOR}.${Capu_VERSION_MINOR}.${Capu_VERSION_PAT
 
 ADD_SUBDIRECTORY(external)
 
+# check for required cmake vars
+IF (NOT DEFINED TARGET_OS OR NOT DEFINED TARGET_ARCH OR "${TARGET_OS}" MATCHES "unknown" OR "${TARGET_ARCH}" MATCHES "unknown")
+    ACME_ERROR("TARGET_OS and TARGET_ARCH must be set")
+ENDIF()
+
+# set vars for defines and Config.h.in
+# infer from cmake vars (vars also used in Config.h.in)
+STRING(TOUPPER "OS_${TARGET_OS}" CAPU_OS_COMPILE_DEFINITION)
+SET(CAPU_ARCH_COMPILE_DEFINITION "ARCH_${TARGET_ARCH}")
+
 ACME2_PROJECT(
     #==========================================================================
     # project metadata
@@ -83,6 +93,8 @@ ACME2_PROJECT(
 #==============================================================================
 # generate and install PkgConfig file
 #==============================================================================
+
+SET(Capu_PLATFORM_DEFINITIONS "-DTARGET_OS=${TARGET_OS} -DTARGET_ARCH=${TARGET_ARCH} -D${CAPU_OS_COMPILE_DEFINITION} -D${CAPU_ARCH_COMPILE_DEFINITION}")
 
 CONFIGURE_FILE(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/Capu.pc.in"

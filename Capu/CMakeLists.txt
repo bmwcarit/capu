@@ -32,15 +32,6 @@ IF (TARGET_OS MATCHES "iPhoneSimulatorOS")
     SET(PLATFORM_SPECIFIC_PUBLIC_HEADER_FILES ${PLATFORM_SPECIFIC_PUBLIC_HEADER_FILES} include/capu/os/MacOSX/*.h include/capu/os/iPhoneOS/*.h)
 ENDIF()
 
-get_directory_property(CAPU_COMPILE_DEFINITIONS COMPILE_DEFINITIONS)
-foreach(CAPU_DEFINITION LISTS ${CAPU_COMPILE_DEFINITIONS})
-    foreach(CAPU_DEFINITION_PREFIX OS_ ARCH_)
-        if (${CAPU_DEFINITION} MATCHES "^(${CAPU_DEFINITION_PREFIX})[A-Za-z0-9_]*")
-            set(CAPU_${CAPU_DEFINITION_PREFIX}COMPILE_DEFINITION ${CAPU_DEFINITION})
-        endif()
-    endforeach()
-endforeach()
-
 include(CheckIncludeFiles)
 check_include_files(stdint.h CAPU_HAVE_STDINT_H)
 check_include_files(stddef.h CAPU_HAVE_STDDEF_H)
@@ -111,6 +102,14 @@ ACME_MODULE(
                             psapi
                             Pipe
 )
+
+# set defines public to target
+TARGET_COMPILE_DEFINITIONS(Capu PUBLIC
+    TARGET_OS=${TARGET_OS}
+    TARGET_ARCH=${TARGET_ARCH}
+    ${CAPU_OS_COMPILE_DEFINITION}
+    ${CAPU_ARCH_COMPILE_DEFINITION})
+
 
 IF(Capu_BUILD_TESTS AND NOT "${TARGET_OS}" STREQUAL "Integrity")
 
