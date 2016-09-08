@@ -15,6 +15,7 @@
  */
 
 #include "capu/util/Guid.h"
+#include "capu/util/shared_ptr.h"
 #include "capu/container/Hash.h"
 #include "gtest/gtest.h"
 
@@ -48,6 +49,33 @@ namespace capu
 
         uint64_t expected64bitHash = 47u;
         EXPECT_EQ(expected64bitHash, CapuDefaultHashFunction<64>::Digest(bytePtr, 6));
+    }
+
+    TEST(HashTest, HashSharedPtr)
+    {
+        shared_ptr<int64_t> ptr( new int64_t(858918934591ll) );
+        shared_ptr<int64_t> same_ptr = ptr;
+
+        EXPECT_EQ(CapuDefaultHashFunction<32>::Digest(ptr, 4), CapuDefaultHashFunction<32>::Digest(same_ptr, 4));
+        EXPECT_EQ(CapuDefaultHashFunction<64>::Digest(ptr, 4), CapuDefaultHashFunction<64>::Digest(same_ptr, 4));
+    }
+
+    TEST(HashTest, HashSeveralSharedPtrWithUserDeleter)
+    {
+        struct NoopDeleter
+        {
+            void operator()(int64_t*)
+            {
+            }
+        };
+
+        shared_ptr<int64_t> ptr( new int64_t(858918934591ll), NoopDeleter() );
+        shared_ptr<int64_t> same_ptr( ptr.get(), NoopDeleter() );
+
+        EXPECT_EQ(CapuDefaultHashFunction<32>::Digest(ptr, 4), CapuDefaultHashFunction<32>::Digest(same_ptr, 4));
+        EXPECT_EQ(CapuDefaultHashFunction<64>::Digest(ptr, 4), CapuDefaultHashFunction<64>::Digest(same_ptr, 4));
+
+        delete( ptr.get() );
     }
 
     enum Someenum

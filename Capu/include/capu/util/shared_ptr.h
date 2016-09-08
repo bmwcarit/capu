@@ -20,6 +20,8 @@
 #include "capu/Config.h"
 #include "capu/os/Atomic.h"
 #include "capu/util/Swap.h"
+#include "capu/util/Traits.h"
+#include "capu/container/Hash.h"
 
 namespace capu
 {
@@ -466,6 +468,17 @@ namespace capu
         }
     }
 
+    /**
+     * Specialization of Hash in order to calculate the Hash differently for shared_ptr
+     */
+    template<class T, typename INTRESULTTYPE>
+    struct Hasher<shared_ptr<T>, CAPU_TYPE_CLASS, INTRESULTTYPE>
+    {
+        static INTRESULTTYPE Hash(const shared_ptr<T> key, const uint8_t bitsize)
+        {
+            return Hasher<T*, CAPU_TYPE_POINTER, INTRESULTTYPE>::Hash(key.get(), bitsize);
+        }
+    };
 }
 
 #endif // CAPU_SHAREDPTR_H
