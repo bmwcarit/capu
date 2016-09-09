@@ -202,7 +202,7 @@ public:
     uint32_t m_receiveCount;
 };
 
-TEST(NonBlockSocketCheckerTest, AcceptALotOfClients)
+TEST(NonBlockSocketCheckerTest, DISABLED_AcceptALotOfClients)
 {
     static const uint32_t clientcount = 10;
     static const uint64_t testtimeout = 5000;
