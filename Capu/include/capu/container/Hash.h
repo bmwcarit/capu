@@ -41,7 +41,7 @@ namespace capu
     {
         static uint32_t Resize(const uint32_t hashValue, const uint8_t bitcount)
         {
-            return bitcount == 32 ? hashValue : hashValue & ((static_cast<uint32_t>(1) << bitcount) - 1);
+            return bitcount >= 32 ? hashValue : hashValue & ((static_cast<uint32_t>(1) << bitcount) - 1);
         }
     };
 
@@ -53,7 +53,7 @@ namespace capu
     {
         static uint64_t Resize(const uint64_t hashValue, const uint8_t bitcount)
         {
-            return bitcount == 64 ? hashValue : ((hashValue >> bitcount) ^ hashValue) & ((static_cast<uint64_t>(1) << (bitcount)) - 1);
+            return bitcount >= 64 ? hashValue : hashValue & ((static_cast<uint64_t>(1) << (bitcount)) - 1);
         }
     };
 

@@ -26,7 +26,7 @@ namespace capu
         uint32_t expected32bitHash = 10u;
         EXPECT_EQ(expected32bitHash, CapuDefaultHashFunction<32>::Digest(intVal, 4));
 
-        uint64_t expected64bitHash = 8u;
+        uint64_t expected64bitHash = 10u;
         EXPECT_EQ(expected64bitHash, CapuDefaultHashFunction<64>::Digest(intVal, 4));
     }
 
@@ -36,7 +36,7 @@ namespace capu
         uint32_t expected32bitHash = 11u;
         EXPECT_EQ(expected32bitHash, CapuDefaultHashFunction<32>::Digest(intVal, 4));
 
-        uint64_t expected64bitHash = 13u;
+        uint64_t expected64bitHash = 12u;
         EXPECT_EQ(expected64bitHash, CapuDefaultHashFunction<64>::Digest(intVal, 4));
     }
 
