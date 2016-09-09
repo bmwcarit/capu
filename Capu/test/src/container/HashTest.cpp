@@ -40,6 +40,16 @@ namespace capu
         EXPECT_EQ(expected64bitHash, CapuDefaultHashFunction<64>::Digest(intVal, 4));
     }
 
+    TEST(HashTest, HashPointer)
+    {
+        uint8_t* bytePtr = reinterpret_cast<uint8_t*>(0xabcdef);
+        uint32_t expected32bitHash = 47u;
+        EXPECT_EQ(expected32bitHash, CapuDefaultHashFunction<32>::Digest(bytePtr, 6));
+
+        uint64_t expected64bitHash = 47u;
+        EXPECT_EQ(expected64bitHash, CapuDefaultHashFunction<64>::Digest(bytePtr, 6));
+    }
+
     enum Someenum
     {
         MEMBER0 = 1234,

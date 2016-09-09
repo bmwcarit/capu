@@ -491,7 +491,7 @@ namespace capu
         {
             // shortcut: a pointer is already a hash, we need only the resizer
             const T *keyPtr = &key;
-            return Resizer<INTRESULTTYPE>::Resize(*reinterpret_cast<const uint_t*>(keyPtr), bitsize);
+            return static_cast<INTRESULTTYPE>(Resizer<uint_t>::Resize(*reinterpret_cast<const uint_t*>(keyPtr), bitsize));
         }
     };
 
