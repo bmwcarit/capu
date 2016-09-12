@@ -21,7 +21,7 @@
 #define PATH_MAX __ABS_PATH_MAX // file system max path length
 #include <capu/os/Posix/File.h>
 
-#define STREAM_BUFFER_SIZE 2048
+#define STREAM_BUFFER_SIZE (2 * 1024 * 1024)
 
 namespace capu
 {
