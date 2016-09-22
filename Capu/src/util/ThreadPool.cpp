@@ -178,6 +178,7 @@ void capu::ThreadPool::PoolRunnable::run()
 capu::ThreadPool::PoolWorker::PoolWorker(capu::ThreadPool& pool)
     : mPool(pool)
     , mPoolRunnable(mPool)
+    , mThread("capu::Threadpool worker")
 {
     mValid = mThread.start(mPoolRunnable) == CAPU_OK;
 }

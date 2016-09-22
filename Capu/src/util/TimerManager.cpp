@@ -20,9 +20,9 @@
 #include "capu/os/Time.h"
 
 
-capu::shared_ptr<capu::TimerManager> capu::TimerManager::GetNewTimerManager()
+capu::shared_ptr<capu::TimerManager> capu::TimerManager::GetNewTimerManager(const String& timerThreadName)
 {
-    return shared_ptr<TimerManager>(new TimerManager());
+    return shared_ptr<TimerManager>(new TimerManager(timerThreadName));
 }
 
 capu::TimerManager::~TimerManager()
@@ -77,8 +77,9 @@ bool capu::TimerManager::Execution::operator<(const TimerManager::Execution& oth
     return getExecutionTime() < other.getExecutionTime();
 }
 
-capu::TimerManager::TimerManager()
-    : m_threadRunning(false)
+capu::TimerManager::TimerManager(const String& timerThreadName)
+    : m_waitThread(timerThreadName)
+    , m_threadRunning(false)
 {
 
 }

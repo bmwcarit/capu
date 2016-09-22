@@ -38,9 +38,11 @@ namespace capu
     public:
         /**
          * Constructs a new TimerManager, and returns a shared pointer on it.
+         *
+         * @param timerThreadName thread name to use for the internally created timer thread
          * @returns a shared pointer on a newly created TimerManager object.
          */
-        static shared_ptr<TimerManager> GetNewTimerManager();
+        static shared_ptr<TimerManager> GetNewTimerManager(const String& timerThreadName = "");
 
         /**
          * Destructor
@@ -100,8 +102,10 @@ namespace capu
         /**
          * Constructor
          * The timer manager can only be constructed via the static function GetNewTimerManager.
+         *
+         * @param timerThreadName thread name to use for the internally created timer thread
          */
-        TimerManager();
+        TimerManager(const String& timerThreadName);
 
         /**
          * Inserts an execution into the executions' container.

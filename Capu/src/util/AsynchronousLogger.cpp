@@ -20,6 +20,7 @@ namespace capu
 {
     AsynchronousLogger::AsynchronousLogger(ILogAppender& appender)
         :  Logger(appender)
+        , m_loggerThread("capu::AsynchronousLogger")
     {
         m_loggerThread.start(*this);
     }
