@@ -492,8 +492,8 @@ namespace capu
             class VisitSmaller : public UnaryFunctionKey
             {
             public:
-                VisitSmaller(const Key& key) :
-                    UnaryFunctionKey(key)
+                VisitSmaller(const Key& visitSmallerKey) :
+                    UnaryFunctionKey(visitSmallerKey)
                 {
                 }
                 bool operator()(const Iterator& element)
@@ -505,8 +505,8 @@ namespace capu
             class VisitGreater : public UnaryFunctionKey
             {
             public:
-                VisitGreater(const Key& key) :
-                    UnaryFunctionKey(key)
+                VisitGreater(const Key& visitGreaterKey) :
+                    UnaryFunctionKey(visitGreaterKey)
                 {
                 }
                 bool operator()(const Iterator& element)
@@ -699,8 +699,8 @@ namespace capu
             class Visit : public UnaryFunctionKey
             {
             public:
-                Visit(const Key& key) :
-                    UnaryFunctionKey(key)
+                Visit(const Key& visitKey) :
+                    UnaryFunctionKey(visitKey)
                 {
                 }
                 bool operator()(const Iterator& element)
@@ -724,8 +724,8 @@ namespace capu
             class VisitSmaller : public UnaryFunctionKey
             {
             public:
-                VisitSmaller(const Key& key) :
-                    UnaryFunctionKey(key)
+                VisitSmaller(const Key& visitSmallerKey) :
+                    UnaryFunctionKey(visitSmallerKey)
                 {
                 }
                 bool operator()(const Iterator& element)
@@ -760,8 +760,8 @@ namespace capu
             class Visit : public UnaryFunctionKey
             {
             public:
-                Visit(const Key& key) :
-                    UnaryFunctionKey(key)
+                Visit(const Key& visitKey) :
+                    UnaryFunctionKey(visitKey)
                 {
                 }
                 bool operator()(const Iterator& element)
@@ -785,8 +785,8 @@ namespace capu
             class VisitSmaller : public UnaryFunctionKey
             {
             public:
-                VisitSmaller(const Key& key) :
-                    UnaryFunctionKey(key)
+                VisitSmaller(const Key& visitSmallerKey) :
+                    UnaryFunctionKey(visitSmallerKey)
                 {
                 }
                 bool operator()(const Iterator& element)
