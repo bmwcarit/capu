@@ -29,6 +29,7 @@ namespace capu
             {
 
             public:
+                Thread(const String& name);
                 using capu::os::Thread::start;
                 using capu::os::Thread::join;
                 using capu::os::Thread::cancel;
@@ -36,7 +37,14 @@ namespace capu
                 using capu::os::Thread::getState;
                 using capu::os::Thread::Sleep;
                 using capu::os::Thread::CurrentThreadId;
+                using capu::os::Thread::getName;
             };
+
+            inline
+            Thread::Thread(const String& name)
+                : capu::os::Thread(name)
+            {
+            }
         }
     }
 }

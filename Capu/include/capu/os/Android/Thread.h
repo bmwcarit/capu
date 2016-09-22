@@ -27,14 +27,22 @@ namespace capu
         {
 
         public:
+            Thread(const String& name);
             using capu::posix::Thread::start;
             using capu::posix::Thread::join;
             using capu::posix::Thread::cancel;
             using capu::posix::Thread::resetCancel;
             using capu::posix::Thread::getState;
             using capu::posix::Thread::Sleep;
+            using capu::posix::Thread::getName;
             static uint_t CurrentThreadId();
         };
+
+        inline
+        Thread::Thread(const String& name)
+            : capu::posix::Thread(name)
+        {
+        }
 
         inline
         uint_t

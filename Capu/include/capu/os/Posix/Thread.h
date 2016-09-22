@@ -28,7 +28,7 @@ namespace capu
         class Thread : private generic::Thread
         {
         public:
-            Thread();
+            Thread(const String& name);
             ~Thread();
             status_t start(Runnable& runnable);
             status_t join();
@@ -36,6 +36,7 @@ namespace capu
             using capu::generic::Thread::cancel;
             using capu::generic::Thread::resetCancel;
             using capu::generic::Thread::getState;
+            using capu::generic::Thread::getName;
 
         protected:
             pthread_t mThread;
@@ -46,8 +47,8 @@ namespace capu
 
 
         inline
-        Thread::Thread()
-            : generic::Thread()
+        Thread::Thread(const String& name)
+            : generic::Thread(name)
             , mThread(0)
         {
             pthread_attr_init(&mAttr);
@@ -66,6 +67,12 @@ namespace capu
         Thread::run(void* arg)
         {
             generic::ThreadRunnable* tr = static_cast<generic::ThreadRunnable*>(arg);
+#ifdef OS_MACOSX
+// OSX can only set name from within running thread
+            pthread_setname_np(tr->thread->getName());
+#elif !defined(OS_INTEGRITY)
+            pthread_setname_np(pthread_self(), tr->thread->getName());
+#endif
             tr->thread->setState(TS_RUNNING);
             if (tr->runnable != NULL)
             {
@@ -96,6 +103,7 @@ namespace capu
                 mIsStarted = false;
                 return CAPU_ERROR;
             }
+
             return CAPU_OK;
         }
 

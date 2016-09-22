@@ -94,6 +94,13 @@ public:
 int32_t ThreadTest::variable = 0;
 int32_t IncrementerThreadTest::variable = 0;
 
+TEST(Thread, canSetAndGetThreadName)
+{
+    //CREATE THREAD
+    capu::Thread thread("test name of thread");
+    EXPECT_STREQ("test name of thread", thread.getName());
+}
+
 TEST(Thread, startAndJoinTest)
 {
     ThreadTest _test(6);

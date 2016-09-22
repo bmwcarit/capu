@@ -32,6 +32,12 @@ namespace capu
     class Thread: private capu::os::arch::Thread
     {
     public:
+        /**
+         * Create a thread object with an optional name
+         *
+         * Depending on OS, the name might appear in debuggers, task lists etc
+         */
+        Thread(const String& name = "");
 
         /**
          * Starts the thread.
@@ -51,6 +57,12 @@ namespace capu
          *         CAPU_ERROR otherwise
          */
         status_t join();
+
+        /**
+        * Returns the previously set name of the thread
+        * @return the previously set name of the thread
+        */
+        const char* getName();
 
         /**
          * Sets the cancel flag of the runnable
@@ -83,6 +95,12 @@ namespace capu
     };
 
     inline
+    Thread::Thread(const String& name)
+        : capu::os::arch::Thread(name)
+    {
+    }
+
+    inline
     status_t
     Thread::start(Runnable& runnable)
     {
@@ -94,6 +112,12 @@ namespace capu
     Thread::join()
     {
         return capu::os::arch::Thread::join();
+    }
+
+    inline
+    const char* Thread::getName()
+    {
+        return capu::os::arch::Thread::getName();
     }
 
     inline

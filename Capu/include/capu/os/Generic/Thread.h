@@ -19,6 +19,7 @@
 
 #include "capu/util/Runnable.h"
 #include "capu/os/ThreadState.h"
+#include "capu/container/String.h"
 
 namespace capu
 {
@@ -38,16 +39,17 @@ namespace capu
         class Thread
         {
         public:
-            Thread();
+            Thread(const String& name);
             void cancel();
             void resetCancel();
             ThreadState getState() const;
             void setState(ThreadState state);
-
+            const char* getName();
         protected:
             ThreadState mState;
             ThreadRunnable mRunnable;
             bool mIsStarted;
+            String mName;
         };
 
 
@@ -59,9 +61,10 @@ namespace capu
         }
 
         inline
-        Thread::Thread()
+        Thread::Thread(const String& name)
             : mState(TS_NEW)
             , mIsStarted(false)
+            , mName(name)
         {
             mRunnable.thread = this;
         }
@@ -78,6 +81,12 @@ namespace capu
         Thread::setState(ThreadState state)
         {
             mState = state;
+        }
+
+        inline
+        const char* Thread::getName()
+        {
+            return mName.c_str();
         }
 
         inline

@@ -29,13 +29,14 @@ namespace capu
         class Thread : private generic::Thread
         {
         public:
-            Thread();
+            Thread(const String& name);
             ~Thread();
             status_t start(Runnable& runnable);
             status_t join();
             using capu::generic::Thread::cancel;
             using capu::generic::Thread::resetCancel;
             using capu::generic::Thread::getState;
+            using capu::generic::Thread::getName;
             static status_t Sleep(uint32_t millis);
             static uint_t CurrentThreadId();
         private:
@@ -60,8 +61,8 @@ namespace capu
         }
 
         inline
-        Thread::Thread()
-            : generic::Thread()
+        Thread::Thread(const String& name)
+            : generic::Thread(name)
             , mThreadHandle(0)
         {
         }

@@ -28,6 +28,7 @@ namespace capu
             class Thread: private capu::iphoneos::Thread
             {
             public:
+                Thread(const String& name);
                 using capu::iphoneos::Thread::start;
                 using capu::iphoneos::Thread::join;
                 using capu::iphoneos::Thread::cancel;
@@ -35,7 +36,14 @@ namespace capu
                 using capu::iphoneos::Thread::getState;
                 using capu::iphoneos::Thread::Sleep;
                 using capu::iphoneos::Thread::CurrentThreadId;
+                using capu::iphoneos::Thread::getName;
             };
+
+            inline
+            Thread::Thread(const String& name)
+                : capu::iphoneos::Thread(name)
+            {
+            }
         }
     }
 }
