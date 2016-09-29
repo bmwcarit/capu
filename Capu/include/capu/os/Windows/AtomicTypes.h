@@ -17,7 +17,7 @@
 #ifndef CAPU_WINDOWS_ATOMICTYPES_H
 #define CAPU_WINDOWS_ATOMICTYPES_H
 
-#include <Windows.h>
+#include "MinimalWindowsH.h"
 #include "capu/Config.h"
 
 namespace capu
