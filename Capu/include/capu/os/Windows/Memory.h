@@ -18,8 +18,6 @@
 #define CAPU_WINDOWS_MEMORY_H_
 
 #include "capu/os/Generic/Memory.h"
-#include <Windows.h>
-#include <Psapi.h>
 
 namespace capu
 {
@@ -36,20 +34,6 @@ namespace capu
             using capu::generic::Memory::Copy;
             static uint_t CurrentMemoryUsage();
         };
-
-        inline uint_t Memory::CurrentMemoryUsage()
-        {
-            HANDLE currentProcess = ::GetCurrentProcess();
-            PROCESS_MEMORY_COUNTERS_EX info;
-            if (::GetProcessMemoryInfo(currentProcess, (PROCESS_MEMORY_COUNTERS*)&info, sizeof(info)))
-            {
-                return info.WorkingSetSize;
-            }
-            else
-            {
-                return 0;
-            }
-        }
     }
 }
 
