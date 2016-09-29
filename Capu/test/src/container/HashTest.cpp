@@ -14,29 +14,13 @@
  * limitations under the License.
  */
 
-#include "container/HashTest.h"
 #include "capu/util/Guid.h"
 #include "capu/container/Hash.h"
+#include "gtest/gtest.h"
 
 namespace capu
 {
-    HashTest::HashTest()
-    {
-    }
-
-    HashTest::~HashTest()
-    {
-    }
-
-    void HashTest::SetUp()
-    {
-    }
-
-    void HashTest::TearDown()
-    {
-    }
-
-    TEST_F(HashTest, HashInt32)
+    TEST(HashTest, HashInt32)
     {
         int32_t intVal = 42;
         uint32_t expected32bitHash = 10u;
@@ -46,7 +30,7 @@ namespace capu
         EXPECT_EQ(expected64bitHash, CapuDefaultHashFunction<64>::Digest(intVal, 4));
     }
 
-    TEST_F(HashTest, HashInt64)
+    TEST(HashTest, HashInt64)
     {
         int64_t intVal = 858918934591ll;
         uint32_t expected32bitHash = 11u;
@@ -62,7 +46,7 @@ namespace capu
         MEMBER1
     };
 
-    TEST_F(HashTest, HashEnum)
+    TEST(HashTest, HashEnum)
     {
         Someenum val = MEMBER0;
 
@@ -70,7 +54,7 @@ namespace capu
         EXPECT_EQ(CapuDefaultHashFunction<>::Digest(static_cast<uint_t>(MEMBER0), 4), CapuDefaultHashFunction<>::Digest(val, 4));
     }
 
-    TEST_F(HashTest, HashGuid)
+    TEST(HashTest, HashGuid)
     {
         Guid guid;
         guid.toString(); // change internal state
@@ -79,7 +63,7 @@ namespace capu
         EXPECT_EQ(CapuDefaultHashFunction<>::Digest(guid, 4), CapuDefaultHashFunction<>::Digest(guid2, 4));
     }
 
-    TEST_F(HashTest, requestOneBitHashValue)
+    TEST(HashTest, requestOneBitHashValue)
     {
         char dataToHash[128];
 
@@ -89,7 +73,7 @@ namespace capu
         EXPECT_EQ(0u, shouldBeZero);
     }
 
-    TEST_F(HashTest, request32BitHashValueIn64BitType)
+    TEST(HashTest, request32BitHashValueIn64BitType)
     {
         char dataToHash[128] = {1};
 
@@ -100,7 +84,7 @@ namespace capu
         EXPECT_NE(0u, hashValue);
     }
 
-    TEST_F(HashTest, request63BitHashValue)
+    TEST(HashTest, request63BitHashValue)
     {
         char dataToHash[128] = {1};
 
