@@ -17,10 +17,10 @@
 #ifndef CAPU_WINDOWS_MUTEX_H
 #define CAPU_WINDOWS_MUTEX_H
 
-
-#include <windows.h>
 #include "capu/Config.h"
 #include "capu/Error.h"
+
+#include "MinimalWindowsH.h"
 
 namespace capu
 {
