@@ -17,7 +17,6 @@
 #ifndef CAPU_WINDOWS_CONDVAR_H
 #define CAPU_WINDOWS_CONDVAR_H
 
-#include <windows.h>
 #include "capu/os/Time.h"
 #include "capu/Config.h"
 #include "capu/Error.h"
