@@ -17,7 +17,6 @@
 #ifndef CAPU_WINDOWS_FILEUTILS_H
 #define CAPU_WINDOWS_FILEUTILS_H
 
-#include <windows.h>
 #include "capu/Config.h"
 #include "capu/os/File.h"
 
@@ -31,29 +30,6 @@ namespace capu
             static capu::File getCurrentWorkingDirectory();
             static status_t setCurrentWorkingDirectory(const capu::File& directory);
         };
-
-        inline
-        capu::File FileUtils::getCurrentWorkingDirectory()
-        {
-            DWORD bufferSize = GetCurrentDirectory(0, NULL);
-            char* buffer = new char[bufferSize];
-            buffer[0] = 0;
-            GetCurrentDirectory(bufferSize, buffer);
-            capu::File ret(buffer);
-            delete[] buffer;
-            return ret;
-        }
-
-        inline
-        status_t FileUtils::setCurrentWorkingDirectory(const capu::File& directory)
-        {
-            status_t ret = CAPU_ERROR;
-            if(SetCurrentDirectory(directory.getPath().c_str()))
-            {
-                ret = CAPU_OK;
-            }
-            return ret;
-        }
     }
 }
 
