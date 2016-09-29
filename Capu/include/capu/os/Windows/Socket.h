@@ -17,11 +17,11 @@
 #ifndef CAPU_WINDOWS_SOCKET_H
 #define CAPU_WINDOWS_SOCKET_H
 
-#define WIN32_LEAN_AND_MEAN
+
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
-#include <windows.h>
+#include "MinimalWindowsH.h"
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
