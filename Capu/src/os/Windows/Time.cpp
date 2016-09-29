@@ -15,8 +15,7 @@
 */
 
 #include "capu/os/Time.h"
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "capu/os/Windows/MinimalWindowsH.h"
 
 namespace capu
 {
