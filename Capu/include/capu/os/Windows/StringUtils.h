@@ -17,7 +17,6 @@
 #ifndef CAPU_WINDOWS_STRINGUTILS_H
 #define CAPU_WINDOWS_STRINGUTILS_H
 
-#include <windows.h>
 #include <stdarg.h>
 #include "capu/Config.h"
 #include <capu/os/Memory.h>
