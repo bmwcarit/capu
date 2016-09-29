@@ -18,7 +18,7 @@
 #define CAPU_WINDOWS_TIME_H
 
 #define _WINSOCKAPI_
-#include <windows.h>
+
 #include "capu/Config.h"
 
 namespace capu
@@ -32,29 +32,6 @@ namespace capu
             static uint64_t GetMicroseconds();
         };
 
-        inline
-        uint64_t
-        Time::GetMilliseconds()
-        {
-            FILETIME now;
-            GetSystemTimeAsFileTime(&now);
-            uint64_t convertedTime = (((ULONGLONG) now.dwHighDateTime) << 32) + now.dwLowDateTime;
-            return (convertedTime - 116444736000000000LL) / 10000; // convertedTime is since 1601.., but we want since 1970, so we must remove this amount
-        }
-
-        inline
-        uint64_t
-        Time::GetMicroseconds()
-        {
-            const uint_t microsecondsPerSecond = 1000000;
-            LARGE_INTEGER frequency;
-            LARGE_INTEGER t;
-
-            QueryPerformanceFrequency(&frequency);
-            QueryPerformanceCounter(&t);
-
-            return (ULONGLONG)t.QuadPart * microsecondsPerSecond / frequency.QuadPart;
-        }
     }
 }
 #endif //CAPU_WINDOWS_TIME_H
