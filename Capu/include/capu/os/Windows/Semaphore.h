@@ -17,10 +17,9 @@
 #ifndef CAPU_WINDOWS_SEMAPHORE_H
 #define CAPU_WINDOWS_SEMAPHORE_H
 
-#include <windows.h>
+#include "MinimalWindowsH.h"
 #include "capu/Config.h"
 #include "capu/Error.h"
-
 namespace capu
 {
     namespace os
