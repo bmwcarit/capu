@@ -17,7 +17,7 @@
 #ifndef CAPU_WINDOWS_DYNAMICLIBRARY_H
 #define CAPU_WINDOWS_DYNAMICLIBRARY_H
 
-#include <Windows.h>
+#include "capu/os/Windows/MinimalWindowsH.h"
 #include "capu/os/Generic/DynamicLibrary.h"
 #include "capu/Error.h"
 

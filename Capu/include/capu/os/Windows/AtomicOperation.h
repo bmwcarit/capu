@@ -17,7 +17,7 @@
 #ifndef CAPU_WINDOWS_ATOMICOPERATION_H
 #define CAPU_WINDOWS_ATOMICOPERATION_H
 
-#include <Windows.h>
+#include "capu/os/Windows/MinimalWindowsH.h"
 #include "capu/Config.h"
 
 namespace capu

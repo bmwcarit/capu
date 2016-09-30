@@ -15,7 +15,7 @@
 */
 
 #include "capu/os/Windows/Memory.h"
-#include <Windows.h>
+#include "capu/os/Windows/MinimalWindowsH.h"
 #include <Psapi.h>
 
 namespace capu
