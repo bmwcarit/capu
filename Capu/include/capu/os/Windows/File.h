@@ -19,17 +19,8 @@
 
 #include "capu/os/Generic/File.h"
 #include "capu/os/FileMode.h"
-#include <Windows.h>
+#include "MinimalWindowsH.h"
 
-// Hack to remove OS_WINDOWS: macro redefinition.
-// Shlwapi also defines OS_WINDOWS.
-#ifdef OS_WINDOWS
-#undef OS_WINDOWS
-#endif
-#include <Shlwapi.h>
-#ifndef OS_WINDOWS
-#define OS_WINDOWS
-#endif
 
 namespace capu
 {
