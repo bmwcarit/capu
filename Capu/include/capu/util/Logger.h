@@ -98,7 +98,7 @@ namespace capu
         /**
          * Sets the LogLevel of all contexts
          * @param logLevel for all Contexts
-         * @param filterContext only contexts which has the substring 'filterContext' in their name will change their logLevel, 
+         * @param filterContext only contexts which has the substring 'filterContext' in their name or id will change their logLevel,
                   if filterContext is empty all contexts of the logger will be modified
          * @{
          */
@@ -250,7 +250,8 @@ namespace capu
             LogContext* lc = *current;
 
             if (filterContext == "" ||
-                lc->getContextName().find(filterContext) >= 0)
+                lc->getContextName().find(filterContext) >= 0 ||
+                lc->getContextId().find(filterContext) >= 0)
             {
                 lc->setLogLevel(logLevel);
             }
