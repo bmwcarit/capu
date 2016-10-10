@@ -73,63 +73,63 @@ namespace capu
         float
         Math::Ceil(float val)
         {
-            return ceilf(val);
+            return ::std::ceil(val);
         }
 
         inline
         double
         Math::Ceil(double val)
         {
-            return std::ceil(val);
+            return ::std::ceil(val);
         }
 
         inline
         float
         Math::Floor(float val)
         {
-            return floorf(val);
+            return ::std::floor(val);
         }
 
         inline
         double
         Math::Floor(double val)
         {
-            return std::floor(val);
+            return ::std::floor(val);
         }
 
         inline
         float
         Math::Abs(float val)
         {
-            return std::fabs(val);
+            return ::std::fabs(val);
         }
 
         inline
         double
         Math::Abs(double val)
         {
-            return std::abs(val);
+            return ::std::fabs(val);
         }
 
         inline
         int_t
         Math::Abs(int_t val)
         {
-            return std::abs(val);
+            return ::std::abs(val);
         }
 
         inline
         float
         Math::Sqrt(float val)
         {
-            return sqrtf(val);
+            return ::std::sqrt(val);
         }
 
         inline
         double
         Math::Sqrt(double val)
         {
-            return std::sqrt(val);
+            return ::std::sqrt(val);
         }
 
         inline
@@ -150,98 +150,98 @@ namespace capu
         float
         Math::Cos(float val)
         {
-            return cosf(val);
+            return ::std::cos(val);
         }
 
         inline
         float
         Math::Pow(float val, float exponent)
         {
-            return powf(val, exponent);
+            return ::std::pow(val, exponent);
         }
 
         inline
         double
         Math::Pow(double val, double exponent)
         {
-            return std::pow(val, exponent);
+            return ::std::pow(val, exponent);
         }
 
         inline
         double
         Math::Cos(double val)
         {
-            return std::cos(val);
+            return ::std::cos(val);
         }
 
         inline
         float
         Math::Sin(float val)
         {
-            return sinf(val);
+            return ::std::sin(val);
         }
 
         inline
         double
         Math::Sin(double val)
         {
-            return std::sin(val);
+            return ::std::sin(val);
         }
 
         inline
         float
         Math::Tan(float val)
         {
-            return tanf(val);
+            return ::std::tan(val);
         }
 
         inline
         double
         Math::Tan(double val)
         {
-            return std::tan(val);
+            return ::std::tan(val);
         }
 
         inline
         float
         Math::ArcCos(float val)
         {
-            return acosf(val);
+            return ::std::acos(val);
         }
 
         inline
         double
         Math::ArcCos(double val)
         {
-            return std::acos(val);
+            return ::std::acos(val);
         }
 
         inline
         float
         Math::ArcSin(float val)
         {
-            return asinf(val);
+            return ::std::asin(val);
         }
 
         inline
         double
         Math::ArcSin(double val)
         {
-            return std::asin(val);
+            return ::std::asin(val);
         }
 
         inline
         float
         Math::ArcTan(float val)
         {
-            return atanf(val);
+            return ::std::atan(val);
         }
 
         inline
         double
         Math::ArcTan(double val)
         {
-            return std::atan(val);
+            return ::std::atan(val);
         }
 
         inline
@@ -276,7 +276,7 @@ namespace capu
         float
         Math::Log2(float val)
         {
-            return logf(val) / Math::LN2_f;
+            return ::std::log(val) / LN2_f;
 
         }
 
@@ -284,22 +284,21 @@ namespace capu
         double
         Math::Log2(double val)
         {
-            return log(val) / Math::LN2_d;
+            return ::std::log(val) / LN2_d;
         }
 
         inline
-            float
-            Math::Exp(float val)
+        float
+        Math::Exp(float val)
         {
-            return expf(val);
-
+            return ::std::exp(val);
         }
 
         inline
-            double
-            Math::Exp(double val)
+        double
+        Math::Exp(double val)
         {
-            return std::exp(val);
+            return ::std::exp(val);
         }
     }
 }
