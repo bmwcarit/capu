@@ -18,6 +18,9 @@
 #define CAPU_INTEGRITY_FILE_H
 
 #include <limits>
+#ifdef PATH_MAX
+#undef PATH_MAX
+#endif
 #define PATH_MAX __ABS_PATH_MAX // file system max path length
 #include <capu/os/Posix/File.h>
 
