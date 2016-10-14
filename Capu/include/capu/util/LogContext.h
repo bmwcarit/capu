@@ -19,6 +19,7 @@
 
 #include "capu/container/String.h"
 #include "capu/util/LogLevel.h"
+#include "capu/os/AtomicOperation.h"
 
 namespace capu
 {
@@ -107,8 +108,8 @@ namespace capu
         /**
          * LogLevel of context
          */
-        ELogLevel m_logLevel;
-        
+        int32_t m_logLevel;
+
         /**
          * Private assignment operator prevents misuse
          */
@@ -123,13 +124,13 @@ namespace capu
     inline
     void LogContext::setLogLevel(const ELogLevel logLevel)
     {
-        m_logLevel = logLevel;
+        AtomicOperation::AtomicStore(m_logLevel, static_cast<int32_t>(logLevel));
     }
 
     inline
     ELogLevel LogContext::getLogLevel() const
     {
-        return m_logLevel;
+        return static_cast<ELogLevel>(AtomicOperation::AtomicLoad(m_logLevel));
     }
 
     inline
