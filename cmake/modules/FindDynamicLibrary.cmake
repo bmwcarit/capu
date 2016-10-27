@@ -33,7 +33,7 @@ IF("${TARGET_OS}" STREQUAL "Windows")
 ELSEIF("${TARGET_OS}" STREQUAL "Linux")
 
     FIND_PATH(${PACKAGE_NAME}_INCLUDE_DIRS dlfcn.h /usr/include )
-    FIND_LIBRARY(${PACKAGE_NAME}_LIBRARIES NAMES dl PATHS /usr/lib /usr/lib/i386-linux-gnu )
+    FIND_LIBRARY(${PACKAGE_NAME}_LIBRARIES NAMES dl PATHS /usr/lib /usr/lib/i386-linux-gnu /usr/lib32 /usr/libx32)
     SET(${PACKAGE_NAME}_FOUND ${${PACKAGE_NAME}_LIBRARIES}_FOUND)
 
 ELSEIF("${TARGET_OS}" STREQUAL "MacOSX")
