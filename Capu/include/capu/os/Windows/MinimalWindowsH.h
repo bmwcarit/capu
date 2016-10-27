@@ -17,45 +17,121 @@
 #ifndef CAPU_MINIMAL_WINDOWSH_H
 #define CAPU_MINIMAL_WINDOWSH_H
 
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 
+#ifndef NOGDICAPMASKS
 #define NOGDICAPMASKS
-#define NOVIRTUALKEYCODES 
+#endif
+#ifndef NOVIRTUALKEYCODES
+#define NOVIRTUALKEYCODES
+#endif
+#ifndef NOWINMESSAGES
 #define NOWINMESSAGES
+#endif
+#ifndef NOWINSTYLES
 #define NOWINSTYLES
-#define NOSYSMETRICS 
+#endif
+#ifndef NOSYSMETRICS
+#define NOSYSMETRICS
+#endif
+#ifndef NOMENUS
 #define NOMENUS
-#define NOICONS 
-#define NOKEYSTATES 
-#define NOSYSCOMMANDS 
+#endif
+#ifndef NOICONS
+#define NOICONS
+#endif
+#ifndef NOKEYSTATES
+#define NOKEYSTATES
+#endif
+#ifndef NOSYSCOMMANDS
+#define NOSYSCOMMANDS
+#endif
+#ifndef NORASTEROPS
 #define NORASTEROPS
+#endif
+#ifndef NOSHOWWINDOW
 #define NOSHOWWINDOW
+#endif
+#ifndef OEMRESOURCE
 #define OEMRESOURCE
-#define NOATOM 
-#define NOCLIPBOARD 
-#define NOCOLOR 
-#define NOCTLMGR 
+#endif
+#ifndef NOATOM
+#define NOATOM
+#endif
+#ifndef NOCLIPBOARD
+#define NOCLIPBOARD
+#endif
+#ifndef NOCOLOR
+#define NOCOLOR
+#endif
+#ifndef NOCTLMGR
+#define NOCTLMGR
+#endif
+#ifndef NODRAWTEXT
 #define NODRAWTEXT
+#endif
+#ifndef NOKERNEL
 #define NOKERNEL
+#endif
+#ifndef NONLS
 #define NONLS
-#define NOMB 
-#define NOMEMMGR 
-#define NOMETAFILE 
-#define NOMINMAX 
-#define NOMSG 
-#define NOOPENFILE 
-#define NOSCROLL 
-#define NOSERVICE 
-#define NOSOUND 
-#define NOTEXTMETRIC 
-#define NOWH 
-#define NOWINOFFSETS 
-#define NOCOMM 
-#define NOKANJI 
-#define NOHELP 
+#endif
+#ifndef NOMB
+#define NOMB
+#endif
+#ifndef NOMEMMGR
+#define NOMEMMGR
+#endif
+#ifndef NOMETAFILE
+#define NOMETAFILE
+#endif
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#ifndef NOMSG
+#define NOMSG
+#endif
+#ifndef NOOPENFILE
+#define NOOPENFILE
+#endif
+#ifndef NOSCROLL
+#define NOSCROLL
+#endif
+#ifndef NOSERVICE
+#define NOSERVICE
+#endif
+#ifndef NOSOUND
+#define NOSOUND
+#endif
+#ifndef NOTEXTMETRIC
+#define NOTEXTMETRIC
+#endif
+#ifndef NOWH
+#define NOWH
+#endif
+#ifndef NOWINOFFSETS
+#define NOWINOFFSETS
+#endif
+#ifndef NOCOMM
+#define NOCOMM
+#endif
+#ifndef NOKANJI
+#define NOKANJI
+#endif
+#ifndef NOHELP
+#define NOHELP
+#endif
+#ifndef NOPROFILER
 #define NOPROFILER
-#define NODEFERWINDOWPOS 
-#define NOMCX 
+#endif
+#ifndef NODEFERWINDOWPOS
+#define NODEFERWINDOWPOS
+#endif
+#ifndef NOMCX
+#define NOMCX
+#endif
 
 #include <windows.h>
 
