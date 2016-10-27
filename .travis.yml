@@ -14,6 +14,10 @@
 # limitations under the License.
 #
 
+# Ubuntu 14.04 Trusty support
+sudo: required
+dist: trusty
+
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
@@ -33,12 +37,6 @@ script:
   - cp -r lib/* bin
   - cd bin
   - LD_LIBRARY_PATH=. ./Capu_Test
-
-before_install:
-  - cd ..
-  - wget --no-check-certificate http://www.cmake.org/files/v2.8/cmake-2.8.10.tar.gz
-  - tar xf cmake-2.8.10.tar.gz
-  - cd cmake-2.8.10
 
 install:
   - sudo apt-get install libcurl3-dev
