@@ -39,8 +39,6 @@ script:
   - LD_LIBRARY_PATH=. ./Capu_Test
 
 install:
-  - sudo apt-get install libcurl3-dev
-  - ./bootstrap --system-curl
   - make -j4
   - sudo make install
 
