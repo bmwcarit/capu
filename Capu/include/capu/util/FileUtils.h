@@ -169,7 +169,6 @@ namespace capu
             if (retVal != capu::CAPU_OK)
             {
                 // an error occurred
-                readBytes = 0;
                 break;
             }
             if (readBytes <= 0)
