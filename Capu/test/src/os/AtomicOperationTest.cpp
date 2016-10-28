@@ -20,6 +20,10 @@
 #include "capu/os/Mutex.h"
 #include "capu/util/Runnable.h"
 
+#if defined(ARCH_X86_64) || defined(ARCH_ARM64)
+#define CAPU_HAS_64BIT_ATOMICS
+#endif
+
 template <typename T>
 class AtomicOperationTest : public ::testing::Test
 {
@@ -27,7 +31,11 @@ protected:
     T value;
 };
 
-typedef ::testing::Types< uint32_t, int32_t, uint64_t, int64_t > IntegerTypes;
+typedef ::testing::Types< uint32_t, int32_t
+#ifdef CAPU_HAS_64BIT_ATOMICS
+                          , uint64_t, int64_t
+#endif
+                          > IntegerTypes;
 TYPED_TEST_CASE(AtomicOperationTest, IntegerTypes);
 
 namespace
@@ -40,14 +48,6 @@ namespace
     {
         value = 0x7350F000;
     }
-    void getHugeValue(uint64_t& value)
-    {
-        value = 0x7350F000F234F234;
-    }
-    void getHugeValue(int64_t& value)
-    {
-        value = 0x7350F000F234F234;
-    }
     void getNegativeValue(uint32_t& value)
     {
         value = 0xF4127654;
@@ -55,6 +55,15 @@ namespace
     void getNegativeValue(int32_t& value)
     {
         value = 0xF4127654;
+    }
+#ifdef CAPU_HAS_64BIT_ATOMICS
+    void getHugeValue(uint64_t& value)
+    {
+        value = 0x7350F000F234F234;
+    }
+    void getHugeValue(int64_t& value)
+    {
+        value = 0x7350F000F234F234;
     }
     void getNegativeValue(uint64_t& value)
     {
@@ -64,7 +73,9 @@ namespace
     {
         value = 0xF4127654F234F234;
     }
+#endif
 }
+
 
 TYPED_TEST(AtomicOperationTest, CanStoreAndLoadAValue)
 {
@@ -137,9 +148,35 @@ public:
 };
 
 
+TEST(AtomicOperation, Add_Overflow_32bit)
+{
+    uint32_t val = 4294967295u;
+    uint32_t ret = capu::AtomicOperation::AtomicAdd(val, 3);
+    EXPECT_EQ(2u, val);
+    EXPECT_EQ(4294967295u, ret);
+}
 
-//include tests depending on architecture
-#include "arch/AtomicOperation.inc"
+TEST(AtomicOperation, Sub_Overflow_32bit)
+{
+    uint32_t val = 0;
+    uint32_t ret = capu::AtomicOperation::AtomicSub(val, 5);
+    EXPECT_EQ(4294967291u, val);
+    EXPECT_EQ(0u, ret);
+}
+
+#ifdef CAPU_HAS_64BIT_ATOMICS
+TEST(AtomicOperation,Add_Overflow_64bit) {
+  uint64_t val = 18446744073709551615u;
+  capu::AtomicOperation::AtomicAdd(val, 3);
+  EXPECT_EQ((uint32_t) 2,val);
+}
+
+TEST(AtomicOperation,Sub_Overflow_64bit) {
+  uint64_t val = 0;
+  capu::AtomicOperation::AtomicSub(val, 5);
+  EXPECT_EQ(18446744073709551611u,val);
+}
+#endif
 
 TEST(AtomicOperation, Add)
 {
