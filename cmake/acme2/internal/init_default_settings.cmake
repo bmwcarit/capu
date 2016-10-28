@@ -31,7 +31,8 @@ SET(ACME2_DEFAULT_VALUES
     VERSION_MAJOR           0
     VERSION_MINOR           0
     VERSION_PATCH           0
-    
+    VERSION_STRING          "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
+
     # source paths
     INCLUDE_BASE            include
     FILES_PUBLIC_HEADER     #include/*.h
@@ -39,13 +40,13 @@ SET(ACME2_DEFAULT_VALUES
     FILES_SOURCE            #src/*.h
     FILES_DOCUMENTATION     #doc/*
     FILES_RESOURCE          #res/*
-    FILES_GENERATED         
+    FILES_GENERATED
 
     # dependencies
-    DEPENDENCIES            
-    DEPENDENCIES_HEADER     
-    DEPENDENCIES_SYSTEM     
-    
+    DEPENDENCIES
+    DEPENDENCIES_HEADER
+    DEPENDENCIES_SYSTEM
+
     # install module: boolean
     ENABLE_INSTALL          ON
 
@@ -63,7 +64,7 @@ SET(ACME2_DEFAULT_VALUES
     INSTALL_PKGCONFIG       lib/pkgconfig
 
     # content
-    CONTENT                 
+    CONTENT
 )
 
 #provide variables DEFAULT_<ACME2_API>
