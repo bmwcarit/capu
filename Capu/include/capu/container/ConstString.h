@@ -239,4 +239,4 @@ namespace capu
     }
 }
 
-#endif // __RAMSES_STATICSTRING_H__
+#endif
