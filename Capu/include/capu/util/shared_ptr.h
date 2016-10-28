@@ -196,8 +196,8 @@ namespace capu
         {
         public:
             MetadataBase(uint_t initialReferenceCount)
-                : mReferenceCount(initialReferenceCount)
             {
+                capu::AtomicOperation::AtomicStore(mReferenceCount, initialReferenceCount);
             }
 
             virtual ~MetadataBase() {}
@@ -216,7 +216,7 @@ namespace capu
 
             uint_t numReferences() const
             {
-                return mReferenceCount;
+                return capu::AtomicOperation::AtomicLoad(mReferenceCount);
             }
 
         private:
