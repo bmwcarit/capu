@@ -24,9 +24,9 @@
 class Globals
 {
 public:
-    static uint32_t var;
+    static capu::uint_t var;
 };
-uint32_t Globals::var = 0;
+capu::uint_t Globals::var = 0;
 
 class WorkToDo : public capu::Runnable
 {
