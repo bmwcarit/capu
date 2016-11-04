@@ -29,14 +29,14 @@ namespace capu
             class AtomicBool
             {
             public:
-                bool load();
+                bool load() const;
                 void store(bool desired);
             private:
-                volatile Address mValue;
+                volatile mutable Address mValue;
             };
 
             inline
-            bool AtomicBool::load()
+            bool AtomicBool::load() const
             {
                 const Address Zero = 0;
                 Address oldValue;

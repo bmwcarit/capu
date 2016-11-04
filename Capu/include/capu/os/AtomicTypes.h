@@ -47,7 +47,7 @@ namespace capu
          * @brief The method returns the current value of the bool atomically
          * @return The current boolean value
          */
-        bool load();
+        bool load() const;
 
         /**
          * @brief Sets the value of the bool atomically
@@ -67,7 +67,7 @@ namespace capu
         /**
          * @brief Type operator to implicitly cast to bool
          */
-        operator bool();
+        operator bool() const;
     };
 
 
@@ -84,7 +84,7 @@ namespace capu
     }
 
     inline
-    bool AtomicBool::load()
+    bool AtomicBool::load() const
     {
         return os::arch::AtomicBool::load();
     }
@@ -103,7 +103,7 @@ namespace capu
     }
 
     inline
-    AtomicBool::operator bool()
+    AtomicBool::operator bool() const
     {
         return load();
     }

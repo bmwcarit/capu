@@ -29,10 +29,10 @@ namespace capu
         public:
             void store(bool value);
 
-            bool load();
+            bool load() const;
 
         private:
-            volatile LONG mValue;
+            volatile mutable LONG mValue;
         };
 
         inline
@@ -42,7 +42,7 @@ namespace capu
         }
 
         inline
-        bool AtomicBool::load()
+        bool AtomicBool::load() const
         {
             return (InterlockedCompareExchange(&mValue,0,0) != 0);
         }
