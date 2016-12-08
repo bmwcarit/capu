@@ -20,6 +20,7 @@
 #include "capu/util/Iterator.h"
 #include "capu/util/Traits.h"
 #include "capu/os/Memory.h"
+#include <new>
 
 namespace capu
 {
