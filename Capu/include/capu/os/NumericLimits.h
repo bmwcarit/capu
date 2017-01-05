@@ -20,6 +20,7 @@
 #include <capu/Config.h>
 #include <capu/os/PlatformInclude.h>
 #include CAPU_PLATFORM_INCLUDE(NumericLimits)
+#include <limits>
 
 namespace capu
 {
@@ -38,6 +39,11 @@ namespace capu
          * Return the minimum value for the given type
          */
         template<typename T> static T Min();
+
+        /**
+         * Return the epsilon value for the given type
+         */
+        template<typename T> static T Epsilon();
     };
 
     template<typename T>
@@ -56,7 +62,12 @@ namespace capu
         return capu::os::arch::NumericLimits::Min<T>();
     }
 
+    template<typename T>
+    inline
+    T NumericLimits::Epsilon()
+    {
+        return std::numeric_limits<T>::epsilon();
+    }
 }
 
 #endif //CAPU_NUMERIC_LIMITS_H
-
