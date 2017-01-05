@@ -46,7 +46,10 @@ namespace capu
         static OutputIt copy(InputIt first, InputIt last, OutputIt dest)
         {
             const uint_t distance = (last - first);
-            Memory::Copy(&*dest, &*first, distance * sizeof(T));
+            if (distance > 0)
+            {
+                Memory::Copy(&*dest, &*first, distance * sizeof(T));
+            }
             return dest + distance;
         }
     };
