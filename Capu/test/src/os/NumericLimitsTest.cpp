@@ -17,6 +17,26 @@
 #include <gtest/gtest.h>
 #include "capu/os/NumericLimits.h"
 
+TEST(NumericLimits, ensureAvailableForAlltypes)
+{
+    (void)capu::NumericLimits::Max<uint64_t>();
+    (void)capu::NumericLimits::Max<int64_t>();
+
+    (void)capu::NumericLimits::Max<uint32_t>();
+    (void)capu::NumericLimits::Max<int32_t>();
+
+    (void)capu::NumericLimits::Max<uint16_t>();
+    (void)capu::NumericLimits::Max<int16_t>();
+
+    (void)capu::NumericLimits::Max<uint8_t>();
+    (void)capu::NumericLimits::Max<int8_t>();
+
+    (void)capu::NumericLimits::Max<float>();
+
+    (void)capu::NumericLimits::Max<capu::uint_t>();
+    (void)capu::NumericLimits::Max<capu::int_t>();
+}
+
 TEST(NumericLimits, testLimits)
 {
     EXPECT_EQ(capu::NumericLimits::Max<int64_t>(), static_cast<int64_t>(0x7fffffffffffffffLL));
