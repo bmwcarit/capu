@@ -18,8 +18,6 @@
 #define CAPU_NUMERIC_LIMITS_H
 
 #include <capu/Config.h>
-#include <capu/os/PlatformInclude.h>
-#include CAPU_PLATFORM_INCLUDE(NumericLimits)
 #include <limits>
 
 namespace capu
@@ -51,7 +49,7 @@ namespace capu
     T
     NumericLimits::Max()
     {
-        return capu::os::arch::NumericLimits::Max<T>();
+        return std::numeric_limits<T>::max();
     }
 
     template<typename T>
@@ -59,7 +57,7 @@ namespace capu
     T
     NumericLimits::Min()
     {
-        return capu::os::arch::NumericLimits::Min<T>();
+        return std::numeric_limits<T>::min();
     }
 
     template<typename T>

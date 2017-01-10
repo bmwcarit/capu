@@ -45,7 +45,7 @@ namespace capu
 
     TEST_F(StringOutputStreamTest, WriteFloatMaximumNegativeWithDefaultPrecision)
     {
-        outputStream << -capu::generic::NumericLimits::Max<float>();
+        outputStream << -capu::NumericLimits::Max<float>();
         outputStream.flush();
         EXPECT_EQ(47U, outputStream.length());
     }
@@ -69,7 +69,7 @@ namespace capu
     TEST_F(StringOutputStreamTest, WriteFloatSmallestNegativeWithMaximumPrecision)
     {
         outputStream.setDecimalDigits(45);
-        outputStream << (-1.f / (capu::generic::NumericLimits::Max<float>() - 1));
+        outputStream << (-1.f / (capu::NumericLimits::Max<float>() - 1));
         outputStream.flush();
         EXPECT_EQ(3U + 45U, outputStream.length()); // '-' + '0.' + precision
     }
