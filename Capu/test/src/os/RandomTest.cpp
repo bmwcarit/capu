@@ -24,7 +24,7 @@ TEST(Random, TestUInt8)
 {
     capu::Random rand;
 
-    uint32_t max = capu::NumericLimits::Max<uint8_t>();
+    uint32_t max = capu::NumericLimits<uint8_t>::Max();
 
     uint32_t* counts = new uint32_t[max + 1];
     capu::Memory::Set(counts, 0, (max + 1) * sizeof(uint32_t));
@@ -57,4 +57,3 @@ TEST(Random, TestUInt32)
     uint32_t i2 = rand.nextUInt32();
     EXPECT_TRUE(i1 != i2);
 }
-

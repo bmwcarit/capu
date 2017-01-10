@@ -25,47 +25,34 @@ namespace capu
     /**
      * Numerical system limits.
      */
+    template <typename T>
     class NumericLimits // no inheritance is needed because all methods are static
     {
     public:
         /**
          * Return the maximum value for the given type
          */
-        template<typename T> static T Max();
+        static T Max()
+        {
+            return std::numeric_limits<T>::max();
+        }
 
         /**
          * Return the minimum value for the given type
          */
-        template<typename T> static T Min();
+        static T Min()
+        {
+            return std::numeric_limits<T>::min();
+        }
 
         /**
          * Return the epsilon value for the given type
          */
-        template<typename T> static T Epsilon();
+        static T Epsilon()
+        {
+            return std::numeric_limits<T>::epsilon();
+        }
     };
-
-    template<typename T>
-    inline
-    T
-    NumericLimits::Max()
-    {
-        return std::numeric_limits<T>::max();
-    }
-
-    template<typename T>
-    inline
-    T
-    NumericLimits::Min()
-    {
-        return std::numeric_limits<T>::min();
-    }
-
-    template<typename T>
-    inline
-    T NumericLimits::Epsilon()
-    {
-        return std::numeric_limits<T>::epsilon();
-    }
 }
 
 #endif //CAPU_NUMERIC_LIMITS_H
