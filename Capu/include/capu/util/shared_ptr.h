@@ -18,7 +18,7 @@
 #define CAPU_SHAREDPTR_H
 
 #include "capu/Config.h"
-#include "capu/os/AtomicOperation.h"
+#include "capu/os/Atomic.h"
 #include "capu/util/Swap.h"
 
 namespace capu
@@ -196,8 +196,8 @@ namespace capu
         {
         public:
             MetadataBase(uint_t initialReferenceCount)
+                : mReferenceCount(initialReferenceCount)
             {
-                capu::AtomicOperation::AtomicStore(mReferenceCount, initialReferenceCount);
             }
 
             virtual ~MetadataBase() {}
@@ -206,21 +206,21 @@ namespace capu
 
             void incRefCount()
             {
-                capu::AtomicOperation::AtomicInc(mReferenceCount);
+                ++mReferenceCount;
             }
 
             void decRefCount()
             {
-                capu::AtomicOperation::AtomicDec(mReferenceCount);
+                --mReferenceCount;
             }
 
             uint_t numReferences() const
             {
-                return capu::AtomicOperation::AtomicLoad(mReferenceCount);
+                return mReferenceCount;
             }
 
         private:
-            uint_t mReferenceCount;
+            Atomic<uint_t> mReferenceCount;
         };
 
         template <typename T>

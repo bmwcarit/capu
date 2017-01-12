@@ -19,7 +19,7 @@
 
 #include "capu/os/Time.h"
 #include "capu/os/Thread.h"
-#include "capu/os/AtomicOperation.h"
+#include "capu/os/Atomic.h"
 #include <stdlib.h>
 #include <cstdlib>
 
@@ -37,11 +37,11 @@ namespace capu
 
         private:
             // Type required by rand_r()
-            unsigned int mSeed;
+            Atomic<unsigned int> mSeed;
         };
 
         inline Random::Random()
-            : mSeed(static_cast<uint32_t>(Time::GetMicroseconds()))
+            : mSeed(static_cast<unsigned int>(Time::GetMicroseconds()))
         {
         }
 
@@ -54,7 +54,7 @@ namespace capu
         {
             // RAND_MAX is at least 32767, which are 15 bit, so we need to shift here already
             unsigned int threadID = static_cast<unsigned int>(capu::Thread::CurrentThreadId());
-            unsigned int seedCopy = AtomicOperation::AtomicAdd(mSeed,threadID);
+            unsigned int seedCopy = mSeed++;
             seedCopy += threadID;
             int r1 = rand_r(&seedCopy);
             int r2 = rand_r(&seedCopy);

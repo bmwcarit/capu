@@ -19,7 +19,7 @@
 
 #include "capu/Config.h"
 
-#include "capu/os/AtomicTypes.h"
+#include "capu/os/Atomic.h"
 
 
 namespace capu
@@ -71,7 +71,7 @@ namespace capu
         }
 
     private:
-        AtomicBool mCancel;
+        Atomic<bool> mCancel;
     };
 }
 

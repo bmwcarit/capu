@@ -19,14 +19,11 @@
 #include "capu/util/ThreadPool.h"
 #include "capu/os/Mutex.h"
 #include "capu/os/Semaphore.h"
-#include "capu/os/AtomicOperation.h"
+#include "capu/os/Atomic.h"
 
-class Globals
-{
-public:
-    static capu::uint_t var;
-};
-capu::uint_t Globals::var = 0;
+namespace {
+    static capu::Atomic<capu::uint_t> GlobalVar(0);
+}
 
 class WorkToDo : public capu::Runnable
 {
@@ -37,7 +34,7 @@ public:
 
     void run()
     {
-        capu::AtomicOperation::AtomicAdd(Globals::var, 5);
+        GlobalVar += 5;
         capu::Thread::Sleep(10);
     }
 };
@@ -54,7 +51,7 @@ public:
 
     void run()
     {
-        capu::AtomicOperation::AtomicAdd(Globals::var, 5);
+        GlobalVar += 5;
         m_semaphore.release();
         while (!isCancelRequested())
         {
@@ -88,7 +85,7 @@ TEST(ThreadPool, TooManyThreadsTest)
 
 TEST(ThreadPool, AddCloseTest)
 {
-    Globals::var = 0;
+    GlobalVar = 0;
 
     capu::ThreadPool* pool = new capu::ThreadPool(capu::ThreadPool::MAX_THREAD_POOL_THREADS);
     for (int32_t i = 0; i < 1000; i++)
@@ -98,7 +95,7 @@ TEST(ThreadPool, AddCloseTest)
     }
     EXPECT_EQ(capu::CAPU_OK, pool->close());
     //check if all the work has been done which means that all threads have been executed
-    EXPECT_EQ(5000u, Globals::var);
+    EXPECT_EQ(5000u, GlobalVar.load());
 
     //make sure adding is no more supported after pool has been closed
     capu::shared_ptr<WorkToDo> w(new WorkToDo());
@@ -111,7 +108,7 @@ TEST(ThreadPool, AddCloseTest)
 
 TEST(ThreadPool, AddCloseCancelTest)
 {
-    Globals::var = 0;
+    GlobalVar = 0;
     capu::Semaphore waiter;
     uint32_t poolSize = 5;
     capu::ThreadPool* pool = new capu::ThreadPool(poolSize);
@@ -134,7 +131,7 @@ TEST(ThreadPool, AddCloseCancelTest)
     EXPECT_EQ(capu::CAPU_OK, pool->close(true));
 
     // check if all the work has been done which means that all threads have been executed
-    EXPECT_EQ(25u, Globals::var);
+    EXPECT_EQ(25u, GlobalVar.load());
 
     // if test runs further closing has worked
     EXPECT_TRUE(pool->isClosed());
@@ -152,7 +149,7 @@ TEST(ThreadPool, SizeTest)
 
 TEST(ThreadPool, CloseTest)
 {
-    Globals::var = 0;
+    GlobalVar = 0;
     capu::ThreadPool pool(1);
 
     pool.add(capu::shared_ptr<capu::Runnable>(new WorkToDo()));
@@ -163,7 +160,7 @@ TEST(ThreadPool, CloseTest)
 
     EXPECT_EQ(capu::CAPU_ERROR, pool.add(capu::shared_ptr<capu::Runnable>(new WorkToDo())));
 
-    EXPECT_EQ(15u, Globals::var);
+    EXPECT_EQ(15u, GlobalVar.load());
 
     EXPECT_TRUE(pool.isClosed());
 }

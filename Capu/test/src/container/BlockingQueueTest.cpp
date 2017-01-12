@@ -19,9 +19,9 @@
 
 #include "capu/container/BlockingQueue.h"
 #include "capu/util/ThreadPool.h"
-#include "capu/os/AtomicOperation.h"
+#include "capu/os/Atomic.h"
 
-using namespace std;
+using namespace capu;
 
 class Producer: public capu::Runnable
 {
@@ -30,7 +30,7 @@ public:
     int32_t mCount;
     uint32_t mId;
 
-    static uint32_t mSum;
+    static Atomic<uint32_t> mSum;
 
     Producer(capu::BlockingQueue<uint32_t>& queue, int32_t count, uint32_t id)
         : mQueue(queue), mCount(count), mId(id)
@@ -45,12 +45,12 @@ public:
             mQueue.push(val);
             uint32_t sleepTime = rand() % 100;
             capu::Thread::Sleep(sleepTime);
-            capu::AtomicOperation::AtomicAdd(mSum, val);
+            mSum += val;
         }
     }
 };
 
-uint32_t Producer::mSum = 0;
+Atomic<uint32_t> Producer::mSum(0);
 
 class Consumer: public capu::Runnable
 {
@@ -59,7 +59,7 @@ public:
     int32_t mCount;
     uint32_t mId;
 
-    static uint32_t mSum;
+    static Atomic<uint32_t> mSum;
 
     Consumer(capu::BlockingQueue<uint32_t>& queue, int32_t count, uint32_t id)
         : mQueue(queue), mCount(count), mId(id)
@@ -72,11 +72,11 @@ public:
         {
             uint32_t tmp = 0;
             EXPECT_EQ(capu::CAPU_OK, mQueue.pop(&tmp));
-            capu::AtomicOperation::AtomicAdd(mSum, tmp);
+            mSum += tmp;
         }
     }
 };
-uint32_t Consumer::mSum = 0;
+Atomic<uint32_t> Consumer::mSum(0);
 
 TEST(BlockingQueue, PushPopSingleThread)
 {
@@ -147,5 +147,5 @@ TEST(BlockingQueue, PushPopMultiThread)
     producer.close();
     consumer.close();
 
-    EXPECT_EQ(Producer::mSum, Consumer::mSum);
+    EXPECT_EQ(Producer::mSum.load(), Consumer::mSum.load());
 }
