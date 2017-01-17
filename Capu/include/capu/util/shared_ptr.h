@@ -204,14 +204,14 @@ namespace capu
 
             virtual void callDeleter() = 0;
 
-            void incRefCount()
+            uint_t incRefCount()
             {
-                ++mReferenceCount;
+                return ++mReferenceCount;
             }
 
-            void decRefCount()
+            uint_t decRefCount()
             {
-                --mReferenceCount;
+                return --mReferenceCount;
             }
 
             uint_t numReferences() const
@@ -455,8 +455,7 @@ namespace capu
     {
         if (mMetadata)
         {
-            mMetadata->decRefCount();
-            if (0 == mMetadata->numReferences())
+            if (0 == mMetadata->decRefCount())
             {
                 mMetadata->callDeleter();
                 delete mMetadata;
