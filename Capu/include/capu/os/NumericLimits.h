@@ -17,6 +17,10 @@
 #ifndef CAPU_NUMERIC_LIMITS_H
 #define CAPU_NUMERIC_LIMITS_H
 
+// remove MSVC macros
+#undef min
+#undef max
+
 #include <capu/Config.h>
 #include <limits>
 
