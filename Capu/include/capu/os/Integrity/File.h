@@ -24,8 +24,6 @@
 #define PATH_MAX __ABS_PATH_MAX // file system max path length
 #include <capu/os/Posix/File.h>
 
-#define STREAM_BUFFER_SIZE (2 * 1024 * 1024)
-
 namespace capu
 {
     namespace os
@@ -59,53 +57,30 @@ namespace capu
             using capu::posix::File::isDirectory;
             using capu::posix::File::copyTo;
 
-        private:
-            char* mStreamBuffer;
         };
 
         inline
         File::File(const String& path)
             : capu::posix::File(path)
-            , mStreamBuffer(NULL)
         {
         }
 
         inline
         File::File(const File& parent, const capu::String& path)
             : capu::posix::File(parent, path)
-            , mStreamBuffer(NULL)
         {
         }
 
         inline
         status_t File::open(const FileMode& mode)
         {
-            status_t status = capu::posix::File::open(mode);
-            if (status == CAPU_OK && mStreamBuffer == NULL)
-            {
-                //the stream buffer is a block of data that acts as intermediary between the i/o operations and the physical file associated to the stream
-                //activating it here in order to improve file operation performance
-                mStreamBuffer = (char*) malloc(STREAM_BUFFER_SIZE);
-                int returnCode = setvbuf(mHandle, mStreamBuffer, _IOFBF, STREAM_BUFFER_SIZE);
-                if (returnCode != 0)
-                {
-                    status = CAPU_ERROR;
-                }
-            }
-
-            return status;
+            return capu::posix::File::open(mode);
         }
 
         inline
         status_t File::close()
         {
-            status_t status = capu::posix::File::close();
-            if (NULL != mStreamBuffer)
-            {
-                free(mStreamBuffer);
-                mStreamBuffer = NULL;
-            }
-            return status;
+            return capu::posix::File::close();
         }
 
     }
