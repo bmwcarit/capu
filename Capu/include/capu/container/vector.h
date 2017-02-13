@@ -546,7 +546,7 @@ namespace capu
 
     template<typename T>
     capu::vector<T>::vector(const vector& other)
-        : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * other.capacity()]))
+        : m_data(other.capacity() == 0u ? NULL : reinterpret_cast<T*>(new uint8_t[sizeof(T) * other.capacity()]))
         , m_dataEnd( m_data + other.size())
         , m_capacityEnd( m_data + other.capacity())
     {
@@ -565,7 +565,7 @@ namespace capu
     template<typename T>
     inline
     vector<T>::vector(const uint_t initialSize, const T& value)
-        : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
+        : m_data(initialSize == 0u ? NULL : reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
     {
@@ -575,7 +575,7 @@ namespace capu
     template<typename T>
     inline
     vector<T>::vector(const uint_t initialSize)
-        : m_data(reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
+        : m_data(initialSize == 0u ? NULL : reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
     {
