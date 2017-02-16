@@ -48,19 +48,21 @@ namespace capu
             friend class vector<T>;
 
             /**
-             * Sets the current position to the next element
-             */
-            void operator++()
+             * Default constructor for the iterator
+            */
+            InternalIterator()
+                : m_current(NULL)
             {
-                ++m_current;
+
             }
 
             /**
-             *  Sets the current position to the previous element
-             */
-            void operator--()
+            * Copy constructor for the iterator
+            */
+            InternalIterator(const InternalIterator& other)
+                : m_current(other.m_current)
             {
-                --m_current;
+
             }
 
             /**
@@ -99,6 +101,16 @@ namespace capu
             bool operator==(const InternalIterator<const T>& other) const
             {
                 return m_current == other.m_current;
+            }
+
+            /**
+             * Returns a reference to the element at the current position plus the offset
+             * @param offset for the wanted position
+             * @return reference to the element
+             */
+            TYPE& operator[](uint_t offset)
+            {
+                return *(m_current + offset);
             }
 
             /**
@@ -153,6 +165,26 @@ namespace capu
             }
 
             /**
+            * Checks if the pointer of the other iterator is smaller or equal than my own pointer
+            * @param other InternalIterator to check with
+            * @return true if other pointer is smaller or equal than my one one, false otherwise
+            */
+            bool operator <=(const InternalIterator<TYPE>& other)
+            {
+                return m_current <= other.m_current;
+            }
+
+            /**
+            * Checks if the pointer of the other iterator is bigger or equal than my own pointer
+            * @param other InternalIterator to check with
+            * @return true if other pointer is bigger or equal than my one one, false otherwise
+            */
+            bool operator >=(const InternalIterator<TYPE>& other)
+            {
+                return m_current >= other.m_current;
+            }
+
+            /**
              * Adds the given value to the internal pointer and returns a new iterator
              * @param value to add to the internal pointer
              * @return InternalIterator with the new pointer
@@ -163,10 +195,10 @@ namespace capu
             }
 
             /**
-             * Substracts the given value to the internal pointer and returns a new iterator
-             * @param value to substract from the internal pointer
-             * @return InternalIterator with the new pointer
-             */
+            * Substracts the given value to the internal pointer and returns a new iterator
+            * @param value to substract from the internal pointer
+            * @return InternalIterator with the new pointer
+            */
             InternalIterator operator-(const int_t value) const
             {
                 return InternalIterator(m_current - value);
@@ -180,6 +212,107 @@ namespace capu
             int_t operator-(const InternalIterator<TYPE>& other) const
             {
                 return m_current - other.m_current;
+            }
+
+            /**
+            * Sets the position to the current element plus the offset
+            * @return Iterator to the new position
+            */
+            friend InternalIterator<TYPE> operator+(int_t offset, InternalIterator<TYPE>& other)
+            {
+                return other + offset;
+            }
+
+            /**
+             * Sets the position to the current position plus the given offset
+             * @param offset to add to the current position
+             */
+            InternalIterator<TYPE>& operator+=(const int_t offset)
+            {
+                m_current += offset;
+                return *this;
+            }
+
+            /**
+            * Sets the position to the current position minus the given offset
+            * @param offset to substract from the current position
+            */
+            InternalIterator<TYPE>& operator-=(const int_t offset)
+            {
+                m_current -= offset;
+                return *this;
+            }
+
+
+            /**
+            * Sets the current position to the next element
+            * @return InternalIterator pointing to the current position
+            */
+            InternalIterator<TYPE>& operator++()
+            {
+                ++m_current;
+                return *this;
+            }
+
+            /**
+            * Sets the current position to the next element and returns an iterator to the current element
+            * @return InternalIterator to the element before the incrementation
+            */
+            InternalIterator<TYPE> operator++(int32_t)
+            {
+                InternalIterator<TYPE> result(*this);
+                ++(*this);
+                return result;
+            }
+
+            /**
+            *  Sets the current position to the previous element
+            */
+            InternalIterator<TYPE>& operator--()
+            {
+                --m_current;
+                return *this;
+            }
+
+            /**
+            * Sets the current position to the previous element and returns an iterator to the current element
+            * @return InternalIterator to the element before the decrement
+            */
+            InternalIterator<TYPE> operator--(int32_t)
+            {
+                InternalIterator<TYPE> result(*this);
+                --(*this);
+                return result;
+            }
+
+            /**
+             * Assigns the position of the other iterator to my own position
+             * @param other iterator to take position from
+             * @return reference to myself
+             */
+            InternalIterator& operator=(const InternalIterator& other)
+            {
+                m_current = other.m_current;
+                return *this;
+            }
+
+            /**
+             * Swaps the internal pointer to the underlying data
+             * @param iterator to swap with
+             */
+            void swap(InternalIterator& other)
+            {
+                capu::swap(m_current, other.m_current);
+            }
+
+            /**
+             * Swaps the internal pointers of the two given iterators
+             * @param first iterator to swap with
+             * @param second iterator to swap with
+            */
+            friend void swap(InternalIterator& first, InternalIterator& second)
+            {
+                first.swap(second);
             }
 
         protected:
@@ -446,6 +579,7 @@ namespace capu
          */
         void grow(uint_t requiredCapacity);
     };
+
 
     /**
      * swap specialization for Vector<T>

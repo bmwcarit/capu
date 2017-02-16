@@ -26,6 +26,7 @@
 #include "capu/container/String.h"
 #include "util/BidirectionalTestContainer.h"
 #include "util/ComplexTestType.h"
+#include "util/IteratorTestHelper.h"
 
     template<typename T>
     struct NumberOfExistingObjectsHelper
@@ -1331,4 +1332,19 @@
         EXPECT_EQ(6u, vec.capacity());
         vec.insert(vec.end(), rangeVec.begin(), rangeVec.end());
         EXPECT_EQ(15u, vec.capacity());
+    }
+
+
+ 
+    TEST(VectorTest, IteratorFullfillsStandard)
+    {
+        typedef capu::vector<capu::uint_t> UintVector;
+        capu::IteratorTestHelper::IteratorHasTag<UintVector, capu::random_access_iterator_tag>();
+
+        UintVector v;
+        v.push_back(1);
+        v.push_back(2);
+        v.push_back(3);
+ 
+        capu::IteratorTestHelper::IteratorImplementsAllNecessaryMethods(v);
     }
