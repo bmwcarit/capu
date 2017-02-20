@@ -24,9 +24,7 @@ SET(CMAKE_C_COMPILER   clang)
 SET(CMAKE_CXX_COMPILER clang++)
 SET(CMAKE_LINKER       llvm-link)
 
-SET(UNDEFINED_SANITIZER_CHECKS "bool,bounds,enum,float-divide-by-zero,function,integer-divide-by-zero,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,vla-bound,vptr,alignment,float-cast-overflow")
-
-SET(FLAGS_COMMON "-m64 -Wall -Wextra -Wno-missing-field-initializers -Werror -Wshadow -fPIC -fno-omit-frame-pointer -fsanitize=${UNDEFINED_SANITIZER_CHECKS}")
+SET(FLAGS_COMMON "-m64 -Wall -Wextra -Wno-missing-field-initializers -Werror -Wshadow -fPIC -fno-omit-frame-pointer -fsanitize=undefined -fno-sanitize-recover=undefined")
 
 SET(CMAKE_C_FLAGS "-std=c11 ${FLAGS_COMMON}"  CACHE STRING "")
 SET(CMAKE_CXX_FLAGS "-std=c++11 ${FLAGS_COMMON} -Wnon-virtual-dtor"  CACHE STRING "")
