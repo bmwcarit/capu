@@ -1,5 +1,6 @@
 #include "capu/util/ConsoleLogAppender.h"
 #include "capu/util/LogMessage.h"
+#include "capu/util/ScopedLock.h"
 #include "capu/os/Console.h"
 #include "capu/os/Time.h"
 #include <stdio.h>
@@ -14,7 +15,7 @@ namespace capu
 
     void ConsoleLogAppender::logMessage(const LogMessage& logMessage)
     {
-        m_logMutex.lock();
+        ScopedMutexLock lock(m_logMutex);
         const uint64_t now = Time::GetMilliseconds();
         Console::Print(Console::WHITE, "%.3f ", now/1000.0);
 
@@ -44,6 +45,5 @@ namespace capu
         Console::Print(Console::AQUA, logMessage.getContext().getContextName().c_str());
         Console::Print(" | %s\n", logMessage.getLogMessage());
         Console::Flush();
-        m_logMutex.unlock();
     }
 }
