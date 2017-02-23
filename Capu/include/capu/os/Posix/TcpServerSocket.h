@@ -129,10 +129,14 @@ namespace capu
                 return CAPU_SOCKET_ESOCKET;
             }
 
+            if (port != 0)
+            {
+                int32_t optval = 1;
+                setsockopt(mServerSock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+            }
+
             mPort = port;
 
-            int32_t optval = 1;
-            setsockopt(mServerSock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
             Memory::Set(reinterpret_cast<char*>(&serverAddress), 0x00, sizeof(serverAddress));
             serverAddress.sin_family = AF_INET;
             if (addr == NULL)

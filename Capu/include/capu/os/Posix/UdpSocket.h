@@ -79,10 +79,9 @@ namespace capu
                 mAddressFamily = AF_INET;
                 mSocketType = SOCK_DGRAM;
                 mSocket = socket(mAddressFamily, mSocketType, 0);
+
                 if (mSocket != -1)
                 {
-                    int32_t optval = 1;
-                    setsockopt(mSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
                     mIsInitialized = true;
                 }
             }
@@ -102,6 +101,12 @@ namespace capu
             if (mSocket == -1)
             {
                 return CAPU_SOCKET_ESOCKET;
+            }
+
+            if (port != 0)
+            {
+                int32_t optval = 1;
+                setsockopt(mSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
             }
 
             struct sockaddr_in mServerAddress;

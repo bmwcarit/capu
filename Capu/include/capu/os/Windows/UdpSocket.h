@@ -85,8 +85,6 @@ namespace capu
                     }
                     else
                     {
-                        int32_t optVal = 1;
-                        setsockopt(mSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&optVal, sizeof(optVal));
                         mIsInitilized = true;
                     }
                 }
@@ -113,6 +111,12 @@ namespace capu
             if (mSocket == INVALID_SOCKET)
             {
                 return CAPU_SOCKET_ESOCKET;
+            }
+
+            if (port != 0)
+            {
+                int32_t optVal = 1;
+                setsockopt(mSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&optVal, sizeof(optVal));
             }
 
             sockaddr_in socketAddr;

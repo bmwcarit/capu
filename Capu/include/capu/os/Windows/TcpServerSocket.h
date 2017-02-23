@@ -55,11 +55,6 @@ namespace capu
             {
                 //create the socket which is used to connect the server
                 mTcpServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-                if (mTcpServerSocket != INVALID_SOCKET)
-                {
-                    int32_t optVal = 1;
-                    setsockopt(mTcpServerSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&optVal, sizeof(optVal));
-                }
             }
             else
             {
@@ -147,6 +142,12 @@ namespace capu
             if (mTcpServerSocket == INVALID_SOCKET)
             {
                 return CAPU_SOCKET_ESOCKET;
+            }
+
+            if (port != 0)
+            {
+                int32_t optVal = 1;
+                setsockopt(mTcpServerSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&optVal, sizeof(optVal));
             }
 
             mPort = port;
