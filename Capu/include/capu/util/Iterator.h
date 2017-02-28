@@ -19,19 +19,15 @@
 
 #include "capu/Config.h"
 #include <assert.h>
+#include <iterator>
 
 namespace capu
 {
-    /// Tag type for input iterators
-    struct input_iterator_tag {};
-    /// Tag type for forward iterators
-    struct forward_iterator_tag : public input_iterator_tag {};
-    /// Tag type for bidirectional iterators
-    struct bidirectional_iterator_tag : public forward_iterator_tag {};
-    /// Tag type for random accessible iterators
-    struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-    /// Tag type for output iterators
-    struct output_iterator_tag {};
+    using std::input_iterator_tag;
+    using std::forward_iterator_tag;
+    using std::bidirectional_iterator_tag;
+    using std::random_access_iterator_tag;
+    using std::output_iterator_tag;
 
     /**
      * Base class for iterators
