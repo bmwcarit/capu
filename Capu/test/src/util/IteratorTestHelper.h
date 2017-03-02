@@ -182,9 +182,13 @@ namespace capu
 
         void isPostDecremenDereferencable(ITERATABLE& iteratable)
         {
-            Iterator start = iteratable.end();
-            Iterator current = iteratable.end();
-            EXPECT_TRUE(*start == *current--);
+            Iterator start = iteratable.begin();
+            Iterator current = iteratable.begin();
+            Iterator moved = iteratable.begin();
+            ++moved;
+            ++current;
+            EXPECT_TRUE(*moved == *current--);
+            EXPECT_TRUE(*start == *current);
         }
 
     public:
