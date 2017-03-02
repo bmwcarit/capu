@@ -147,7 +147,10 @@ namespace capu
             if (port != 0)
             {
                 int32_t optVal = 1;
-                setsockopt(mTcpServerSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&optVal, sizeof(optVal));
+                if (setsockopt(mTcpServerSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&optVal, sizeof(optVal)) != 0)
+                {
+                    return CAPU_SOCKET_ESOCKET;
+                }
             }
 
             mPort = port;

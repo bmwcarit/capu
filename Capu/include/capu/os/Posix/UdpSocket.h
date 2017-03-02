@@ -106,7 +106,10 @@ namespace capu
             if (port != 0)
             {
                 int32_t optval = 1;
-                setsockopt(mSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+                if (setsockopt(mSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) != 0)
+                {
+                    return CAPU_SOCKET_ESOCKET;
+                }
             }
 
             struct sockaddr_in mServerAddress;
