@@ -73,7 +73,7 @@ namespace capu
          * Returns a string representation of the guid.
          * @return A string representation of the guid.
          */
-        const String& toString() const;
+        String toString() const;
 
         /**
          * Checks if this guid equals the given guid.
@@ -121,16 +121,12 @@ namespace capu
         const generic_uuid_t& getGuidData() const;
 
     private:
-        void createString() const;
         void createNew();
         generic_uuid_t m_id;
-        mutable String m_stringRepresentation;
-        mutable bool m_stringRepresentationIsInvalid;
         static Random& getRandom();
     };
 
     inline Guid::Guid(bool valid /*=true*/)
-        : m_stringRepresentationIsInvalid(true)
     {
         Memory::Set(&m_id, 0, sizeof(generic_uuid_t));
         if (valid)
@@ -140,27 +136,22 @@ namespace capu
     }
 
     inline Guid::Guid(const String& guid)
-        : m_stringRepresentationIsInvalid(true)
     {
         parse(guid);
     }
 
     inline Guid::Guid(const char* guid)
-        : m_stringRepresentationIsInvalid(true)
     {
         parse(String(guid));
     }
 
     inline Guid::Guid(const Guid& other)
         : m_id(other.m_id)
-        , m_stringRepresentation()
-        , m_stringRepresentationIsInvalid(true)
     {
     }
 
     inline Guid::Guid(const generic_uuid_t& other)
         : m_id(other)
-        , m_stringRepresentationIsInvalid(true)
     {
     }
 
@@ -183,16 +174,12 @@ namespace capu
     inline Guid& Guid::operator=(const Guid& other)
     {
         m_id = other.m_id;
-        m_stringRepresentationIsInvalid = true;
-        m_stringRepresentation = "";
         return *this;
     }
 
     inline Guid& Guid::operator=(const generic_uuid_t& other)
     {
         m_id = other;
-        m_stringRepresentationIsInvalid = true;
-        m_stringRepresentation = "";
         return *this;
     }
 
@@ -203,22 +190,14 @@ namespace capu
         return Memory::Compare(&emptyId, &m_id, sizeof(generic_uuid_t)) == 0;
     }
 
-    inline const String& Guid::toString() const
-    {
-        if (m_stringRepresentationIsInvalid)
-        {
-            createString();
-        }
-        return m_stringRepresentation;
-    }
-
     inline bool Guid::equals(const Guid& second) const
     {
         return Memory::Compare(&m_id, &second.m_id, sizeof(generic_uuid_t)) == 0;
     }
 
-    inline void Guid::createString() const
+    inline String Guid::toString() const
     {
+        String stringFromGuid;
         char buffer[37];
         Memory::Set(buffer, 0, sizeof(buffer));
         StringUtils::Sprintf(buffer, 37, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
@@ -233,9 +212,9 @@ namespace capu
                              m_id.Data4[5],
                              m_id.Data4[6],
                              m_id.Data4[7]);
-        m_stringRepresentation = buffer;
-        m_stringRepresentation.toUpperCase();
-        m_stringRepresentationIsInvalid = false;
+        stringFromGuid = buffer;
+        stringFromGuid.toUpperCase();
+        return stringFromGuid;
     }
 
     inline void Guid::createNew()
@@ -309,15 +288,11 @@ namespace capu
             m_id.Data4[5] = static_cast<uint8_t>(data45);
             m_id.Data4[6] = static_cast<uint8_t>(data46);
             m_id.Data4[7] = static_cast<uint8_t>(data47);
-            m_stringRepresentation = guid;
-            m_stringRepresentation.toUpperCase();
-            m_stringRepresentationIsInvalid = false;
         }
         else
         {
             // error
             Memory::Set(&m_id, 0, sizeof(generic_uuid_t));
-            m_stringRepresentationIsInvalid = true;
         }
 
         return *this;
