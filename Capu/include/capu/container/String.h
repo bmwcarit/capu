@@ -86,6 +86,12 @@ namespace capu
         const char* c_str() const;
 
         /**
+         * Return pointer to character storage
+         */
+        const char* data() const;
+        char* data();
+
+        /**
          * Assign a string by copying from another
          */
         String& operator=(const String& other);
@@ -153,7 +159,7 @@ namespace capu
         /**
          * @}
          */
-        
+
         /**
          * Append the given string to this string
          * @param other The String to append
@@ -556,6 +562,16 @@ namespace capu
     inline const char* String::c_str() const
     {
         return m_data.size() > 0 ? m_data.getRawData() : "";
+    }
+
+    inline const char* String::data() const
+    {
+        return m_data.getRawData();
+    }
+
+    inline char* String::data()
+    {
+        return m_data.getRawData();
     }
 
     inline void String::initData(const char* data)

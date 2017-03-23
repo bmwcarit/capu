@@ -672,3 +672,21 @@ TEST(String, ReplaceOccurenceWithOffset)
 
     EXPECT_STREQ("hello c++ world. bye java world.", result.c_str());
 }
+
+TEST(String, TestDataGetterOnEmptyString)
+{
+    capu::String s;
+    EXPECT_TRUE(s.data() == NULL);
+
+    const capu::String sConst;
+    EXPECT_TRUE(sConst.data() == NULL);
+}
+
+TEST(String, TestDataGetterOnNonEmptyString)
+{
+    capu::String s("a");
+    EXPECT_EQ('a', *s.data());
+
+    const capu::String sConst("a");
+    EXPECT_EQ('a', *sConst.data());
+}
