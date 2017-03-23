@@ -18,8 +18,7 @@
 #define CAPU_STRINGOUTPUTSTREAM_H
 
 #include <capu/util/IOutputStream.h>
-
-#include <capu/container/Array.h>
+#include <capu/container/vector.h>
 
 namespace capu
 {
@@ -126,12 +125,7 @@ namespace capu
         /**
          * The internal buffer of the stream
          */
-        Array<char> mBuffer;
-
-        /**
-         * The current size of the internal string
-         */
-        uint32_t      mSize;
+        vector<char> mBuffer;
 
         FloatingPointType mFloatingPointType;
 
@@ -142,18 +136,7 @@ namespace capu
 
         uint32_t mDecimalDigits;
 
-        /**
-         * Resizes the internal buffer to minSize
-         * @param minSize to resize the buffer
-         */
-        void resize(const uint32_t minSize);
-
-        /**
-         * Requests a buffer size on the stream
-         * If the internal buffer is to small, the buffer will be resized
-         * @param size to request on the stream
-         */
-        void requestSize(const uint32_t size);
+        void increaseSize(const uint32_t size);
 
     };
 
@@ -161,14 +144,14 @@ namespace capu
     const char*
     StringOutputStream::c_str()
     {
-        return mBuffer.getRawData();
+        return mBuffer.data();
     }
 
     inline
     const char*
     StringOutputStream::c_str() const
     {
-        return mBuffer.getRawData();
+        return mBuffer.data();
     }
 
 
@@ -176,7 +159,8 @@ namespace capu
     uint32_t
     StringOutputStream::length() const
     {
-        return mSize;
+        assert(mBuffer.size() > 0);
+        return static_cast<uint32_t>(mBuffer.size()) - 1;
     }
 
     inline
@@ -374,13 +358,9 @@ namespace capu
     StringOutputStream&
     StringOutputStream::write(const void* data, const uint32_t size)
     {
-        requestSize(size + 1); // Terminating 0
-        char* base = mBuffer.getRawData();
-        char* writePos = base + mSize;
-        char* nullPos = writePos + size;
-        Memory::Copy(writePos, data, size);
-        *nullPos = '\0';
-        mSize += size;
+        const uint_t writeIdx = mBuffer.size() - 1;
+        increaseSize(size);
+        Memory::Copy(mBuffer.data() + writeIdx, data, size);
         return *this;
     }
 
@@ -388,7 +368,7 @@ namespace capu
     void
     StringOutputStream::clear()
     {
-        mSize = 0;
+        mBuffer.resize(1);
         mBuffer[0] = '\0';
     }
 
@@ -396,7 +376,6 @@ namespace capu
     status_t
     StringOutputStream::flush()
     {
-        mBuffer[mSize] = '\0';
         return CAPU_OK;
     }
 
@@ -450,6 +429,12 @@ namespace capu
     StringOutputStream::setHexadecimalOutputFormat(StringOutputStream::HexadecimalType hexFormat)
     {
         mHexadecimalFormat = hexFormat;
+    }
+
+    inline
+    void StringOutputStream::increaseSize(const uint32_t increment)
+    {
+        mBuffer.resize(mBuffer.size() + increment);
     }
 }
 

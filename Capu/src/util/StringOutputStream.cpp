@@ -16,42 +16,15 @@
 
 #include <capu/util/StringOutputStream.h>
 
-#include <capu/container/ConstString.h>
-
 namespace capu
 {
-
-
-
     StringOutputStream::StringOutputStream()
-        : mBuffer(16, 0)
-        , mSize(0)
+        : mBuffer()
         , mFloatingPointType(NORMAL)
         , mHexadecimalFormat(NO_HEXADECIMAL)
         , mDecimalDigits(6)
     {
-    }
-
-    void
-    StringOutputStream::resize(const uint32_t minSize)
-    {
-        uint_t newCapacity = mBuffer.size();
-        while (newCapacity < minSize)
-        {
-            newCapacity *= 2;
-        }
-
-        Array<char> newBuffer(newCapacity);
-        Memory::Copy(newBuffer.getRawData(), mBuffer.getRawData(), mSize);
-        swap(mBuffer, newBuffer);
-    }
-
-    void
-    StringOutputStream::requestSize(const uint32_t size)
-    {
-        if (mSize + size > mBuffer.size())
-        {
-            resize(mSize + size);
-        }
+        mBuffer.reserve(16);
+        mBuffer.push_back('\0'); // initial terminating 0
     }
 }
