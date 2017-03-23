@@ -432,6 +432,12 @@ namespace capu
         const T& back() const;
 
         /**
+        * Returns a pointer to the underlaying element storage.
+        */
+        T* data();
+        const T* data() const;
+
+        /**
          * Returns the current capacity of the vector.
          * The capacity is the total number of elements the vector can hold
          * without causing reallocation because the memory is already reserved.
@@ -629,6 +635,18 @@ namespace capu
     const T& capu::vector<T>::back() const
     {
         return *(m_dataEnd - 1);
+    }
+
+    template<typename T>
+    T*  capu::vector<T>::data()
+    {
+        return m_data;
+    }
+
+    template<typename T>
+    const T*  capu::vector<T>::data() const
+    {
+        return m_data;
     }
 
     template<typename T>

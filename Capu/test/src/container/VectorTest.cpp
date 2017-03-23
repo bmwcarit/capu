@@ -1350,6 +1350,23 @@
         EXPECT_TRUE(it == vec.end());
     }
 
+    TEST(VectorTest, dataReturnPointerToDataStore)
+    {
+        capu::vector<capu::uint_t> vec;
+        vec.push_back(1);
+        const capu::vector<capu::uint_t>& vecConst = *const_cast<const capu::vector<capu::uint_t>*>(&vec);
+        EXPECT_TRUE(vec.data() == &vec.front());
+        EXPECT_TRUE(vecConst.data() == &vec.front());
+    }
+
+    TEST(VectorTest, dataOnEmptyVectorReturnsNull)
+    {
+        capu::vector<capu::uint_t> vec;
+        const capu::vector<capu::uint_t>& vecConst = *const_cast<const capu::vector<capu::uint_t>*>(&vec);
+        EXPECT_TRUE(vec.data() == NULL);
+        EXPECT_TRUE(vecConst.data() == NULL);
+    }
+
     TEST(VectorTest, IteratorFullfillsStandard)
     {
         typedef capu::vector<capu::uint_t> UintVector;
