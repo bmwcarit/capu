@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#include <capu/container/Array.h>
 #include <capu/util/SocketInputStream.h>
 
 namespace capu
@@ -26,12 +25,10 @@ namespace capu
         uint32_t strLen = 0;
 
         operator>>(strLen);
-        Array<char> buffer(strLen + 1);
 
-        read(buffer.getRawData(), strLen);
-        buffer[strLen] = 0;
-
-        value = buffer.getRawData();
+        String tmpValue(strLen, '\0');
+        read(tmpValue.data(), strLen);
+        value.swap(tmpValue);
 
         return *this;
     }
