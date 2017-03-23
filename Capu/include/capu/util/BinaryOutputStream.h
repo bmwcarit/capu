@@ -18,7 +18,7 @@
 #define CAPU_BINARYOUTPUTSTREAM_H
 
 #include <capu/util/IOutputStream.h>
-#include <capu/container/Array.h>
+#include <capu/container/vector.h>
 
 namespace capu
 {
@@ -34,7 +34,6 @@ namespace capu
          * @param startSize the initial capacity of the stream
          */
         BinaryOutputStream(const uint32_t startSize = 16);
-        ~BinaryOutputStream();
 
         /**
          * Write a float into the stream
@@ -146,50 +145,28 @@ namespace capu
         /**
          * Point to the internal stream data
          */
-        Array<char> mBuffer;
-
-        /**
-         * The current size of the stream
-         */
-        uint32_t mSize;
-
-        /**
-         * The current capacity of the stream
-         */
-        uint32_t mCapacity;
-
-        /**
-         * Resizes the local buffer to a given minimum size. The size is always power of 2
-         * @param minSize of the internal buffer after resizing
-         */
-        void resize(const uint32_t minSize);
-
-        /**
-         * Checks if the buffer has enough space and resizes the buffer if necessary
-         * @paran the requested size for the internal buffer
-         */
-        void requestSize(const uint32_t size);
+        vector<char> mBuffer;
     };
 
     inline
     const char*
     BinaryOutputStream::getData() const
     {
-        return mBuffer.getRawData();
+        return mBuffer.data();
     }
 
     inline
     uint32_t
     BinaryOutputStream::getSize() const
     {
-        return mSize;
+        return static_cast<uint32_t>(mBuffer.size());
     }
 
     inline
     uint32_t
     BinaryOutputStream::getCapacity() const
     {
-        return mCapacity;
+        return static_cast<uint32_t>(mBuffer.capacity());
     }
 
     inline
@@ -227,15 +204,15 @@ namespace capu
         return write(&value, sizeof(uint32_t));
     }
 
-    inline 
-    IOutputStream& 
+    inline
+    IOutputStream&
     BinaryOutputStream::operator<<(const int64_t value)
     {
         return write(&value, sizeof(int64_t));
     }
 
-    inline 
-    IOutputStream& 
+    inline
+    IOutputStream&
     BinaryOutputStream::operator<<(const uint64_t value)
     {
         return write(&value, sizeof(uint64_t));
@@ -273,11 +250,27 @@ namespace capu
     }
 
     inline
+    IOutputStream&
+    BinaryOutputStream::write(const void* data, const uint32_t size)
+    {
+        const char* dataCharptr = static_cast<const char*>(data);
+        mBuffer.insert(mBuffer.end(), dataCharptr, dataCharptr+size);
+        return *this;
+    }
+
+    inline
     status_t
     BinaryOutputStream::flush()
     {
         // no flushing necessary since the binary stream is always flushed
         return CAPU_OK;
+    }
+
+    inline
+    void
+    BinaryOutputStream::clear()
+    {
+        mBuffer.resize(0);
     }
 }
 

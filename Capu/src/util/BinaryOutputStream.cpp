@@ -16,58 +16,11 @@
 
 #include <capu/util/BinaryOutputStream.h>
 
-#include <capu/os/Memory.h>
-#include <capu/os/StringUtils.h>
-#include <capu/util/Swap.h>
-
 namespace capu
 {
     BinaryOutputStream::BinaryOutputStream(const uint32_t capacity)
-        : mBuffer(capacity)
-        , mSize(0)
-        , mCapacity(capacity)
-
+        : mBuffer()
     {
-    }
-
-    BinaryOutputStream::~BinaryOutputStream()
-    {
-    }
-
-    void
-    BinaryOutputStream::clear()
-    {
-        mSize = 0;
-    }
-
-    IOutputStream&
-    BinaryOutputStream::write(const void* data, const uint32_t size)
-    {
-        requestSize(size);
-        Memory::Copy(mBuffer.getRawData() + mSize, data, size);
-        mSize += size;
-        return *this;
-    }
-
-    void
-    BinaryOutputStream::resize(const uint32_t minSize)
-    {
-        while (mCapacity < minSize)
-        {
-            mCapacity *= 2;
-        }
-
-        Array<char> newBuffer(mCapacity);
-        Memory::Copy(newBuffer.getRawData(), mBuffer.getRawData(), mSize);
-        swap(mBuffer, newBuffer);
-    }
-
-    void
-    BinaryOutputStream::requestSize(const uint32_t size)
-    {
-        if (mSize + size > mCapacity)
-        {
-            resize(mSize + size);
-        }
+        mBuffer.reserve(capacity);
     }
 }
