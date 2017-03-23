@@ -1334,8 +1334,22 @@
         EXPECT_EQ(15u, vec.capacity());
     }
 
+    TEST(VectorTest, cbeginReturnsConstIteratorToBegin)
+    {
+        capu::vector<capu::uint_t> vec;
+        vec.push_back(1);
+        capu::vector<capu::uint_t>::ConstIterator it = vec.cbegin();
+        EXPECT_TRUE(it == vec.begin());
+    }
 
- 
+    TEST(VectorTest, cendReturnsConstIteratorToEnd)
+    {
+        capu::vector<capu::uint_t> vec;
+        vec.push_back(1);
+        capu::vector<capu::uint_t>::ConstIterator it = vec.cend();
+        EXPECT_TRUE(it == vec.end());
+    }
+
     TEST(VectorTest, IteratorFullfillsStandard)
     {
         typedef capu::vector<capu::uint_t> UintVector;

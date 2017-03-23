@@ -501,6 +501,13 @@ namespace capu
          */
 
         /**
+         * Returns a new ConstIterator to the start of the Vector
+         * @return a new ConstIterator to the start of the Vector
+         * @{
+         */
+        ConstIterator cbegin() const;
+
+        /**
          * Returns a new Iterator to the end of the Vector
          * @return a new Iterator to the end of the Vector
          * @{
@@ -510,6 +517,13 @@ namespace capu
         /**
         * @}
         */
+
+        /**
+         * Returns a new ConstIterator to the end of the Vector
+         * @return a new ConstIterator to the end of the Vector
+         * @{
+         */
+        ConstIterator cend() const;
 
          /**
          * remove the element in the specified index and if the element_old
@@ -918,6 +932,14 @@ namespace capu
 
     template<typename T>
     inline
+    typename vector<T>::ConstIterator
+    vector<T>::cbegin() const
+    {
+        return ConstIterator(m_data);
+    }
+
+    template<typename T>
+    inline
     typename vector<T>::Iterator
     vector<T>::end()
     {
@@ -928,6 +950,14 @@ namespace capu
     inline
     typename vector<T>::ConstIterator
     vector<T>::end() const
+    {
+        return ConstIterator(m_dataEnd);
+    }
+
+    template<typename T>
+    inline
+    typename vector<T>::ConstIterator
+    vector<T>::cend() const
     {
         return ConstIterator(m_dataEnd);
     }
