@@ -18,6 +18,7 @@
 #define CAPU_ILOGAPPENDER_H
 
 #include "capu/util/LogLevel.h"
+#include "capu/os/Atomic.h"
 
 namespace capu
 {
@@ -55,7 +56,7 @@ namespace capu
         /**
          * Log level of the appender
          */
-        ELogLevel m_logLevel;
+        Atomic<int32_t> m_logLevel;
     };
 
 }
