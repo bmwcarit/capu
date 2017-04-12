@@ -42,19 +42,19 @@ namespace capu
         /**
          * Logs the current message and performs a log level check
          */
-        virtual void log(const LogMessage& message);
+        virtual void log(const LogMessage& message) override;
 
         /**
          * Query for the log level of the appender
          * @returns the log level
          */
-        virtual ELogLevel getLogLevel();
+        virtual ELogLevel getLogLevel() override;
 
         /**
          * Set the log level for the appender
          * @param level the log level to set the appender to
          */
-        virtual void setLogLevel(ELogLevel level);
+        virtual void setLogLevel(ELogLevel level) override;
 
         /**
          * virtual destructor

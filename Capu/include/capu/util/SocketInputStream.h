@@ -75,7 +75,7 @@ namespace capu
          * Read an uint16_t value from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(uint16_t& value);
+        IInputStream& operator>>(uint16_t& value) override;
 
         /**
          * Read an int16_t value from the stream
@@ -87,51 +87,51 @@ namespace capu
          * Read an unsigned int from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(uint32_t& value);
+        IInputStream& operator>>(uint32_t& value) override;
 
         /**
          * Read a signed int from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(int32_t& value);
+        IInputStream& operator>>(int32_t& value) override;
 
          /**
          * Reads an uint64_t value from the stream
          * @param value the destination of the read value
          * @return a reference to the input stream for further processing
          */
-        IInputStream& operator>>(uint64_t& value);
+        IInputStream& operator>>(uint64_t& value) override;
 
         /**
          * Reads an int64_t value from the stream
          * @param value the destination of the read value
          * @return a reference to the input stream for further processing
          */
-        IInputStream& operator>>(int64_t& value);
+        IInputStream& operator>>(int64_t& value) override;
 
         /**
          * Read a string from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(String&  value);
+        IInputStream& operator>>(String&  value) override;
 
         /**
          * Read a bool from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(bool&  value);
+        IInputStream& operator>>(bool&  value) override;
 
         /**
          * Read a float from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(float& value);
+        IInputStream& operator>>(float& value) override;
 
         /**
          * Read a Guid from the stream
          * @param value Reference to variable to store the value read
          */
-        IInputStream& operator>>(Guid& value);
+        IInputStream& operator>>(Guid& value) override;
 
         /**
          * Returns the current state of the SocketInputStream
@@ -140,7 +140,7 @@ namespace capu
          * CAPU_ERROR if there is a problem with the socket
          * @return the state of the socket
          */
-        virtual status_t getState() const;
+        virtual status_t getState() const override;
 
         /**
          * Resets the state to CAPU_OK

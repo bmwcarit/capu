@@ -81,7 +81,7 @@ namespace capu
         {
         public:
             PoolRunnable(ThreadPool& pool);
-            void run();
+            void run() override;
 
             void cancelCurrentRunnable();
 

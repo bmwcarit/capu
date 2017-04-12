@@ -41,69 +41,69 @@ namespace capu
          * Read an integer from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(int32_t& value);
+        IInputStream& operator>>(int32_t& value) override;
 
         /**
          * Read an integer from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(uint32_t& value);
+        IInputStream& operator>>(uint32_t& value) override;
 
          /**
          * Reads an uint64_t value from the stream
          * @param value the destination of the read value
          * @return a reference to the input stream for further processing
          */
-        IInputStream& operator>>(uint64_t& value);
+        IInputStream& operator>>(uint64_t& value) override;
 
         /**
          * Reads an int64_t value from the stream
          * @param value the destination of the read value
          * @return a reference to the input stream for further processing
          */
-        IInputStream& operator>>(int64_t& value);
+        IInputStream& operator>>(int64_t& value) override;
 
         /**
          * Read a String from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(String&  value);
+        IInputStream& operator>>(String&  value) override;
 
         /**
          * Read a bool from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(bool&  value);
+        IInputStream& operator>>(bool&  value) override;
 
         /**
          * Read a float from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(float& value);
+        IInputStream& operator>>(float& value) override;
 
         /**
          * Read a uint16_t from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(uint16_t& value);
+        IInputStream& operator>>(uint16_t& value) override;
 
         /**
          * Read a guid from the stream
          * @param value The variable to write the value to
          */
-        IInputStream& operator>>(Guid& value);
+        IInputStream& operator>>(Guid& value) override;
 
         /**
          * Read a number of bytes from the stream
          * @param data Pointer to which the bytes will be written
          * @param size Number of bytes to read
          */
-        IInputStream& read(char* data, const uint32_t size);
+        IInputStream& read(char* data, const uint32_t size) override;
 
         /**
          * @see IInputstream
          */
-        virtual status_t getState() const;
+        virtual status_t getState() const override;
 
         /**
          * Resets the current reading position to the start of the buffer

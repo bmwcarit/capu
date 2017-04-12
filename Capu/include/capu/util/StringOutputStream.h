@@ -51,22 +51,22 @@ namespace capu
          * @see  IOutputStream
          * @{
          */
-        virtual StringOutputStream& operator<<(const float value);
-        virtual StringOutputStream& operator<<(const int32_t value);
-        virtual StringOutputStream& operator<<(const uint32_t value);
-        virtual StringOutputStream& operator<<(const int64_t value);
-        virtual StringOutputStream& operator<<(const uint64_t value);
-        virtual StringOutputStream& operator<<(const String& value);
-        virtual StringOutputStream& operator<<(const bool  value);
-        virtual StringOutputStream& operator<<(const char* value);
+        virtual StringOutputStream& operator<<(const float value) override;
+        virtual StringOutputStream& operator<<(const int32_t value) override;
+        virtual StringOutputStream& operator<<(const uint32_t value) override;
+        virtual StringOutputStream& operator<<(const int64_t value) override;
+        virtual StringOutputStream& operator<<(const uint64_t value) override;
+        virtual StringOutputStream& operator<<(const String& value) override;
+        virtual StringOutputStream& operator<<(const bool  value) override;
+        virtual StringOutputStream& operator<<(const char* value) override;
         virtual StringOutputStream& operator<<(const char value);
-        virtual StringOutputStream& operator<<(const uint16_t value);
-        virtual StringOutputStream& operator<<(const int16_t value);
-        virtual StringOutputStream& operator<<(const Guid& value);
+        virtual StringOutputStream& operator<<(const uint16_t value) override;
+        virtual StringOutputStream& operator<<(const int16_t value) override;
+        virtual StringOutputStream& operator<<(const Guid& value) override;
 
-        virtual StringOutputStream& write(const void* data, const uint32_t size);
+        virtual StringOutputStream& write(const void* data, const uint32_t size) override;
 
-        virtual status_t flush();
+        virtual status_t flush() override;
         /**
          * @}
          */

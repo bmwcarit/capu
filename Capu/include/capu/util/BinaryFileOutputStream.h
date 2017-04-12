@@ -33,7 +33,7 @@ namespace capu
          * @see IOutputStream
          * @{
          */
-        virtual IOutputStream& write(const void* data, const uint32_t size);
+        virtual IOutputStream& write(const void* data, const uint32_t size) override;
         /**
          * @}
          */

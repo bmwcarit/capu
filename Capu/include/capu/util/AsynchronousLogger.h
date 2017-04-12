@@ -47,7 +47,7 @@ namespace capu
          * @name Asynchronous implementation of log method
          * @see Logger
          */
-        virtual void log(const LogMessage& message);
+        virtual void log(const LogMessage& message) override;
 
     private:
 
@@ -66,7 +66,7 @@ namespace capu
         /**
          * Internal run method for the thread
          */
-        virtual void run();
+        virtual void run() override;
 
     };
 }

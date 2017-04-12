@@ -39,74 +39,74 @@ namespace capu
          * Write a float into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const float value);
+        IOutputStream& operator<<(const float value) override;
 
         /**
          * Write an integer into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const int32_t value);
+        IOutputStream& operator<<(const int32_t value) override;
 
         /**
          * Write an integer into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const uint32_t value);
+        IOutputStream& operator<<(const uint32_t value) override;
 
         /**
          * Write an integer into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const int64_t value);
+        IOutputStream& operator<<(const int64_t value) override;
 
         /**
          * Write an integer into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const uint64_t value);
+        IOutputStream& operator<<(const uint64_t value) override;
 
         /**
          * Write a string into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const String& value);
+        IOutputStream& operator<<(const String& value) override;
 
         /**
          * Write a bool into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const bool  value);
+        IOutputStream& operator<<(const bool  value) override;
 
         /**
          * Write a char into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const char* value);
+        IOutputStream& operator<<(const char* value) override;
 
         /**
          * Write a uint16_t into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const uint16_t value);
+        IOutputStream& operator<<(const uint16_t value) override;
 
         /**
          * Write a int16_t into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const int16_t value);
+        IOutputStream& operator<<(const int16_t value) override;
 
         /**
          * Write a guid into the stream
          * @param value The variable to write to the stream
          */
-        IOutputStream& operator<<(const Guid& value);
+        IOutputStream& operator<<(const Guid& value) override;
 
         /**
          * Write a number of bytes into the stream
          * @param data The data to write to the stream
          * @param size The number of bytes to write
          */
-        IOutputStream& write(const void* data, const uint32_t size);
+        IOutputStream& write(const void* data, const uint32_t size) override;
 
         /**
          * Returns a pointer to the raw data
@@ -135,7 +135,7 @@ namespace capu
          * @see IOutputStream
          * @{
          */
-        status_t flush();
+        status_t flush() override;
         /**
          * @}
          */

@@ -235,7 +235,7 @@ namespace capu
             {
             }
 
-            virtual void callDeleter()
+            virtual void callDeleter() override
             {
                 delete mPtr;
             }

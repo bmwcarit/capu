@@ -132,7 +132,7 @@ namespace capu
          * Function to implement the timer loop. The execute() functions of the active timers will
          * be executed every 'timeoutMillis' milliseconds.
          */
-        virtual void run() /*override*/;
+        virtual void run() override;
 
         Thread m_waitThread;
         CondVar m_sleepConditionVariable;

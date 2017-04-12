@@ -35,7 +35,7 @@ namespace capu
          * @name log implementation of ConsoleLogAppender
          * @see LogAppenderBase
          */
-        virtual void logMessage(const LogMessage& logMessage);
+        virtual void logMessage(const LogMessage& logMessage) override;
 
         virtual ~ConsoleLogAppender();
     private:

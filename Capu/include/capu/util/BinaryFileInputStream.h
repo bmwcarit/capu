@@ -33,7 +33,7 @@ namespace capu
          * @see BinaryInputStream
          * @{
          */
-        virtual IInputStream& read(char* data, const uint32_t size);
+        virtual IInputStream& read(char* data, const uint32_t size) override;
         /**
          * @}
          */
