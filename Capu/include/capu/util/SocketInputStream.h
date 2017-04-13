@@ -133,14 +133,6 @@ namespace capu
          */
         IInputStream& operator>>(Guid& value);
 
-
-        /**
-         * Read bytes from the stream
-         * @param data Pointer to store data read
-         * @param size Number of bytes to read
-         */
-        virtual IInputStream& read(char* data, const uint32_t size) = 0;
-
         /**
          * Returns the current state of the SocketInputStream
          * CAPU_OK if everything is ok
