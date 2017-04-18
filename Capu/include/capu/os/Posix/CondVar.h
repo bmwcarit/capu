@@ -67,7 +67,8 @@ namespace capu
                 }
             }
 
-            status_t wait(capu::Mutex& mutex, uint32_t timeoutMillis)
+            template<class Mutex>
+            status_t wait(Mutex& mutex, uint32_t timeoutMillis)
             {
                 if (timeoutMillis != 0)
                 {

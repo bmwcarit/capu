@@ -20,6 +20,7 @@
 #include "capu/Config.h"
 #include "capu/Error.h"
 #include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 #include "capu/os/PlatformInclude.h"
 
 #include CAPU_PLATFORM_INCLUDE(CondVar)
@@ -47,7 +48,8 @@ namespace capu
          * @return CAPU_OK if the condition variable is correctly waited
          *         CAPU_ERROR otherwise
          */
-        status_t wait(capu::Mutex& mutex, uint32_t millisec = 0);
+        template<class Mutex>
+        status_t wait(Mutex& mutex, uint32_t millisec = 0);
 
         /**
          * Wake up all threads that is waiting for this condition variable
@@ -63,8 +65,10 @@ namespace capu
         return os::arch::CondVar::signal();
     }
 
-    inline status_t CondVar::wait(capu::Mutex& mutex, uint32_t millisec)
+    template<class Mutex>
+    inline status_t CondVar::wait(Mutex& mutex, uint32_t millisec)
     {
+        static_assert(std::is_same<Mutex, capu::Mutex>::value || std::is_same<Mutex, capu::LightweightMutex>::value, "Unsupported mutex type used in capu::Cond::wait()");
         return os::arch::CondVar::wait(mutex, millisec);
     }
 
