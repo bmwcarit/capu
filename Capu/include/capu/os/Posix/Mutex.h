@@ -37,23 +37,23 @@ namespace capu
             status_t unlock();
 
         private:
-            pthread_mutex_t     mLock;
-            pthread_mutexattr_t mLockAttr;
+            pthread_mutex_t mLock;
         };
 
         inline
         Mutex::Mutex()
         {
+            pthread_mutexattr_t mLockAttr;
             pthread_mutexattr_init(&mLockAttr);
             pthread_mutexattr_settype(&mLockAttr, PTHREAD_MUTEX_RECURSIVE);
             pthread_mutex_init(&mLock, &mLockAttr);
+            pthread_mutexattr_destroy(&mLockAttr);
         }
 
         inline
         Mutex::~Mutex()
         {
             pthread_mutex_destroy(&mLock);
-            pthread_mutexattr_destroy(&mLockAttr);
         }
 
         inline
