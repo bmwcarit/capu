@@ -18,7 +18,7 @@
 #define CAPU_SYNCHRONIZED_H
 
 
-#include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 
 namespace capu
 {
@@ -30,7 +30,7 @@ namespace capu
     class AutoLockReleaser
     {
     public:
-        AutoLockReleaser(T& data, Mutex& lock)
+        AutoLockReleaser(T& data, LightweightMutex& lock)
             : mData(data)
             , mLock(lock)
         {
@@ -49,7 +49,7 @@ namespace capu
 
     private:
         T& mData;
-        Mutex& mLock;
+        LightweightMutex& mLock;
     };
 
     /**
@@ -66,7 +66,7 @@ namespace capu
         AutoLockReleaser<T> operator->();
 
     private:
-        Mutex mMutex;
+        LightweightMutex mMutex;
         T mSynchronizedObject;
     };
 

@@ -18,7 +18,6 @@
 #define CAPU_TIMER_H
 
 #include "capu/util/Delegate.h"
-#include "capu/os/Mutex.h"
 #include "capu/util/shared_ptr.h"
 
 namespace capu

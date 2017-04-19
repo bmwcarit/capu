@@ -18,7 +18,7 @@
 #define CAPU_READWRITELOCK_H
 
 #include "capu/os/CondVar.h"
-#include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 #include "capu/util/ScopedLock.h"
 
 namespace capu
@@ -57,8 +57,8 @@ namespace capu
     private:
         uint32_t m_readerCount;
         CondVar m_readerLeftArea;
-        Mutex m_readerLock;
-        Mutex m_writerLock;
+        LightweightMutex m_readerLock;
+        LightweightMutex m_writerLock;
     };
 
     inline ReadWriteLock::ReadWriteLock()
@@ -68,14 +68,14 @@ namespace capu
 
     inline void ReadWriteLock::lockRead()
     {
-        ScopedMutexLock lockWriter(m_writerLock); // will block reader if writer is active
-        ScopedMutexLock lockReader(m_readerLock);
+        ScopedLightweightMutexLock lockWriter(m_writerLock); // will block reader if writer is active
+        ScopedLightweightMutexLock lockReader(m_readerLock);
         ++m_readerCount;
     }
 
     inline void ReadWriteLock::unlockRead()
     {
-        ScopedMutexLock lockReader(m_readerLock);
+        ScopedLightweightMutexLock lockReader(m_readerLock);
         if (m_readerCount > 0)
         {
             // defensive style to avoid double unlock
@@ -92,7 +92,7 @@ namespace capu
     inline void ReadWriteLock::lockWrite()
     {
         m_writerLock.lock();
-        ScopedMutexLock lockReader(m_readerLock);
+        ScopedLightweightMutexLock lockReader(m_readerLock);
         while (m_readerCount > 0)
         {
             // block writer until all readers are finished

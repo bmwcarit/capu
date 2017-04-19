@@ -19,7 +19,7 @@
 
 #include <gmock/gmock.h>
 #include <capu/os/CondVar.h>
-#include <capu/os/Mutex.h>
+#include <capu/os/LightweightMutex.h>
 
 namespace capu
 {
@@ -50,7 +50,7 @@ namespace capu
         }
 
     private:
-        Mutex m_mutex;
+        LightweightMutex m_mutex;
         CondVar m_condVar;
         bool m_condition;
     };

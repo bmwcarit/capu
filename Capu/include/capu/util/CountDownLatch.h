@@ -18,7 +18,7 @@
 #define CAPU_COUNTDOWNLATCH_H
 
 #include "capu/Config.h"
-#include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 #include "capu/os/CondVar.h"
 #include "capu/util/ScopedLock.h"
 
@@ -58,7 +58,7 @@ namespace capu
         status_t await(const uint32_t timeoutMillis = 0);
 
     private:
-        Mutex mCountLock;
+        LightweightMutex mCountLock;
         CondVar mCountChanged;
         uint_t mCount;
     };
@@ -75,7 +75,7 @@ namespace capu
     inline status_t CountDownLatch::countDown()
     {
         status_t retVal = CAPU_OK;
-        ScopedMutexLock lock(mCountLock);
+        ScopedLightweightMutexLock lock(mCountLock);
         if (mCount > 0)
         {
             --mCount;
@@ -93,7 +93,7 @@ namespace capu
 
     inline status_t CountDownLatch::await(const uint32_t timeoutMillis)
     {
-        ScopedMutexLock lock(mCountLock);
+        ScopedLightweightMutexLock lock(mCountLock);
         while (mCount > 0)
         {
             status_t retVal = mCountChanged.wait(mCountLock, timeoutMillis);

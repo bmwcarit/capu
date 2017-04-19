@@ -15,7 +15,6 @@
  */
 
 #include "capu/os/Windows/Console.h"
-#include "capu/os/Mutex.h"
 
 namespace capu
 {
@@ -29,7 +28,7 @@ namespace capu
     };
 
     HANDLE os::Console::m_event = INVALID_HANDLE_VALUE;
-    os::Mutex os::Console::interruptMutex;
+    os::LightweightMutex os::Console::interruptMutex;
 
     capu::status_t os::Console::ReadOneCharacter(HANDLE fileHandle, char& buffer)
     {

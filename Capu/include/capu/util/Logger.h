@@ -19,7 +19,7 @@
 
 #include "capu/container/HashSet.h"
 #include "capu/util/StringOutputStream.h"
-#include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 #include "capu/util/LogLevel.h"
 #include "capu/util/LogMessage.h"
 #include "capu/util/ScopedLock.h"
@@ -217,8 +217,8 @@ namespace capu
          */
         void releaseStream();
 
-        Mutex m_appenderLock;
-        typedef ScopedLock<Mutex> MutexLocker;
+        LightweightMutex m_appenderLock;
+        typedef ScopedLock<LightweightMutex> MutexLocker;
 
     };
 

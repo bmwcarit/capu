@@ -21,7 +21,7 @@
 #include "capu/container/List.h"
 #include "capu/container/Queue.h"
 #include "capu/os/CondVar.h"
-#include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 #include "capu/os/Thread.h"
 #include "capu/util/Runnable.h"
 #include "capu/util/shared_ptr.h"
@@ -87,7 +87,7 @@ namespace capu
 
         private:
             ThreadPool& mPool;
-            Mutex mCurrentRunnableMutex;
+            LightweightMutex mCurrentRunnableMutex;
             Runnable* mCurrentRunnable;
 
             PoolRunnable operator=(const PoolRunnable pr);
@@ -118,7 +118,7 @@ namespace capu
         bool mCloseRequested;
         Queue<shared_ptr<Runnable> > mRunnableQueue;
         CondVar mCV;
-        Mutex mMutex;
+        LightweightMutex mMutex;
         List<PoolWorkerPtr> mWorkerList;
     };
 }

@@ -56,7 +56,7 @@ capu::status_t capu::ThreadPool::add(capu::shared_ptr<capu::Runnable> runnable)
         return CAPU_ERROR;
     }
 
-    ScopedMutexLock lock(mMutex);
+    ScopedLightweightMutexLock lock(mMutex);
     status_t result = mRunnableQueue.push(runnable);
     mCV.signal();
     return result;
@@ -65,7 +65,7 @@ capu::status_t capu::ThreadPool::add(capu::shared_ptr<capu::Runnable> runnable)
 capu::status_t capu::ThreadPool::close(bool cancelThreads)
 {
     {
-        ScopedMutexLock lock(mMutex);
+        ScopedLightweightMutexLock lock(mMutex);
         mCloseRequested = true;
         mCV.broadcast(); // let all worker wake up to terminate
     }
@@ -127,7 +127,7 @@ void capu::ThreadPool::PoolWorker::cancel()
 
 void capu::ThreadPool::PoolRunnable::cancelCurrentRunnable()
 {
-    ScopedMutexLock lock(mCurrentRunnableMutex);
+    ScopedLightweightMutexLock lock(mCurrentRunnableMutex);
     if (mCurrentRunnable != NULL)
     {
         mCurrentRunnable->cancel();
@@ -141,7 +141,7 @@ void capu::ThreadPool::PoolRunnable::run()
         status_t result;
         shared_ptr<Runnable> r;
         {
-            ScopedMutexLock lock(mPool.mMutex);
+            ScopedLightweightMutexLock lock(mPool.mMutex);
             while (mPool.mRunnableQueue.empty() && !mPool.isClosed())
             {
                 if (mPool.mCloseRequested)

@@ -19,7 +19,7 @@
 
 #include "capu/util/LogAppenderBase.h"
 #include "capu/util/LogMessage.h"
-#include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 
 namespace capu
 {
@@ -43,7 +43,7 @@ namespace capu
         /**
          * Mutex to make messages to console atomic
          */
-        static Mutex m_logMutex;
+        static LightweightMutex m_logMutex;
     };
 }
 

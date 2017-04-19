@@ -19,7 +19,7 @@
 
 #include "capu/container/Queue.h"
 #include "capu/os/Semaphore.h"
-#include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 #include "capu/util/ScopedLock.h"
 
 namespace capu
@@ -64,7 +64,7 @@ namespace capu
 
     private:
         Semaphore mSemaphore;
-        Mutex mMutex;
+        LightweightMutex mMutex;
     };
 
     template <class T>
@@ -75,14 +75,14 @@ namespace capu
     template <class T>
     inline bool BlockingQueue<T>::empty()
     {
-        ScopedMutexLock locker(mMutex);
+        ScopedLightweightMutexLock locker(mMutex);
         return Queue<T>::empty();
     }
 
     template <class T>
     inline void BlockingQueue<T>::push(const T& element)
     {
-        ScopedMutexLock locker(mMutex);
+        ScopedLightweightMutexLock locker(mMutex);
         Queue<T>::push(element);
         mSemaphore.release();
     }
@@ -90,7 +90,7 @@ namespace capu
     template <class T>
     inline status_t BlockingQueue<T>::peek(T& element)
     {
-        ScopedMutexLock locker(mMutex);
+        ScopedLightweightMutexLock locker(mMutex);
         return Queue<T>::peek(element);
     }
 
@@ -103,7 +103,7 @@ namespace capu
         {
             return retVal;
         }
-        ScopedMutexLock locker(mMutex);
+        ScopedLightweightMutexLock locker(mMutex);
         return Queue<T>::pop(element);
     }
 }

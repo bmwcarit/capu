@@ -19,7 +19,7 @@
 
 #include <conio.h>
 #include "capu/container/String.h"
-#include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 
 namespace capu
 {
@@ -43,7 +43,7 @@ namespace capu
 
             static HANDLE m_event;
             static const uint8_t Colors[];
-            static Mutex interruptMutex;
+            static LightweightMutex interruptMutex;
         };
 
         inline

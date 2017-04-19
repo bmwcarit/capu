@@ -18,6 +18,7 @@
 #define CAPU_SCOPED_LOCK_H
 
 #include "capu/os/Mutex.h"
+#include "capu/os/LightweightMutex.h"
 
 namespace capu
 {
@@ -72,6 +73,7 @@ namespace capu
      * Typedef for syntactic sugar when using with capu::Mutex.
      */
     typedef ScopedLock<Mutex> ScopedMutexLock;
+    typedef ScopedLock<LightweightMutex> ScopedLightweightMutexLock;
 
 
     template<typename T>
