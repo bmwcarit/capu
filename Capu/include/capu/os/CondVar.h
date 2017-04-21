@@ -23,6 +23,8 @@
 #include "capu/os/LightweightMutex.h"
 #include "capu/os/PlatformInclude.h"
 
+#include <type_traits>
+
 #include CAPU_PLATFORM_INCLUDE(CondVar)
 
 namespace capu

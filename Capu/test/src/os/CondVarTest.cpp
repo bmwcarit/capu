@@ -139,7 +139,7 @@ TEST(CondVar, WaitAndSignalTest)
     delete CAPU_thread2;
 }
 
-TEST(CondVar, TimedWaitTest)
+TEST(CondVar, TimedWaitTestWithMutex)
 {
     capu::Mutex mutex;
     capu::CondVar condvar;
@@ -149,4 +149,14 @@ TEST(CondVar, TimedWaitTest)
     mutex.unlock();
 }
 
-//TODO add recursive mutext condvar test
+TEST(CondVar, TimedWaitTestWithLightweightMutex)
+{
+    capu::LightweightMutex mutex;
+    capu::CondVar condvar;
+    mutex.lock();
+    // 100ms wait and timeout
+    EXPECT_EQ(capu::CAPU_ETIMEOUT, condvar.wait(mutex, 100));
+    mutex.unlock();
+}
+
+//TODO add recursive mutex condvar test
