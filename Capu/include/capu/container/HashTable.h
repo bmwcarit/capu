@@ -463,6 +463,13 @@ namespace capu
         ConstIterator end() const;
 
         /**
+         * Reserve space for given number of bits elements. Does nothing if the
+         * HashTable is already bigger.
+         * @param bitsize The requested bit size of the map.
+         */
+        void reserve(uint8_t bitsize);
+
+        /**
          * Assignment operator for HashTable
          * @param HashTable to copy from
          * @return reference to HashTable with copied data
@@ -943,14 +950,25 @@ namespace capu
     }
 
     template <class Key, class T, class C, class H>
-    inline void HashTable<Key, T, C, H>::rehash()
+    inline void HashTable<Key, T, C, H>::reserve(uint8_t bitsize)
     {
-        HashTable<Key, T, C, H> tmp(mBitCount + 1, mResizeable);
+        if (bitsize <= mBitCount)
+        {
+            return;
+        }
+
+        HashTable<Key, T, C, H> tmp(bitsize, mResizeable);
         for (Iterator it = begin(); it != end(); ++it)
         {
             tmp.put(it->key, it->value);
         }
         swap(tmp);
+    }
+
+    template <class Key, class T, class C, class H>
+    inline void HashTable<Key, T, C, H>::rehash()
+    {
+        reserve(mBitCount + 1);
     }
 
     template <class Key, class T, class C, class H>

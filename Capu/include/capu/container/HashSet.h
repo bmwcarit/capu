@@ -246,6 +246,13 @@ namespace capu
         ConstIterator end() const;
 
         /**
+         * Reserve space for given number of bits elements. Does nothing if the
+         * HashSet is already bigger.
+         * @param bitsize The requested bit size of the set.
+         */
+        void reserve(uint8_t bitsize);
+
+        /**
         * Swap this HashSet with another
         * @param other HashSet to copy from
         */
@@ -355,6 +362,12 @@ namespace capu
     typename HashSet<T, C, H>::ConstIterator HashSet<T, C, H>::end() const
     {
         return ConstIterator(m_table.end());
+    }
+
+    template <class T, class C, class H>
+    void HashSet<T, C, H>::reserve(uint8_t bitsize)
+    {
+        m_table.reserve(bitsize);
     }
 
     template <class T, class C, class H>
