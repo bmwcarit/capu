@@ -55,7 +55,8 @@ namespace capu
         const char* c_str() const;
 
         /**
-         * Returns the length of the string
+         * Calculates and returns the length of the string. This operation is
+         * expensive.
          * @return the length of the string
          */
         uint_t length() const;
@@ -127,38 +128,28 @@ namespace capu
          * Internal const char* to work with
          */
         const char* m_data;
-
-        /**
-         * The length of the string
-         */
-        uint_t m_length;
-
     };
 
     inline
     ConstString::ConstString(const char* str)
         : m_data(str)
-        , m_length(StringUtils::Strlen(m_data))
     {
     }
 
     inline
     ConstString::ConstString(const ConstString& other)
         : m_data(other.c_str())
-        , m_length(other.m_length)
     {
     }
 
     inline
     ConstString::ConstString(const char* data, const uint_t start)
         : m_data(0)
-        , m_length(0)
     {
         if (0 != data)
         {
             const char* startdata = &data[start];
             m_data = startdata;
-            m_length = StringUtils::Strlen(startdata);
         }
     }
 
@@ -173,7 +164,7 @@ namespace capu
     uint_t
     ConstString::length() const
     {
-        return m_length;
+        return StringUtils::Strlen(m_data);
     }
 
     inline
@@ -213,7 +204,6 @@ namespace capu
     ConstString::operator=(const ConstString& other)
     {
         m_data = other.m_data;
-        m_length = other.m_length;
         return *this;
     }
 
