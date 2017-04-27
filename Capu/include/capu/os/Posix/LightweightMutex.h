@@ -43,11 +43,7 @@ namespace capu
         inline
         LightweightMutex::LightweightMutex()
         {
-            pthread_mutexattr_t mLockAttr;
-            pthread_mutexattr_init(&mLockAttr);
-            pthread_mutexattr_settype(&mLockAttr, PTHREAD_MUTEX_NORMAL);
-            pthread_mutex_init(&mLock, &mLockAttr);
-            pthread_mutexattr_destroy(&mLockAttr);
+            pthread_mutex_init(&mLock, NULL);
         }
 
         inline
