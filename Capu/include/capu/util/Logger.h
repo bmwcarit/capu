@@ -23,6 +23,7 @@
 #include "capu/util/LogLevel.h"
 #include "capu/util/LogMessage.h"
 #include "capu/util/ScopedLock.h"
+#include "capu/container/vector.h"
 
 namespace capu
 {
@@ -108,6 +109,42 @@ namespace capu
          *@}
          */
 
+
+        /**
+         * Get log level of a given context id
+         * @param[out] logLevel context log level
+         * @param[in] contextId context identifier
+         * @{
+         */
+        static void GetLogLevel(const String& contextId,ELogLevel& logLevel);
+        void getLogLevel(const String& contextId,ELogLevel& logLevel);
+        /**
+         *@}
+         */
+
+        /**
+         * Get context name by its id
+         * @param[in] contextId Context ID
+         * @param[out] contextName Context name from the query
+         * @{
+         */
+        static void GetContextNameByContextId(const String& contextId, String& contextName);
+        void getContextName(const String& contextId, String& contextName);
+        /**
+         *@}
+         */
+
+        /**
+         * Get list of IDs of contexts created already
+         * @param[out] contextIds context identifiers vector from the query
+         * @{
+         */
+        static void GetContextIds(vector<String>& contextIds);
+        void getContextIds(vector<String>& contextIds);
+        /**
+         *@}
+         */
+
         /**
          * Sets the default logger
          * @return the method always returns 0. This is just 
@@ -180,7 +217,7 @@ namespace capu
 
         /**
          * Removes the given appender from the logger
-         * @parem appender to remove
+         * @param appender to remove
          * @{
          */
         void removeAppender(ILogAppender& appender);
@@ -255,6 +292,89 @@ namespace capu
             {
                 lc->setLogLevel(logLevel);
             }
+        }
+    }
+
+    inline
+    void
+    Logger::GetLogLevel(const String& filterContext, ELogLevel& logLevel)
+    {
+        if(0 != DefaultLogger)
+        {
+            DefaultLogger->getLogLevel(filterContext,logLevel);
+        }
+    }
+
+    inline
+    void
+    Logger::getLogLevel(const String& contextId, ELogLevel& logLevel)
+    {
+        ContextSet::Iterator current = m_logContexts.begin();
+        const ContextSet::Iterator end = m_logContexts.end();
+
+        for(; current != end; ++current)
+        {
+            LogContext* lc = *current;
+
+            if (lc->getContextId() == contextId)
+            {
+                logLevel = lc->getLogLevel();
+                break;
+            }
+        }
+    }
+
+    inline
+    void
+    Logger::GetContextNameByContextId(const String& contextId, String& contextName)
+    {
+        if(0 != DefaultLogger)
+        {
+            DefaultLogger->getContextName(contextId, contextName);
+        }
+    }
+
+    inline
+    void
+    Logger::getContextName(const String& contextId, String& contextName)
+    {
+        ContextSet::Iterator current = m_logContexts.begin();
+        const ContextSet::Iterator end = m_logContexts.end();
+
+        for(; current != end; ++current)
+        {
+            LogContext* lc = *current;
+
+            if (lc->getContextId() == contextId)
+            {
+                contextName = lc->getContextName();
+                break;
+            }
+        }
+    }
+
+    inline
+    void
+    Logger::GetContextIds(vector<String>& contextIds)
+    {
+        if(0 != DefaultLogger)
+        {
+            DefaultLogger->getContextIds(contextIds);
+        }
+    }
+
+    inline
+    void
+    Logger::getContextIds(vector<String>& contextIds)
+    {
+        ContextSet::Iterator current = m_logContexts.begin();
+        const ContextSet::Iterator end = m_logContexts.end();
+
+        for(; current != end; ++current)
+        {
+            LogContext* lc = *current;
+
+            contextIds.push_back(lc->getContextId());
         }
     }
 

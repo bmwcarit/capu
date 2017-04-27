@@ -325,4 +325,49 @@ namespace capu
         consoleAppender.setLogLevel(ll);
         EXPECT_EQ(ll,consoleAppender.getLogLevel());
     }
+
+    TEST_F(LoggerTest,SetAndGetContextLevel)
+    {
+        ELogLevel read_level= capu::LL_ALL;
+        const capu::String &context_name = "HECA";
+        Logger::SetLogLevel(capu::LL_WARN,context_name);
+        Logger::GetLogLevel(context_name, read_level);
+        EXPECT_EQ(capu::LL_WARN,read_level);
+    }
+
+    TEST_F(LoggerTest,GetContextIdsAndNames)
+    {
+        capu::vector<capu::String> contextIds;
+        vector<String> contextNames = {"capu.Logger", "capu.OtherContext","Hello.Capu"};
+
+        Logger::GetContextIds(contextIds);
+
+        capu::vector<capu::String>::Iterator current = contextIds.begin();
+        capu::vector<capu::String>::Iterator end = contextIds.end();
+
+         for(; current != end; ++current)
+         {
+             String context_name("");
+             Logger::GetContextNameByContextId((*current), context_name);
+
+             capu::vector<capu::String>::Iterator test_current = contextNames.begin();
+             capu::vector<capu::String>::Iterator test_end = contextNames.end();
+
+             bool found=false;
+
+             for (;test_current != test_end; ++test_current)
+             {
+                 if (context_name == (*test_current))
+                 {
+                     found = true;
+                     EXPECT_TRUE(true);
+                     break;
+                 }
+             }
+
+             if (false==found)
+                 EXPECT_TRUE(false);
+         }
+    }
+
 }
