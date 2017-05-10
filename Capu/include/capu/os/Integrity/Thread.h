@@ -19,7 +19,9 @@
 
 #include <capu/os/Posix/Thread.h>
 
+#ifndef CAPU_DEFAULT_INTEGRITY_THREAD_STACK_SIZE_IN_BYTES
 #define CAPU_DEFAULT_INTEGRITY_THREAD_STACK_SIZE_IN_BYTES 0x8000
+#endif
 
 namespace capu
 {
