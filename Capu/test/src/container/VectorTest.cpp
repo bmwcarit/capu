@@ -1395,3 +1395,26 @@
         EXPECT_EQ(3, v[2]);
     }
 
+    TEST(VectorTest, MoveConstructFromOther)
+    {
+        capu::vector<int> other({1, 2});
+        capu::vector<int> v(std::move(other));
+
+        ASSERT_EQ(0u, other.size());  // not allowed on std::vector, relies on implementation
+        ASSERT_EQ(2u, v.size());
+        EXPECT_EQ(1, v[0]);
+        EXPECT_EQ(2, v[1]);
+    }
+
+    TEST(VectorTest, MoveAssignFromOther)
+    {
+        capu::vector<int> v = {1};
+        capu::vector<int> other = {1, 2};
+
+        v = std::move(other);
+
+        ASSERT_EQ(0u, other.size());  // not allowed on std::vector, relies on implementation
+        ASSERT_EQ(2u, v.size());
+        EXPECT_EQ(1, v[0]);
+        EXPECT_EQ(2, v[1]);
+    }

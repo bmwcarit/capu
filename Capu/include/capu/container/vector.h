@@ -384,11 +384,23 @@ namespace capu
         vector(const vector& other);
 
         /**
+         * Move initializes the vector from another vector
+         */
+        vector(vector&& other);
+
+        /**
          * Assignment operator for vector
          * @param Vector to copy from
          * @return reference to Vector with copied data
          */
         vector& operator=(const vector& other);
+
+        /**
+         * Move assign operator for vector
+         * @param Vector to move from
+         * @return reference to Vector with copied data
+         */
+        vector& operator=(vector&& other);
 
         /**
          * Destructor
@@ -730,6 +742,18 @@ namespace capu
 
     template<typename T>
     inline
+    vector<T>::vector(vector&& other)
+        : m_data(other.m_data)
+        , m_dataEnd(other.m_dataEnd)
+        , m_capacityEnd(other.m_capacityEnd)
+    {
+        other.m_data = nullptr;
+        other.m_dataEnd = nullptr;
+        other.m_capacityEnd = nullptr;
+    }
+
+    template<typename T>
+    inline
     vector<T>::vector()
         : m_data(0)
         , m_dataEnd(0)
@@ -780,7 +804,16 @@ namespace capu
             copy_to_raw(other.m_data, other.m_dataEnd, m_data);
             m_dataEnd = m_data + numberOfElementsInOther;
         }
+        return *this;
+    }
 
+    template<typename T>
+    inline
+    vector<T>&
+    vector<T>::operator=(vector&& other)
+    {
+        vector<T> tmp(std::move(other));
+        this->swap(tmp);
         return *this;
     }
 
