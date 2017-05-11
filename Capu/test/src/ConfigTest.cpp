@@ -49,6 +49,7 @@ namespace capu
         EXPECT_EQ(8u, sizeof(double));
         EXPECT_EQ(1u, sizeof(bool));
         EXPECT_EQ(1u, sizeof(char));
+        EXPECT_EQ(1u, sizeof(Byte));
 
 #if defined (OS_WINDOWS)
         EXPECT_EQ(8u, sizeof(time_t));

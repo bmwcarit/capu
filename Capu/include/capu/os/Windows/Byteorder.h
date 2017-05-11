@@ -17,9 +17,8 @@
 #ifndef CAPU_WINDOWS_BYTEORDER_H
 #define CAPU_WINDOWS_BYTEORDER_H
 
+#include "capu/Config.h"
 #include <Winsock2.h>
-
-#include "capu/capustdint.h"
 
 namespace capu
 {

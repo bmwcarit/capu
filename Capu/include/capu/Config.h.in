@@ -48,35 +48,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#cmakedefine CAPU_HAVE_STDINT_H
-#cmakedefine CAPU_HAVE_STDDEF_H
-#cmakedefine HAVE_CAPU_SIZEOF_LONG_LONG_INT
-@CAPU_SIZEOF_LONG_LONG_INT_CODE@
-#cmakedefine HAVE_CAPU_SIZEOF_LONG_INT
-@CAPU_SIZEOF_LONG_INT_CODE@
-#cmakedefine HAVE_CAPU___INT64
-#cmakedefine HAVE_CAPU_INT64_T
-#cmakedefine HAVE_CAPU_SIZEOF_CHAR
-@CAPU_SIZEOF_CHAR_CODE@
-#cmakedefine HAVE_CAPU_SIZEOF_SHORT_INT
-@CAPU_SIZEOF_SHORT_INT_CODE@
-#cmakedefine HAVE_CAPU_SIZEOF_INT
-@CAPU_SIZEOF_INT_CODE@
-
-#ifndef HAVE_CAPU_INT64_T
-#undef CAPU_HAVE_STDINT_H
-#endif // HAVE_CAPU_INT64_T
-
-#ifdef CAPU_HAVE_STDINT_H
-#include <stdint.h>
-#else
-#include "capu/capustdint.h"
-#endif // CAPU_HAVE_STDINT_H
-
-#ifdef CAPU_HAVE_STDDEF_H
-#include <stddef.h>
-#endif // CAPU_HAVE_STDDEF_H
+#include <cstdint>
 
 #define UNUSED(x) {(void)(x);}
 
@@ -99,7 +71,7 @@ namespace capu
         typedef int32_t int_t;
         typedef uint32_t uint_t;
     #endif
+    typedef unsigned char Byte;
 }
 
 #endif //CAPU_CONFIG_H
-
