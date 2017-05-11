@@ -20,12 +20,17 @@
 #include "capu/util/Iterator.h"
 #include "capu/util/Traits.h"
 #include "capu/os/Memory.h"
+#include <type_traits>
 #include <new>
+
+#if __GNUC__ == 4 && __GNUC_MINOR__ <= 7
+#define CAPU_LIMITED_TRAIT_SUPPORT
+#endif
 
 namespace capu
 {
 
-    template<class InputIt, class OutputIt, typename T, int TYPE, class InputItCategory, class OutputItCategory>
+    template<class InputIt, class OutputIt, typename T, bool>
     struct CopyRawHelper
     {
         static OutputIt copy(InputIt first, InputIt last, OutputIt dest)
@@ -41,7 +46,7 @@ namespace capu
     };
 
     template<class InputIt, class OutputIt, typename T>
-    struct CopyRawHelper<InputIt, OutputIt, T, CAPU_TYPE_PRIMITIVE, random_access_iterator_tag, random_access_iterator_tag>
+    struct CopyRawHelper<InputIt, OutputIt, T, true>
     {
         static OutputIt copy(InputIt first, InputIt last, OutputIt dest)
         {
@@ -67,10 +72,18 @@ namespace capu
         typedef typename iterator_traits<InputIt>::value_type T;
         typedef typename iterator_traits<InputIt>::iterator_category InputItCategory;
         typedef typename iterator_traits<OutputIt>::iterator_category OutputItCategory;
-        return CopyRawHelper<InputIt, OutputIt, T, Type<T>::Identifier, InputItCategory, OutputItCategory>::copy(first, last, dest);
+        return CopyRawHelper<InputIt, OutputIt, T,
+            std::is_same<InputItCategory, random_access_iterator_tag>::value &&
+            std::is_same<OutputItCategory, random_access_iterator_tag>::value &&
+#ifdef CAPU_LIMITED_TRAIT_SUPPORT
+            std::is_pod<T>::value
+#else
+            std::is_trivially_copyable<T>::value
+#endif
+            >::copy(first, last, dest);
     }
 
-    template<class OutputIt, class Size, typename T, int TYPE, class OutputItCategory>
+    template<class OutputIt, class Size, typename T, bool>
     struct FillNRawHelper
     {
         static OutputIt fill(OutputIt first, Size count, const T& value = T())
@@ -85,7 +98,7 @@ namespace capu
     };
 
     template<class OutputIt, class Size, typename T>
-    struct FillNRawHelper<OutputIt, Size, T, CAPU_TYPE_PRIMITIVE, random_access_iterator_tag>
+        struct FillNRawHelper<OutputIt, Size, T, true>
     {
         static OutputIt fill(OutputIt first, Size count, const T& value)
         {
@@ -111,10 +124,17 @@ namespace capu
      * @return iterator one after the last element that was written
      */
     template <class OutputIt, class Size, class T>
-    OutputIt fill_n_raw(OutputIt first, Size count, const T& value = T())
+        OutputIt fill_n_raw(OutputIt first, Size count, const T& value = T())
     {
         typedef typename iterator_traits<OutputIt>::iterator_category OutputItCategory;
-        return FillNRawHelper<OutputIt, Size, T, Type<T>::Identifier, OutputItCategory>::fill(first, count, value);
+        return FillNRawHelper<OutputIt, Size, T,
+            std::is_same<OutputItCategory, random_access_iterator_tag>::value &&
+#ifdef CAPU_LIMITED_TRAIT_SUPPORT
+            std::is_pod<T>::value
+#else
+            std::is_trivially_constructible<T>::value
+#endif
+            >::fill(first, count, value);
     }
 
     /**
@@ -128,10 +148,17 @@ namespace capu
     {
         typedef typename iterator_traits<OutputIt>::value_type T;
         typedef typename iterator_traits<OutputIt>::iterator_category OutputItCategory;
-        return FillNRawHelper<OutputIt, Size, T, Type<T>::Identifier, OutputItCategory>::fill(first, count);
+        return FillNRawHelper<OutputIt, Size, T,
+            std::is_same<OutputItCategory, random_access_iterator_tag>::value &&
+#ifdef CAPU_LIMITED_TRAIT_SUPPORT
+            std::is_pod<T>::value
+#else
+            std::is_trivially_constructible<T>::value
+#endif
+            >::fill(first, count);
     }
 
-    template<class InputIt, typename T, int TYPE>
+    template<class InputIt, typename T, bool>
     struct DestructRawHelper
     {
         static void destruct(InputIt first, InputIt last)
@@ -145,7 +172,7 @@ namespace capu
     };
 
     template<class InputIt, typename T>
-    struct DestructRawHelper<InputIt, T, CAPU_TYPE_PRIMITIVE>
+    struct DestructRawHelper<InputIt, T, true>
     {
         static void destruct(InputIt /*first*/, InputIt /*last*/)
         {
@@ -162,10 +189,14 @@ namespace capu
     void destruct_raw(InputIt first, InputIt last)
     {
         typedef typename iterator_traits<InputIt>::value_type T;
-        DestructRawHelper<InputIt, T, Type<T>::Identifier>::destruct(first, last);
+        DestructRawHelper<InputIt, T,
+#ifdef CAPU_LIMITED_TRAIT_SUPPORT
+            std::is_pod<T>::value
+#else
+            std::is_trivially_destructible<T>::value
+#endif
+            >::destruct(first, last);
     }
 }
 
 #endif // CAPU_ALGORITHM_RAW_H
-
-
