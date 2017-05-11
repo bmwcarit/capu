@@ -733,7 +733,7 @@ namespace capu
     template<typename T>
     inline
     capu::vector<T>::vector(const vector& other)
-        : m_data(other.capacity() == 0u ? nullptr : reinterpret_cast<T*>(new uint8_t[sizeof(T) * other.capacity()]))
+        : m_data(other.capacity() == 0u ? nullptr : reinterpret_cast<T*>(new Byte[sizeof(T) * other.capacity()]))
         , m_dataEnd( m_data + other.size())
         , m_capacityEnd( m_data + other.capacity())
     {
@@ -764,7 +764,7 @@ namespace capu
     template<typename T>
     inline
     vector<T>::vector(const uint_t initialSize, const T& value)
-        : m_data(initialSize == 0u ? nullptr : reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
+        : m_data(initialSize == 0u ? nullptr : reinterpret_cast<T*>(new Byte[sizeof(T) * initialSize]))
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
     {
@@ -783,7 +783,7 @@ namespace capu
     template<typename T>
     inline
     vector<T>::vector(const uint_t initialSize)
-        : m_data(initialSize == 0u ? nullptr : reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
+        : m_data(initialSize == 0u ? nullptr : reinterpret_cast<T*>(new Byte[sizeof(T) * initialSize]))
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
     {
@@ -821,7 +821,7 @@ namespace capu
     inline vector<T>::~vector()
     {
         clear();
-        const uint8_t* untypedMemory = reinterpret_cast<uint8_t*>(m_data);
+        const Byte* untypedMemory = reinterpret_cast<Byte*>(m_data);
         delete[] untypedMemory;
     }
 
@@ -927,14 +927,14 @@ namespace capu
         if (newSize > capacity())
         {
             const uint_t currentNumberOfElements = size();
-            void* newMemory = new uint8_t[sizeof(T) * newSize];
+            void* newMemory = new Byte[sizeof(T) * newSize];
             T* newTypedMemory = reinterpret_cast<T*>(newMemory);
 
             copy_to_raw(m_data, m_dataEnd, newTypedMemory);
             destruct_raw(m_data, m_dataEnd);
 
             // delete previous memory
-            uint8_t* untypedMemory = reinterpret_cast<uint8_t*>(m_data);
+            Byte* untypedMemory = reinterpret_cast<Byte*>(m_data);
             delete[] untypedMemory;
             m_data = newTypedMemory;
             m_dataEnd = m_data + currentNumberOfElements;
