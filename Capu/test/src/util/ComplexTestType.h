@@ -64,4 +64,56 @@ public:
     static capu::uint_t dtor_count;
 };
 
+class MoveableComplexTestType
+{
+public:
+    MoveableComplexTestType(capu::uint_t value_ = 0u)
+        :value(value_)
+    {
+        ++ctor_count;
+    }
+
+    MoveableComplexTestType(const MoveableComplexTestType& other)
+    {
+        value = other.value;
+        ++copyctor_count;
+    }
+
+    MoveableComplexTestType(MoveableComplexTestType&& other)
+    {
+        value = other.value;
+        ++movector_count;
+    }
+
+    bool operator==(const MoveableComplexTestType& other) const
+    {
+        return value == other.value;
+    }
+
+    bool operator!=(const MoveableComplexTestType& other) const
+    {
+        return value != other.value;
+    }
+
+    ~MoveableComplexTestType()
+    {
+        ++dtor_count;
+    }
+
+    static void Reset()
+    {
+        ctor_count = 0;
+        copyctor_count = 0;
+        movector_count = 0;
+        dtor_count = 0;
+    }
+
+    capu::uint_t value;
+
+    static capu::uint_t ctor_count;
+    static capu::uint_t copyctor_count;
+    static capu::uint_t movector_count;
+    static capu::uint_t dtor_count;
+};
+
 #endif

@@ -29,7 +29,6 @@
 
 namespace capu
 {
-
     template<class InputIt, class OutputIt, typename T, bool>
     struct CopyRawHelper
     {
@@ -81,6 +80,50 @@ namespace capu
             std::is_trivially_copyable<T>::value
 #endif
             >::copy(first, last, dest);
+    }
+
+    template<class InputIt, class OutputIt, typename T, bool>
+    struct MoveRawHelper
+    {
+        static OutputIt move(InputIt first, InputIt last, OutputIt dest)
+        {
+            while (first != last)
+            {
+                new(&(*dest))T(std::move(*first));
+                ++first;
+                ++dest;
+            }
+            return dest;
+        }
+    };
+
+    template<class InputIt, class OutputIt, typename T>
+    struct MoveRawHelper<InputIt, OutputIt, T, true>
+    {
+        static OutputIt move(InputIt first, InputIt last, OutputIt dest)
+        {
+            return CopyRawHelper<InputIt, OutputIt, T, true>::copy(first, last, dest);
+        }
+    };
+
+   /**
+     * Move-construct range of elements in uninitialized memory
+     * @param first begin of range to move from
+     * @param last non-inclusive end of range to move from
+     * @param dest iterator to raw (uninitialized memory) where elements are constructed
+     * @return iterator one after the last element that was written
+     */
+    template <class InputIt, class OutputIt>
+    OutputIt move_to_raw(InputIt first, InputIt last, OutputIt dest)
+    {
+        typedef typename iterator_traits<InputIt>::value_type T;
+        typedef typename iterator_traits<InputIt>::iterator_category InputItCategory;
+        typedef typename iterator_traits<OutputIt>::iterator_category OutputItCategory;
+        return MoveRawHelper<InputIt, OutputIt, T,
+            std::is_same<InputItCategory, random_access_iterator_tag>::value &&
+            std::is_same<OutputItCategory, random_access_iterator_tag>::value &&
+            std::is_pod<T>::value
+            >::move(first, last, dest);
     }
 
     template<class OutputIt, class Size, typename T, bool>

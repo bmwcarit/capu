@@ -64,6 +64,66 @@ namespace capu
         EXPECT_EQ(0u, dst[0]);
     }
 
+    TEST(AlgorithmRawTest, MoveToRawPointers)
+    {
+        uint32_t src[3] = { 2, 3, 4 };
+        uint32_t dst[4] = { 0 };
+
+        uint32_t *result = move_to_raw(src, src + 3, dst);
+        EXPECT_EQ(dst + 3, result);
+        EXPECT_EQ(2u, dst[0]);
+        EXPECT_EQ(3u, dst[1]);
+        EXPECT_EQ(4u, dst[2]);
+        EXPECT_EQ(0u, dst[3]);
+    }
+
+    TEST(AlgorithmRawTest, MoveToRawZeroElements)
+    {
+        uint32_t src[2] = { 2, 3 };
+        uint32_t dst[1] = { 0 };
+
+        uint32_t *result = move_to_raw(src, src + 0, dst);
+        EXPECT_EQ(dst, result);
+        EXPECT_EQ(0u, dst[0]);
+    }
+
+    TEST(AlgorithmRawTest, MoveToRawComplexType)
+    {
+        ComplexTestType src[3] = {1, 2, 3};
+        uint8_t dst_mem[sizeof(ComplexTestType) * 4];
+        ComplexTestType *dst = reinterpret_cast<ComplexTestType*>(dst_mem);
+
+        ComplexTestType::Reset();
+        ComplexTestType *result = move_to_raw(src, src + 3, dst);
+        EXPECT_EQ(dst + 3, result);
+        EXPECT_EQ(0u, ComplexTestType::ctor_count);
+        EXPECT_EQ(3u, ComplexTestType::copyctor_count);
+        EXPECT_EQ(0u, ComplexTestType::dtor_count);
+
+        EXPECT_EQ(1u, dst[0].value);
+        EXPECT_EQ(2u, dst[1].value);
+        EXPECT_EQ(3u, dst[2].value);
+    }
+
+    TEST(AlgorithmRawTest, MoveToRawMovableComplexType)
+    {
+        MoveableComplexTestType src[3] = {1, 2, 3};
+        uint8_t dst_mem[sizeof(MoveableComplexTestType) * 4];
+        MoveableComplexTestType *dst = reinterpret_cast<MoveableComplexTestType*>(dst_mem);
+
+        MoveableComplexTestType::Reset();
+        MoveableComplexTestType *result = move_to_raw(src, src + 3, dst);
+        EXPECT_EQ(dst + 3, result);
+        EXPECT_EQ(0u, MoveableComplexTestType::ctor_count);
+        EXPECT_EQ(0u, MoveableComplexTestType::copyctor_count);
+        EXPECT_EQ(3u, MoveableComplexTestType::movector_count);
+        EXPECT_EQ(0u, MoveableComplexTestType::dtor_count);
+
+        EXPECT_EQ(1u, dst[0].value);
+        EXPECT_EQ(2u, dst[1].value);
+        EXPECT_EQ(3u, dst[2].value);
+    }
+
     TEST(AlgorithmRawTest, CopyToRawBidirrectionalContainerIntegralType)
     {
         BidirectionalTestContainer<uint32_t> src(3);
