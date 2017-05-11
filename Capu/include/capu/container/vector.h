@@ -51,7 +51,7 @@ namespace capu
              * Default constructor for the iterator
             */
             InternalIterator()
-                : m_current(NULL)
+                : m_current(nullptr)
             {
 
             }
@@ -533,7 +533,7 @@ namespace capu
 
          /**
          * remove the element in the specified index and if the element_old
-         * parameter is not NULL, the removed element will be put to element_old
+         * parameter is not nullptr, the removed element will be put to element_old
          *
          * NOTE: Not STL compatible
          *
@@ -546,7 +546,7 @@ namespace capu
 
         /**
          * Removes the element in the specified iterator position and if the element_old
-         * parameter is not NULL, the removed element will be put to element_old
+         * parameter is not nullptr, the removed element will be put to element_old
          * @param iterator iterator of element that will be removed
          * @param elementOld the buffer which will keep the copy of the removed element
          * @return CAPU_EINVAL invalid iterator
@@ -705,14 +705,16 @@ namespace capu
     }
 
     template<typename T>
+    inline
     bool capu::vector<T>::empty() const
     {
         return m_data == m_dataEnd;
     }
 
     template<typename T>
+    inline
     capu::vector<T>::vector(const vector& other)
-        : m_data(other.capacity() == 0u ? NULL : reinterpret_cast<T*>(new uint8_t[sizeof(T) * other.capacity()]))
+        : m_data(other.capacity() == 0u ? nullptr : reinterpret_cast<T*>(new uint8_t[sizeof(T) * other.capacity()]))
         , m_dataEnd( m_data + other.size())
         , m_capacityEnd( m_data + other.capacity())
     {
@@ -731,7 +733,7 @@ namespace capu
     template<typename T>
     inline
     vector<T>::vector(const uint_t initialSize, const T& value)
-        : m_data(initialSize == 0u ? NULL : reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
+        : m_data(initialSize == 0u ? nullptr : reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
     {
@@ -741,7 +743,7 @@ namespace capu
     template<typename T>
     inline
     vector<T>::vector(const uint_t initialSize)
-        : m_data(initialSize == 0u ? NULL : reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
+        : m_data(initialSize == 0u ? nullptr : reinterpret_cast<T*>(new uint8_t[sizeof(T) * initialSize]))
         , m_dataEnd(m_data + initialSize)
         , m_capacityEnd(m_data + initialSize)
     {
