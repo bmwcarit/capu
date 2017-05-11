@@ -1376,6 +1376,22 @@
         v.push_back(1);
         v.push_back(2);
         v.push_back(3);
- 
+
         capu::IteratorTestHelper::IteratorImplementsAllNecessaryMethods(v);
     }
+
+    TEST(VectorTest, ConstructFromEmptyInitializerList)
+    {
+        capu::vector<int> v({});
+        EXPECT_EQ(0u, v.size());
+    }
+
+    TEST(VectorTest, ConstructFromInitializerList)
+    {
+        capu::vector<int> v({1, 2, 3});
+        ASSERT_EQ(3u, v.size());
+        EXPECT_EQ(1, v[0]);
+        EXPECT_EQ(2, v[1]);
+        EXPECT_EQ(3, v[2]);
+    }
+

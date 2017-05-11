@@ -25,6 +25,7 @@
 #include "capu/util/Algorithm.h"
 #include "capu/util/Swap.h"
 #include <new>
+#include <initializer_list>
 #include <assert.h>
 
 namespace capu
@@ -370,6 +371,12 @@ namespace capu
          * @param value to set for all elements
          */
         vector(const uint_t initialSize, const T& value);
+
+        /**
+         * Initializes the vector from given initializer_list
+         * @param init the initializer_list
+         */
+        vector(std::initializer_list<T> init);
 
         /**
          * Initializes the vector from another vector
@@ -738,6 +745,15 @@ namespace capu
         , m_capacityEnd(m_data + initialSize)
     {
         fill_n_raw(m_data, initialSize, value);
+    }
+
+
+    template<typename T>
+    inline
+    vector<T>::vector(std::initializer_list<T> init)
+        : vector()
+    {
+        insert(end(), std::begin(init), std::end(init));
     }
 
     template<typename T>
