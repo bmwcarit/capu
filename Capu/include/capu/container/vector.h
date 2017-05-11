@@ -930,7 +930,7 @@ namespace capu
             void* newMemory = new Byte[sizeof(T) * newSize];
             T* newTypedMemory = reinterpret_cast<T*>(newMemory);
 
-            copy_to_raw(m_data, m_dataEnd, newTypedMemory);
+            move_to_raw(m_data, m_dataEnd, newTypedMemory);
             destruct_raw(m_data, m_dataEnd);
 
             // delete previous memory

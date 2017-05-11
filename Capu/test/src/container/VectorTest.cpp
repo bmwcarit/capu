@@ -1418,3 +1418,13 @@
         EXPECT_EQ(1, v[0]);
         EXPECT_EQ(2, v[1]);
     }
+
+    TEST(VectorTest, ReserveCanMoveInternally)
+    {
+        capu::vector<MoveableComplexTestType> v(3);
+
+        MoveableComplexTestType::Reset();
+        v.reserve(v.capacity() + 1);
+        EXPECT_EQ(0u, MoveableComplexTestType::copyctor_count);
+        EXPECT_EQ(3u, MoveableComplexTestType::movector_count);
+    }
