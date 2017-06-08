@@ -32,14 +32,15 @@ namespace capu
         public:
             CondVar()
             {
-                pthread_condattr_init(&mCondAttr);
-                pthread_cond_init(&mCond, &mCondAttr);
+                pthread_condattr_t attr;
+                pthread_condattr_init(&attr);
+                pthread_cond_init(&mCond, &attr);
+                pthread_condattr_destroy(&attr);
             }
 
             ~CondVar()
             {
                 pthread_cond_destroy(&mCond);
-                pthread_condattr_destroy(&mCondAttr);
             }
 
             status_t signal()
@@ -104,7 +105,6 @@ namespace capu
             }
         private:
             pthread_cond_t mCond;
-            pthread_condattr_t mCondAttr;
         };
     }
 }
