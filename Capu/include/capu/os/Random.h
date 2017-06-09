@@ -17,17 +17,19 @@
 #ifndef CAPU_RANDOM_H
 #define CAPU_RANDOM_H
 
-#include "capu/os/PlatformInclude.h"
-#include CAPU_PLATFORM_INCLUDE(Random)
+#include "capu/Config.h"
+#include <random>
 
 namespace capu
 {
     /**
      * Represents a random number generator.
      */
-    class Random: private capu::os::arch::Random
+    class Random
     {
     public:
+        Random();
+
         /**
          * Creates a new random number.
          * @return A new random number.
@@ -45,21 +47,31 @@ namespace capu
          * @return A new random number.
          */
         uint32_t nextUInt32();
+
+    private:
+        std::random_device rd;
+        std::mt19937 gen;
+        std::uniform_int_distribution<uint32_t> dist;
     };
+
+    inline Random::Random()
+        : gen(rd())
+    {
+    }
 
     inline uint8_t Random::nextUInt8()
     {
-        return capu::os::arch::Random::nextUInt8();
+        return dist(gen) & 0xFF;
     }
 
     inline uint16_t Random::nextUInt16()
     {
-        return capu::os::arch::Random::nextUInt16();
+        return dist(gen) & 0xFFFF;
     }
 
     inline uint32_t Random::nextUInt32()
     {
-        return capu::os::arch::Random::nextUInt32();
+        return dist(gen);
     }
 }
 
