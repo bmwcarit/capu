@@ -34,6 +34,9 @@ namespace capu
             {
                 pthread_condattr_t attr;
                 pthread_condattr_init(&attr);
+#ifdef OS_LINUX
+                pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
+#endif
                 pthread_cond_init(&mCond, &attr);
                 pthread_condattr_destroy(&attr);
             }
@@ -73,11 +76,21 @@ namespace capu
             {
                 if (timeoutMillis != 0)
                 {
-                    // use platform independent GetMilliseconds() function here because clock_gettime is not always available
-                    uint64_t endTime = Time::GetMilliseconds() + timeoutMillis;
                     struct timespec timeout;
+#ifdef OS_LINUX
+                    clock_gettime(CLOCK_MONOTONIC, &timeout);
+                    timeout.tv_sec += timeoutMillis / 1000;
+                    timeout.tv_nsec += (timeoutMillis % 1000) * 1000000;
+                    if (timeout.tv_nsec > 1000000000)
+                    {
+                        timeout.tv_sec += 1;
+                        timeout.tv_nsec -= 1000000000;
+                    }
+#else
+                    uint64_t endTime = Time::GetMilliseconds() + timeoutMillis;
                     timeout.tv_sec = endTime / 1000;
                     timeout.tv_nsec = (endTime % 1000) * 1000000;
+#endif
 
                     int32_t ret = pthread_cond_timedwait(&mCond, &mutex.mLock, &timeout);
 
