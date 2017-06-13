@@ -19,6 +19,7 @@
 
 #include "capu/os/File.h"
 #include "capu/util/FileTraverser.h"
+#include "capu/container/vector.h"
 
 #include CAPU_PLATFORM_INCLUDE(FileUtils)
 
@@ -74,12 +75,29 @@ namespace capu
         static String readAllText(File& file);
 
         /**
+        * Reads all bytes from a file.
+        * @param file The file containing the bytes.
+        * @param result A vector which the resulting bytes will be appended to.
+        * @return CAPU_OK if the file was read successfully.
+        */
+        static status_t readAllBytes(File& file, vector<Byte>& result);
+
+        /**
         * Writes all given text in a file. Existing content will get overwritten.
         * @param file The file into which to content will get written.
         * @param content The content that should go into the file.
         * @return The return value.
         */
         static status_t writeAllText(File& file, const String& content);
+
+        /**
+        * Writes all bytes to a file. Existing content will be overwritten.
+        * @param file The file which the content will get written to.
+        * @param buffer A pointer to an input buffer with byte data.
+        * @param numberOfBytesToWrite The number of bytes to write.
+        * @return CAPU_OK if the file was written successfully.
+        */
+        static status_t writeAllBytes(File& file, const Byte* buffer, uint32_t numberOfBytesToWrite);
 
         /**
         * Retrieves the current working directory for the calling process
@@ -141,6 +159,65 @@ namespace capu
 
         // finally, create the directory
         return directory.createDirectory();
+    }
+
+    inline status_t FileUtils::readAllBytes(File& file, vector<Byte>& result)
+    {
+        capu::uint_t fileSize;
+        if (file.getSizeInBytes(fileSize) != capu::CAPU_OK)
+        {
+            // error determining file size
+            return CAPU_ERROR;
+        }
+
+        result.resize(fileSize);
+        file.open(capu::READ_ONLY_BINARY);
+        capu::uint_t totalBytesRead = 0;
+        status_t retVal = CAPU_ERROR;
+
+        // Read directly into the vector
+        char* vectorPtr = reinterpret_cast<char*>(result.data());
+
+        while (totalBytesRead < fileSize)
+        {
+            capu::uint_t bytesRead = 0;
+            retVal = file.read(vectorPtr, fileSize - totalBytesRead, bytesRead);
+
+            if (retVal == capu::CAPU_EOF)
+            {
+                // read to end
+                break;
+            }
+            if (retVal != capu::CAPU_OK)
+            {
+                // an error occurred
+                break;
+            }
+            if (bytesRead == 0)
+            {
+                // read 0 bytes and no EOF
+                break;
+            }
+
+            totalBytesRead += bytesRead;
+            vectorPtr += bytesRead; // Bump the pointer in case end-of-file is not reached yet
+        }
+
+        file.close();
+        return retVal;
+    }
+
+    inline status_t FileUtils::writeAllBytes(File& file, const Byte* buffer, uint32_t numberOfBytesToWrite)
+    {
+        if (file.exists())
+        {
+            file.remove();
+        }
+        file.open(capu::READ_WRITE_OVERWRITE_OLD_BINARY);
+        file.write(reinterpret_cast<const char*>(buffer), numberOfBytesToWrite);
+        file.flush();
+        file.close();
+        return CAPU_OK;
     }
 
     inline String FileUtils::readAllText(File& file)

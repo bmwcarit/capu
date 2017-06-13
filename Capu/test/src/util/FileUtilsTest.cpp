@@ -16,6 +16,7 @@
 
 #include "gmock/gmock.h"
 #include "capu/util/FileUtils.h"
+#include "capu/Config.h"
 
 TEST(FileUtilsTest, TestRemoveDirectory)
 {
@@ -116,6 +117,38 @@ TEST(FileUtilsTest, ReadWriteAllText)
 
     capu::String fromFile2 = capu::FileUtils::readAllText(temp);
     EXPECT_STREQ(content2.c_str(), fromFile2.c_str());
+
+    temp.remove();
+    EXPECT_FALSE(temp.exists());
+}
+
+TEST(FileUtilsTest, ReadWriteAllBytes)
+{
+    capu::File temp("readWriteBytesTest.dat");
+    EXPECT_FALSE(temp.exists());
+
+    capu::Byte largeContent[8000];
+
+    for (uint32_t i = 0; i < sizeof(largeContent); i++)
+    {
+        largeContent[i] = i % 255;
+    }
+
+    capu::FileUtils::writeAllBytes(temp, largeContent, sizeof(largeContent));
+    EXPECT_TRUE(temp.exists());
+
+    capu::vector<capu::Byte> readBuffer;
+    EXPECT_EQ(capu::CAPU_OK, capu::FileUtils::readAllBytes(temp, readBuffer));
+    EXPECT_EQ(readBuffer.size(), sizeof(largeContent));
+    EXPECT_EQ(0, capu::Memory::Compare(largeContent, readBuffer.data(), readBuffer.size()));
+
+    // Keep the file and overwrite with a smaller set of data
+    const capu::Byte smallContent[] = {0xAA, 0xBB, 0x0, 0xCC, 0xFF, 0x0, 0x05 };
+    capu::FileUtils::writeAllBytes(temp, smallContent, sizeof(smallContent));
+    readBuffer.clear(); // Re-use the same buffer
+    EXPECT_EQ(capu::CAPU_OK, capu::FileUtils::readAllBytes(temp, readBuffer));
+    EXPECT_EQ(readBuffer.size(), sizeof(smallContent));
+    EXPECT_EQ(0, capu::Memory::Compare(smallContent, readBuffer.data(), readBuffer.size()));
 
     temp.remove();
     EXPECT_FALSE(temp.exists());
