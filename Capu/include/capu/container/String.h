@@ -80,6 +80,8 @@ namespace capu
          */
         ~String();
 
+        void resize(uint_t newSize);
+
         /**
          * Return the string as characters
          */
@@ -386,11 +388,15 @@ namespace capu
         StringUtils::Strncpy(m_data.getRawData(), m_data.size(), startdata);
     }
 
-
-
     inline String::~String()
     {
         initData(0);
+    }
+
+    inline void String::resize(uint_t newSize)
+    {
+        m_data.setSize(newSize);
+        m_size = newSize;
     }
 
     inline String& String::operator=(const String& other)

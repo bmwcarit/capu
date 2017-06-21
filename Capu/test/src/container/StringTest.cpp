@@ -690,3 +690,29 @@ TEST(String, TestDataGetterOnNonEmptyString)
     const capu::String sConst("a");
     EXPECT_EQ('a', *sConst.data());
 }
+
+TEST(String, ResizeAnEmptyString)
+{
+    capu::String s;
+    EXPECT_EQ(0u, s.getLength());
+
+    s.resize(15);
+    EXPECT_EQ(15u, s.getLength());
+}
+
+TEST(String, ResizeToSmaller)
+{
+    capu::String s("12345");
+    s.resize(3);
+    EXPECT_EQ(3u, s.getLength());
+}
+
+TEST(String, ResizeReallyAllocatesEnough)
+{
+    capu::String s("12");
+    s.resize(6);
+    const char* source = "12345\0";
+    capu::Memory::Copy(s.data(), source, 6);
+
+    EXPECT_STREQ("12345", s.data());
+}
