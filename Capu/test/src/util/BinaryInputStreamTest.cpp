@@ -118,6 +118,22 @@ namespace capu
         EXPECT_STREQ("Hello World", value.c_str());
     }
 
+    TEST_F(BinaryInputStreamTest, ReadEmptyStringValue)
+    {
+        char buffer[16];
+        String value = "";
+        uint32_t strlen = static_cast<uint32_t>(value.getLength());
+
+        Memory::Copy(buffer, reinterpret_cast<char*>(&strlen), sizeof(uint32_t));
+        Memory::Copy(buffer + sizeof(uint32_t), value.c_str(), value.getLength() + 1);
+
+        BinaryInputStream inStream(buffer);
+
+        inStream >> value;
+
+        EXPECT_STREQ("", value.c_str());
+    }
+
     TEST_F(BinaryInputStreamTest, ReadBoolValue)
     {
         char buffer[4];

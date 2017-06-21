@@ -59,15 +59,15 @@ namespace capu
     {
         uint32_t length = 0;
         operator>>(length); // first read the length of the string
+        String retValue;
+        if (length>0)
+        {
+            retValue.resize(length+1);
 
-        char* buffer = new char[length + 1];
-
-        read(buffer, length);
-        buffer[length] = 0; // terminate string
-
-        value = buffer;
-
-        delete[] buffer;
+            read(retValue.data(), length);
+            retValue.data()[length] = 0; // terminate string
+        }
+        value.swap(retValue);
         return *this;
     }
 
