@@ -589,7 +589,7 @@ namespace capu
             Array<char> tmpArray(len);
             capu::swap(m_data, tmpArray);
 
-            StringUtils::Strncpy(m_data.getRawData(), len, data);
+            Memory::Copy(m_data.getRawData(), data, len);
             m_size = len - 1;
         }
         else
