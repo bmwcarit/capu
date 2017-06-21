@@ -427,7 +427,7 @@ namespace capu
     inline String operator+(const char* lOperand, const String& rOperand)
     {
         String result(lOperand);
-        return result.append(rOperand.c_str());
+        return result.append(rOperand);
     }
 
     inline bool String::operator==(const String& other) const
