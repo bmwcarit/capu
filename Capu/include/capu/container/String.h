@@ -584,7 +584,7 @@ namespace capu
     {
         if (data)
         {
-            uint_t len = StringUtils::Strlen(data) + 1;
+            const uint_t len = StringUtils::Strlen(data) + 1;
 
             Array<char> tmpArray(len);
             capu::swap(m_data, tmpArray);
