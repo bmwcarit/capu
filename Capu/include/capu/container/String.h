@@ -385,8 +385,8 @@ namespace capu
 
         Array<char> tmpArray(m_size + 1); // with ending \0
         capu::swap(m_data, tmpArray);
-
-        StringUtils::Strncpy(m_data.getRawData(), m_data.size(), startdata);
+        Memory::Copy(m_data.getRawData(), startdata, m_size);
+        m_data[m_size] = '\0';
     }
 
     inline String::~String()
