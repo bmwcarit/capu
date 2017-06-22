@@ -55,8 +55,8 @@ namespace capu
         String(const char* data, const uint_t start, const uint_t end);
 
         /**
-         * Create a string from some other strnig, only taking some from the middle
-         * @param other THe string frmo which a substring will be taken.
+         * Create a string from some other string, only taking some from the middle
+         * @param other The string from which a substring will be taken.
          * @param start Position within characters to start copying from
          * @param end Position within characters to stop copying
          */
