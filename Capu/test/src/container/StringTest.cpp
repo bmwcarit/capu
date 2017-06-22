@@ -229,6 +229,14 @@ TEST(String, TestAppend4)
     EXPECT_EQ(10u, str.getLength());
 }
 
+TEST(String, TestAppend5)
+{
+    capu::String str;
+    capu::String other;
+    str.append(other);
+    EXPECT_EQ(0u, str.getLength());
+}
+
 TEST(String, TestPlusOperator1)
 {
     capu::String str1("hello");

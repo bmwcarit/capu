@@ -272,6 +272,7 @@ namespace capu
     private:
         void initData(const char* data);
         void initFromGivenData(const char* data, const uint_t end, const uint_t start, uint_t size);
+        String& appendWithKnownLength(const char* other, uint_t length);
 
         Array<char> m_data;
         uint_t m_size;
@@ -513,7 +514,7 @@ namespace capu
 
     inline String& String::append(const String& other)
     {
-        return append(other.c_str());
+        return appendWithKnownLength(other.data(), other.getLength());
     }
 
     inline void String::toUpperCase()
@@ -544,18 +545,27 @@ namespace capu
     {
         if (other && *other)
         {
+            const uint_t otherlen = StringUtils::Strlen(other);
+            return appendWithKnownLength(other, otherlen);
+        }
+        return *this;
+    }
+
+    inline String& String::appendWithKnownLength(const char* other, uint_t otherLength)
+    {
+        if (other && *other)
+        {
             if (m_data.size() > 0)
             {
-                uint_t mylen = StringUtils::Strlen(m_data.getRawData());
-                uint_t otherlen = StringUtils::Strlen(other) + 1;
+                if (otherLength > 0)
+                {
+                    Array<char> newData(m_size + otherLength +1);
+                    Memory::Copy(newData.getRawData(), m_data.getRawData(), m_size);
+                    Memory::Copy(&newData.getRawData()[m_size], other, otherLength + 1); // include copy of nullterminiator
 
-                Array<char> newData(mylen + otherlen);
-
-                StringUtils::Strncpy(newData.getRawData(), mylen + 1, m_data.getRawData());
-                StringUtils::Strncpy(&newData.getRawData()[mylen], otherlen, other);
-
-                capu::swap(m_data, newData);
-                m_size = mylen + otherlen - 1;
+                    capu::swap(m_data, newData);
+                    m_size = m_size + otherLength;
+                }
             }
             else
             {
