@@ -715,6 +715,29 @@ TEST(String, ResizeToSmaller)
     EXPECT_EQ(3u, s.getLength());
 }
 
+TEST(String, IsNullterminatedAlsoAfterResizing)
+{
+    capu::String s("1234");
+    s.resize(2);
+
+    char destination[3];
+
+    capu::Memory::Copy(&destination, s.c_str(), 3);
+    ASSERT_EQ(0, destination[2]);
+}
+
+
+TEST(String, IsNullterminatedAlsoAfterResizingToZero)
+{
+    capu::String s("1234");
+    s.resize(0);
+
+    char destination;
+
+    capu::Memory::Copy(&destination, s.c_str(), 1);
+    ASSERT_EQ(0, destination);
+}
+
 TEST(String, ResizeReallyAllocatesEnough)
 {
     capu::String s("12");

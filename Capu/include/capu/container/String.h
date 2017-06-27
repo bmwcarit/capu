@@ -396,7 +396,15 @@ namespace capu
 
     inline void String::resize(uint_t newSize)
     {
-        m_data.setSize(newSize);
+        if (newSize>0)
+        {
+            m_data.setSize(newSize + 1); // additional byte for null termination
+            m_data[newSize] = 0;
+        }
+        else
+        {
+            m_data.setSize(0);
+        }
         m_size = newSize;
     }
 
