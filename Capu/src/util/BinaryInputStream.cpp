@@ -62,10 +62,8 @@ namespace capu
         String retValue;
         if (length>0)
         {
-            retValue.resize(length+1);
-
+            retValue.resize(length);
             read(retValue.data(), length);
-            retValue.data()[length] = 0; // terminate string
         }
         value.swap(retValue);
         return *this;
