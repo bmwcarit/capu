@@ -21,10 +21,10 @@ SET(TARGET_OS Windows)
 SET(TARGET_ARCH X86_32)
 
 SET(CMAKE_C_FLAGS_RELEASE "/MD /O2 /Ob2 /DNDEBUG /MP8 /GR-" CACHE STRING "")
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W3 /WX" CACHE STRING "")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W3 /WX /wd4996" CACHE STRING "")
 
 SET(CMAKE_C_FLAGS_DEBUG "/MDd /Zi /Od /RTC1 /D_DEBUG /MP8" CACHE STRING "")
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /W3 /WX" CACHE STRING "")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /W3 /WX /wd4996" CACHE STRING "")
 
 add_definitions("-D_VARIADIC_MAX=10") #this is needed for compiling gtest with visual studio 11
 
@@ -32,4 +32,3 @@ add_definitions("-D_VARIADIC_MAX=10") #this is needed for compiling gtest with v
 #we need this as some API calls used require this version
 add_definitions("-D_WIN32_WINNT=0x0600")
 add_definitions("-DWINVER=0x0600")
-

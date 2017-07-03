@@ -22,6 +22,7 @@
 #include "capu/os/Memory.h"
 #include "capu/util/ScopedPointer.h"
 #include "capu/util/Swap.h"
+#include "capu/util/Traits.h"
 
 namespace capu
 {
