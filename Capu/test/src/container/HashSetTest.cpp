@@ -379,7 +379,7 @@ TEST(HashSet, swapGlobal)
     first.put(2);
     second.put(3);
 
-    using capu::swap;
+    using std::swap;
     swap(first, second);
     EXPECT_EQ(2u, second.count());
     EXPECT_EQ(1u, first.count());

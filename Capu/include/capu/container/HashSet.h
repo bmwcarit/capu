@@ -17,7 +17,6 @@
 #ifndef CAPU_HASHSET_H
 #define CAPU_HASHSET_H
 
-#include "capu/util/Swap.h"
 #include "capu/container/Hash.h"
 #include "capu/container/HashTable.h"
 

@@ -20,7 +20,6 @@
 #include "capu/Error.h"
 #include "capu/Config.h"
 #include "capu/container/List.h"
-#include "capu/util/Swap.h"
 
 namespace capu
 {

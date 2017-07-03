@@ -20,9 +20,9 @@
 #include "capu/Config.h"
 #include "capu/os/StringUtils.h"
 #include "capu/container/Array.h"
-#include "capu/util/Swap.h"
 #include "capu/container/Hash.h"
 #include "capu/container/ConstString.h"
+#include <algorithm>
 
 namespace capu
 {
@@ -290,14 +290,10 @@ namespace capu
         }
     };
 
-
-
     /**
-     * Specialized swap for String
+     * Overloading swap for String
      */
-
-    template<>
-    inline void swap<String>(String& first, String& second)
+    inline void swap(String& first, String& second)
     {
         first.swap(second);
     }
@@ -384,7 +380,8 @@ namespace capu
         m_size = theend - start + 1;
 
         Array<char> tmpArray(m_size + 1); // with ending \0
-        capu::swap(m_data, tmpArray);
+        using std::swap;
+        swap(m_data, tmpArray);
         Memory::Copy(m_data.getRawData(), startdata, m_size);
         m_data[m_size] = '\0';
     }
@@ -571,7 +568,8 @@ namespace capu
                     Memory::Copy(newData.getRawData(), m_data.getRawData(), m_size);
                     Memory::Copy(&newData.getRawData()[m_size], other, otherLength + 1); // include copy of nullterminiator
 
-                    capu::swap(m_data, newData);
+                    using std::swap;
+                    swap(m_data, newData);
                     m_size = m_size + otherLength;
                 }
             }
@@ -605,7 +603,8 @@ namespace capu
             const uint_t len = StringUtils::Strlen(data) + 1;
 
             Array<char> tmpArray(len);
-            capu::swap(m_data, tmpArray);
+            using std::swap;
+            swap(m_data, tmpArray);
 
             Memory::Copy(m_data.getRawData(), data, len);
             m_size = len - 1;
@@ -640,7 +639,8 @@ namespace capu
     inline String& String::swap(String& other)
     {
         m_data.swap(other.m_data);
-        capu::swap(m_size, other.m_size);
+        using std::swap;
+        swap(m_size, other.m_size);
         return *this;
     }
 

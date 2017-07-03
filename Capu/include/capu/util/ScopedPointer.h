@@ -18,7 +18,7 @@
 #define CAPU_SCOPED_POINTER_H
 
 #include "capu/Config.h"
-#include "capu/util/Swap.h"
+#include <algorithm>
 
 namespace capu
 {
@@ -214,7 +214,7 @@ namespace capu
     template<typename T, typename DELETER>
     void ScopedPointer<T, DELETER>::swap(ScopedPointer<T, DELETER>& other)
     {
-        using capu::swap;
+        using std::swap;
         swap(mRawData, other.mRawData);
     }
 

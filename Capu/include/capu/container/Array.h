@@ -21,8 +21,8 @@
 #include "capu/Error.h"
 #include "capu/os/Memory.h"
 #include "capu/util/ScopedPointer.h"
-#include "capu/util/Swap.h"
 #include "capu/util/Traits.h"
+#include <algorithm>
 
 namespace capu
 {
@@ -236,8 +236,9 @@ namespace capu
     template<typename T>
     void Array<T>::swap(Array<T>& other)
     {
-        capu::swap(mSize, other.mSize);
-        capu::swap(mInternalArray, other.mInternalArray);
+        using std::swap;
+        swap(mSize, other.mSize);
+        swap(mInternalArray, other.mInternalArray);
     }
 
     template<typename T>

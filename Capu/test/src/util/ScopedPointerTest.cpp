@@ -134,7 +134,8 @@ TEST(ScopedArrayTest, Swap)
 
             Resource* firstOfHandler2 = handler2.get();
 
-            capu::swap(handler1, handler2);
+            using std::swap;
+            swap(handler1, handler2);
             EXPECT_EQ(firstOfHandler1, handler2.get());
             EXPECT_EQ(firstOfHandler2, handler1.get());
 
@@ -143,7 +144,7 @@ TEST(ScopedArrayTest, Swap)
             EXPECT_EQ(firstOfHandler2, handler2.get());
 
             // another swap for checking resource count
-            capu::swap(handler1, handler2);
+            swap(handler1, handler2);
         }
         EXPECT_EQ(100, Resource::refCount);
     }
@@ -220,7 +221,8 @@ TEST(ScopedPointerTest, Swap)
             EXPECT_EQ(resource1, resourceOfHandler1);
             EXPECT_EQ(resource2, resourceOfHandler2);
 
-            capu::swap(handler1, handler2);
+            using std::swap;
+            swap(handler1, handler2);
             EXPECT_EQ(resource1, handler2.get());
             EXPECT_EQ(resource2, handler1.get());
             EXPECT_EQ(resource1->mData, handler2->mData);

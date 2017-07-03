@@ -19,9 +19,9 @@
 
 #include "capu/Config.h"
 #include "capu/os/Atomic.h"
-#include "capu/util/Swap.h"
 #include "capu/util/Traits.h"
 #include "capu/container/Hash.h"
+#include <algorithm>
 
 namespace capu
 {
@@ -381,7 +381,7 @@ namespace capu
     inline
     void shared_ptr<T>::swap(shared_ptr& other)
     {
-        using capu::swap;
+        using std::swap;
         swap(mData, other.mData);
         swap(mMetadata, other.mMetadata);
     }

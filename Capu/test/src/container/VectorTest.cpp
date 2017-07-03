@@ -1209,7 +1209,7 @@
         capu::vector<capu::uint_t> other(1);
         other[0] = 11;
 
-        using capu::swap;
+        using std::swap;
         swap(vec, other);
         EXPECT_EQ(1u, vec.capacity());
         EXPECT_EQ(20u, other.capacity());

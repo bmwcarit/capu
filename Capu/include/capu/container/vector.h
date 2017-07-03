@@ -23,10 +23,10 @@
 #include "capu/util/Iterator.h"
 #include "capu/util/AlgorithmRaw.h"
 #include "capu/util/Algorithm.h"
-#include "capu/util/Swap.h"
 #include <new>
 #include <initializer_list>
 #include <assert.h>
+#include <algorithm>
 
 namespace capu
 {
@@ -303,7 +303,8 @@ namespace capu
              */
             void swap(InternalIterator& other)
             {
-                capu::swap(m_current, other.m_current);
+                using std::swap;
+                swap(m_current, other.m_current);
             }
 
             /**
@@ -621,7 +622,7 @@ namespace capu
 
 
     /**
-     * swap specialization for Vector<T>
+     * swap overload for Vector<T>
      * @param first first vector
      * @param second vector to swap with first
      */
@@ -1075,7 +1076,7 @@ namespace capu
     inline
     void vector<T>::swap(vector<T>& other)
     {
-        using capu::swap;
+        using std::swap;
         swap(m_data, other.m_data);
         swap(m_dataEnd, other.m_dataEnd);
         swap(m_capacityEnd, other.m_capacityEnd);

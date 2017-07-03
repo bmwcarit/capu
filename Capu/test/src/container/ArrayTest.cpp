@@ -18,7 +18,6 @@
 #include "capu/container/Array.h"
 #include "capu/Error.h"
 #include "capu/Config.h"
-#include "capu/util/Swap.h"
 #include "capu/container/String.h"
 
 class ComplexCopyable
@@ -213,7 +212,8 @@ TEST(Array, Swap)
     myArray2[3] = 2;
     myArray2[4] = 1;
 
-    capu::swap(myArray1, myArray2);
+    using std::swap;
+    swap(myArray1, myArray2);
 
     // check first array
     EXPECT_EQ(5u, myArray1.size());
@@ -233,7 +233,8 @@ TEST(Array, Swap)
     capu::Array<uint32_t> myArrayStack;
     capu::Array<uint32_t> *myArrayHeap = new capu::Array<uint32_t>();
 
-    capu::swap(myArrayStack, *myArrayHeap);
+    using std::swap;
+    swap(myArrayStack, *myArrayHeap);
     EXPECT_EQ(0u, myArrayHeap->size());
     delete myArrayHeap;
 

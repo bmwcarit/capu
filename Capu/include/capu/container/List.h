@@ -20,9 +20,9 @@
 #include "capu/Error.h"
 #include "capu/Config.h"
 #include "capu/container/Comparator.h"
-#include "capu/util/Swap.h"
 #include "capu/util/Allocator.h"
 #include "capu/util/Iterator.h"
+#include <algorithm>
 
 namespace capu
 {
@@ -629,7 +629,7 @@ namespace capu
         other.mBoundary.mNext = isEmpty() ? &other.mBoundary : thisNext;
         other.mBoundary.mPrev = isEmpty() ? &other.mBoundary : thisPrev;
 
-        capu::swap(mSize, other.mSize);
+        std::swap(mSize, other.mSize);
 
         // correct next and first of elements next to the boundary
         mBoundary.mPrev->mNext = &mBoundary;

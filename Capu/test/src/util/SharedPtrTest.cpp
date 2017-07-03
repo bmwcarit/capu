@@ -376,7 +376,7 @@ TEST_F(SharedPtrTest, SwapFreeFunction)
 {
     capu::shared_ptr<BaseClass> sp(new BaseClass(123));
     capu::shared_ptr<BaseClass> other(new BaseClass(456));
-    using capu::swap;
+    using std::swap;
     swap(sp, other);
     EXPECT_EQ(123u, other->mValue);
     EXPECT_EQ(456u, sp->mValue);

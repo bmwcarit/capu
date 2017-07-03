@@ -219,7 +219,8 @@ TEST(Queue, swap)
     EXPECT_EQ(1u, queue1.size());
     EXPECT_EQ(2u, queue2.size());
 
-    capu::swap(queue1, queue2);
+    using std::swap;
+    swap(queue1, queue2);
 
     EXPECT_EQ(2u, queue1.size());
     EXPECT_EQ(1u, queue2.size());

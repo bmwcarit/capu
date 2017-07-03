@@ -896,7 +896,7 @@ TEST_F(HashTableTest, swapGlobal)
     first.put(2, 12);
     second.put(100, 101);
 
-    using capu::swap;
+    using std::swap;
     swap(first, second);
     EXPECT_EQ(2u, second.count());
     EXPECT_EQ(1u, first.count());

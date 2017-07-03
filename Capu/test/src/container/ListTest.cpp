@@ -490,8 +490,9 @@ TEST(List, swap)
     EXPECT_TRUE(l2.contains("world"));
     EXPECT_EQ(2u, l2.size());
 
-    // swap second time using capu::swap
-    capu::swap(l1, l2);
+    // swap second time using swap
+    using std::swap;
+    swap(l1, l2);
     EXPECT_TRUE(l2.contains("will"));
     EXPECT_TRUE(l2.contains("get"));
     EXPECT_TRUE(l2.contains("removed"));

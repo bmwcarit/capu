@@ -18,9 +18,9 @@
 #define CAPU_HASHTABLE_H
 
 #include <new>
+#include <algorithm>
 #include "capu/Error.h"
 #include "capu/Config.h"
-#include "capu/util/Swap.h"
 #include "capu/container/Comparator.h"
 #include "capu/container/Hash.h"
 #include "capu/os/Memory.h"
@@ -994,7 +994,7 @@ namespace capu
     template <class Key, class T, class C, class H>
     inline void HashTable<Key, T, C, H>::swap(HashTable<Key, T, C, H>& other)
     {
-        using capu::swap;
+        using std::swap;
         swap(mBitCount, other.mBitCount);
         swap(mSize, other.mSize);
         swap(mThreshold, other.mThreshold);
