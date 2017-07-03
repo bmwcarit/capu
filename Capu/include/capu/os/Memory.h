@@ -18,17 +18,15 @@
 #define CAPU_MEMORY_H
 
 #include "capu/Config.h"
-#include "capu/Error.h"
-#include "capu/os/PlatformInclude.h"
-
-#include CAPU_PLATFORM_INCLUDE(Memory)
+#include <cstring>
+#include <algorithm>
 
 namespace capu
 {
     /**
      * Memory operations
      */
-    class Memory: private os::arch::Memory
+    class Memory
     {
     public:
         /**
@@ -98,18 +96,13 @@ namespace capu
         static uint_t CurrentMemoryUsage();
     };
 
-    inline uint_t Memory::CurrentMemoryUsage()
-    {
-        return os::arch::Memory::CurrentMemoryUsage();
-    }
-
     inline
     void
     Memory::Set(void* dst, int32_t val, uint_t size)
     {
         if(size > 0)
         {
-            os::arch::Memory::Set(dst, val, size);
+            std::memset(dst, val, size);
         }
     }
 
@@ -119,7 +112,7 @@ namespace capu
     {
         if(size > 0)
         {
-            os::arch::Memory::Move(dst, src, size);
+            std::memmove(dst, src, size);
         }
     }
 
@@ -129,7 +122,7 @@ namespace capu
     {
         if(num > 0)
         {
-            return os::arch::Memory::Compare(ptr1, ptr2, num);
+            return std::memcmp(ptr1, ptr2, num);
         }
         return 0;
     }
@@ -140,7 +133,7 @@ namespace capu
     {
         if(size > 0)
         {
-            os::arch::Memory::Copy(dst, src, size);
+            std::memcpy(dst, src, size);
         }
     }
 
@@ -149,10 +142,7 @@ namespace capu
     void
     Memory::CopyObject(T* dst, const T* src, const uint_t count)
     {
-        if(count > 0)
-        {
-            os::arch::Memory::CopyObject(dst, src, count);
-        }
+        std::copy(src, src + count, dst);
     }
 
     template<typename T>
@@ -160,11 +150,17 @@ namespace capu
     void
     Memory::MoveObject(T* dst, const T* src, const uint_t count)
     {
-        if(count > 0)
+        // In order to handle overlapping moves the move direction must be taken
+        // into account. If copying forward we must copy in descending order
+        // and vice versa.
+        if (dst > src)
         {
-            os::arch::Memory::MoveObject(dst, src, count);
+            std::copy_backward(src, src + count, dst + count);
+        }
+        else
+        {
+            std::copy(src, src + count, dst);
         }
     }
 }
 #endif // CAPU_MEMORY_H
-

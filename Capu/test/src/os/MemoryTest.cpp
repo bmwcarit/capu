@@ -216,12 +216,3 @@ TEST(Memory, moveOjectWithClassTypeOverlapBackward)
         EXPECT_TRUE(vals[i].assignmentOperatorCalled);
     }
 }
-
-TEST(Memory, usedMemoryTest)
-{
-    capu::uint_t memUsage = capu::Memory::CurrentMemoryUsage();
-    char* someMem = new char[1000000];
-    capu::uint_t memUsageAfter = capu::Memory::CurrentMemoryUsage();
-    EXPECT_GE(memUsageAfter, memUsage);
-    delete[] someMem;
-}
