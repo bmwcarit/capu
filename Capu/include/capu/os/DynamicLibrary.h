@@ -30,7 +30,7 @@
 #elif defined(__GNUC__) // GCC
 #define EXPORT_FUNCTION __attribute__ ((visibility("default")))
 #elif defined(__ghs__) // Integrity
-#define EXPORT_FUNCTION __attribute__((externally_visible))
+#define EXPORT_FUNCTION
 #else
 #warning EXPORT_FUNCTION is not defined for your compiler. Adjust capu/os/DynamicLibrary.h to get rid of the error message for your compiler.
 #endif
