@@ -38,6 +38,11 @@ namespace capu
         return m_outputStream.c_str();
     }
 
+    uint32_t LogMessage::getLogMessageLength() const
+    {
+        return m_outputStream.length();
+    }
+
     LogMessage& LogMessage::operator=(const LogMessage& other)
     {
         if(&other != this)

@@ -24,7 +24,7 @@
 namespace capu
 {
     /**
-     * This class encapsulates a log message. The containing data can be used in a ILogAppender to 
+     * This class encapsulates a log message. The containing data can be used in a ILogAppender to
      * print the message.
      */
     class LogMessage
@@ -54,6 +54,8 @@ namespace capu
          * @return a const char pointer to the message
          */
         const char* getLogMessage() const;
+
+        uint32_t getLogMessageLength() const;
 
         /**
          * Returns the context of the message
