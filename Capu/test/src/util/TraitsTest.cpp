@@ -56,7 +56,7 @@ union SomeUnion
 {
     uint32_t intVal1;
     uint32_t intVal2;
-    struct
+    struct shortStruct
     {
         uint16_t shortVal1;
         uint16_t shortVal2;
@@ -68,7 +68,7 @@ union SomeUnion
 union SomeUnionWithEnumSize
 {
     char data[sizeof(SomeEnum)];
-    struct
+    struct data2Struct
     {
         char data2[sizeof(SomeEnum)];
     };

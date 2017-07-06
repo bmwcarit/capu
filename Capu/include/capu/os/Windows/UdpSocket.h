@@ -246,15 +246,15 @@ namespace capu
             {
                 if (sender != 0)
                 {
-                    char buffer[INET_ADDRSTRLEN] = { '\0' };
-                    const char* result = inet_ntop(AF_INET, &(remoteSocketAddr.sin_addr), buffer, INET_ADDRSTRLEN);
-                    if (0 == result)
+                    char buf[INET_ADDRSTRLEN] = { '\0' };
+                    const char* res = inet_ntop(AF_INET, &(remoteSocketAddr.sin_addr), buf, INET_ADDRSTRLEN);
+                    if (0 == res)
                     {
                         return CAPU_ERROR;
                     }
 
                     sender->port = ntohs(remoteSocketAddr.sin_port);
-                    sender->addr = result;
+                    sender->addr = res;
                 }
             }
 
