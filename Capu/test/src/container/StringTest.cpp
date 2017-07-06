@@ -52,7 +52,7 @@ TEST(String, TestAssignOperator1)
 {
     capu::String str("asdf");
     capu::String other("other");
-    
+
     EXPECT_EQ(4u, str.getLength());
     EXPECT_EQ(5u, other.getLength());
     str = other;
@@ -81,6 +81,29 @@ TEST(String, TestAssignOperator1)
     EXPECT_EQ(0u, stringHeap2->getLength());
     EXPECT_EQ(0u, stringStack2.getLength());
     delete stringHeap2;
+}
+
+TEST(String, MoveConstructor)
+{
+    capu::String a("abc");
+    capu::String b(std::move(a));
+
+    EXPECT_EQ(capu::String("abc"), b);
+    EXPECT_EQ(3u, b.getLength());
+    EXPECT_EQ(capu::String(), a);
+    EXPECT_EQ(0u, a.getLength());
+}
+
+TEST(String, MoveAssignment)
+{
+    capu::String a("abc");
+    capu::String b;
+    b = std::move(a);
+
+    EXPECT_EQ(capu::String("abc"), b);
+    EXPECT_EQ(3u, b.getLength());
+    EXPECT_EQ(capu::String(), a);
+    EXPECT_EQ(0u, a.getLength());
 }
 
 TEST(String, TestToLowerCase1)
@@ -367,7 +390,7 @@ TEST(String, AccessOperator)
     capu::String str("abc");
 
     EXPECT_EQ('b', str[1]);
-    
+
     str[1] = 'z';
     EXPECT_STREQ("azc", str.c_str());
 }
@@ -396,6 +419,21 @@ TEST(String, Equals2)
     EXPECT_FALSE(str2 == str1);
 }
 
+TEST(String, Equals3)
+{
+    capu::String str1("abc");
+    capu::String str2("abc");
+    EXPECT_TRUE(str1 == str2);
+    EXPECT_FALSE(str1 != str2);
+}
+
+TEST(String, Equals4)
+{
+    capu::String str1("abc");
+    EXPECT_TRUE(str1 == "abc");
+    EXPECT_FALSE(str1 != "abc");
+}
+
 TEST(String, NotEquals1)
 {
     capu::String str1;
@@ -419,6 +457,13 @@ TEST(String, NotEquals2)
     capu::String str3("world");
     EXPECT_TRUE(str1 != str2);
     EXPECT_FALSE(str2 != str3);
+}
+
+TEST(String, NotEquals3)
+{
+    capu::String str1("hello");
+    EXPECT_TRUE(str1 != "world");
+    EXPECT_FALSE(str1 != "hello");
 }
 
 TEST(String, SmallerGreater1)

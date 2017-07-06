@@ -19,10 +19,10 @@
 
 #include "capu/Config.h"
 #include "capu/os/StringUtils.h"
-#include "capu/container/Array.h"
 #include "capu/container/Hash.h"
-#include "capu/container/ConstString.h"
+#include "capu/container/vector.h"
 #include <algorithm>
+#include <cctype>
 
 namespace capu
 {
@@ -69,11 +69,15 @@ namespace capu
          */
         String(uint_t initialSize, char character);
 
-
         /**
          * Create a string by copying from another
          */
         String(const String& other);
+
+        /**
+         * Move constructor
+         */
+        String(String&& other);
 
         /**
          * Destructor.
@@ -109,6 +113,11 @@ namespace capu
         String& operator=(char other);
 
         /**
+         * Move assignment
+         */
+        String& operator=(String&& other);
+
+        /**
          * Adds the given character string to the string
          * @param character string to add
          */
@@ -136,9 +145,19 @@ namespace capu
         bool operator==(const String& other) const;
 
         /**
+         * Return if this string equals another
+         */
+        bool operator==(const char* other) const;
+
+        /**
          * Return if this string does not equalsanother
          */
         bool operator!=(const String& other) const;
+
+        /**
+         * Return if this string does not equalsanother
+         */
+        bool operator!=(const char* other) const;
 
         /**
          * Return if this string is lexicographically ordered before other
@@ -274,7 +293,7 @@ namespace capu
         void initFromGivenData(const char* data, const uint_t end, const uint_t start, uint_t size);
         String& appendWithKnownLength(const char* other, uint_t length);
 
-        Array<char> m_data;
+        vector<char> m_data;
         uint_t m_size;
     };
 
@@ -301,28 +320,26 @@ namespace capu
     /*
      * Implementation String
      */
-
     inline String::String()
-        : m_data(0), m_size(0)
+        : m_data(), m_size(0)
     {
     }
 
     inline String::String(uint_t initialSize, char character)
-        : m_data(initialSize + 1)
+        : m_data(initialSize + 1, character)
         , m_size(initialSize)
     {
-        m_data.set(character);
         m_data[initialSize] = '\0';
     }
 
     inline String::String(const char* other)
-        : m_data(0), m_size(0)
+        : m_data(), m_size(0)
     {
         initData(other);
     }
 
     inline String::String(const char* data, uint_t start)
-        : m_data(0), m_size(0)
+        : m_data(), m_size(0)
     {
         if (data)
         {
@@ -332,13 +349,13 @@ namespace capu
     }
 
     inline String::String(const String& other, const uint_t start, const uint_t end)
-        : m_data(0), m_size(0)
+        : m_data(), m_size(0)
     {
         initFromGivenData(other.c_str(), start, end, other.m_size);
     }
 
     inline String::String(const char* data, const uint_t start, const uint_t end)
-        : m_data(0), m_size(0)
+        : m_data(), m_size(0)
     {
         initFromGivenData(data, start, end, StringUtils::Strnlen(data, end + 1));
     }
@@ -346,6 +363,13 @@ namespace capu
     inline String::String(const String& other)
         : m_data(other.m_data), m_size(other.m_size)
     {
+    }
+
+    inline String::String(String&& other)
+        : m_data(std::move(other.m_data))
+        , m_size(other.m_size)
+    {
+        other.m_size = 0;
     }
 
     inline void String::initFromGivenData(const char* data, const uint_t start, const uint_t end, uint_t size)
@@ -376,14 +400,13 @@ namespace capu
         }
 
         // do the work
-        const char* startdata = &data[start];
+        const char* startdata = data + start;
         m_size = theend - start + 1;
 
-        Array<char> tmpArray(m_size + 1); // with ending \0
-        using std::swap;
-        swap(m_data, tmpArray);
-        Memory::Copy(m_data.getRawData(), startdata, m_size);
-        m_data[m_size] = '\0';
+        m_data.reserve(m_size + 1);
+        m_data.clear();
+        m_data.insert(m_data.end(), startdata, startdata + m_size);
+        m_data.push_back('\0');
     }
 
     inline String::~String()
@@ -395,12 +418,12 @@ namespace capu
     {
         if (newSize>0)
         {
-            m_data.setSize(newSize + 1); // additional byte for null termination
+            m_data.resize(newSize + 1); // additional byte for null termination
             m_data[newSize] = 0;
         }
         else
         {
-            m_data.setSize(0);
+            m_data.resize(0);
         }
         m_size = newSize;
     }
@@ -415,6 +438,14 @@ namespace capu
     inline String& String::operator=(const char* other)
     {
         initData(other);
+        return *this;
+    }
+
+    inline String& String::operator=(String&& other)
+    {
+        m_data = std::move(other.m_data);
+        m_size = other.m_size;
+        other.m_size = 0;
         return *this;
     }
 
@@ -438,13 +469,13 @@ namespace capu
 
     inline bool String::operator==(const String& other) const
     {
-        static char null(0);
-        const char* str1 = m_data.getRawData();
+        const char null(0);
+        const char* str1 = m_data.data();
         if (!str1)
         {
             str1 = &null;
         }
-        const char* str2 = other.m_data.getRawData();
+        const char* str2 = other.m_data.data();
         if (!str2)
         {
             str2 = &null;
@@ -452,15 +483,30 @@ namespace capu
         return StringUtils::Strcmp(str1, str2) == 0;
     }
 
-    inline bool String::operator<(const String& other) const
+    inline bool String::operator==(const char* other) const
     {
-        static char null(0);
-        const char* str1 = m_data.getRawData();
+        const char null(0);
+        const char* str1 = m_data.data();
         if (!str1)
         {
             str1 = &null;
         }
-        const char* str2 = other.m_data.getRawData();
+        if (!other)
+        {
+            other = &null;
+        }
+        return StringUtils::Strcmp(str1, other) == 0;
+    }
+
+    inline bool String::operator<(const String& other) const
+    {
+        const char null(0);
+        const char* str1 = m_data.data();
+        if (!str1)
+        {
+            str1 = &null;
+        }
+        const char* str2 = other.m_data.data();
         if (!str2)
         {
             str2 = &null;
@@ -470,13 +516,13 @@ namespace capu
 
     inline bool String::operator>(const String& other) const
     {
-        static char null(0);
-        const char* str1 = m_data.getRawData();
+        const char null(0);
+        const char* str1 = m_data.data();
         if (!str1)
         {
             str1 = &null;
         }
-        const char* str2 = other.m_data.getRawData();
+        const char* str2 = other.m_data.data();
         if (!str2)
         {
             str2 = &null;
@@ -506,6 +552,11 @@ namespace capu
         return !operator==(other);
     }
 
+    inline bool String::operator!=(const char* other) const
+    {
+        return !operator==(other);
+    }
+
     inline char& String::operator[](uint_t index)
     {
         return m_data[index];
@@ -516,7 +567,6 @@ namespace capu
         return m_data[index];
     }
 
-
     inline String& String::append(const String& other)
     {
         return appendWithKnownLength(other.data(), other.getLength());
@@ -524,25 +574,19 @@ namespace capu
 
     inline void String::toUpperCase()
     {
-        uint_t length = getLength();
+        const uint_t length = getLength();
         for (uint_t i = 0; i < length; ++i)
         {
-            if (m_data[i] > 96 && m_data[i] < 123) // ascii 'a' - 'z' (german umlauts missing!)
-            {
-                m_data[i] -= 32;
-            }
+            m_data[i] = std::toupper(m_data[i]);
         }
     }
 
     inline void String::toLowerCase()
     {
-        uint_t length = getLength();
+        const uint_t length = getLength();
         for (uint_t i = 0; i < length; ++i)
         {
-            if (m_data[i] > 64 && m_data[i] < 91) // ascii 'A' - 'Z' (german umlauts missing!)
-            {
-                m_data[i] += 32;
-            }
+            m_data[i] = std::tolower(m_data[i]);
         }
     }
 
@@ -558,60 +602,45 @@ namespace capu
 
     inline String& String::appendWithKnownLength(const char* other, uint_t otherLength)
     {
-        if (other && *other)
+        if (m_data.data() || other)
         {
-            if (m_data.size() > 0)
-            {
-                if (otherLength > 0)
-                {
-                    Array<char> newData(m_size + otherLength +1);
-                    Memory::Copy(newData.getRawData(), m_data.getRawData(), m_size);
-                    Memory::Copy(&newData.getRawData()[m_size], other, otherLength + 1); // include copy of nullterminiator
-
-                    using std::swap;
-                    swap(m_data, newData);
-                    m_size = m_size + otherLength;
-                }
-            }
-            else
-            {
-                initData(other);
-            }
+            m_data.reserve(m_size + otherLength + 1);
+            m_data.resize(m_size);
+            m_data.insert(m_data.end(), other, other + otherLength);
+            m_data.push_back('\0');
+            m_size += otherLength;
         }
         return *this;
     }
 
     inline const char* String::c_str() const
     {
-        return m_data.size() > 0 ? m_data.getRawData() : "";
+        return m_data.size() > 0 ? m_data.data() : "";
     }
 
     inline const char* String::data() const
     {
-        return m_data.getRawData();
+        return m_data.data();
     }
 
     inline char* String::data()
     {
-        return m_data.getRawData();
+        return m_data.data();
     }
 
     inline void String::initData(const char* data)
     {
         if (data)
         {
-            const uint_t len = StringUtils::Strlen(data) + 1;
-
-            Array<char> tmpArray(len);
-            using std::swap;
-            swap(m_data, tmpArray);
-
-            Memory::Copy(m_data.getRawData(), data, len);
-            m_size = len - 1;
+            m_size = StringUtils::Strlen(data);
+            m_data.clear();
+            m_data.reserve(m_size + 1);
+            m_data.insert(m_data.end(), data, data + m_size);
+            m_data.push_back('\0');
         }
         else
         {
-            m_data = Array<char>(0);
+            m_data.clear();
             m_size = 0;
         }
     }
@@ -623,17 +652,17 @@ namespace capu
 
     inline int_t String::find(const char ch, const uint_t offset) const
     {
-        return ConstString(c_str()).find(ch, offset);
+        return StringUtils::IndexOf(c_str(), ch, offset);
     }
 
     inline int_t String::find(const String& substr, const uint_t offset) const
     {
-        return ConstString(c_str()).find(ConstString(substr.c_str()), offset);
+        return StringUtils::IndexOf(c_str(), substr.c_str(), offset);;
     }
 
     inline int_t String::rfind(const char ch) const
     {
-        return ConstString(c_str()).rfind(ch);
+        return StringUtils::LastIndexOf(c_str(), ch);
     }
 
     inline String& String::swap(String& other)
@@ -654,6 +683,7 @@ namespace capu
 
         // set new size and append null char after end of string
         m_size = length;
+        m_data.resize(length + 1);
         m_data[length] = 0;
         return *this;
     }
