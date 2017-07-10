@@ -588,7 +588,7 @@ namespace capu
         const uint_t length = getLength();
         for (uint_t i = 0; i < length; ++i)
         {
-            m_data[i] = static_cast<char>(std::toupper(m_data[i]));
+            m_data[i] = static_cast<char>(std::toupper(static_cast<unsigned char>(m_data[i])));
         }
     }
 
@@ -597,7 +597,7 @@ namespace capu
         const uint_t length = getLength();
         for (uint_t i = 0; i < length; ++i)
         {
-            m_data[i] = static_cast<char>(std::tolower(m_data[i]));
+            m_data[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(m_data[i])));
         }
     }
 
