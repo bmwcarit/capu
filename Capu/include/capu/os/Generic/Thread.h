@@ -45,8 +45,9 @@ namespace capu
             ThreadState getState() const;
             void setState(ThreadState state);
             const char* getName();
+        private:
+            Atomic<uint32_t> mState;
         protected:
-            ThreadState mState;
             ThreadRunnable mRunnable;
             bool mIsStarted;
             String mName;
@@ -62,7 +63,7 @@ namespace capu
 
         inline
         Thread::Thread(const String& name)
-            : mState(TS_NEW)
+            : mState(static_cast<uint32_t>(TS_NEW))
             , mIsStarted(false)
             , mName(name)
         {
@@ -73,14 +74,14 @@ namespace capu
         ThreadState
         Thread::getState() const
         {
-            return mState;
+            return static_cast<ThreadState>(mState.load());
         }
 
         inline
         void
         Thread::setState(ThreadState state)
         {
-            mState = state;
+            mState = static_cast<uint32_t>(state);
         }
 
         inline
