@@ -825,9 +825,9 @@ TEST_F(HashTableTest, ForEach)
 
     Int32HashMap someHashMap;
 
-    capu_foreach(Int32HashMap, hashMap, iter)
+    for (auto p : hashMap)
     {
-        someHashMap.put(iter->key, iter->value);
+        someHashMap.put(p.key, p.value);
     }
 
     EXPECT_EQ(33, someHashMap.find(32)->value);

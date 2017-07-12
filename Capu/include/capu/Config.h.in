@@ -52,16 +52,6 @@
 
 #define UNUSED(x) {(void)(x);}
 
-#define capu_foreach(IteratableType, Iteratable, Iter)\
-    for(IteratableType::Iterator Iter = (Iteratable).begin(), \
-        _##Iter##_end = (Iteratable).end(); \
-        Iter != _##Iter##_end; ++Iter)
-
-#define capu_const_foreach(IteratableType, Iteratable, Iter)\
-    for (IteratableType::ConstIterator Iter = (Iteratable).begin(), \
-         _##Iter##_end = (Iteratable).end(); \
-         Iter != _##Iter##_end; ++Iter)
-
 namespace capu
 {
     #if defined(ARCH_X86_64) || defined(ARCH_ARM64)

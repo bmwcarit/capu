@@ -227,10 +227,9 @@ TEST(HashSetIterator, ForEach)
     hashSet.put(44);
 
     capu::HashSet<int32_t> testHashSet;
-
-    capu_foreach(capu::HashSet<int32_t>, hashSet, iter)
+    for (auto el : hashSet)
     {
-        testHashSet.put(*iter);
+        testHashSet.put(el);
     }
 
     EXPECT_TRUE(testHashSet.hasElement(32));

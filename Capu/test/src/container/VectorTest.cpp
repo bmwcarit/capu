@@ -1037,10 +1037,9 @@
         vector.push_back(TypeParam(44));
 
         capu::vector<TypeParam> testVector;
-
-        capu_foreach(typename capu::vector<TypeParam>, vector, iter)
+        for (const auto& el : vector)
         {
-            testVector.push_back(*iter);
+            testVector.push_back(el);
         }
 
         EXPECT_EQ(TypeParam(32), testVector[0]);

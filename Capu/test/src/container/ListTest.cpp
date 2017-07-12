@@ -1101,10 +1101,9 @@ TEST(ListTest, ForEach)
     list.insert(44);
 
     capu::List<int32_t> testList;
-
-    capu_foreach(capu::List<int32_t>, list, iter)
+    for (auto el : list)
     {
-        testList.insert(*iter);
+        testList.insert(el);
     }
 
     EXPECT_EQ(32, testList.get(0));
