@@ -317,6 +317,17 @@ namespace capu
         first.swap(second);
     }
 
+    // global comparison
+    inline bool operator==(const char* a, const String& b)
+    {
+        return b == a;
+    }
+
+    inline bool operator!=(const char* a, const String& b)
+    {
+        return b != a;
+    }
+
     /*
      * Implementation String
      */

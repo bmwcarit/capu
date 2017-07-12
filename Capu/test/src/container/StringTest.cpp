@@ -432,6 +432,8 @@ TEST(String, Equals4)
     capu::String str1("abc");
     EXPECT_TRUE(str1 == "abc");
     EXPECT_FALSE(str1 != "abc");
+    EXPECT_TRUE("abc" == str1);
+    EXPECT_FALSE("abc" != str1);
 }
 
 TEST(String, NotEquals1)
@@ -464,6 +466,8 @@ TEST(String, NotEquals3)
     capu::String str1("hello");
     EXPECT_TRUE(str1 != "world");
     EXPECT_FALSE(str1 != "hello");
+    EXPECT_TRUE("world" != str1);
+    EXPECT_FALSE("hello" != str1);
 }
 
 TEST(String, SmallerGreater1)
