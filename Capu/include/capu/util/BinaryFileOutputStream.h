@@ -38,6 +38,8 @@ namespace capu
          * @}
          */
 
+        status_t getState() const;
+
     protected:
     private:
         File& m_file;
@@ -61,7 +63,10 @@ namespace capu
         m_file.close();
     }
 
-
+    inline status_t BinaryFileOutputStream::getState() const
+    {
+        return m_fileState;
+    }
 }
 
 #endif // CAPU_FILEOUTPUTSTREAM_H
