@@ -42,8 +42,7 @@ namespace capu
 
 #define LOG(context, logLevel, message)           \
     {                                             \
-    capu::Logger* logger = capu::Logger::GetDefaultLogger();  \
-    LOG_EXT((*logger), context, logLevel, message)  \
+        LOG_EXT((*capu::Logger::GetDefaultLogger()), context, logLevel, message) \
     }
 
 #define LOG_TRACE_EXT(logger, context, message) \
