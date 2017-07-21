@@ -38,23 +38,23 @@ namespace capu
         switch(logMessage.getLogLevel())
         {
         case LL_TRACE:
-            Console::Print(Console::WHITE, "[  Trace  ] ");
+            Console::Print(Console::WHITE,  "[ Trace ] ");
             break;
         default:
         case LL_DEBUG :
-            Console::Print(Console::WHITE, "[  Debug  ] ");
+            Console::Print(Console::WHITE,  "[ Debug ] ");
             break;
         case LL_INFO :
-            Console::Print(Console::GREEN, "[  Info   ] ");
+            Console::Print(Console::GREEN,  "[ Info  ] ");
             break;
         case LL_WARN :
-            Console::Print(Console::YELLOW, "[  Warn   ] ");
+            Console::Print(Console::YELLOW, "[ Warn  ] ");
             break;
         case LL_ERROR :
-            Console::Print(Console::RED, "[  Error  ] ");
+            Console::Print(Console::RED,    "[ Error ] ");
             break;
         case LL_FATAL :
-            Console::Print(Console::RED, "[  Fatal  ] ");
+            Console::Print(Console::RED,    "[ Fatal ] ");
             break;
         }
 
