@@ -243,16 +243,6 @@ namespace capu
          */
         AppenderSet m_appenders;
 
-        /**
-         * Current log level of the logger
-         */
-        //ELogLevel m_logLevel;
-
-        /**
-         * Releases the stream
-         */
-        void releaseStream();
-
         LightweightMutex m_appenderLock;
         typedef ScopedLock<LightweightMutex> MutexLocker;
 
