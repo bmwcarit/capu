@@ -41,7 +41,7 @@ namespace capu
          * Query for the log level of the appender
          * @returns the log level
          */
-        virtual ELogLevel getLogLevel() = 0;
+        virtual ELogLevel getLogLevel() const = 0;
 
         /**
          * Set the log level for the appender

@@ -36,7 +36,7 @@ namespace capu
         m_logLevel = logLevel;
     }
 
-    ELogLevel LogAppenderBase::getLogLevel()
+    ELogLevel LogAppenderBase::getLogLevel() const
     {
         return static_cast<ELogLevel>(m_logLevel.load());
     }
