@@ -18,11 +18,13 @@
 #define CAPU_IOUTPUTSTREAM_H
 
 #include <capu/Config.h>
-#include <capu/container/String.h>
-#include <capu/util/Guid.h>
+#include <capu/Error.h>
 
 namespace capu
 {
+    class Guid;
+    class String;
+
     /**
      * Interface for writing data to a stream
      */

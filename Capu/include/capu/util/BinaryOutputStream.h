@@ -19,6 +19,7 @@
 
 #include <capu/util/IOutputStream.h>
 #include <capu/container/vector.h>
+#include <capu/util/Guid.h>
 
 namespace capu
 {

@@ -20,6 +20,8 @@
 #include <capu/util/IOutputStream.h>
 #include <capu/container/vector.h>
 #include <capu/container/ConstString.h>
+#include <capu/container/String.h>
+#include <capu/util/Guid.h>
 
 namespace capu
 {
