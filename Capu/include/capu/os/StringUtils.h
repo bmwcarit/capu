@@ -213,7 +213,7 @@ namespace capu
     int_t
     StringUtils::IndexOf(const char* str, const char* str2, const uint_t offset)
     {
-        if (Strlen(str) >= offset)
+        if (str && str2 && Strlen(str) >= offset)
         {
             return capu::os::arch::StringUtils::IndexOf(str, str2, offset);
         }
